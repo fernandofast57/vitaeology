@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Clock, ChevronRight, ChevronLeft, Check } from 'lucide-react'
+import { ArrowLeft, Clock, ChevronRight, ChevronLeft, Check, PlayCircle } from 'lucide-react'
 
 interface Question {
   id: number
@@ -12,11 +12,6 @@ interface Question {
   scoring_type: string
   order_index: number
   characteristic_id: number
-}
-
-interface Answer {
-  question_id: number
-  value: number // 0 = FALSO, 1 = INCERTO, 2 = VERO
 }
 
 export default function TestPage() {
@@ -27,6 +22,7 @@ export default function TestPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [started, setStarted] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -70,9 +66,12 @@ export default function TestPage() {
       })
       setAnswers(answersMap)
       
-      // Find first unanswered question
-      const firstUnanswered = questionsData?.findIndex(q => !answersMap.has(q.id)) ?? 0
-      setCurrentIndex(firstUnanswered >= 0 ? firstUnanswered : 0)
+      // If user has existing answers, go directly to test
+      if (answersMap.size > 0) {
+        const firstUnanswered = questionsData?.findIndex(q => !answersMap.has(q.id)) ?? 0
+        setCurrentIndex(firstUnanswered >= 0 ? firstUnanswered : 0)
+        setStarted(true)
+      }
     }
 
     setLoading(false)
@@ -136,12 +135,135 @@ export default function TestPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-petrol-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Caricamento domande...</p>
+          <p className="mt-4 text-gray-600">Caricamento...</p>
         </div>
       </div>
     )
   }
 
+  // INTRO SCREEN
+  if (!started) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200">
+          <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <Link 
+              href="/dashboard" 
+              className="flex items-center text-gray-600 hover:text-petrol-600"
+            >
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Torna alla Dashboard
+            </Link>
+            <div className="flex items-center text-sm text-gray-500">
+              <Clock className="h-4 w-4 mr-1" />
+              ~45 minuti
+            </div>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="max-w-3xl mx-auto px-4 py-12">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-bold text-petrol-600">
+              Test Diagnostico Leadership
+            </h1>
+            <p className="mt-4 text-lg text-gray-600">
+              Scopri il tuo profilo di leadership attraverso 240 domande
+            </p>
+          </div>
+
+          {/* Instructions Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+            <h2 className="text-xl font-bold text-petrol-600 mb-6">
+              Come funziona il test
+            </h2>
+            
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-petrol-100 text-petrol-600 flex items-center justify-center font-bold flex-shrink-0">
+                  1
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Rispondi con sincerità</h3>
+                  <p className="text-gray-600 mt-1">
+                    Non ci sono risposte giuste o sbagliate. Il test misura il tuo stile attuale, 
+                    non un ideale da raggiungere. Rispondi pensando a come ti comporti realmente, 
+                    non a come vorresti comportarti.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-petrol-100 text-petrol-600 flex items-center justify-center font-bold flex-shrink-0">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Tre possibili risposte</h3>
+                  <p className="text-gray-600 mt-1">
+                    Per ogni affermazione scegli: <span className="font-medium text-green-600">VERO</span> se ti riconosci, 
+                    <span className="font-medium text-yellow-600"> INCERTO</span> se non sei sicuro, 
+                    <span className="font-medium text-red-600"> FALSO</span> se non ti rappresenta.
+                    Usa INCERTO con parsimonia.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-petrol-100 text-petrol-600 flex items-center justify-center font-bold flex-shrink-0">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Salvataggio automatico</h3>
+                  <p className="text-gray-600 mt-1">
+                    Ogni risposta viene salvata automaticamente. Puoi interrompere e riprendere 
+                    il test in qualsiasi momento senza perdere i progressi.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-petrol-100 text-petrol-600 flex items-center justify-center font-bold flex-shrink-0">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Risultati immediati</h3>
+                  <p className="text-gray-600 mt-1">
+                    Al completamento vedrai il tuo profilo su 24 caratteristiche di leadership 
+                    organizzate in 4 pilastri: Visione, Azione, Relazioni e Adattamento.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Info box */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+            <p className="text-amber-800 text-sm">
+              <strong>Suggerimento:</strong> Trova un momento tranquillo per completare il test. 
+              Anche se puoi interromperlo, è meglio rispondere quando sei rilassato e concentrato.
+            </p>
+          </div>
+
+          {/* Start Button */}
+          <div className="text-center">
+            <button 
+              onClick={() => setStarted(true)}
+              className="inline-flex items-center px-8 py-4 bg-petrol-600 text-white rounded-lg hover:bg-petrol-700 font-medium text-lg transition-colors"
+            >
+              <PlayCircle className="h-6 w-6 mr-2" />
+              Inizia il Test
+            </button>
+            <p className="mt-4 text-sm text-gray-500">
+              240 domande • Tempo stimato: 45 minuti
+            </p>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // TEST SCREEN
   if (questions.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
