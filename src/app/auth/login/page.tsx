@@ -1,94 +1,151 @@
-﻿'use client'
+'use client'
 
 import { useState, Suspense } from 'react'
-import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { createBrowserClient } from '@supabase/ssr'
 
 function LoginForm() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/dashboard'
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo') || '/dashboard'
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
     setLoading(true)
+    setError('')
 
-    const supabase = createClient()
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+      if (signInError) {
+        if (signInError.message.includes('Invalid login credentials')) {
+          setError('Email o password non corretti')
+        } else if (signInError.message.includes('Email not confirmed')) {
+          setError('Per favore conferma la tua email prima di accedere')
+        } else {
+          setError(signInError.message)
+        }
+        return
+      }
 
-    if (error) {
-      setError(
-        error.message === 'Invalid login credentials'
-          ? 'Email o password non corretti'
-          : 'Errore durante il login. Riprova.'
-      )
+      if (data.user) {
+        router.push(redirectTo)
+        router.refresh()
+      }
+    } catch (err) {
+      setError('Si è verificato un errore. Riprova.')
+    } finally {
       setLoading(false)
-      return
     }
-
-    router.push(redirect)
-    router.refresh()
   }
 
   return (
-    <div className="bg-white py-8 px-4 shadow-sm rounded-xl sm:px-10">
-      <form onSubmit={handleLogin} className="space-y-6">
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
-            <span className="text-sm">{error}</span>
-          </div>
-        )}
-        <div>
-          <label htmlFor="email" className="label">Email</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-gray-400" />
-            </div>
-            <input id="email" name="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder="nome@azienda.it" />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-slate-900">Vitaeology</h1>
+          <p className="mt-2 text-slate-600">Accedi al tuo account</p>
         </div>
-        <div>
-          <label htmlFor="password" className="label">Password</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-5 w-5 text-gray-400" />
-            </div>
-            <input id="password" name="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} className="input pl-10" placeholder="********" />
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="text-sm">
-            <Link href="/auth/forgot-password" className="text-petrol-600 hover:text-petrol-700">Password dimenticata?</Link>
-          </div>
-        </div>
-        <button type="submit" disabled={loading} className="btn-primary w-full">
-          {loading ? (<><Loader2 className="h-5 w-5 animate-spin mr-2" />Accesso in corso...</>) : ('Accedi')}
-        </button>
-      </form>
-    </div>
-  )
-}
 
-function LoginFormFallback() {
-  return (
-    <div className="bg-white py-8 px-4 shadow-sm rounded-xl sm:px-10">
-      <div className="animate-pulse space-y-6">
-        <div className="h-10 bg-gray-200 rounded"></div>
-        <div className="h-10 bg-gray-200 rounded"></div>
-        <div className="h-10 bg-gray-200 rounded"></div>
+        <form onSubmit={handleLogin} className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-lg">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="la-tua@email.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-700">
+                Ricordami
+              </label>
+            </div>
+
+            <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:text-blue-800">
+              Password dimenticata?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Accesso in corso...
+              </span>
+            ) : (
+              'Accedi'
+            )}
+          </button>
+
+          <p className="text-center text-sm text-slate-600">
+            Non hai un account?{' '}
+            <Link href="/auth/signup" className="text-blue-600 hover:text-blue-800 font-medium">
+              Registrati
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   )
@@ -96,22 +153,12 @@ function LoginFormFallback() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="/" className="flex justify-center">
-          <span className="text-3xl font-display font-bold text-petrol-600">Vitaeology</span>
-        </Link>
-        <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">Accedi al tuo account</h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Non hai un account?{' '}
-          <Link href="/auth/signup" className="text-petrol-600 hover:text-petrol-700 font-medium">Registrati gratis</Link>
-        </p>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <Suspense fallback={<LoginFormFallback />}>
-          <LoginForm />
-        </Suspense>
-      </div>
-    </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
