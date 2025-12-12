@@ -40,12 +40,35 @@ interface PillarScore {
   characteristics: CharacteristicScore[]
 }
 
-// Colori pilastri
+// Colori pilastri (supporta sia italiano che inglese)
 const PILLAR_COLORS: Record<string, string> = {
   'Vision': '#0F4C81',
   'Action': '#C1272D',
   'Relations': '#2D9B6D',
-  'Adaptation': '#E87722'
+  'Adaptation': '#E87722',
+  'VISION': '#0F4C81',
+  'ACTION': '#C1272D',
+  'RELATIONS': '#2D9B6D',
+  'ADAPTATION': '#E87722',
+  'VISIONE': '#0F4C81',
+  'AZIONE': '#C1272D',
+  'RELAZIONI': '#2D9B6D',
+  'ADATTAMENTO': '#E87722'
+}
+
+// Mapping normalizzazione pilastri
+const normalizePillar = (pillar: string): string => {
+  const mapping: Record<string, string> = {
+    'VISIONE': 'Vision',
+    'AZIONE': 'Action',
+    'RELAZIONI': 'Relations',
+    'ADATTAMENTO': 'Adaptation',
+    'VISION': 'Vision',
+    'ACTION': 'Action',
+    'RELATIONS': 'Relations',
+    'ADAPTATION': 'Adaptation'
+  }
+  return mapping[pillar?.toUpperCase()] || pillar
 }
 
 // Livelli interpretazione
@@ -178,19 +201,20 @@ export default function ResultsPage() {
 
         setCharacteristicScores(charScores)
 
-        // Calcola punteggi pilastri
-        const pillarData: Record<string, CharacteristicScore[]> = {
-          'Vision': [],
-          'Action': [],
-          'Relations': [],
-          'Adaptation': []
-        }
+       // Calcola punteggi pilastri
+const pillarData: Record<string, CharacteristicScore[]> = {
+  'Vision': [],
+  'Action': [],
+  'Relations': [],
+  'Adaptation': []
+}
 
-        charScores.forEach(score => {
-          if (pillarData[score.pillar]) {
-            pillarData[score.pillar].push(score)
-          }
-        })
+charScores.forEach(score => {
+  const normalizedPillar = normalizePillar(score.pillar)
+  if (pillarData[normalizedPillar]) {
+    pillarData[normalizedPillar].push(score)
+  }
+})
 
         const pillars: PillarScore[] = Object.entries(pillarData).map(([name, chars]) => {
           const avgScore = chars.length > 0 
