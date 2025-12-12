@@ -51,72 +51,31 @@ function LoginForm() {
             <span className="text-sm">{error}</span>
           </div>
         )}
-
         <div>
-          <label htmlFor="email" className="label">
-            Email
-          </label>
+          <label htmlFor="email" className="label">Email</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Mail className="h-5 w-5 text-gray-400" />
             </div>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input pl-10"
-              placeholder="nome@azienda.it"
-            />
+            <input id="email" name="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder="nome@azienda.it" />
           </div>
         </div>
-
         <div>
-          <label htmlFor="password" className="label">
-            Password
-          </label>
+          <label htmlFor="password" className="label">Password</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Lock className="h-5 w-5 text-gray-400" />
             </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input pl-10"
-              placeholder="********"
-            />
+            <input id="password" name="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} className="input pl-10" placeholder="********" />
           </div>
         </div>
-
         <div className="flex items-center justify-between">
           <div className="text-sm">
-            <Link href="/auth/forgot-password" className="text-petrol-600 hover:text-petrol-700">
-              Password dimenticata?
-            </Link>
+            <Link href="/auth/forgot-password" className="text-petrol-600 hover:text-petrol-700">Password dimenticata?</Link>
           </div>
         </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary w-full"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-5 w-5 animate-spin mr-2" />
-              Accesso in corso...
-            </>
-          ) : (
-            'Accedi'
-          )}
+        <button type="submit" disabled={loading} className="btn-primary w-full">
+          {loading ? (<><Loader2 className="h-5 w-5 animate-spin mr-2" />Accesso in corso...</>) : ('Accedi')}
         </button>
       </form>
     </div>
@@ -140,34 +99,19 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center">
-          <span className="text-3xl font-display font-bold text-petrol-600">
-            Vitaeology
-          </span>
+          <span className="text-3xl font-display font-bold text-petrol-600">Vitaeology</span>
         </Link>
-        <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">
-          Accedi al tuo account
-        </h2>
+        <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">Accedi al tuo account</h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Non hai un account?{' '}
-          <Link href="/auth/signup" className="text-petrol-600 hover:text-petrol-700 font-medium">
-            Registrati gratis
-          </Link>
+          <Link href="/auth/signup" className="text-petrol-600 hover:text-petrol-700 font-medium">Registrati gratis</Link>
         </p>
       </div>
-
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Suspense fallback={<LoginFormFallback />}>
           <LoginForm />
         </Suspense>
- </div>
+      </div>
     </div>
-  )
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Caricamento...</div>}>
-      <LoginContent />
-    </Suspense>
   )
 }
