@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Sidebar from '@/components/layout/Sidebar';
@@ -19,7 +19,7 @@ interface Plan {
   priceId?: string;
 }
 
-export default function SubscriptionPage() {
+function SubscriptionContent() {
   const searchParams = useSearchParams();
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -327,7 +327,7 @@ export default function SubscriptionPage() {
                           handleCheckout(plan.priceId);
                         }
                       }}
-                      disabled={plan.current || (plan.priceId && !!checkoutLoading)}
+                      disabled={plan.current || (!!plan.priceId && !!checkoutLoading)}
                       className={`w-full py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                         plan.current
                           ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed'
@@ -401,11 +401,11 @@ export default function SubscriptionPage() {
               <div className="space-y-3 text-sm">
                 <div>
                   <p className="font-medium text-neutral-700">Posso annullare in qualsiasi momento?</p>
-                  <p className="text-neutral-500">Sì, puoi annullare il tuo abbonamento quando vuoi. L'accesso rimarrà attivo fino alla fine del periodo pagato.</p>
+                  <p className="text-neutral-500">Sì, puoi annullare il tuo abbonamento quando vuoi. L&apos;accesso rimarrà attivo fino alla fine del periodo pagato.</p>
                 </div>
                 <div>
                   <p className="font-medium text-neutral-700">Cosa succede dopo il trial?</p>
-                  <p className="text-neutral-500">Al termine dei 14 giorni, potrai continuare con un piano a pagamento o l'accesso sarà limitato alle funzionalità base.</p>
+                  <p className="text-neutral-500">Al termine dei 14 giorni, potrai continuare con un piano a pagamento o l&apos;accesso sarà limitato alle funzionalità base.</p>
                 </div>
                 <div>
                   <p className="font-medium text-neutral-700">Posso cambiare piano?</p>
@@ -417,5 +417,17 @@ export default function SubscriptionPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function SubscriptionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-petrol-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <SubscriptionContent />
+    </Suspense>
   );
 }

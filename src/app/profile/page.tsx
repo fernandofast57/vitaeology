@@ -163,7 +163,7 @@ export default function ProfilePage() {
                     disabled
                     className="w-full px-4 py-2.5 border border-neutral-200 rounded-lg bg-neutral-50 text-neutral-500"
                   />
-                  <p className="text-xs text-neutral-500 mt-1">L'email non può essere modificata</p>
+                  <p className="text-xs text-neutral-500 mt-1">L&apos;email non può essere modificata</p>
                 </div>
 
                 <div>
