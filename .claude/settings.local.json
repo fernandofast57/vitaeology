@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint:*)",
+      "Bash(npx next:*)",
+      "Bash(npm install:*)",
+      "Bash(node scripts/03_generate_embeddings.js:*)",
+      "Bash(npm run build:*)",
+      "Bash(node scripts/run-sql.js:*)",
+      "Bash(node scripts/add-user-type.js:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}

@@ -70,7 +70,7 @@ export default function SignupPage() {
               Clicca sul link per attivare il tuo account.
             </p>
             <p className="text-sm text-gray-500">
-              Non hai ricevuto l'email? Controlla la cartella spam o{' '}
+              Non hai ricevuto l&apos;email? Controlla la cartella spam o{' '}
               <button 
                 onClick={() => setSuccess(false)} 
                 className="text-petrol-600 hover:text-petrol-700"

@@ -9,7 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Brand Colors Vitaeology
+        // ========================================
+        // Brand Colors Vitaeology (esistenti)
+        // ========================================
         petrol: {
           50: '#E6EAED',
           100: '#C0CAD4',
@@ -34,17 +36,56 @@ const config: Config = {
           800: '#976E26',
           900: '#76531D',
         },
+        
+        // ========================================
+        // ALIAS per componenti Dashboard (NUOVI)
+        // ========================================
+        primary: {
+          DEFAULT: '#0A2540', // = petrol-600
+          light: '#2E4F72',   // = petrol-500
+          dark: '#061526',    // = petrol-800
+        },
+        accent: {
+          DEFAULT: '#F4B942', // = gold-500
+          light: '#F6D355',   // = gold-400
+          dark: '#D9A438',    // = gold-600
+        },
+        neutral: {
+          pearl: '#E8E8E8',   // Grigio Perla (bordi, separatori)
+        },
+        
+        // ========================================
         // Colori pilastri leadership (per radar chart)
+        // ========================================
         pillar: {
+          // Nomi originali (4 pilastri assessment)
           being: '#3B82F6',      // Blu - Essere
           feeling: '#10B981',    // Verde - Sentire  
           thinking: '#8B5CF6',   // Viola - Pensare
           acting: '#F59E0B',     // Arancione - Agire
+          // Alias inglesi (usati nei componenti)
+          vision: '#3B82F6',     // = being
+          relations: '#10B981',  // = feeling
+          adaptation: '#8B5CF6', // = thinking
+          action: '#F59E0B',     // = acting
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Playfair Display', 'Georgia', 'serif'],
+        // Alias per componenti
+        heading: ['Playfair Display', 'Georgia', 'serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      // ========================================
+      // Utilities aggiuntive Vitaeology
+      // ========================================
+      borderRadius: {
+        'vitae': '0.75rem', // 12px standard
+      },
+      boxShadow: {
+        'vitae': '0 1px 3px rgba(10, 37, 64, 0.1), 0 1px 2px rgba(10, 37, 64, 0.06)',
+        'vitae-lg': '0 10px 15px -3px rgba(10, 37, 64, 0.1), 0 4px 6px -2px rgba(10, 37, 64, 0.05)',
       },
     },
   },

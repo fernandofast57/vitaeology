@@ -47,3 +47,10 @@ coverage/
 *.pid.lock
 
 .vercel
+
+# Temp files
+supabase/.temp/
+nul
+
+# Large embedding files (regenerate with scripts)
+scripts/book_chunks_with_embeddings.json

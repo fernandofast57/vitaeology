@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "versione": "2.0",
+    "principi_applicati": [
+      "Parole familiari: ogni termine tecnico spiegato o sostituito",
+      "Concretezza: esempi pratici per ogni istruzione",
+      "Gradualità: settimane 40-52 = SFIDE VERE + INTEGRAZIONE finale"
+    ],
+    "note": "L'utente ha ora 39 settimane di pratica. È pronto per sfide significative. Le ultime 4 settimane sono di integrazione e pianificazione per l'anno successivo."
+  },
+  "esercizi": [
+    {
+      "week_number": 40,
+      "title": "Il Superpotere di Ogni Persona",
+      "subtitle": "Sviluppo Team",
+      "characteristic_slug": "sviluppo_team",
+      "exercise_type": "analisi",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 45,
+      "month_name": "Ottobre",
+      "description": "Ogni persona del tuo team ha un 'superpotere' - qualcosa che fa meglio di tutti. Il tuo lavoro è scoprirlo e usarlo. Questa settimana fai questa analisi per ogni membro del team.",
+      "instructions": "1. Per OGNI persona del tuo team diretto, rispondi:\n\na) Qual è il suo 'superpotere'?\n   (la cosa che fa meglio di tutti, dove brilla)\n\nb) Quale competenza deve sviluppare per crescere?\n   (non debolezza, ma area di crescita)\n\nc) Sto usando al meglio i suoi talenti?\n   (da 1 a 10)\n\n2. Per almeno UNA persona con punteggio basso (c < 7):\n   - Cosa potrei cambiare nel suo ruolo per usare meglio i suoi talenti?\n   - Quale responsabilità potrei darle che si allinea al suo superpotere?\n\n3. Fai una conversazione con quella persona:\n   'Ho notato che sei particolarmente bravo/a in [superpotere]. Vorrei darti più opportunità di usarlo. Cosa ne pensi di [nuova responsabilità]?'\n\nEsempio: 'Marco è bravissimo a spiegare cose complesse in modo semplice. Passava le giornate a fare report. Gli ho proposto di gestire la formazione interna. È rinato.'",
+      "deliverable": "Analisi di ogni membro del team + una conversazione fatta + nuovo ruolo/responsabilità assegnato.",
+      "reflection_prompts": [
+        "Quanto bene conoscevi davvero i talenti del tuo team?",
+        "Ci sono persone il cui superpotere non stavi usando per niente?",
+        "Come ha reagito la persona a cui hai proposto un cambiamento?"
+      ]
+    },
+    {
+      "week_number": 41,
+      "title": "Dai Vera Autorità, Non Solo Compiti",
+      "subtitle": "Empowerment",
+      "characteristic_slug": "empowerment",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 40,
+      "month_name": "Ottobre",
+      "description": "L'empowerment non è delegare compiti. È dare alle persone l'AUTORITÀ di decidere. Questa settimana dai a qualcuno il potere di prendere decisioni senza chiederti permesso.",
+      "instructions": "1. Identifica UN tipo di decisione che oggi richiede la tua approvazione:\n- Approvare spese fino a €X\n- Rispondere a certi tipi di richieste dei clienti\n- Gestire certi problemi operativi\n\n2. Scegli UNA persona a cui delegare questa autorità\n\n3. Definisci regole chiare:\n- 'Puoi decidere autonomamente quando [criteri]'\n- 'Mi devi consultare solo se [eccezioni]'\n\n4. Comunica la nuova autorità alla persona:\n- Spiega il perché\n- Spiega i limiti\n- Dille che ti fidi\n\n5. Regola: per 30 giorni, NON puoi fare override delle sue decisioni (a meno di emergenze vere)\n\n6. Traccia: decisioni prese, qualità, tuo livello di ansia (1-10)\n\nEsempio: 'Ho dato a Laura l'autorità di approvare spese operative fino a 1000€. Primo giorno: ansia 9. Dopo 2 settimane: ansia 4. Le sue decisioni erano migliori delle mie.'",
+      "deliverable": "La decisione delegata, a chi, i criteri definiti, e cosa è successo in 30 giorni.",
+      "reflection_prompts": [
+        "È stato difficile 'lasciare andare' il controllo?",
+        "La persona ha preso decisioni buone? O ha fatto errori?",
+        "Ci sono altre decisioni che potresti delegare così?"
+      ]
+    },
+    {
+      "week_number": 42,
+      "title": "Fai Lavorare Insieme Chi Non Lo Fa Mai",
+      "subtitle": "Collaborazione",
+      "characteristic_slug": "collaborazione",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 60,
+      "month_name": "Ottobre",
+      "description": "I migliori risultati vengono quando persone diverse lavorano insieme. Questa settimana crea una collaborazione insolita - fai lavorare insieme chi normalmente non lo fa.",
+      "instructions": "1. Identifica un problema che richiede competenze diverse:\n- Es: un problema tecnico che impatta il commerciale\n- Es: un processo che tocca più reparti\n- Es: un progetto che richiede creatività + numeri\n\n2. Crea una 'task force' temporanea con 3-5 persone da aree diverse\n\n3. Organizza un workshop di 2 ore:\n- 15 min: presenta il problema\n- 30 min: ogni persona porta la sua prospettiva\n- 45 min: generate soluzioni insieme\n- 30 min: definite un piano d'azione\n\n4. Osserva:\n- Ci sono state resistenze territoriali? ('Questo non è compito mio')\n- Sono emerse idee che nessuno avrebbe avuto da solo?\n\n5. Documenta cosa hai imparato sulla collaborazione cross-funzionale.\n\nEsempio: 'Ho messo insieme vendite e produzione per risolvere un problema di ritardi. Per la prima volta si sono parlati davvero. Hanno trovato una soluzione in 2 ore che io cercavo da mesi.'",
+      "deliverable": "Il problema affrontato, il team creato, le soluzioni emerse, e cosa hai imparato.",
+      "reflection_prompts": [
+        "Perché queste persone normalmente non lavorano insieme?",
+        "La collaborazione ha prodotto idee migliori di quelle che avresti avuto da solo?",
+        "Creerai più spesso questi gruppi misti?"
+      ]
+    },
+    {
+      "week_number": 43,
+      "title": "Dai Voce a Chi Non Parla Mai",
+      "subtitle": "Inclusione",
+      "characteristic_slug": "inclusione",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 25,
+      "month_name": "Ottobre",
+      "description": "In ogni riunione ci sono persone che parlano sempre e persone che non parlano mai. Ma spesso le idee migliori sono in chi tace. Questa settimana fai parlare chi normalmente sta zitto.",
+      "instructions": "1. In ogni riunione questa settimana, fai attenzione a chi NON ha ancora parlato\n\n2. Verso metà riunione, chiedi esplicitamente la loro opinione:\n- '[Nome], tu cosa ne pensi?'\n- '[Nome], hai un punto di vista diverso?'\n- '[Nome], c'è qualcosa che non stiamo considerando?'\n\n3. Importante:\n- Non metterli in imbarazzo - chiedi in modo genuino\n- Ascolta davvero la risposta\n- Ringrazia per il contributo\n\n4. Conta:\n- Quante volte hai chiesto a voci silenziose di parlare?\n- Quante idee preziose sono emerse?\n- È cambiata la dinamica delle riunioni?\n\nEsempio: 'Ho chiesto a Sara, che non parla mai, cosa ne pensava. Ha detto una cosa che nessuno aveva pensato. Il cliente l'ha adorata.'",
+      "deliverable": "Quante volte hai fatto parlare voci silenziose + le idee emerse + cosa è cambiato.",
+      "reflection_prompts": [
+        "Perché certe persone non parlano nelle riunioni?",
+        "Le loro idee erano preziose quanto quelle di chi parla sempre?",
+        "Come puoi creare un ambiente dove tutti si sentano liberi di parlare?"
+      ]
+    },
+    {
+      "week_number": 44,
+      "title": "Una Settimana di Grazie",
+      "subtitle": "Riconoscimento",
+      "characteristic_slug": "riconoscimento",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 20,
+      "month_name": "Ottobre",
+      "description": "Il riconoscimento è uno degli strumenti più potenti che hai - e costa zero. Questa settimana ringrazia qualcuno ogni giorno, in modo specifico e pubblico.",
+      "instructions": "1. Ogni giorno questa settimana, riconosci pubblicamente 1 contributo specifico\n\n2. Usa questa formula:\n'[Nome], ho notato che [comportamento specifico - cosa ha fatto]. Questo ha avuto questo impatto: [risultato concreto]. Grazie.'\n\n3. Regole:\n- Deve essere SPECIFICO (non 'bravo', ma 'hai gestito benissimo quel cliente arrabbiato')\n- Deve essere PUBBLICO (davanti ad altri, non solo in privato)\n- Deve essere SINCERO (non inventato)\n\n4. Scrivi:\n- Chi hai ringraziato ogni giorno?\n- Come ha reagito?\n- Hai notato cambiamenti nel morale del team?\n\nEsempio: 'Anna, ho notato che hai lavorato fino a tardi per consegnare quel report in tempo. Grazie al tuo lavoro, il cliente ci ha confermato il contratto. Grazie.'",
+      "deliverable": "5 riconoscimenti specifici fatti + le reazioni + cosa hai notato nel team.",
+      "reflection_prompts": [
+        "È stato facile o difficile trovare qualcosa da riconoscere ogni giorno?",
+        "Come hanno reagito le persone? Ti ha sorpreso?",
+        "Continuerai questa pratica?"
+      ]
+    },
+    {
+      "week_number": 45,
+      "title": "Il Feedback che Non Vuoi Sentire",
+      "subtitle": "Autoconsapevolezza Avanzata",
+      "characteristic_slug": "autoconsapevolezza",
+      "exercise_type": "feedback",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 45,
+      "month_name": "Novembre",
+      "description": "La vera crescita viene quando ascolti il feedback che fa male. Questa settimana chiedi a 5 persone un feedback brutalmente onesto su di te.",
+      "instructions": "1. Scegli 5 persone che ti conoscono bene (mix di ruoli: superiori, pari, collaboratori)\n\n2. Chiedi a ognuna di rispondere ANONIMAMENTE (usa un modulo online o lasciaglielo scritto):\n- 1 cosa che dovrei SMETTERE di fare\n- 1 cosa che dovrei INIZIARE a fare\n- 1 cosa che dovrei CONTINUARE a fare\n\n3. Quando leggi le risposte:\n- NON difenderti (neanche nella tua testa)\n- NON cercare di indovinare chi ha scritto cosa\n- Cerca i PATTERN (cosa dicono in tanti?)\n\n4. Scegli 1 feedback doloroso ma vero. Crea un piano d'azione per 90 giorni.\n\nEsempio: '3 persone su 5 hanno detto che interrompo troppo. Mi faceva male leggerlo, ma è vero. Ho creato un piano: in ogni riunione, conto fino a 3 prima di parlare.'",
+      "deliverable": "I feedback ricevuti, il pattern principale, e un piano d'azione 90 giorni.",
+      "reflection_prompts": [
+        "Quale feedback ti ha fatto più male? Perché?",
+        "C'è un feedback che ti ha sorpreso?",
+        "Come ti senti ora che sai cosa gli altri pensano davvero?"
+      ]
+    },
+    {
+      "week_number": 46,
+      "title": "Preparati al Peggio",
+      "subtitle": "Resilienza Avanzata",
+      "characteristic_slug": "resilienza",
+      "exercise_type": "pianificazione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 60,
+      "month_name": "Novembre",
+      "description": "I leader resilienti non sperano solo che le cose vadano bene - si PREPARANO per quando andranno male. Questa settimana crea il tuo 'piano di emergenza'.",
+      "instructions": "1. Identifica i 3 'scenari peggiori' che potrebbero accadere nei prossimi 6 mesi:\n- Perdere il cliente più importante?\n- Dimissioni di una persona chiave?\n- Crisi di liquidità?\n- Problema legale o di reputazione?\n\n2. Per ogni scenario, scrivi:\n- Probabilità che accada (1-100%)\n- Primi segnali di allarme da monitorare\n- Prime 3 azioni da fare SE accade\n- Cosa posso fare ORA per prevenirlo\n\n3. Crea un 'playbook di emergenza':\n- 1 pagina per ogni scenario\n- Leggibile in 2 minuti\n- Con numeri di telefono e contatti utili\n\n4. Condividilo con chi deve saperlo (socio, direttore, famiglia?)\n\nEsempio: 'Se perdiamo il cliente X (20% del fatturato): 1) chiamare altri 3 clienti potenziali entro 48h, 2) ridurre costi fissi del 10%, 3) parlare con la banca per linea di credito.'",
+      "deliverable": "3 scenari peggiori + playbook di emergenza + azioni preventive avviate.",
+      "reflection_prompts": [
+        "Ti senti più tranquillo ora che hai un piano?",
+        "C'è qualche scenario che puoi prevenire agendo ora?",
+        "Aggiornerai questo playbook periodicamente?"
+      ]
+    },
+    {
+      "week_number": 47,
+      "title": "Come Vuoi Essere Ricordato?",
+      "subtitle": "Visione Avanzata",
+      "characteristic_slug": "visione",
+      "exercise_type": "riflessione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 45,
+      "month_name": "Novembre",
+      "description": "La visione più potente non è sui numeri - è su che tipo di leader vuoi essere ricordato. Questa settimana scrivi il tuo 'legacy statement' - l'eredità che vuoi lasciare.",
+      "instructions": "1. Immagina di essere tra 30 anni. Stai andando in pensione.\n\n2. Scrivi cosa vorresti che le persone dicessero di te:\n\n- I tuoi collaboratori: 'Lavorare con [nome] mi ha insegnato...'\n- I tuoi clienti: '[Nome] è stato diverso dagli altri perché...'\n- La tua famiglia: 'Come leader, [nome] ha sempre...'\n\n3. Poi chiediti:\n- Le mie azioni di OGGI stanno costruendo questa eredità?\n- C'è un gap tra chi voglio essere e chi sono ora?\n\n4. Identifica 1 gap specifico e 1 azione per iniziare a colmarlo.\n\nEsempio: 'Voglio essere ricordato come qualcuno che ha sviluppato altri leader. Ma oggi passo il 90% del tempo a fare, non a insegnare. Gap: devo dedicare tempo al mentoring.'",
+      "deliverable": "Il tuo legacy statement + 1 gap identificato + 1 azione per colmarlo.",
+      "reflection_prompts": [
+        "Questo esercizio ti ha emozionato? Perché?",
+        "Qual è il gap più grande tra chi vuoi essere e chi sei oggi?",
+        "Cosa cambierebbe se ogni giorno pensassi alla tua legacy?"
+      ]
+    },
+    {
+      "week_number": 48,
+      "title": "Impara Dalle Tue Decisioni",
+      "subtitle": "Decisionalità Avanzata",
+      "characteristic_slug": "decisionalita",
+      "exercise_type": "analisi",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 40,
+      "month_name": "Novembre",
+      "description": "I migliori leader imparano dalle loro decisioni - buone e cattive. Questa settimana crea un 'diario delle decisioni' che continuerai per sempre.",
+      "instructions": "1. Per ogni decisione importante di questa settimana, registra:\n- Data\n- Situazione: cosa stava succedendo?\n- Opzioni: quali alternative avevo?\n- Decisione: cosa ho scelto e perché?\n- Risultato atteso: cosa penso che succederà?\n\n2. Crea un sistema semplice (un foglio Excel, una nota, un quaderno)\n\n3. Programma un reminder tra 90 giorni per ogni decisione:\n- Cosa è successo davvero?\n- La mia previsione era giusta?\n- Cosa ho imparato?\n\n4. Cerca pattern:\n- Ci sono tipi di decisioni dove sbaglio spesso?\n- Ci sono condizioni dove decido meglio?\n\nEsempio: 'Ho notato che le decisioni prese di fretta la sera sono spesso sbagliate. Nuovo principio: decisioni importanti solo la mattina.'",
+      "deliverable": "Il diario delle decisioni iniziato + il sistema per rivedere tra 90 giorni.",
+      "reflection_prompts": [
+        "Hai mai tenuto traccia delle tue decisioni prima?",
+        "Quali pattern pensi che emergeranno?",
+        "Continuerai questo diario anche dopo questa settimana?"
+      ]
+    },
+    {
+      "week_number": 49,
+      "title": "Le 3 Grandi Domande dell'Anno",
+      "subtitle": "Riflessione Integrativa",
+      "characteristic_slug": "autoconsapevolezza",
+      "exercise_type": "riflessione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 45,
+      "month_name": "Dicembre",
+      "description": "Prima di guardare avanti, guarda indietro. Questo esercizio ti aiuta a fare il bilancio dell'anno rispondendo a 3 domande essenziali.",
+      "instructions": "1. Trova 45 minuti di silenzio. Spegni tutto.\n\n2. Rispondi per iscritto a queste 3 domande:\n\nDOMANDA 1: Quale caratteristica ho sviluppato di più quest'anno?\n- Porta un'evidenza concreta (un esempio specifico)\n- Come mi ha aiutato?\n\nDOMANDA 2: Quale caratteristica mi manca ancora di più?\n- Quale 'costo' ho pagato per questa mancanza?\n- Cosa sarebbe diverso se l'avessi sviluppata?\n\nDOMANDA 3: Se dovessi scegliere UNA SOLA caratteristica su cui lavorare l'anno prossimo, quale sarebbe?\n- Perché proprio questa?\n- Cosa cambierebbe se la sviluppassi?\n\n3. Non avere fretta. Lascia che le risposte vengano.\n\nEsempio: 'Ho sviluppato la pazienza. Evidenza: non ho più reagito a caldo alle email. Mi manca ancora la delega. Costo: sono ancora troppo coinvolto nell'operativo.'",
+      "deliverable": "Le risposte alle 3 domande con evidenze concrete.",
+      "reflection_prompts": [
+        "Guardando indietro, qual è la cosa di cui sei più orgoglioso quest'anno?",
+        "C'è qualcosa che avresti voluto fare diversamente?",
+        "Come ti senti dopo aver fatto questo bilancio?"
+      ]
+    },
+    {
+      "week_number": 50,
+      "title": "Grazie a Chi Ti Ha Formato",
+      "subtitle": "Gratitudine",
+      "characteristic_slug": "gratitudine",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 40,
+      "month_name": "Dicembre",
+      "description": "Nessuno diventa un buon leader da solo. Questa settimana ringrazia le persone che ti hanno formato quest'anno.",
+      "instructions": "1. Identifica 3 persone che hanno avuto un impatto significativo sulla tua crescita quest'anno:\n- Un mentore o maestro\n- Un collaboratore che ti ha insegnato qualcosa\n- Anche un 'maestro negativo' (qualcuno da cui hai imparato cosa NON fare)\n\n2. Per ognuna, scrivi un messaggio personale (email, lettera, WhatsApp):\n- Cosa ho imparato da te\n- Come mi ha cambiato\n- Come userò questo insegnamento\n\n3. Invia i messaggi questa settimana.\n\n4. Non importa se ti rispondono. Il valore è nell'atto di riconoscere.\n\nEsempio: 'Caro Marco, quest'anno ho imparato da te cosa significa davvero ascoltare. Quando mi hai fatto notare che interrompevo sempre, mi ha fatto male. Ma hai ragione. Ora faccio più pause prima di parlare. Grazie.'",
+      "deliverable": "3 messaggi di gratitudine inviati.",
+      "reflection_prompts": [
+        "È stato difficile esprimere gratitudine in modo così diretto?",
+        "Come ti sei sentito dopo aver inviato i messaggi?",
+        "C'è qualcuno che vorresti aggiungere alla lista?"
+      ]
+    },
+    {
+      "week_number": 51,
+      "title": "Le Tue 3 Priorità per l'Anno Nuovo",
+      "subtitle": "Pianificazione",
+      "characteristic_slug": "visione",
+      "exercise_type": "pianificazione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 50,
+      "month_name": "Dicembre",
+      "description": "Non puoi lavorare su tutto. Scegli le 3 caratteristiche su cui concentrarti l'anno prossimo e crea un piano concreto.",
+      "instructions": "1. Riguarda il tuo assessment Vitaeology (il radar delle 24 caratteristiche)\n\n2. Scegli 3 caratteristiche su cui concentrarti nel prossimo anno:\n- 1 dalla tua area più debole (dove hai più bisogno)\n- 1 dalla tua area più forte (per eccellere ancora di più)\n- 1 che ti interessa sviluppare (curiosità personale)\n\n3. Per ogni caratteristica, definisci:\n- Livello attuale (1-10)\n- Livello target a fine anno\n- 1 azione mensile per svilupparla\n- 1 modo per misurare i progressi\n\n4. Trova un 'accountability partner' (qualcuno che ti ricordi e ti sfidi)\n\n5. Programma una revisione ogni 3 mesi\n\nEsempio: 'Caratteristica: Delega. Oggi: 4/10. Target: 7/10. Azione mensile: delegare 1 nuova responsabilità. Misura: ore risparmiate a settimana.'",
+      "deliverable": "3 caratteristiche scelte + piano dettagliato per ognuna + accountability partner identificato.",
+      "reflection_prompts": [
+        "Perché hai scelto proprio queste 3 caratteristiche?",
+        "Cosa cambierebbe nella tua vita se le sviluppassi davvero?",
+        "Chi può aiutarti a restare sul percorso?"
+      ]
+    },
+    {
+      "week_number": 52,
+      "title": "Lettera al Te Stesso del Futuro",
+      "subtitle": "Commitment",
+      "characteristic_slug": "visione",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 30,
+      "month_name": "Dicembre",
+      "description": "Ultimo esercizio dell'anno. Scrivi una lettera al te stesso che aprirai esattamente tra 12 mesi. Un impegno con te stesso per l'anno che verrà.",
+      "instructions": "1. Prendi carta e penna (non digitale - scrivi a mano)\n\n2. Inizia: 'Caro/a [tuo nome] del [data tra 1 anno]...'\n\n3. Scrivi:\n- Il leader che voglio essere diventato\n- Le 3 caratteristiche che avrò sviluppato\n- L'impatto che avrò avuto sul mio team e sulla mia azienda\n- 1 cosa che NON farò più\n- 1 cosa che farò SEMPRE\n- Come mi sentirò quando leggerò questa lettera\n\n4. Firma e data\n\n5. Metti la lettera in una busta, sigillala, scrivi sopra: 'Aprire il [data]'\n\n6. Programma un reminder nel calendario per quella data\n\nEsempio: 'Caro Fernando del 31 dicembre 2025, se stai leggendo questa lettera, significa che ce l'hai fatta. Spero che tu abbia finalmente imparato a delegare senza ansia...'",
+      "deliverable": "La lettera sigillata + reminder programmato.",
+      "reflection_prompts": [
+        "Come ti sei sentito scrivendo questa lettera?",
+        "Credi davvero che diventerai quella persona?",
+        "Cosa farai domani per iniziare quel percorso?"
+      ]
+    }
+  ]
+}

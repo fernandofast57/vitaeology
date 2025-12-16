@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "versione": "2.0",
+    "principi_applicati": [
+      "Parole familiari: ogni termine tecnico spiegato o sostituito",
+      "Concretezza: esempi pratici per ogni istruzione",
+      "Gradualità: settimane 27-39 = azioni PIÙ IMPEGNATIVE"
+    ],
+    "note": "Ora l'utente ha 26 settimane di pratica. Può affrontare sfide più grandi, ma sempre con supporto e esempi chiari."
+  },
+  "esercizi": [
+    {
+      "week_number": 27,
+      "title": "Pensa al Contrario",
+      "subtitle": "Creatività",
+      "characteristic_slug": "creativita",
+      "exercise_type": "analisi",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 35,
+      "month_name": "Luglio",
+      "description": "La creatività spesso arriva pensando al contrario. Invece di chiederti 'come risolvere questo problema', chiediti 'come potrei peggiorarlo'. Poi inverti le risposte.",
+      "instructions": "1. Scegli un problema che stai cercando di risolvere da tempo\n\n2. Invece di cercare soluzioni, chiediti: 'Se volessi che questo problema diventasse PEGGIORE, cosa farei?'\n\n3. Scrivi 10 modi per peggiorare la situazione. Sii creativo, anche assurdo.\n\nEsempio problema: 'I clienti non tornano'\nModi per peggiorare:\n- Non rispondere mai al telefono\n- Aumentare i prezzi senza spiegare perché\n- Ignorare i reclami\n- Essere scortesi\n\n4. Ora INVERTI ogni punto: cosa stai facendo che assomiglia a quei modi di peggiorare?\n\n5. Scegli 1 cosa da cambiare questa settimana.\n\nEsempio: 'Rispondo sempre al telefono? No, spesso non richiamo. Ecco un problema che posso risolvere.'",
+      "deliverable": "10 modi per peggiorare, cosa stai già facendo di simile, e 1 azione di miglioramento.",
+      "reflection_prompts": [
+        "È stato più facile pensare a come peggiorare che a come migliorare?",
+        "Hai scoperto qualcosa che stavi già facendo 'sbagliato' senza rendertene conto?",
+        "Come puoi usare questa tecnica per altri problemi?"
+      ]
+    },
+    {
+      "week_number": 28,
+      "title": "Cosa Farebbe Fallire Questo Progetto?",
+      "subtitle": "Innovazione",
+      "characteristic_slug": "innovazione",
+      "exercise_type": "analisi",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 40,
+      "month_name": "Luglio",
+      "description": "Prima di iniziare qualcosa di nuovo, chiediti: 'Cosa potrebbe farlo fallire?' Questo si chiama 'pre-mortem' - immaginare il fallimento prima che accada per prevenirlo.",
+      "instructions": "1. Scegli un progetto importante che stai per iniziare (o hai appena iniziato)\n\n2. Immagina di essere tra 6 mesi. Il progetto è FALLITO miseramente.\n\n3. Scrivi il 'necrologio' del progetto:\n- Cosa è andato storto?\n- Quali segnali avevamo ignorato?\n- Quali decisioni sbagliate abbiamo preso?\n- Cosa avremmo potuto fare diversamente?\n\n4. Ora torna al presente. Per ogni rischio identificato, scrivi:\n- Come posso prevenirlo?\n- Quali segnali devo monitorare?\n\n5. Condividi questa analisi con il team\n\nEsempio: 'Il lancio del nuovo prodotto è fallito perché non abbiamo testato con clienti veri prima. Azione preventiva: fare 10 interviste a clienti entro 2 settimane.'",
+      "deliverable": "Il 'necrologio' del progetto e le azioni preventive identificate.",
+      "reflection_prompts": [
+        "È stato scomodo immaginare il fallimento?",
+        "Hai identificato rischi che non avevi considerato prima?",
+        "Come ha reagito il team quando hai condiviso questa analisi?"
+      ]
+    },
+    {
+      "week_number": 29,
+      "title": "Testa Quell'Idea in Una Settimana",
+      "subtitle": "Sperimentazione",
+      "characteristic_slug": "sperimentazione",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 60,
+      "month_name": "Luglio",
+      "description": "Spesso rimandiamo le idee perché 'non abbiamo tempo o budget'. Ma quasi ogni idea può essere testata in piccolo, velocemente e con pochi soldi. Questa settimana fallo.",
+      "instructions": "1. Pensa a un'idea che vorresti testare da mesi ma 'non hai mai il tempo'\n\n2. Chiediti: come posso testarla in 1 settimana con meno di 500€?\n\nEsempi:\n- Nuovo servizio? Offrilo a 3 clienti gratis e chiedi feedback\n- Nuovo mercato? Fai 10 chiamate a potenziali clienti\n- Nuovo processo? Provalo con 1 persona per 1 settimana\n\n3. Definisci:\n- Cosa voglio imparare? (ipotesi)\n- Come lo testo? (azione)\n- Come capisco se funziona? (criterio di successo)\n\n4. Fallo questa settimana. Niente scuse.\n\n5. Scrivi: cosa hai imparato?\n\nEsempio: 'Volevo testare consulenze online. Ho offerto 3 sessioni gratuite su Zoom. 2 su 3 hanno detto che pagherebbero. Ora so che c'è mercato.'",
+      "deliverable": "L'idea testata, come l'hai testata, e cosa hai imparato.",
+      "reflection_prompts": [
+        "È stato più facile o più difficile del previsto testare l'idea?",
+        "Cosa hai imparato che non avresti scoperto 'pensandoci'?",
+        "Continuerai con questa idea o la abbandonerai? Perché?"
+      ]
+    },
+    {
+      "week_number": 30,
+      "title": "Pensa a Lungo Termine",
+      "subtitle": "Pensiero Strategico",
+      "characteristic_slug": "pensiero_strategico",
+      "exercise_type": "riflessione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 45,
+      "month_name": "Luglio",
+      "description": "Il pensiero strategico è vedere oltre l'urgenza del momento. Questa settimana ti chiedo di fermarti e guardare lontano: cosa stai costruendo davvero?",
+      "instructions": "1. Trova 45 minuti di silenzio totale. Spegni tutto.\n\n2. Rispondi a queste domande per iscritto:\n\na) Tra 3 anni, dove vuoi che sia la tua azienda/carriera?\n- Dimensione?\n- Tipo di clienti?\n- Tuo ruolo?\n\nb) Delle cose che fai OGGI, quali ti avvicinano a quel futuro?\n\nc) Delle cose che fai OGGI, quali sono solo 'rumore' - urgenti ma non importanti?\n\nd) C'è qualcosa di IMPORTANTE che non stai facendo perché 'non hai tempo'?\n\n3. Identifica UNA azione strategica da iniziare questo mese.\n\nEsempio: 'Tra 3 anni voglio lavorare meno ore ma guadagnare di più. Oggi passo il 50% del tempo in attività operative. L'azione strategica: formare 1 persona che possa sostituirmi in alcune cose.'",
+      "deliverable": "La visione a 3 anni e UNA azione strategica da iniziare questo mese.",
+      "reflection_prompts": [
+        "Quanto tempo dedichi normalmente a pensare strategicamente vs. operativamente?",
+        "L'urgenza del quotidiano ti impedisce di lavorare sulle cose importanti?",
+        "Come puoi proteggere tempo per il pensiero strategico ogni settimana?"
+      ]
+    },
+    {
+      "week_number": 31,
+      "title": "Togli una Maschera",
+      "subtitle": "Autenticità",
+      "characteristic_slug": "autenticita",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 30,
+      "month_name": "Agosto",
+      "description": "Tutti indossiamo 'maschere' al lavoro - fingiamo di essere sempre sicuri, sempre energici, sempre sotto controllo. Ma essere autentici crea fiducia. Questa settimana prova a togliere una maschera.",
+      "instructions": "1. Identifica una 'maschera' che indossi spesso al lavoro:\n- 'Sono sempre sicuro delle mie decisioni' (quando a volte hai dubbi)\n- 'Non sono mai stanco' (quando sei esausto)\n- 'Ho tutto sotto controllo' (quando sei sopraffatto)\n- 'Non mi importa cosa pensano gli altri' (quando ti importa eccome)\n\n2. Scrivi:\n- Perché indosso questa maschera?\n- Cosa ho paura che succeda se la tolgo?\n- Quanto mi costa portarla? (energia, autenticità, relazioni)\n\n3. Questa settimana, in UNA situazione sicura, prova a togliere la maschera:\n- Ammetti un dubbio: 'Non sono sicuro, voi cosa ne pensate?'\n- Ammetti stanchezza: 'Oggi sono stanco, facciamo una pausa'\n- Chiedi aiuto: 'Non so come gestire questa cosa'\n\n4. Nota la reazione degli altri e come ti sei sentito.\n\nEsempio: Luca ha sempre finto di sapere tutto. In una riunione ha detto: 'Onestamente, non conosco bene questo argomento. Qualcuno può spiegarmi?' Il team ha reagito bene. Si è sentito sollevato.",
+      "deliverable": "La maschera identificata, la situazione in cui l'hai tolta, e cosa è successo.",
+      "reflection_prompts": [
+        "Come ti sei sentito nel togliere la maschera?",
+        "La reazione degli altri è stata come temevi?",
+        "Vorresti togliere questa maschera più spesso?"
+      ]
+    },
+    {
+      "week_number": 32,
+      "title": "I Tuoi Valori Sono Veri?",
+      "subtitle": "Valori",
+      "characteristic_slug": "valori",
+      "exercise_type": "analisi",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 35,
+      "month_name": "Agosto",
+      "description": "Diciamo tutti di avere valori. Ma i valori veri si vedono nelle decisioni difficili, non in quelle facili. Questa settimana verifica se i tuoi valori sono reali.",
+      "instructions": "1. Scrivi i tuoi 3 valori più importanti\n(es. famiglia, onestà, innovazione, libertà, sicurezza...)\n\n2. Per ogni valore, pensa a una decisione recente dove avresti potuto scegliere diversamente:\n- Hai scelto secondo il valore?\n- O hai fatto un compromesso?\n\n3. Sii onesto: i tuoi valori 'dichiarati' corrispondono ai tuoi valori 'praticati'?\n\nEsempio:\nValore dichiarato: 'La famiglia viene prima di tutto'\nRealtà: 'Negli ultimi 3 mesi ho cancellato 4 cene di famiglia per lavoro'\nDomanda: È davvero il mio valore principale, o lo dico solo?\n\n4. Identifica UN gap tra valori dichiarati e praticati. Cosa puoi fare per ridurlo?\n\nNota: Non c'è giudizio qui. A volte scopriamo che i nostri veri valori sono diversi da quelli che diciamo. Va bene anche quello.",
+      "deliverable": "3 valori, una verifica onesta per ognuno, e UN gap da ridurre.",
+      "reflection_prompts": [
+        "Ti ha sorpreso scoprire gap tra valori dichiarati e praticati?",
+        "I tuoi valori 'veri' (quelli che pratichi) ti piacciono?",
+        "Cosa dovresti cambiare per vivere più in linea con i tuoi valori?"
+      ]
+    },
+    {
+      "week_number": 33,
+      "title": "Dì Quella Verità Scomoda",
+      "subtitle": "Onestà",
+      "characteristic_slug": "onesta",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 40,
+      "month_name": "Agosto",
+      "description": "L'onestà non è solo non mentire. È anche dire le verità scomode che sarebbe più facile tacere. Questa settimana affrontane una.",
+      "instructions": "1. Pensa a UNA verità scomoda che non stai dicendo a qualcuno:\n- Un feedback negativo che stai evitando\n- Una preoccupazione che non hai espresso\n- Un disaccordo che stai nascondendo\n- Un problema che stai minimizzando\n\n2. Pianifica la conversazione:\n- Quando la farai? (entro 48 ore)\n- Come inizierai? 'Ho bisogno di dirti qualcosa difficile...'\n- Qual è il messaggio chiave in 1-2 frasi?\n\n3. Fai la conversazione. Usa questo approccio:\n- Sii diretto ma gentile\n- Parla di fatti, non di giudizi\n- Ascolta la risposta\n- Non difenderti, cerca di capire\n\n4. Dopo, scrivi: come è andata? Come ti senti?\n\nEsempio: 'Devo dire al mio socio che non sono d'accordo con la sua strategia. L'ho fatto. È stato teso, ma ora almeno ne parliamo invece di fingere.'",
+      "deliverable": "La verità che hai detto, come è andata, e come ti senti dopo.",
+      "reflection_prompts": [
+        "Quanto ti è costato aspettare prima di dire questa verità?",
+        "La conversazione è andata meglio o peggio di quanto temevi?",
+        "C'è un'altra verità scomoda che dovresti affrontare?"
+      ]
+    },
+    {
+      "week_number": 34,
+      "title": "Condividi un'Informazione Riservata",
+      "subtitle": "Trasparenza",
+      "characteristic_slug": "trasparenza",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 30,
+      "month_name": "Agosto",
+      "description": "La trasparenza crea fiducia. Ma spesso teniamo informazioni 'riservate' per paura. Questa settimana condividi con il team qualcosa che normalmente terresti per te.",
+      "instructions": "1. Pensa a un'informazione che normalmente tieni riservata:\n- Come sta andando davvero l'azienda (numeri)\n- Una sfida che stai affrontando\n- Un feedback critico ricevuto da un cliente\n- Un errore che hai fatto\n\n2. Chiediti:\n- Perché la tengo riservata?\n- Cosa ho paura che succeda se la condivido?\n- Il team potrebbe aiutarmi se sapesse?\n\n3. Scegli UNA informazione e condividila con il team questa settimana:\n- Spiega il contesto\n- Sii onesto sulla situazione\n- Chiedi input/aiuto\n\n4. Nota: come ha reagito il team?\n\nEsempio: 'Ho condiviso che abbiamo perso un cliente importante. Il team non è andato in panico - anzi, hanno proposto idee per recuperare. Mi sono sentito meno solo.'",
+      "deliverable": "L'informazione condivisa, la reazione del team, e come ti sei sentito.",
+      "reflection_prompts": [
+        "La reazione del team è stata come temevi?",
+        "Ti senti più leggero dopo aver condiviso?",
+        "Cosa ti impedisce di essere più trasparente normalmente?"
+      ]
+    },
+    {
+      "week_number": 35,
+      "title": "Racconta un Tuo Fallimento",
+      "subtitle": "Vulnerabilità",
+      "characteristic_slug": "vulnerabilita",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 30,
+      "month_name": "Agosto",
+      "description": "La vulnerabilità è mostrare anche i propri fallimenti, non solo i successi. Questo crea connessione umana. Questa settimana racconta un tuo fallimento al team.",
+      "instructions": "1. Scegli un fallimento significativo della tua carriera che non hai mai condiviso:\n- Un progetto andato male\n- Un'assunzione sbagliata\n- Un'opportunità persa\n- Un errore costoso\n\n2. Prepara la storia (5-10 minuti):\n- Cosa è successo?\n- Come ti sei sentito?\n- Cosa hai imparato?\n\n3. Racconta questa storia in una riunione team questa settimana.\n\n4. Nota:\n- Come ti sei sentito a condividerla?\n- Come ha reagito il team?\n- È cambiato qualcosa nel clima del gruppo?\n\nEsempio: 'Ho raccontato di quando ho quasi fatto fallire la mia prima azienda per troppa fiducia in un partner sbagliato. Il team è rimasto in silenzio, poi qualcuno ha condiviso un suo errore. L'atmosfera è cambiata.'",
+      "deliverable": "Il fallimento raccontato, la reazione del team, e cosa hai notato.",
+      "reflection_prompts": [
+        "È stato difficile condividere questo fallimento?",
+        "Come ha reagito il team? Si sono aperti anche loro?",
+        "Cosa cambia nella relazione con il team dopo aver mostrato vulnerabilità?"
+      ]
+    },
+    {
+      "week_number": 36,
+      "title": "Elimina il 20% Meno Importante",
+      "subtitle": "Orientamento ai Risultati",
+      "characteristic_slug": "orientamento_risultati",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 40,
+      "month_name": "Settembre",
+      "description": "Per ottenere più risultati, spesso devi fare MENO cose. Questa settimana identifica ed elimina le attività che non producono valore reale.",
+      "instructions": "1. Fai una lista di TUTTE le attività che fai in una settimana tipica\n\n2. Per ognuna, chiediti:\n'Se non facessi questa cosa, cosa succederebbe tra 30 giorni?'\n\n3. Categorizza:\n- ESSENZIALE: se non la faccio, ci sono conseguenze serie\n- UTILE: aiuta, ma non è critica\n- RUMORE: nessuna conseguenza reale\n\n4. Per le attività 'RUMORE':\n- Eliminale completamente\n- OPPURE: delegale a qualcun altro\n\n5. Obiettivo: recuperare almeno 3-5 ore alla settimana\n\nEsempio: 'Passavo 4 ore a settimana in report che nessuno leggeva. Li ho eliminati. Nessuno ha protestato. Ho recuperato 4 ore.'",
+      "deliverable": "Lista attività categorizzate, cosa hai eliminato/delegato, tempo recuperato.",
+      "reflection_prompts": [
+        "È stato difficile eliminare attività che fai da tempo?",
+        "Qualcuno ha notato che non fai più quelle cose?",
+        "Come userai il tempo recuperato?"
+      ]
+    },
+    {
+      "week_number": 37,
+      "title": "21 Giorni di Una Nuova Abitudine",
+      "subtitle": "Disciplina",
+      "characteristic_slug": "disciplina",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 20,
+      "month_name": "Settembre",
+      "description": "La disciplina è fare quello che devi fare, anche quando non ne hai voglia. Questa settimana inizi una nuova abitudine che manterrai per 21 giorni.",
+      "instructions": "1. Scegli UNA abitudine ad alto impatto che sai dovresti fare ogni giorno:\n- 20 minuti di lettura/studio\n- 10 minuti di pianificazione mattutina\n- 1 chiamata a un cliente\n- 30 minuti di esercizio fisico\n- 15 minuti di riflessione serale\n\n2. Regole:\n- Stessa ora ogni giorno\n- Nessuna eccezione per 21 giorni\n- Trova qualcuno a cui rendere conto (accountability partner)\n\n3. Traccia ogni giorno:\n- L'ho fatto? ✓ o ✗\n- Resistenza sentita (1-10)\n- Benefici notati\n\n4. Se salti un giorno, non mollare. Riprendi subito.\n\nEsempio: Marco ha scelto '15 minuti di pianificazione ogni mattina alle 7'. I primi 5 giorni erano difficili. Dopo 2 settimane, non poteva più farne a meno.",
+      "deliverable": "L'abitudine scelta, il tracciamento di 21 giorni (inizia ora), e cosa hai notato.",
+      "reflection_prompts": [
+        "Quali giorni sono stati più difficili? Cosa li ha resi difficili?",
+        "L'abitudine sta diventando più facile con il tempo?",
+        "Continuerai dopo i 21 giorni?"
+      ]
+    },
+    {
+      "week_number": 38,
+      "title": "Riprendi Quel Progetto Abbandonato",
+      "subtitle": "Perseveranza",
+      "characteristic_slug": "perseveranza",
+      "exercise_type": "azione",
+      "difficulty_level": "avanzato",
+      "estimated_time_minutes": 45,
+      "month_name": "Settembre",
+      "description": "A volte abbandoniamo progetti importanti perché diventano difficili. Ma la perseveranza significa tornare a lottare. Questa settimana riprendi qualcosa che hai mollato.",
+      "instructions": "1. Pensa a UN progetto importante che hai abbandonato nell'ultimo anno\n\n2. Analizza onestamente:\n- Perché l'ho abbandonato?\n  □ Era davvero impossibile?\n  □ Ho trovato scuse?\n  □ È diventato troppo difficile?\n  □ Ho perso interesse?\n\n3. Decidi:\n- Vale la pena riprenderlo? (sì/no)\n- Se SÌ: quale piccolo passo posso fare QUESTA SETTIMANA per ricominciare?\n- Se NO: chiudi formalmente - comunica a chi serve che il progetto è finito\n\n4. In entrambi i casi, scrivi cosa hai imparato.\n\nEsempio: 'Avevo iniziato a scrivere un libro, poi ho mollato. L'ho ripreso - questa settimana ho scritto il primo capitolo. Era più facile di quanto ricordassi.'",
+      "deliverable": "Il progetto abbandonato, la decisione (riprendere o chiudere), e il primo passo fatto.",
+      "reflection_prompts": [
+        "Perché avevi davvero mollato? Era una buona ragione?",
+        "Come ti senti ad aver ripreso (o chiuso formalmente)?",
+        "Cosa farai diversamente questa volta per non mollare di nuovo?"
+      ]
+    },
+    {
+      "week_number": 39,
+      "title": "Dove Va il Tuo Tempo Davvero?",
+      "subtitle": "Efficienza",
+      "characteristic_slug": "efficienza",
+      "exercise_type": "analisi",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 35,
+      "month_name": "Settembre",
+      "description": "Pensiamo di sapere dove va il nostro tempo, ma spesso ci sbagliamo. Questa settimana fai un 'audit del tempo' brutalmente onesto.",
+      "instructions": "1. Per 5 giorni lavorativi, ogni 30 minuti scrivi cosa stai facendo\n\n2. Alla fine di ogni giorno, categorizza:\n- ALTO IMPATTO: attività che producono risultati importanti\n- NECESSARIO: deve essere fatto, ma non produce grandi risultati\n- SPRECO: non produce valore reale\n\n3. Calcola le percentuali:\n- % tempo in ALTO IMPATTO\n- % tempo in NECESSARIO\n- % tempo in SPRECO\n\n4. Identifica i 3 maggiori 'sprechi di tempo' e crea un piano per:\n- Eliminarli\n- Delegarli\n- Automatizzarli\n\n5. Obiettivo: aumentare ALTO IMPATTO del 20% la prossima settimana\n\nEsempio: 'Ho scoperto che passavo 2 ore al giorno in email non urgenti. Ho impostato 2 slot fissi per le email. Ho recuperato 1.5 ore al giorno.'",
+      "deliverable": "5 giorni di tracciamento, percentuali, e 3 sprechi da eliminare.",
+      "reflection_prompts": [
+        "Ti ha sorpreso vedere dove va davvero il tuo tempo?",
+        "Qual è lo spreco più grande che hai scoperto?",
+        "Come puoi proteggere più tempo per le attività ad alto impatto?"
+      ]
+    }
+  ]
+}

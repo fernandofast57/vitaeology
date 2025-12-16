@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "versione": "2.0",
+    "principi_applicati": [
+      "Parole familiari: ogni termine tecnico spiegato o sostituito",
+      "Concretezza: esempi pratici per ogni istruzione",
+      "Gradualità: settimane 14-26 = azioni PICCOLE e SICURE"
+    ],
+    "note": "In queste settimane iniziamo con PICCOLE azioni. Niente di rischioso. L'utente ha già 13 settimane di osservazione alle spalle."
+  },
+  "esercizi": [
+    {
+      "week_number": 14,
+      "title": "Fai Più Domande, Dai Meno Risposte",
+      "subtitle": "Curiosità",
+      "characteristic_slug": "curiosita",
+      "exercise_type": "azione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Aprile",
+      "description": "I migliori leader fanno domande, non danno solo risposte. Questa settimana prova a fare più domande del solito - vedrai che scoprirai cose che non sapevi.",
+      "instructions": "1. Scegli 2-3 conversazioni questa settimana (riunioni, chiamate, incontri)\n\n2. Prima di dare la tua opinione, fai almeno 2 domande:\n- 'Cosa ne pensi tu?'\n- 'Cosa hai già provato?'\n- 'Cosa ti preoccupa di più?'\n- 'Cosa succederebbe se...?'\n\n3. Conta quante domande fai vs. quante opinioni dai\n\n4. Dopo ogni conversazione, scrivi:\n- Quante domande ho fatto?\n- Ho scoperto qualcosa che non sapevo?\n\nEsempio semplice: Invece di dire 'Dovresti fare così', prova 'Cosa hai già considerato? Cosa ti blocca?'",
+      "deliverable": "Un conteggio delle domande fatte in 2-3 conversazioni e una cosa nuova che hai scoperto.",
+      "reflection_prompts": [
+        "È stato difficile fare domande invece di dare subito risposte?",
+        "Hai scoperto qualcosa che non avresti scoperto se avessi parlato subito?",
+        "Come hanno reagito le persone quando hai fatto domande?"
+      ]
+    },
+    {
+      "week_number": 15,
+      "title": "Cosa Ti Manca per Crescere?",
+      "subtitle": "Apprendimento",
+      "characteristic_slug": "apprendimento",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Aprile",
+      "description": "Per crescere, devi sapere cosa ti manca. Questa settimana ti chiedo di identificare UNA competenza (cioè qualcosa che sai fare) che vorresti sviluppare.",
+      "instructions": "1. Pensa a dove vuoi essere tra 3 anni\n\n2. Chiediti: quale competenza mi manca per arrivarci?\n\nEsempi:\n- Saper parlare in pubblico\n- Capire i numeri finanziari\n- Gestire i conflitti nel team\n- Vendere meglio\n- Delegare senza ansia\n\n3. Scegli UNA sola competenza e scrivi:\n- Perché questa è importante per me?\n- Dove sono oggi da 1 a 10?\n- Dove vorrei essere tra 1 anno?\n\n4. Identifica UN piccolo passo che puoi fare questa settimana:\n- Leggere 1 articolo\n- Guardare 1 video\n- Chiedere consiglio a qualcuno che è bravo in questo",
+      "deliverable": "La competenza scelta, il tuo livello attuale, e UN piccolo passo fatto questa settimana.",
+      "reflection_prompts": [
+        "Perché hai scelto proprio questa competenza?",
+        "Cosa ti ha impedito finora di svilupparla?",
+        "Chi conosci che è molto bravo in questo? Potresti chiedergli un consiglio?"
+      ]
+    },
+    {
+      "week_number": 16,
+      "title": "Cambia Una Piccola Abitudine",
+      "subtitle": "Adattabilità",
+      "characteristic_slug": "adattabilita",
+      "exercise_type": "azione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Aprile",
+      "description": "L'adattabilità è la capacità di cambiare quando serve. Ma spesso siamo attaccati alle nostre routine. Questa settimana prova a cambiare UNA piccola abitudine lavorativa.",
+      "instructions": "1. Pensa a una routine che fai sempre nello stesso modo da tempo:\n- L'ordine in cui leggi le email\n- Il posto dove ti siedi in riunione\n- L'ora in cui fai certe cose\n- Il modo in cui inizi la giornata\n\n2. Cambiala per 5 giorni. Qualcosa di piccolo:\n- Leggi le email dal basso invece che dall'alto\n- Siediti in un posto diverso\n- Inizia la giornata con una cosa diversa\n\n3. Nota:\n- Quanto è stato difficile cambiare? (1-10)\n- Hai notato qualcosa di diverso?\n\nEsempio: Sara leggeva sempre le email appena sveglia. Ha provato a leggerle dopo colazione. Ha notato che era meno ansiosa.",
+      "deliverable": "L'abitudine che hai cambiato e cosa hai notato in 5 giorni.",
+      "reflection_prompts": [
+        "Perché è stato difficile (o facile) cambiare questa abitudine?",
+        "Terrai questo cambiamento o tornerai alla vecchia abitudine?",
+        "Cosa ti dice questa esperienza sulla tua capacità di adattarti?"
+      ]
+    },
+    {
+      "week_number": 17,
+      "title": "Metti in Dubbio una Cosa che Credi",
+      "subtitle": "Pensiero Critico",
+      "characteristic_slug": "pensiero_critico",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Aprile",
+      "description": "Il pensiero critico è la capacità di mettere in discussione le proprie certezze. Questa settimana scegli UNA cosa che credi vera sul tuo lavoro e cercane le prove.",
+      "instructions": "1. Pensa a una convinzione forte che hai sul tuo business:\n- 'I nostri clienti vogliono X'\n- 'Il prezzo è troppo alto/basso'\n- 'Il team non è pronto per Y'\n- 'Non possiamo fare Z perché...'\n\n2. Scrivi questa convinzione\n\n3. Ora cerca 3 prove che la CONTRADDICONO:\n- Ci sono clienti che vogliono qualcosa di diverso?\n- C'è qualcuno che ha fatto diversamente e ha funzionato?\n- Cosa direbbero i tuoi clienti se glielo chiedessi?\n\n4. NON devi cambiare idea. Solo vedere l'altro lato.\n\nEsempio: 'Credo che i clienti vogliano prezzi bassi.' Prove contrarie: 'Il cliente A ha scelto noi anche se costiamo di più. Il competitor economico ha recensioni pessime.'",
+      "deliverable": "La convinzione + 3 prove che la contraddicono.",
+      "reflection_prompts": [
+        "È stato difficile trovare prove contrarie? Perché?",
+        "La tua convinzione è ancora così forte come prima?",
+        "Cosa potresti fare per verificare quale versione è più vera?"
+      ]
+    },
+    {
+      "week_number": 18,
+      "title": "Convinci Qualcuno Senza Imporre",
+      "subtitle": "Influenza",
+      "characteristic_slug": "influenza",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 30,
+      "month_name": "Maggio",
+      "description": "L'influenza vera non è imporre la tua idea. È far vedere agli altri perché quell'idea è buona anche per loro. Questa settimana prova a convincere qualcuno usando solo domande e fatti.",
+      "instructions": "1. Pensa a un piccolo cambiamento che vorresti proporre:\n- Un nuovo modo di fare qualcosa\n- Un'idea per migliorare un processo\n- Una proposta per il team\n\n2. Invece di dire 'Dobbiamo fare così', prova:\n- Fai domande: 'Cosa pensi di come facciamo X adesso?'\n- Mostra i fatti: 'Ho notato che ogni volta perdiamo 2 ore...'\n- Chiedi il loro punto di vista: 'Tu come lo risolveresti?'\n\n3. Scrivi come è andata:\n- Hai usato ordini o domande?\n- Come ha reagito l'altra persona?\n- Sei riuscito a convincerla?\n\nEsempio: Invece di 'Da lunedì facciamo le riunioni alle 9', prova 'Ho notato che le riunioni delle 14 durano sempre troppo perché siamo stanchi. Cosa ne pensate di provare la mattina?'",
+      "deliverable": "Una descrizione di come hai provato a convincere qualcuno e cosa è successo.",
+      "reflection_prompts": [
+        "È stato più difficile o più facile del solito convincere l'altra persona?",
+        "Cosa hai imparato su come reagiscono le persone alle domande vs. agli ordini?",
+        "Userai questo approccio di nuovo?"
+      ]
+    },
+    {
+      "week_number": 19,
+      "title": "Perché Fai Quello che Fai?",
+      "subtitle": "Ispirazione",
+      "characteristic_slug": "ispirazione",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Maggio",
+      "description": "I leader che ispirano sanno spiegare PERCHÉ fanno quello che fanno - non solo cosa fanno. Questa settimana ti chiedo di trovare il tuo 'perché'.",
+      "instructions": "1. Rispondi a questa domanda: 'Perché faccio questo lavoro?'\n\nRegola: NON puoi menzionare soldi o status\n\n2. Scrivi la risposta in 3-4 frasi semplici. Deve essere comprensibile a un bambino di 10 anni.\n\n3. Chiediti:\n- Questa risposta mi emoziona?\n- Se la leggessi a qualcuno, capirebbe perché mi alzo la mattina?\n\n4. Se la risposta è 'no', prova di nuovo. Il vero 'perché' è più profondo.\n\nEsempio:\n❌ 'Perché voglio fatturare 1 milione' (questo è un obiettivo, non un perché)\n✅ 'Perché voglio dimostrare che si può fare impresa rispettando le persone. E perché ogni cliente soddisfatto mi fa sentire che ho fatto qualcosa di utile.'",
+      "deliverable": "Il tuo 'perché' in 3-4 frasi semplici.",
+      "reflection_prompts": [
+        "Questo 'perché' ti emoziona quando lo rileggi?",
+        "Quando è stata l'ultima volta che hai sentito forte questo 'perché'?",
+        "Il tuo team sa perché fai quello che fai?"
+      ]
+    },
+    {
+      "week_number": 20,
+      "title": "Se Tu Non Ci Fossi per Due Settimane?",
+      "subtitle": "Delega",
+      "characteristic_slug": "delega",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Maggio",
+      "description": "La delega non è solo assegnare compiti. È preparare gli altri a decidere senza di te. Questa settimana ti chiedo di pensare: cosa succederebbe se sparissi per 2 settimane?",
+      "instructions": "1. Immagina di dover partire tra 7 giorni per 2 settimane. NESSUNA connessione internet.\n\n2. Scrivi:\n- Quali decisioni dovrebbero aspettare il tuo ritorno?\n- Quali potrebbero essere prese da altri se sapessero come?\n- Chi nel team potrebbe gestire cosa?\n\n3. Per le decisioni che 'solo tu puoi prendere', chiediti:\n- È davvero vero? O è solo che non ho mai spiegato come?\n- Cosa dovrei spiegare perché qualcun altro possa decidere?\n\n4. NON devi partire davvero. Solo notare quanto dipende da te.\n\nEsempio: 'Se partissi, nessuno saprebbe approvare ordini sopra i 5000€. Ma potrei creare una regola semplice: se il cliente ha già pagato 3 volte, si può approvare.'",
+      "deliverable": "Una lista di decisioni che dipendono solo da te e cosa servirebbe perché altri le prendessero.",
+      "reflection_prompts": [
+        "Quante decisioni dipendono DAVVERO solo da te?",
+        "Cosa ti impedisce di delegare di più?",
+        "Come ti sentiresti se l'azienda funzionasse perfettamente senza di te per 2 settimane?"
+      ]
+    },
+    {
+      "week_number": 21,
+      "title": "Insegna Qualcosa che Sai",
+      "subtitle": "Mentorship",
+      "characteristic_slug": "mentorship",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 45,
+      "month_name": "Maggio",
+      "description": "Il modo migliore per imparare qualcosa è insegnarla. Questa settimana ti chiedo di insegnare UNA cosa a qualcuno più giovane o meno esperto di te.",
+      "instructions": "1. Scegli qualcuno nel team (o fuori) che potrebbe imparare da te\n\n2. Scegli UNA cosa che sai fare bene e che hai imparato con fatica:\n- Come gestire un cliente difficile\n- Come organizzare il tempo\n- Come prendere una decisione\n- Come negoziare\n\n3. Dedica 30-45 minuti a insegnarla. Struttura:\n- Racconta un tuo errore su quella cosa (5 min)\n- Spiega cosa hai imparato (10 min)\n- Fai un esempio pratico insieme (15 min)\n- Rispondi alle sue domande (10 min)\n\n4. Dopo, scrivi: cosa hai imparato TU insegnando?\n\nEsempio: Marco ha insegnato a un junior come negoziare con i fornitori. Ha scoperto che spiegandolo, ha chiarito anche a se stesso perché fa certe cose.",
+      "deliverable": "Cosa hai insegnato, a chi, e cosa hai imparato tu nel processo.",
+      "reflection_prompts": [
+        "È stato difficile spiegare qualcosa che fai 'naturalmente'?",
+        "Hai scoperto qualcosa di nuovo su te stesso insegnando?",
+        "Ti piacerebbe farlo più spesso?"
+      ]
+    },
+    {
+      "week_number": 22,
+      "title": "Dai un Feedback Onesto",
+      "subtitle": "Feedback",
+      "characteristic_slug": "feedback",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 30,
+      "month_name": "Maggio",
+      "description": "Dare feedback (cioè dire a qualcuno cosa fa bene e cosa può migliorare) è difficile ma necessario. Questa settimana prova a darne uno usando una formula semplice.",
+      "instructions": "1. Pensa a qualcuno a cui vorresti dire qualcosa sul suo lavoro o comportamento\n\n2. Usa questa formula semplice:\n- SITUAZIONE: 'Ieri nella riunione con il cliente...'\n- COMPORTAMENTO: '...ho notato che hai interrotto il cliente 3 volte'\n- IMPATTO: '...e questo ha creato tensione, il cliente sembrava infastidito'\n\n3. Aggiungi: 'Cosa ne pensi?' (lascia parlare l'altro)\n\n4. Dai il feedback entro 48 ore dal fatto, non dopo settimane\n\n5. Scrivi:\n- Quanto eri ansioso prima? (1-10)\n- Come ha reagito la persona?\n- Come ti sei sentito dopo?\n\nEsempio: 'Nella call di ieri, quando hai detto che il problema era del cliente, ho notato che si è irrigidito. Penso che si sia sentito accusato. Cosa ne pensi?'",
+      "deliverable": "Il feedback che hai dato, la reazione, e come ti sei sentito.",
+      "reflection_prompts": [
+        "È stato più o meno difficile di quanto temevi?",
+        "La persona ha accettato il feedback o si è messa sulla difensiva?",
+        "Cosa faresti diversamente la prossima volta?"
+      ]
+    },
+    {
+      "week_number": 23,
+      "title": "Affronta Quel Piccolo Conflitto",
+      "subtitle": "Gestione Conflitti",
+      "characteristic_slug": "gestione_conflitti",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 30,
+      "month_name": "Giugno",
+      "description": "I piccoli conflitti evitati diventano grandi problemi. Questa settimana affronta UN piccolo conflitto che stai evitando.",
+      "instructions": "1. Pensa a un piccolo conflitto o tensione con qualcuno:\n- Un collega che fa qualcosa che ti infastidisce\n- Una incomprensione con un collaboratore\n- Un disaccordo su come fare qualcosa\n\n2. Affronta la conversazione con questo approccio:\n- Descrivi cosa hai OSSERVATO (non giudicare): 'Ho notato che...'\n- Spiega come ti SENTI: 'Questo mi fa sentire...'\n- Fai una RICHIESTA concreta: 'Ti chiedo di...'\n\n3. Ascolta la risposta. Cerca di capire il suo punto di vista.\n\n4. Scrivi: cosa è successo e quanto ti è costato aver aspettato.\n\nEsempio: 'Ho notato che le ultime 3 volte hai consegnato in ritardo. Questo mi mette in difficoltà con i clienti. Ti chiedo di avvisarmi almeno 2 giorni prima se prevedi un ritardo. Cosa ne pensi?'",
+      "deliverable": "Il conflitto affrontato, come è andato, e cosa hai imparato.",
+      "reflection_prompts": [
+        "Quanto ti è costato aver rimandato? (tempo, energia, relazione)",
+        "La conversazione è andata meglio o peggio di quanto temevi?",
+        "C'è un altro piccolo conflitto che potresti affrontare ora?"
+      ]
+    },
+    {
+      "week_number": 24,
+      "title": "Cosa Ti Ricarica e Cosa Ti Scarica?",
+      "subtitle": "Gestione Stress",
+      "characteristic_slug": "gestione_stress",
+      "exercise_type": "analisi",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Giugno",
+      "description": "Lo stress si gestisce sapendo cosa ti scarica e cosa ti ricarica. Questa settimana fai un 'inventario energetico'.",
+      "instructions": "1. Per 5 giorni, nota la tua energia ogni 2-3 ore (1-10)\n\n2. Scrivi cosa stavi facendo quando l'energia era:\n- ALTA (8-10): quali attività? quali persone?\n- BASSA (1-4): quali attività? quali persone?\n\n3. Alla fine dei 5 giorni, identifica:\n- 3 cose/persone che ti RICARICANO\n- 3 cose/persone che ti SCARICANO\n\n4. Scegli UNA azione:\n- Aggiungi 15-30 minuti al giorno di qualcosa che ti ricarica\n- OPPURE: elimina/delega una cosa che ti scarica\n\nEsempio: Giulia ha scoperto che le email la mattina presto la scaricano, ma le chiamate con clienti la ricaricano. Ha spostato le email al pomeriggio.",
+      "deliverable": "Le 3 cose che ti ricaricano, le 3 che ti scaricano, e UNA azione che hai deciso.",
+      "reflection_prompts": [
+        "Ti ha sorpreso qualcosa della tua mappa energetica?",
+        "Quanto tempo dedichi alle cose che ti ricaricano vs quelle che ti scaricano?",
+        "Quale cambiamento piccolo potrebbe fare grande differenza?"
+      ]
+    },
+    {
+      "week_number": 25,
+      "title": "Aspetta Prima di Reagire",
+      "subtitle": "Pazienza",
+      "characteristic_slug": "pazienza",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 20,
+      "month_name": "Giugno",
+      "description": "La pazienza è aspettare prima di reagire. Spesso le decisioni prese a caldo sono peggiori. Questa settimana pratica la 'pausa di 2 ore'.",
+      "instructions": "1. Ogni volta che senti l'urgenza di rispondere/decidere immediatamente, ASPETTA 2 ore\n\n2. Situazioni tipiche:\n- Email che ti fa arrabbiare\n- Richiesta urgente che ti stressa\n- Problema che sembra richiedere azione immediata\n\n3. Per ogni pausa, scrivi:\n- Situazione\n- Cosa avresti fatto/detto subito\n- Cosa hai fatto/detto dopo 2 ore\n- C'è stata differenza?\n\n4. Obiettivo: almeno 3 pause questa settimana\n\nEsempio: Mario riceve un'email arrabbiata da un cliente. Istinto: rispondere subito difendendosi. Dopo 2 ore: risponde con calma, chiede chiarimenti, risolve il problema.",
+      "deliverable": "3 situazioni dove hai aspettato 2 ore e cosa è cambiato.",
+      "reflection_prompts": [
+        "Aspettare 2 ore ha cambiato la tua risposta o decisione?",
+        "Come ti sei sentito durante l'attesa? Ansia? Liberazione?",
+        "Ci sono situazioni dove la pausa NON funzionerebbe?"
+      ]
+    },
+    {
+      "week_number": 26,
+      "title": "Una Regola Non Negoziabile",
+      "subtitle": "Equilibrio",
+      "characteristic_slug": "equilibrio",
+      "exercise_type": "azione",
+      "difficulty_level": "intermedio",
+      "estimated_time_minutes": 20,
+      "month_name": "Giugno",
+      "description": "L'equilibrio tra lavoro e vita non arriva per caso. Serve almeno UNA regola che rispetti sempre. Questa settimana scegline una e tienila per 7 giorni.",
+      "instructions": "1. Pensa a UN confine che vorresti mantenere:\n- Niente email dopo le 20\n- Pranzo lontano dalla scrivania\n- Weekend senza lavoro (o almeno la domenica)\n- 30 minuti al giorno solo per te\n- Cena in famiglia senza telefono\n\n2. Scegli UNA regola e rispettala per 7 giorni. Non fare eccezioni.\n\n3. Comunica questa regola a chi deve saperlo:\n- Team: 'Dopo le 20 non rispondo alle email'\n- Famiglia: 'A cena il telefono è in un'altra stanza'\n\n4. Scrivi ogni giorno: l'ho rispettata? Come mi sono sentito?\n\nEsempio: Anna ha scelto 'domenica senza lavoro'. I primi 2 giorni era ansiosa. Dal terzo, ha iniziato ad apprezzare il riposo.",
+      "deliverable": "La regola scelta, 7 giorni di diario, e come ti sei sentito.",
+      "reflection_prompts": [
+        "È stato difficile tenere la regola? Quali tentazioni hai avuto?",
+        "Hai notato differenze nel tuo umore o energia?",
+        "Continuerai con questa regola? Vuoi aggiungerne altre?"
+      ]
+    }
+  ]
+}

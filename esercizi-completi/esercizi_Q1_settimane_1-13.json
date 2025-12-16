@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "versione": "2.0",
+    "principi_applicati": [
+      "Parole familiari: ogni termine tecnico spiegato o sostituito",
+      "Concretezza: esempi pratici per ogni istruzione",
+      "Gradualità: settimane 1-13 = solo osservazione e riflessione"
+    ],
+    "note": "Queste settimane sono di FONDAZIONE. Nessuna azione difficile richiesta. L'utente deve solo osservare, notare, riflettere."
+  },
+  "esercizi": [
+    {
+      "week_number": 1,
+      "title": "Fermati e Guarda Indietro",
+      "subtitle": "Autoconsapevolezza",
+      "characteristic_slug": "autoconsapevolezza",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Gennaio",
+      "description": "Questa settimana non devi fare nulla di difficile. Ti chiedo solo di fermarti un momento e guardare indietro a tre scelte che hai fatto nell'ultimo anno. Non per giudicarti, ma per conoscerti meglio. Come quando guardi vecchie foto e noti cose che prima non vedevi.",
+      "instructions": "1. Trova 15-20 minuti di tranquillità - può essere la sera dopo cena o la mattina presto\n\n2. Pensa a 3 decisioni che hai preso nell'ultimo anno. Non devono essere enormi - può essere anche 'ho deciso di cambiare fornitore' o 'ho assunto quella persona' o 'ho detto di no a quel cliente'\n\n3. Per ognuna, scrivi semplicemente:\n   - Cosa ho deciso\n   - Come mi sentivo in quel momento (tranquillo? agitato? sicuro? confuso?)\n\nEsempio: Marco, imprenditore, ha scritto: 'Ho deciso di licenziare il responsabile vendite. Mi sentivo in colpa ma anche sollevato perché sapevo che era la cosa giusta.'",
+      "deliverable": "Un foglio con 3 decisioni e come ti sentivi per ognuna. Nient'altro.",
+      "reflection_prompts": [
+        "Guardando queste 3 decisioni, noti qualcosa che hanno in comune?",
+        "C'è una decisione che rifaresti esattamente uguale? Perché?",
+        "Ce n'è una che oggi faresti diversamente? Cosa cambieresti?"
+      ]
+    },
+    {
+      "week_number": 2,
+      "title": "Quella Cosa che Stai Rimandando",
+      "subtitle": "Coraggio",
+      "characteristic_slug": "coraggio",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Gennaio",
+      "description": "Il coraggio non è non avere paura. È fare qualcosa anche se hai paura. Questa settimana ti chiedo solo di NOTARE una cosa che stai rimandando. Non devi farla ancora - solo guardarla in faccia e capire cosa ti blocca.",
+      "instructions": "1. Pensa a una conversazione o azione che stai rimandando da almeno 2 settimane\n\nEsempi comuni:\n- Dire a un collaboratore che il suo lavoro non va bene\n- Chiedere un pagamento a un cliente che ritarda\n- Proporre un'idea al tuo socio\n- Dire di no a qualcuno che ti chiede troppo\n\n2. Scrivi su un foglio:\n- Cosa sto rimandando?\n- Da quanto tempo?\n- Cosa ho paura che succeda se lo faccio?\n\n3. Fermati qui. NON devi agire questa settimana. Solo osservare.",
+      "deliverable": "Un appunto con: cosa rimandi, da quanto, e cosa temi che succeda.",
+      "reflection_prompts": [
+        "Quanto ti costa ogni giorno rimandare questa cosa? (tempo, energia, preoccupazione)",
+        "Qual è la cosa PEGGIORE che potrebbe realisticamente succedere se agissi?",
+        "E la cosa MIGLIORE che potrebbe succedere?"
+      ]
+    },
+    {
+      "week_number": 3,
+      "title": "Le Tre Parole Più Difficili",
+      "subtitle": "Umiltà",
+      "characteristic_slug": "umilta",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Gennaio",
+      "description": "Le tre parole più difficili per chi guida sono: 'Non lo so'. Eppure sono anche le più potenti. Questa settimana ti chiedo solo di notare quante volte avresti potuto dirle ma non l'hai fatto.",
+      "instructions": "1. Per i prossimi 3 giorni, fai attenzione alle situazioni in cui:\n- Qualcuno ti fa una domanda e tu rispondi anche se non sei sicuro\n- Ti viene chiesta un'opinione su qualcosa che non conosci bene\n- Fai finta di capire qualcosa che non hai capito\n\n2. NON devi cambiare comportamento. Solo NOTARE quante volte succede.\n\n3. Alla fine dei 3 giorni, scrivi:\n- Quante volte è successo?\n- Come ti sei sentito in quei momenti?\n\nEsempio: Lucia, manager, ha notato: 'In 3 giorni ho detto la mia opinione su cose che non conoscevo almeno 5 volte. Mi sentivo un po' impostora.'",
+      "deliverable": "Un conteggio delle volte che hai risposto senza essere sicuro, e come ti sei sentito.",
+      "reflection_prompts": [
+        "Perché è così difficile dire 'non lo so'? Cosa temi che pensino gli altri?",
+        "Ricordi una volta che qualcuno ha detto 'non lo so' e tu l'hai rispettato di più per questo?",
+        "In quale situazione della prossima settimana potresti provare a dire 'non lo so'?"
+      ]
+    },
+    {
+      "week_number": 4,
+      "title": "Quel Fallimento che Ancora Brucia",
+      "subtitle": "Resilienza",
+      "characteristic_slug": "resilienza",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Gennaio",
+      "description": "La resilienza è la capacità di rialzarti dopo una caduta. Non si costruisce evitando i fallimenti, ma guardandoli in faccia e trovando cosa ti hanno insegnato. Questa settimana scegli UN fallimento recente e guardalo con occhi nuovi.",
+      "instructions": "1. Scegli UN fallimento degli ultimi 6 mesi. Non deve essere enorme - può essere:\n- Un progetto andato male\n- Un cliente perso\n- Una decisione sbagliata\n- Un'assunzione che non ha funzionato\n- Un'opportunità mancata\n\n2. Scrivi la storia in 5-10 righe, come se la raccontassi a un amico\n\n3. Poi rispondi a queste domande:\n- C'erano segnali che avrei potuto vedere prima?\n- Cosa mi ha insegnato questo fallimento?\n- Cosa faccio diversamente oggi grazie a questa esperienza?\n\nEsempio: Giovanni ha scritto: 'Ho perso il cliente più importante perché non ho ascoltato i suoi feedback. I segnali c'erano tutti - email sempre più fredde, risposte ritardate. Oggi ho un sistema per monitorare la soddisfazione dei clienti ogni mese.'",
+      "deliverable": "La storia del fallimento e le 3 risposte alle domande.",
+      "reflection_prompts": [
+        "Se potessi tornare indietro, quale singola cosa faresti diversamente?",
+        "Questo fallimento ti ha reso un leader migliore? In che modo?",
+        "C'è qualcuno a cui potresti raccontare questa storia per aiutarlo?"
+      ]
+    },
+    {
+      "week_number": 5,
+      "title": "Ascolta Senza Pensare alla Risposta",
+      "subtitle": "Empatia",
+      "characteristic_slug": "empatia",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Febbraio",
+      "description": "L'empatia è la capacità di mettersi nei panni dell'altro. Ma spesso, mentre qualcuno parla, noi pensiamo già a cosa rispondere. Questa settimana ti chiedo di notare quando lo fai.",
+      "instructions": "1. Scegli 2-3 conversazioni questa settimana (con collaboratori, clienti, familiari)\n\n2. Durante la conversazione, nota:\n- Quante volte pensi già alla risposta mentre l'altro sta ancora parlando?\n- Quante volte lo interrompi?\n- Quante volte vuoi dare subito un consiglio o una soluzione?\n\n3. NON devi cambiare nulla. Solo osservare e contare.\n\n4. Dopo ogni conversazione, scrivi un numero da 1 a 10:\n- 1 = Ho ascoltato davvero\n- 10 = Ero già nella mia testa a preparare la risposta\n\nEsempio: Anna ha notato: 'Nella riunione con il team, ho interrotto 4 volte. Mi sono data un 7 - ero più concentrata sulle mie soluzioni che sui loro problemi.'",
+      "deliverable": "Un appunto con il tuo 'punteggio di ascolto' per 2-3 conversazioni.",
+      "reflection_prompts": [
+        "In quale tipo di conversazione fai più fatica ad ascoltare davvero?",
+        "Cosa ti spinge a voler rispondere subito? Paura di dimenticare? Voglia di dimostrare?",
+        "Come ti senti quando qualcuno ti ascolta davvero senza interrompere?"
+      ]
+    },
+    {
+      "week_number": 6,
+      "title": "Spiegalo a Tua Nonna",
+      "subtitle": "Comunicazione",
+      "characteristic_slug": "comunicazione",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Febbraio",
+      "description": "Spesso usiamo parole complicate per sembrare più esperti. Ma la vera abilità è spiegare cose difficili in modo semplice. Questa settimana ti chiedo di notare quanto gergo tecnico usi senza accorgertene.",
+      "instructions": "1. Pensa a come spiegheresti il tuo lavoro a qualcuno che non sa nulla del tuo settore (tua nonna, un bambino di 10 anni)\n\n2. Prova a scriverlo in 3-4 frasi semplici, senza usare:\n- Parole inglesi (se non indispensabili)\n- Termini tecnici del tuo settore\n- Abbreviazioni o sigle\n\n3. Poi, per i prossimi 3 giorni, fai attenzione:\n- Quante volte usi parole che non tutti capirebbero?\n- Quante volte vedi facce confuse ma continui?\n\nEsempio: Prima: 'Ottimizziamo la customer journey attraverso touchpoint strategici per massimizzare la conversion rate.'\nDopo: 'Cerchiamo di capire cosa vogliono i clienti e rendiamo più facile per loro comprare.'",
+      "deliverable": "La spiegazione semplice del tuo lavoro + un conteggio del gergo usato in 3 giorni.",
+      "reflection_prompts": [
+        "Perché usiamo parole complicate? Cosa vogliamo dimostrare?",
+        "Ricordi una volta che qualcuno ti ha spiegato qualcosa in modo così semplice che hai capito subito?",
+        "Quale frase del tuo lavoro quotidiano potresti semplificare?"
+      ]
+    },
+    {
+      "week_number": 7,
+      "title": "Quella Cosa che Fai Solo Tu",
+      "subtitle": "Fiducia",
+      "characteristic_slug": "fiducia",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Febbraio",
+      "description": "Molti di noi tengono strette alcune attività perché 'nessuno le fa bene come me'. Questa settimana ti chiedo solo di identificare quali sono - senza dover fare nulla.",
+      "instructions": "1. Fai una lista delle attività che fai solo tu, anche se teoricamente potresti delegarle\n\n2. Per ognuna, scrivi onestamente perché la fai tu:\n- 'Perché sono davvero l'unico che può farla' (raramente vero)\n- 'Perché non ho tempo di insegnarla a qualcuno'\n- 'Perché ho paura che venga fatta male'\n- 'Perché mi piace farla'\n- 'Perché mi fa sentire importante/indispensabile'\n\n3. NON devi delegare nulla questa settimana. Solo fare questa lista onesta.\n\nEsempio: Paolo ha scritto: 'Controllo personalmente tutte le fatture sopra i 1000€. Perché? Perché ho paura che qualcuno faccia un errore. Ma in 5 anni è successo solo 2 volte.'",
+      "deliverable": "Lista delle attività che fai solo tu + il vero motivo per ognuna.",
+      "reflection_prompts": [
+        "Quale attività della lista ti sorprende di più? Non avevi mai pensato al perché la fai tu?",
+        "Se dovessi scegliere UNA sola cosa da questa lista da non fare più, quale sarebbe?",
+        "Quanto tempo alla settimana spendi in attività che altri potrebbero fare?"
+      ]
+    },
+    {
+      "week_number": 8,
+      "title": "Parla per Ultimo",
+      "subtitle": "Ascolto",
+      "characteristic_slug": "ascolto",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 15,
+      "month_name": "Febbraio",
+      "description": "Quando chi guida parla per primo, spesso gli altri si adeguano. Questa settimana ti chiedo di notare in quante riunioni parli tra i primi - e cosa succederebbe se aspettassi.",
+      "instructions": "1. Pensa alle riunioni della scorsa settimana\n\n2. In quante di queste hai parlato tra i primi 3? (conta onestamente)\n\n3. Questa settimana, in almeno 2 riunioni:\n- NON parlare per primo\n- Nota chi parla e cosa dice\n- Nota se cambiano le tue idee ascoltando prima gli altri\n\n4. NON devi cambiare tutto il tuo modo di fare riunioni. Solo osservare cosa succede quando aspetti.\n\nEsempio: Giulia ha notato: 'In una riunione ho aspettato. Marco ha proposto un'idea che non avevo considerato. Se avessi parlato prima, probabilmente lui non l'avrebbe detta.'",
+      "deliverable": "Un appunto su 2 riunioni in cui hai parlato per ultimo: cosa hai notato?",
+      "reflection_prompts": [
+        "È stato difficile aspettare? Cosa sentivi mentre gli altri parlavano?",
+        "Hai sentito idee che non avresti sentito se avessi parlato prima?",
+        "Come hanno reagito gli altri al fatto che non parlavi subito?"
+      ]
+    },
+    {
+      "week_number": 9,
+      "title": "La Decisione che Rimandi da Mesi",
+      "subtitle": "Decisionalità",
+      "characteristic_slug": "decisionalita",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Marzo",
+      "description": "Spesso le decisioni più importanti sono quelle che rimandiamo più a lungo. Questa settimana ti chiedo di identificare UNA decisione in sospeso da troppo tempo - e di capire cosa ti blocca.",
+      "instructions": "1. Pensa a una decisione importante che stai rimandando da almeno 1 mese:\n- Assumere o licenziare qualcuno?\n- Cambiare un fornitore?\n- Lanciare un nuovo prodotto?\n- Chiudere un progetto che non funziona?\n- Affrontare un problema con un socio?\n\n2. Scrivi:\n- Qual è la decisione?\n- Da quanto tempo la rimandi?\n- Cosa succederebbe se decidessi OGGI di fare A? E se decidessi B?\n- Cosa ti spaventa di più nel decidere?\n\n3. NON devi decidere questa settimana. Solo guardare in faccia cosa ti blocca.\n\nEsempio: Laura ha scritto: 'Devo decidere se chiudere la sede di Roma. La rimando da 4 mesi. Ho paura di deludere il team là.'",
+      "deliverable": "Una descrizione della decisione in sospeso e cosa ti blocca.",
+      "reflection_prompts": [
+        "Qual è il costo di NON decidere? Cosa stai perdendo ogni settimana che passa?",
+        "Se un amico ti descrivesse questa situazione, cosa gli consiglieresti?",
+        "Tra un anno, quale decisione vorresti aver preso?"
+      ]
+    },
+    {
+      "week_number": 10,
+      "title": "Di Chi è la Colpa?",
+      "subtitle": "Responsabilità",
+      "characteristic_slug": "responsabilita",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Marzo",
+      "description": "Quando qualcosa va male, è facile dare la colpa a fattori esterni: il mercato, i concorrenti, il team. Questa settimana ti chiedo di guardare un problema con occhi diversi.",
+      "instructions": "1. Pensa a UN problema attuale nella tua azienda o nel tuo lavoro\n\n2. Scrivi la storia come la racconti di solito:\n- Cosa è successo?\n- Di chi/cosa è la colpa secondo te? (mercato? team? sfortuna?)\n\n3. Ora riscrivi la STESSA storia, ma assumendo che TU sei responsabile al 100%:\n- Cosa avresti potuto fare diversamente?\n- Quali segnali hai ignorato?\n- Quali decisioni hai preso (o non preso) che hanno contribuito?\n\n4. NON devi sentirti in colpa. L'obiettivo è vedere cosa puoi controllare.\n\nEsempio: Prima: 'Abbiamo perso il cliente perché il mercato è difficile.'\nDopo: 'Non ho chiamato il cliente da 3 mesi. Non ho chiesto feedback. Non ho notato che era insoddisfatto.'",
+      "deliverable": "Le due versioni della stessa storia: 'colpa esterna' e 'responsabilità mia'.",
+      "reflection_prompts": [
+        "Quale versione è più utile per migliorare la situazione?",
+        "C'è qualcosa nella versione 'responsabilità mia' che puoi fare questa settimana?",
+        "Come ti senti quando ti prendi la responsabilità invece di dare la colpa?"
+      ]
+    },
+    {
+      "week_number": 11,
+      "title": "Le Promesse che Hai Fatto",
+      "subtitle": "Integrità",
+      "characteristic_slug": "integrita",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 25,
+      "month_name": "Marzo",
+      "description": "L'integrità significa fare quello che dici. Ma spesso facciamo promesse senza rendercene conto - un 'ti richiamo' o un 'ti mando quel documento'. Questa settimana conta le promesse che fai.",
+      "instructions": "1. Per i prossimi 5 giorni, tieni traccia di OGNI promessa che fai:\n- 'Ti richiamo'\n- 'Ti mando il preventivo entro venerdì'\n- 'Ci penso e ti faccio sapere'\n- 'La prossima volta facciamo così'\n\n2. Alla fine di ogni giorno, segna:\n- Quante promesse ho fatto oggi?\n- Quante ne ho mantenute?\n- Quante sono ancora in sospeso?\n\n3. NON devi essere perfetto. Solo notare quante promesse fai senza accorgertene.\n\nEsempio: Roberto ha contato: 'In 5 giorni ho fatto 23 promesse. Ne ho mantenute 15, 5 sono in sospeso, 3 le ho dimenticate.'",
+      "deliverable": "Un conteggio delle promesse fatte in 5 giorni e quante mantenute.",
+      "reflection_prompts": [
+        "Ti sorprende il numero di promesse che fai?",
+        "Quali promesse dimentichi più spesso? C'è uno schema?",
+        "Come pensi che si sentano le persone quando non mantieni una promessa piccola?"
+      ]
+    },
+    {
+      "week_number": 12,
+      "title": "Quello che Dici vs. Quello che Fai",
+      "subtitle": "Coerenza",
+      "characteristic_slug": "coerenza",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 20,
+      "month_name": "Marzo",
+      "description": "Tutti abbiamo dei valori che diciamo essere importanti. Ma i nostri comportamenti raccontano la vera storia. Questa settimana ti chiedo di notare un GAP tra cosa dici e cosa fai.",
+      "instructions": "1. Pensa a 3 cose che dici essere importanti per te come leader:\n- Es: 'La famiglia viene prima del lavoro'\n- Es: 'Il team deve sentirsi libero di sbagliare'\n- Es: 'L'innovazione è fondamentale'\n\n2. Per ognuna, chiediti onestamente:\n- I miei COMPORTAMENTI dimostrano davvero questo?\n- Cosa vedono gli altri quando mi guardano?\n\n3. Identifica UN gap - un punto dove le tue azioni non rispecchiano le tue parole\n\n4. NON devi correggerlo questa settimana. Solo riconoscerlo.\n\nEsempio: Marco dice: 'Il team deve sentirsi libero di sbagliare'. Ma quando qualcuno sbaglia, la sua faccia cambia, il tono diventa secco. Il team lo nota.",
+      "deliverable": "3 valori dichiarati + UN gap tra parole e azioni che hai notato.",
+      "reflection_prompts": [
+        "Come pensi che il team percepisca questo gap?",
+        "Perché c'è questo gap? Cosa ti impedisce di agire secondo i tuoi valori?",
+        "Quale piccolo cambiamento potrebbe ridurre questo gap?"
+      ]
+    },
+    {
+      "week_number": 13,
+      "title": "Dove Sarai tra 5 Anni?",
+      "subtitle": "Visione",
+      "characteristic_slug": "visione",
+      "exercise_type": "riflessione",
+      "difficulty_level": "base",
+      "estimated_time_minutes": 30,
+      "month_name": "Marzo",
+      "description": "La visione è sapere dove vuoi andare. Ma spesso siamo così presi dal quotidiano che non ci fermiamo a pensarci. Questa settimana ti chiedo di immaginare il futuro - senza fretta, senza dover decidere nulla.",
+      "instructions": "1. Trova 30 minuti di silenzio. Niente telefono, niente interruzioni.\n\n2. Immagina di essere tra 5 anni. Scrivi una lettera a te stesso di oggi:\n\n'Caro/a [tuo nome],\n\nSono il te del 2030. Voglio raccontarti dove sono arrivato/a...\n\n- L'azienda che ho costruito: [descrivi]\n- Il leader che sono diventato/a: [descrivi]\n- L'impatto che ho avuto sulle persone: [descrivi]\n- Come mi sento ogni mattina quando mi sveglio: [descrivi]'\n\n3. NON devi essere realista. Sogna in grande. Poi guarda cosa hai scritto.\n\nEsempio: 'Nel 2030 ho un team di 20 persone che lavorano senza che io debba controllare tutto. Ho tempo per la famiglia. I clienti ci cercano, non dobbiamo rincorrerli.'",
+      "deliverable": "La lettera dal tuo io futuro.",
+      "reflection_prompts": [
+        "Cosa ti ha sorpreso di quello che hai scritto?",
+        "Qual è UNA cosa che stai facendo oggi che ti avvicina a quella visione?",
+        "Qual è UNA cosa che stai facendo oggi che ti allontana da quella visione?"
+      ]
+    }
+  ]
+}
