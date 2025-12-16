@@ -5,19 +5,27 @@ import { ChatRequest, ChatResponse } from '@/lib/ai-coach/types';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContext, PathType } from '@/lib/rag';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Lazy initialization per evitare errori durante il build
+function getSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getAnthropicClient() {
+  return new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  });
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse<ChatResponse>> {
   try {
     const body: ChatRequest = await request.json();
     const { messages, userContext } = body;
+
+    const supabase = getSupabaseClient();
+    const anthropic = getAnthropicClient();
 
     if (!messages || messages.length === 0) {
       return NextResponse.json(

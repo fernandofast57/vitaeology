@@ -1,15 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy initialization per evitare errori durante il build
+function getSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORG_ID,
-});
+function getOpenAIClient() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    organization: process.env.OPENAI_ORG_ID,
+  });
+}
 
 // Mapping percorso → book_title
 const PATH_TO_BOOK: Record<string, string> = {
@@ -46,6 +51,7 @@ async function getQueryEmbedding(query: string): Promise<number[] | null> {
     console.log('[RAG] OpenAI API Key presente:', process.env.OPENAI_API_KEY ? 'SI' : 'NO');
     console.log('[RAG] OpenAI Org ID:', process.env.OPENAI_ORG_ID || 'NON CONFIGURATO');
 
+    const openai = getOpenAIClient();
     const response = await openai.embeddings.create({
       model: 'text-embedding-3-small',
       input: query,
@@ -80,6 +86,7 @@ export async function searchByEmbedding(
     // Mappa percorso a book_title per il filtro
     const filterBookTitle = currentPath ? PATH_TO_BOOK[currentPath] : null;
 
+    const supabase = getSupabaseClient();
     const { data, error } = await supabase.rpc('match_book_chunks', {
       query_embedding: embedding,
       match_threshold: threshold,
@@ -110,6 +117,7 @@ async function searchByKeywords(
   const keywords = extractKeywords(query);
   if (keywords.length === 0) return [];
 
+  const supabase = getSupabaseClient();
   let queryBuilder = supabase
     .from('book_knowledge')
     .select('*')
