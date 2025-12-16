@@ -15,7 +15,7 @@ interface ExerciseProgress {
   exercises: {
     title: string;
     characteristic_slug: string;
-  } | null;
+  }[] | null;
 }
 
 export default function ProgressPage() {
@@ -197,8 +197,8 @@ export default function ProgressPage() {
                           )}
                         </div>
                         <div>
-                          <p className="font-medium text-neutral-900">{item.exercises?.title || 'Esercizio'}</p>
-                          <p className="text-xs text-neutral-500">{item.exercises?.characteristic_slug || ''}</p>
+                          <p className="font-medium text-neutral-900">{item.exercises?.[0]?.title || 'Esercizio'}</p>
+                          <p className="text-xs text-neutral-500">{item.exercises?.[0]?.characteristic_slug || ''}</p>
                         </div>
                       </div>
                       <span className={`text-xs px-2 py-1 rounded-full ${
