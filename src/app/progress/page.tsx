@@ -15,7 +15,7 @@ interface ExerciseProgress {
   exercises: {
     title: string;
     characteristic_slug: string;
-  };
+  } | null;
 }
 
 export default function ProgressPage() {
@@ -59,7 +59,7 @@ export default function ProgressPage() {
           .eq('user_id', user.id)
           .order('started_at', { ascending: false });
 
-        setProgress(progressData || []);
+        setProgress((progressData as ExerciseProgress[]) || []);
 
         // Calculate stats
         const { count: totalExercises } = await supabase
