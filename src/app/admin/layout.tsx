@@ -9,21 +9,32 @@ export default async function AdminLayout({
   const supabase = await createClient();
 
   // Verifica autenticazione
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect('/auth/login?redirect=/admin/ai-coach');
+  if (authError || !user) {
+    redirect('/auth/login?redirect=/admin/users');
   }
 
-  // Verifica se utente è admin
-  const { data: profile } = await supabase
+  // Verifica se utente è admin (is_admin legacy O role level >= 80)
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('is_admin')
+    .select(`
+      is_admin,
+      role_id,
+      roles (level)
+    `)
     .eq('id', user.id)
     .single();
 
-  if (!profile?.is_admin) {
-    // Non è admin - redirect alla dashboard normale
+  if (profileError) {
+    console.error('Errore caricamento profilo admin:', profileError);
+    redirect('/dashboard?error=profile_error');
+  }
+
+  const roleLevel = (profile?.roles as any)?.level ?? 0;
+  const isAdmin = profile?.is_admin === true || roleLevel >= 80;
+
+  if (!isAdmin) {
     redirect('/dashboard?error=unauthorized');
   }
 
