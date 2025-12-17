@@ -1,0 +1,31 @@
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = await createClient();
+
+  // Verifica autenticazione
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/auth/login?redirect=/admin/ai-coach');
+  }
+
+  // Verifica se utente è admin
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile?.is_admin) {
+    // Non è admin - redirect alla dashboard normale
+    redirect('/dashboard?error=unauthorized');
+  }
+
+  return <>{children}</>;
+}

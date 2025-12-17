@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 function getSupabaseClient() {
   return createClient(
@@ -9,6 +10,12 @@ function getSupabaseClient() {
 }
 
 export async function POST(request: NextRequest) {
+  // Verifica che l'utente sia admin
+  const adminCheck = await verifyAdminFromRequest();
+  if (!adminCheck.isAdmin) {
+    return adminCheck.response;
+  }
+
   try {
     const { patternId, action } = await request.json();
 

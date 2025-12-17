@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getRecentMetrics } from '@/lib/ai-coach/daily-metrics';
 import { getLatestReport } from '@/lib/ai-coach/weekly-report';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 function getSupabaseClient() {
   return createClient(
@@ -11,6 +12,12 @@ function getSupabaseClient() {
 }
 
 export async function GET() {
+  // Verifica che l'utente sia admin
+  const adminCheck = await verifyAdminFromRequest();
+  if (!adminCheck.isAdmin) {
+    return adminCheck.response;
+  }
+
   try {
     const supabase = getSupabaseClient();
 

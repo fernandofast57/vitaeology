@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { markReportReviewed } from '@/lib/ai-coach/weekly-report';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 export async function POST(request: NextRequest) {
+  // Verifica che l'utente sia admin
+  const adminCheck = await verifyAdminFromRequest();
+  if (!adminCheck.isAdmin) {
+    return adminCheck.response;
+  }
+
   try {
     const { reportId, action, actions } = await request.json();
 
