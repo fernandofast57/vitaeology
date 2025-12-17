@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   keywords: ['leadership', 'assessment', 'sviluppo personale', 'imprenditore', 'manager', 'coaching'],
   authors: [{ name: 'Fernando Marongiu' }],
   creator: 'Vitaeology',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/logo-icon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'it_IT',

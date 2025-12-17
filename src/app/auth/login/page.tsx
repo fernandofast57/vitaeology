@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createBrowserClient } from '@supabase/ssr'
 
 function LoginForm() {
@@ -56,8 +57,17 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-slate-900">Vitaeology</h1>
-          <p className="mt-2 text-slate-600">Accedi al tuo account</p>
+          <Link href="/" className="inline-block">
+            <Image
+              src="/logo-vitaeology.png"
+              alt="Vitaeology"
+              width={200}
+              height={80}
+              className="h-20 w-auto mx-auto"
+              priority
+            />
+          </Link>
+          <p className="mt-4 text-slate-600">Accedi al tuo account</p>
         </div>
 
         <form onSubmit={handleLogin} className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-lg">

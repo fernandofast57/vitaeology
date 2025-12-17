@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Sparkles, Shield, Users, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Shield, Users, BarChart3 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 interface SidebarProps {
@@ -55,11 +56,15 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
   return (
     <aside className={`fixed top-0 left-0 z-50 h-full w-64 bg-petrol-600 text-white transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
       <div className="flex items-center justify-between p-6 border-b border-white/10">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-petrol-600" />
-          </div>
-          <span className="text-xl font-bold">Vitaeology</span>
+        <Link href="/dashboard" className="flex items-center">
+          <Image
+            src="/logo-vitaeology.png"
+            alt="Vitaeology"
+            width={160}
+            height={64}
+            className="h-10 w-auto"
+            priority
+          />
         </Link>
         <button onClick={onClose} className="lg:hidden p-2 hover:bg-white/10 rounded-lg">
           <X className="w-5 h-5" />

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle } from 'lucide-react'
@@ -88,9 +89,14 @@ export default function SignupPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center">
-          <span className="text-3xl font-display font-bold text-petrol-600">
-            Vitaeology
-          </span>
+          <Image
+            src="/logo-vitaeology.png"
+            alt="Vitaeology"
+            width={200}
+            height={80}
+            className="h-20 w-auto mx-auto"
+            priority
+          />
         </Link>
         <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">
           Crea il tuo account gratuito
