@@ -1,6 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 
+// Forza rendering dinamico per evitare caching issues
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({
   children,
 }: {
