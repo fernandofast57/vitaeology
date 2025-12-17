@@ -24,9 +24,13 @@ export interface UserContext {
 export interface ChatRequest {
   messages: Message[];
   userContext: UserContext;
+  sessionId?: string;  // Per tracciare sessione conversazione
+  currentPath?: 'leadership' | 'problemi' | 'benessere';
 }
 
 export interface ChatResponse {
   message: string;
   isSafetyAlert?: boolean;
+  conversationId?: string;  // Per feedback tracking
+  sessionId?: string;       // Ritorna session per client
 }

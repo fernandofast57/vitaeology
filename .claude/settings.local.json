@@ -11,7 +11,12 @@
       "Bash(git push:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(node scripts/verify_ai_coach_tables.js:*)",
+      "Bash(node -e:*)",
+      "Bash(node scripts/test-learning-system.js:*)",
+      "Bash(curl:*)",
+      "Bash(node scripts/check-conversations.js:*)"
     ]
   }
 }

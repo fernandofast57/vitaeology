@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/ai-coach/cron/daily-metrics",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/ai-coach/cron/weekly-report",
+      "schedule": "0 8 * * 1"
+    }
+  ]
+}

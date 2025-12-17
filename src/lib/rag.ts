@@ -176,6 +176,15 @@ export function formatRAGContext(chunks: BookChunk[]): string {
 }
 
 /**
+ * Risultato RAG con metadati per logging
+ */
+export interface RAGResult {
+  context: string;
+  chunkIds: string[];
+  similarityScores: number[];
+}
+
+/**
  * Funzione principale: cerca e formatta contesto RAG
  */
 export async function getRAGContext(
@@ -188,4 +197,24 @@ export async function getRAGContext(
     currentPath,
   });
   return formatRAGContext(chunks);
+}
+
+/**
+ * Versione estesa che ritorna anche metadati per logging
+ */
+export async function getRAGContextWithMetadata(
+  query: string,
+  currentPath?: PathType | null
+): Promise<RAGResult> {
+  const chunks = await searchByEmbedding(query, {
+    limit: 3,
+    threshold: 0.3,
+    currentPath,
+  });
+
+  return {
+    context: formatRAGContext(chunks),
+    chunkIds: chunks.map(c => String(c.id)),
+    similarityScores: chunks.map(c => c.similarity || 0),
+  };
 }
