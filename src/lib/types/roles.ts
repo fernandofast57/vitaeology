@@ -14,8 +14,11 @@ export type RoleName =
   | 'super_admin'      // Fernando, owner - accesso totale
   | 'content_admin'    // Staff gestione contenuti
   | 'tech_admin'       // Staff gestione tecnica
+  | 'tester_staff'     // Tester interno staff
   | 'consultant_tech'  // Consulente esterno tecnico
-  | 'consultant_comm'; // Consulente esterno comunicazione
+  | 'consultant_comm'  // Consulente esterno comunicazione
+  | 'tester_avanzato'  // Tester con accesso avanzato
+  | 'tester_base';     // Tester base
 
 export interface Role {
   id: string;

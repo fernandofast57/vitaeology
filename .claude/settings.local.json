@@ -17,7 +17,8 @@
       "Bash(node scripts/test-learning-system.js:*)",
       "Bash(curl:*)",
       "Bash(node scripts/check-conversations.js:*)",
-      "Bash(node scripts/verify-roles-system.js:*)"
+      "Bash(node scripts/verify-roles-system.js:*)",
+      "Bash(node scripts/fix-roles-rls.js:*)"
     ]
   }
 }
