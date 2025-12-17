@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Target, BarChart3, Calendar, CheckCircle } from 'lucide-react'
 
 export default function HomePage() {
@@ -9,9 +10,14 @@ export default function HomePage() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <span className="text-2xl font-display font-bold text-petrol-600">
-                Vitaeology
-              </span>
+              <Image
+                src="/logo-vitaeology.png"
+                alt="Vitaeology - Tre passi in Libertà"
+                width={160}
+                height={64}
+                className="h-10 w-auto"
+                priority
+              />
             </div>
             <div className="flex items-center gap-4">
               <Link 
@@ -175,7 +181,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <span className="text-2xl font-display font-bold text-white">Vitaeology</span>
+              <Image
+                src="/logo-vitaeology.png"
+                alt="Vitaeology - Tre passi in Libertà"
+                width={160}
+                height={64}
+                className="h-10 w-auto"
+              />
               <p className="mt-2 text-sm">Leadership Autentica per Imprenditori</p>
             </div>
             <div className="flex gap-6 text-sm">
