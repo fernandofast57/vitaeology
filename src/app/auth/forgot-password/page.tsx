@@ -68,9 +68,9 @@ export default function ForgotPasswordPage() {
           <Image
             src="/logo-vitaeology.png"
             alt="Vitaeology"
-            width={200}
-            height={80}
-            className="h-16 w-auto mx-auto"
+            width={280}
+            height={112}
+            className="h-28 w-auto mx-auto"
             priority
           />
         </Link>

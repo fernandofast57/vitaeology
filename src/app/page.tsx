@@ -13,9 +13,9 @@ export default function HomePage() {
               <Image
                 src="/logo-vitaeology.png"
                 alt="Vitaeology - Tre passi in Libertà"
-                width={160}
-                height={64}
-                className="h-10 w-auto"
+                width={200}
+                height={80}
+                className="h-14 w-auto"
                 priority
               />
             </div>
@@ -184,9 +184,9 @@ export default function HomePage() {
               <Image
                 src="/logo-vitaeology.png"
                 alt="Vitaeology - Tre passi in Libertà"
-                width={160}
-                height={64}
-                className="h-10 w-auto"
+                width={200}
+                height={80}
+                className="h-14 w-auto"
               />
               <p className="mt-2 text-sm">Leadership Autentica per Imprenditori</p>
             </div>

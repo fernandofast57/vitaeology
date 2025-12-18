@@ -66,9 +66,9 @@ export default function PricingPage() {
               <Image
                 src="/logo-vitaeology.png"
                 alt="Vitaeology"
-                width={160}
-                height={64}
-                className="h-10 w-auto"
+                width={200}
+                height={80}
+                className="h-14 w-auto"
                 priority
               />
             </Link>
