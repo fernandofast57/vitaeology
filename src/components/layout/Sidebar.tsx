@@ -58,7 +58,7 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
       <div className="flex items-center justify-between p-6 border-b border-white/10">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Image
-            src="/logo-icon.svg"
+            src="/logo-icon-white.svg"
             alt="Vitaeology"
             width={40}
             height={40}
