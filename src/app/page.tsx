@@ -181,11 +181,11 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <Image
-                src="/logo-vitaeology.png"
-                alt="Vitaeology - Tre passi in Libertà"
-                width={200}
-                height={80}
-                className="h-14 w-auto"
+                src="/logo-horizontal-white.svg"
+                alt="Vitaeology"
+                width={180}
+                height={26}
+                className="h-8 w-auto"
               />
               <p className="mt-2 text-sm">Leadership Autentica per Imprenditori</p>
             </div>
