@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Sparkles, ArrowLeft, Shield, Mail, Database, CreditCard, Cookie, UserCheck, Clock, Globe } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowLeft, Shield, Mail, Database, CreditCard, Cookie, UserCheck, Clock, Globe } from 'lucide-react';
 
 export const metadata = {
   title: 'Privacy Policy | Vitaeology',
@@ -14,11 +15,14 @@ export default function PrivacyPolicyPage() {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">Vitaeology</span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo-horizontal.svg"
+              alt="Vitaeology"
+              width={220}
+              height={32}
+              className="h-8 w-auto"
+            />
           </Link>
           <Link
             href="/"
