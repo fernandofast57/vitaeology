@@ -9,15 +9,14 @@ export default function HomePage() {
       <header className="bg-white border-b border-gray-100">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center">
               <Image
-                src="/logo-icon.svg"
+                src="/logo-horizontal.svg"
                 alt="Vitaeology"
-                width={40}
-                height={40}
-                className="h-10 w-10"
+                width={220}
+                height={32}
+                className="h-8 w-auto"
               />
-              <span className="text-2xl font-display font-bold text-petrol-600">Vitaeology</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link 
