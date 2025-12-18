@@ -60,9 +60,9 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
           <Image
             src="/logo-vitaeology.png"
             alt="Vitaeology"
-            width={180}
-            height={72}
-            className="h-12 w-auto"
+            width={220}
+            height={88}
+            className="h-16 w-auto"
             priority
           />
         </Link>

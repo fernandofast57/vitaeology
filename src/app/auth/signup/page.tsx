@@ -92,9 +92,9 @@ export default function SignupPage() {
           <Image
             src="/logo-vitaeology.png"
             alt="Vitaeology"
-            width={280}
-            height={112}
-            className="h-28 w-auto mx-auto"
+            width={360}
+            height={144}
+            className="h-36 w-auto mx-auto"
             priority
           />
         </Link>
