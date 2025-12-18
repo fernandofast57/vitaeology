@@ -4,7 +4,10 @@
 
 /* Font caricati via next/font in layout.tsx:
    - Inter (body/sans)
-   - Stoke 300 (display/heading/logo) - font con swash sulla V
+   - Stoke 300 (brand primario) - font con swash sulla V
+   - Crimson Text 400 (fallback 1)
+   - Libre Baskerville 400 (fallback 2)
+   - Georgia, serif (system fallback)
 */
 
 @layer base {

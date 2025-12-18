@@ -72,10 +72,29 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['var(--font-stoke)', 'Stoke', 'Georgia', 'serif'],
-        stoke: ['var(--font-stoke)', 'Stoke', 'serif'],
+        // Font brand con fallback chain completa
+        brand: [
+          'var(--font-stoke)',
+          'var(--font-crimson)',
+          'var(--font-libre)',
+          'Georgia',
+          'serif',
+        ],
+        display: [
+          'var(--font-stoke)',
+          'var(--font-crimson)',
+          'var(--font-libre)',
+          'Georgia',
+          'serif',
+        ],
         // Alias per componenti
-        heading: ['var(--font-stoke)', 'Stoke', 'Georgia', 'serif'],
+        heading: [
+          'var(--font-stoke)',
+          'var(--font-crimson)',
+          'var(--font-libre)',
+          'Georgia',
+          'serif',
+        ],
         body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       // ========================================

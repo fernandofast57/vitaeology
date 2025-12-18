@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Stoke } from 'next/font/google'
+import { Inter, Stoke, Crimson_Text, Libre_Baskerville } from 'next/font/google'
 import './globals.css'
 
 // Font per il body (sans-serif)
@@ -9,12 +9,28 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-// Font display per titoli, logo e headings brand (serif con swash sulla V)
+// Font brand primario (serif con swash sulla V)
 const stoke = Stoke({
   weight: '300',
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-stoke',
+})
+
+// Font fallback 1: Crimson Text
+const crimsonText = Crimson_Text({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-crimson',
+})
+
+// Font fallback 2: Libre Baskerville
+const libreBaskerville = Libre_Baskerville({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-libre',
 })
 
 export const metadata: Metadata = {
@@ -64,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="it" className={`${inter.variable} ${stoke.variable}`}>
+    <html lang="it" className={`${inter.variable} ${stoke.variable} ${crimsonText.variable} ${libreBaskerville.variable}`}>
       <body className="min-h-screen bg-gray-50 font-sans">
         {children}
       </body>
