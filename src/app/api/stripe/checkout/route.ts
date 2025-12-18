@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { PRICING_TIERS, type PricingTierSlug } from '@/config/pricing';
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -13,19 +14,44 @@ function getSupabase() {
   );
 }
 
-const PRICE_IDS: Record<string, string> = {
-  professional_monthly: process.env.STRIPE_PRICE_PROFESSIONAL_MONTHLY || '',
-  professional_yearly: process.env.STRIPE_PRICE_PROFESSIONAL_YEARLY || '',
-};
-
 export async function POST(request: NextRequest) {
   try {
-    const { priceId, userId, userEmail } = await request.json();
+    const { tierSlug, userId, userEmail } = await request.json();
 
-    if (!priceId || !userId || !userEmail) {
+    // Validate required fields
+    if (!tierSlug || !userId || !userEmail) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required fields: tierSlug, userId, userEmail' },
         { status: 400 }
+      );
+    }
+
+    // Validate tier exists
+    if (!PRICING_TIERS[tierSlug as PricingTierSlug]) {
+      return NextResponse.json(
+        { error: `Invalid tier: ${tierSlug}. Valid tiers: explorer, leader, mentor` },
+        { status: 400 }
+      );
+    }
+
+    const tier = PRICING_TIERS[tierSlug as PricingTierSlug];
+
+    // Explorer is free, no checkout needed
+    if (tier.price === 0) {
+      return NextResponse.json(
+        { error: 'Explorer is a free tier, no checkout required' },
+        { status: 400 }
+      );
+    }
+
+    // Get Stripe Price ID from tier config
+    const priceId = tier.stripePriceId;
+
+    if (!priceId) {
+      console.error(`No Stripe Price ID configured for tier: ${tierSlug}`);
+      return NextResponse.json(
+        { error: `Stripe not configured for tier: ${tier.name}. Contact support.` },
+        { status: 500 }
       );
     }
 
@@ -64,7 +90,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: PRICE_IDS[priceId] || priceId,
+          price: priceId,
           quantity: 1,
         },
       ],
@@ -73,7 +99,17 @@ export async function POST(request: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription?canceled=true`,
       metadata: {
         user_id: userId,
+        tier_slug: tierSlug,
       },
+      // Add subscription metadata
+      subscription_data: {
+        metadata: {
+          tier_slug: tierSlug,
+          tier_name: tier.name,
+        },
+      },
+      // Allow promo codes
+      allow_promotion_codes: true,
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });

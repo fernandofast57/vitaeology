@@ -18,8 +18,8 @@ export type AnswerType = 'VERO' | 'INCERTO' | 'FALSO'
 // Scoring types
 export type ScoringType = 'direct' | 'inverse'
 
-// Subscription tiers
-export type SubscriptionTier = 'free' | 'leader' | 'mentor'
+// Subscription tiers (allineato a src/config/pricing.ts - SINGLE SOURCE OF TRUTH)
+export type SubscriptionTier = 'explorer' | 'leader' | 'mentor'
 
 // User Profile
 export interface Profile {

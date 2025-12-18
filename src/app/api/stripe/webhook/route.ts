@@ -42,13 +42,14 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.user_id;
+        const tierSlug = session.metadata?.tier_slug || 'leader'; // Default to leader for legacy
 
         if (userId) {
           await supabase
             .from('profiles')
             .update({
               subscription_status: 'active',
-              subscription_tier: 'professional',
+              subscription_tier: tierSlug, // Use new tier slug (explorer, leader, mentor)
               stripe_subscription_id: session.subscription as string,
               updated_at: new Date().toISOString(),
             })
@@ -60,11 +61,12 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.updated': {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
+        const tierSlug = subscription.metadata?.tier_slug;
 
         // Find user by stripe_customer_id
         const { data: profile } = await supabase
           .from('profiles')
-          .select('id')
+          .select('id, subscription_tier')
           .eq('stripe_customer_id', customerId)
           .single();
 
@@ -74,12 +76,19 @@ export async function POST(request: NextRequest) {
                          subscription.status === 'canceled' ? 'canceled' :
                          'inactive';
 
+          const updateData: Record<string, unknown> = {
+            subscription_status: status,
+            updated_at: new Date().toISOString(),
+          };
+
+          // Update tier if provided in metadata (for upgrades/downgrades)
+          if (tierSlug) {
+            updateData.subscription_tier = tierSlug;
+          }
+
           await supabase
             .from('profiles')
-            .update({
-              subscription_status: status,
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq('id', profile.id);
         }
         break;
@@ -100,7 +109,7 @@ export async function POST(request: NextRequest) {
             .from('profiles')
             .update({
               subscription_status: 'canceled',
-              subscription_tier: 'free',
+              subscription_tier: 'explorer', // Downgrade to explorer (free tier)
               stripe_subscription_id: null,
               updated_at: new Date().toISOString(),
             })

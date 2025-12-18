@@ -6,18 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import { CreditCard, Check, Crown, Zap, Star, Loader2, ExternalLink } from 'lucide-react';
-
-interface Plan {
-  id: string;
-  name: string;
-  price: string;
-  period: string;
-  description: string;
-  features: string[];
-  highlighted?: boolean;
-  current?: boolean;
-  priceId?: string;
-}
+import { PRICING_TIERS, getAllTiers, type PricingTierSlug } from '@/config/pricing';
 
 function SubscriptionContent() {
   const searchParams = useSearchParams();
@@ -28,12 +17,15 @@ function SubscriptionContent() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState('trial');
+  const [currentTier, setCurrentTier] = useState<PricingTierSlug>('explorer');
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
   const [trialDaysLeft, setTrialDaysLeft] = useState(14);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const supabase = createClient();
+
+  // Get tiers from config
+  const tiers = getAllTiers();
 
   useEffect(() => {
     // Check URL params for success/cancel
@@ -72,7 +64,17 @@ function SubscriptionContent() {
           .single();
 
         if (profile) {
-          setCurrentPlan(profile.subscription_tier || 'trial');
+          // Map old tier names to new ones
+          const tierMapping: Record<string, PricingTierSlug> = {
+            'free': 'explorer',
+            'trial': 'explorer',
+            'explorer': 'explorer',
+            'leader': 'leader',
+            'professional': 'leader', // Legacy mapping
+            'mentor': 'mentor',
+          };
+          const mappedTier = tierMapping[profile.subscription_tier || 'explorer'] || 'explorer';
+          setCurrentTier(mappedTier);
           setSubscriptionStatus(profile.subscription_status);
         }
       } catch (error) {
@@ -84,14 +86,14 @@ function SubscriptionContent() {
     fetchData();
   }, [supabase]);
 
-  const handleCheckout = async (priceId: string) => {
-    setCheckoutLoading(priceId);
+  const handleCheckout = async (tierSlug: PricingTierSlug) => {
+    setCheckoutLoading(tierSlug);
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          priceId,
+          tierSlug,
           userId,
           userEmail,
         }),
@@ -136,57 +138,11 @@ function SubscriptionContent() {
     }
   };
 
-  const plans: Plan[] = [
-    {
-      id: 'trial',
-      name: 'Trial',
-      price: 'Gratis',
-      period: '14 giorni',
-      description: 'Prova tutte le funzionalità',
-      current: currentPlan === 'trial' || currentPlan === 'free',
-      features: [
-        'Assessment completo 240 domande',
-        'Radar Chart interattivo',
-        'AI Coach Fernando',
-        '10 esercizi di base',
-        'Report PDF base'
-      ]
-    },
-    {
-      id: 'professional',
-      name: 'Professional',
-      price: '€47',
-      period: '/mese',
-      description: 'Per chi vuole crescere seriamente',
-      highlighted: true,
-      current: currentPlan === 'professional',
-      priceId: 'professional_monthly',
-      features: [
-        'Tutto del Trial +',
-        'Esercizi illimitati',
-        'Coaching AI avanzato',
-        'Report PDF completo',
-        'Tracciamento progressi',
-        'Supporto prioritario'
-      ]
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      description: 'Per team e aziende',
-      current: currentPlan === 'enterprise',
-      features: [
-        'Tutto del Professional +',
-        'Dashboard team',
-        'Analytics avanzate',
-        'Coaching 1:1 con Fernando',
-        'Onboarding personalizzato',
-        'SLA dedicato'
-      ]
-    }
-  ];
+  const isPaidTier = (slug: PricingTierSlug) => PRICING_TIERS[slug].price > 0;
+  const isCurrentTier = (slug: PricingTierSlug) => slug === currentTier;
+  const canUpgradeTo = (slug: PricingTierSlug) => {
+    return PRICING_TIERS[slug].valueLadderLevel > PRICING_TIERS[currentTier].valueLadderLevel;
+  };
 
   if (loading) {
     return (
@@ -219,8 +175,8 @@ function SubscriptionContent() {
               </div>
             )}
 
-            {/* Current Plan Banner */}
-            {(currentPlan === 'trial' || currentPlan === 'free') && (
+            {/* Explorer (Free) Plan Banner */}
+            {currentTier === 'explorer' && (
               <div className="bg-gradient-to-r from-amber-500 to-gold-500 rounded-xl p-5 text-white">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
@@ -228,26 +184,30 @@ function SubscriptionContent() {
                       <Zap className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg">Periodo di prova attivo</h3>
-                      <p className="text-white/90">Ti restano {trialDaysLeft} giorni per esplorare Vitaeology</p>
+                      <h3 className="font-semibold text-lg">Piano Explorer attivo</h3>
+                      <p className="text-white/90">
+                        {trialDaysLeft > 0
+                          ? `Ti restano ${trialDaysLeft} giorni di prova completa`
+                          : 'Passa a Leader per sbloccare tutte le funzionalità'}
+                      </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => handleCheckout('professional_monthly')}
+                    onClick={() => handleCheckout('leader')}
                     disabled={!!checkoutLoading}
                     className="bg-white text-amber-600 px-5 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
-                    {checkoutLoading === 'professional_monthly' ? (
+                    {checkoutLoading === 'leader' ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : null}
-                    Passa a Pro
+                    Passa a Leader
                   </button>
                 </div>
               </div>
             )}
 
-            {/* Active Subscription Banner */}
-            {currentPlan === 'professional' && subscriptionStatus === 'active' && (
+            {/* Leader Plan Banner */}
+            {currentTier === 'leader' && subscriptionStatus === 'active' && (
               <div className="bg-gradient-to-r from-petrol-500 to-petrol-600 rounded-xl p-5 text-white">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-3">
@@ -255,14 +215,55 @@ function SubscriptionContent() {
                       <Crown className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg">Piano Professional attivo</h3>
-                      <p className="text-white/90">Hai accesso a tutte le funzionalità premium</p>
+                      <h3 className="font-semibold text-lg">Piano Leader attivo</h3>
+                      <p className="text-white/90">Hai accesso a tutte le funzionalità Leader</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleCheckout('mentor')}
+                      disabled={!!checkoutLoading}
+                      className="bg-gold-500 text-petrol-700 px-4 py-2 rounded-lg font-medium hover:bg-gold-400 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {checkoutLoading === 'mentor' ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : null}
+                      Upgrade a Mentor
+                    </button>
+                    <button
+                      onClick={handlePortal}
+                      disabled={portalLoading}
+                      className="bg-white text-petrol-600 px-4 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {portalLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <ExternalLink className="w-4 h-4" />
+                      )}
+                      Gestisci
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Mentor Plan Banner */}
+            {currentTier === 'mentor' && subscriptionStatus === 'active' && (
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl p-5 text-white">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                      <Star className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">Piano Mentor attivo</h3>
+                      <p className="text-white/90">Accesso completo a tutti i percorsi e funzionalità</p>
                     </div>
                   </div>
                   <button
                     onClick={handlePortal}
                     disabled={portalLoading}
-                    className="bg-white text-petrol-600 px-5 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="bg-white text-purple-600 px-5 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {portalLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -277,77 +278,93 @@ function SubscriptionContent() {
 
             {/* Plans Grid */}
             <div className="grid md:grid-cols-3 gap-6">
-              {plans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className={`relative bg-white rounded-xl border-2 overflow-hidden ${
-                    plan.highlighted
-                      ? 'border-petrol-500 shadow-lg'
-                      : plan.current
-                      ? 'border-gold-500'
-                      : 'border-neutral-200'
-                  }`}
-                >
-                  {plan.highlighted && !plan.current && (
-                    <div className="absolute top-0 left-0 right-0 bg-petrol-500 text-white text-center py-1 text-sm font-medium">
-                      <Star className="w-4 h-4 inline mr-1" />
-                      Consigliato
+              {tiers.map((tier) => {
+                const isCurrent = isCurrentTier(tier.slug);
+                const canUpgrade = canUpgradeTo(tier.slug);
+
+                return (
+                  <div
+                    key={tier.slug}
+                    className={`relative bg-white rounded-xl border-2 overflow-hidden ${
+                      tier.highlighted
+                        ? 'border-petrol-500 shadow-lg'
+                        : isCurrent
+                        ? 'border-gold-500'
+                        : 'border-neutral-200'
+                    }`}
+                  >
+                    {tier.badge && !isCurrent && (
+                      <div className={`absolute top-0 left-0 right-0 text-white text-center py-1 text-sm font-medium ${
+                        tier.highlighted ? 'bg-petrol-500' : 'bg-purple-500'
+                      }`}>
+                        <Star className="w-4 h-4 inline mr-1" />
+                        {tier.badge}
+                      </div>
+                    )}
+                    {isCurrent && (
+                      <div className="absolute top-0 left-0 right-0 bg-gold-500 text-white text-center py-1 text-sm font-medium">
+                        <Crown className="w-4 h-4 inline mr-1" />
+                        Piano attuale
+                      </div>
+                    )}
+
+                    <div className={`p-6 ${(tier.badge || isCurrent) ? 'pt-10' : ''}`}>
+                      <h3 className="text-xl font-bold text-neutral-900">{tier.name}</h3>
+                      <p className="text-neutral-500 text-sm mt-1">{tier.description}</p>
+
+                      <div className="mt-4 mb-6">
+                        {tier.price === 0 ? (
+                          <span className="text-3xl font-bold text-neutral-900">Gratis</span>
+                        ) : (
+                          <>
+                            {tier.originalPrice && (
+                              <span className="text-lg text-neutral-400 line-through mr-2">€{tier.originalPrice}</span>
+                            )}
+                            <span className="text-3xl font-bold text-neutral-900">€{tier.price}</span>
+                            <span className="text-neutral-500">{tier.intervalLabel}</span>
+                          </>
+                        )}
+                      </div>
+
+                      <ul className="space-y-3 mb-6">
+                        {tier.features.map((feature, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm">
+                            <Check className="w-5 h-5 text-green-500 shrink-0" />
+                            <span className="text-neutral-700">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        onClick={() => {
+                          if (isPaidTier(tier.slug) && canUpgrade) {
+                            handleCheckout(tier.slug);
+                          }
+                        }}
+                        disabled={isCurrent || !canUpgrade || !!checkoutLoading}
+                        className={`w-full py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                          isCurrent
+                            ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed'
+                            : tier.ctaVariant === 'primary'
+                            ? 'bg-petrol-600 text-white hover:bg-petrol-700'
+                            : tier.ctaVariant === 'secondary'
+                            ? 'bg-purple-600 text-white hover:bg-purple-700'
+                            : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                        } ${!canUpgrade && !isCurrent ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {checkoutLoading === tier.slug && (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        )}
+                        {isCurrent ? 'Piano attuale' : tier.ctaText}
+                      </button>
                     </div>
-                  )}
-                  {plan.current && (
-                    <div className="absolute top-0 left-0 right-0 bg-gold-500 text-white text-center py-1 text-sm font-medium">
-                      <Crown className="w-4 h-4 inline mr-1" />
-                      Piano attuale
-                    </div>
-                  )}
-
-                  <div className={`p-6 ${plan.highlighted || plan.current ? 'pt-10' : ''}`}>
-                    <h3 className="text-xl font-bold text-neutral-900">{plan.name}</h3>
-                    <p className="text-neutral-500 text-sm mt-1">{plan.description}</p>
-
-                    <div className="mt-4 mb-6">
-                      <span className="text-3xl font-bold text-neutral-900">{plan.price}</span>
-                      <span className="text-neutral-500">{plan.period}</span>
-                    </div>
-
-                    <ul className="space-y-3 mb-6">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <Check className="w-5 h-5 text-green-500 shrink-0" />
-                          <span className="text-neutral-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <button
-                      onClick={() => {
-                        if (plan.id === 'enterprise') {
-                          window.location.href = 'mailto:info@vitaeology.com?subject=Piano%20Enterprise';
-                        } else if (plan.priceId && !plan.current) {
-                          handleCheckout(plan.priceId);
-                        }
-                      }}
-                      disabled={plan.current || (!!plan.priceId && !!checkoutLoading)}
-                      className={`w-full py-2.5 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
-                        plan.current
-                          ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed'
-                          : plan.highlighted
-                          ? 'bg-petrol-600 text-white hover:bg-petrol-700'
-                          : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                      }`}
-                    >
-                      {checkoutLoading === plan.priceId && (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      )}
-                      {plan.current ? 'Piano attuale' : plan.id === 'enterprise' ? 'Contattaci' : 'Scegli piano'}
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Manage Subscription */}
-            {currentPlan === 'professional' && (
+            {/* Manage Subscription - Show for paid tiers */}
+            {isPaidTier(currentTier) && subscriptionStatus === 'active' && (
               <div className="bg-white rounded-xl border border-neutral-200 p-6">
                 <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-petrol-600" />
@@ -371,8 +388,8 @@ function SubscriptionContent() {
               </div>
             )}
 
-            {/* Payment Methods - only show for trial */}
-            {(currentPlan === 'trial' || currentPlan === 'free') && (
+            {/* Payment Methods - only show for explorer */}
+            {currentTier === 'explorer' && (
               <div className="bg-white rounded-xl border border-neutral-200 p-6">
                 <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-petrol-600" />
@@ -404,12 +421,12 @@ function SubscriptionContent() {
                   <p className="text-neutral-500">Sì, puoi annullare il tuo abbonamento quando vuoi. L&apos;accesso rimarrà attivo fino alla fine del periodo pagato.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-neutral-700">Cosa succede dopo il trial?</p>
-                  <p className="text-neutral-500">Al termine dei 14 giorni, potrai continuare con un piano a pagamento o l&apos;accesso sarà limitato alle funzionalità base.</p>
+                  <p className="font-medium text-neutral-700">I piani sono annuali?</p>
+                  <p className="text-neutral-500">Sì, Leader e Mentor sono piani annuali. Risparmi rispetto al pagamento mensile e hai accesso per 12 mesi completi.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-neutral-700">Posso cambiare piano?</p>
-                  <p className="text-neutral-500">Sì, puoi passare a un piano superiore in qualsiasi momento. La differenza sarà calcolata pro-rata.</p>
+                  <p className="font-medium text-neutral-700">Posso passare a un piano superiore?</p>
+                  <p className="text-neutral-500">Sì, puoi passare da Leader a Mentor in qualsiasi momento. La differenza sarà calcolata pro-rata.</p>
                 </div>
               </div>
             </div>

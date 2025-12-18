@@ -1,59 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Check, ArrowRight, Sparkles } from 'lucide-react'
+import { getAllTiers, formatPrice } from '@/config/pricing'
 
-const plans = [
-  {
-    name: 'Free',
-    price: '0',
-    period: 'per sempre',
-    description: 'Inizia il tuo percorso di leadership',
-    features: [
-      'Test diagnostico completo (240 domande)',
-      'Radar chart personalizzato',
-      'Analisi dei 4 pilastri',
-      'Report base dei risultati',
-    ],
-    cta: 'Inizia Gratis',
-    href: '/auth/signup',
-    popular: false,
-  },
-  {
-    name: 'Pro',
-    price: '29',
-    period: '/mese',
-    description: 'Per chi vuole crescere davvero',
-    features: [
-      'Tutto del piano Free',
-      '52 esercizi settimanali personalizzati',
-      'AI Coach Fernando illimitato',
-      'Tracking progressi avanzato',
-      'Report mensili dettagliati',
-      'Supporto prioritario',
-    ],
-    cta: 'Prova 14 giorni gratis',
-    href: '/auth/signup?plan=pro',
-    popular: true,
-  },
-  {
-    name: 'Team',
-    price: '199',
-    period: '/mese',
-    description: 'Per team e organizzazioni',
-    features: [
-      'Tutto del piano Pro',
-      'Fino a 10 membri del team',
-      'Dashboard team leader',
-      'Analisi comparativa del team',
-      'Report aggregati',
-      'Onboarding dedicato',
-      'Account manager dedicato',
-    ],
-    cta: 'Contattaci',
-    href: '/contact?subject=team',
-    popular: false,
-  },
-]
+// Usa PRICING_TIERS come fonte dati (SINGLE SOURCE OF TRUTH)
+const tiers = getAllTiers()
 
 export default function PricingPage() {
   return (
@@ -98,7 +49,7 @@ export default function PricingPage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Scegli il piano giusto per il tuo percorso di leadership.
-            Inizia gratis e passa a Pro quando sei pronto.
+            Inizia gratis con Explorer e cresci al tuo ritmo.
           </p>
         </div>
       </section>
@@ -107,36 +58,40 @@ export default function PricingPage() {
       <section className="pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {plans.map((plan) => (
+            {tiers.map((tier) => (
               <div
-                key={plan.name}
+                key={tier.slug}
                 className={`relative bg-white rounded-2xl shadow-sm border-2 ${
-                  plan.popular ? 'border-gold-500' : 'border-gray-200'
+                  tier.highlighted ? 'border-gold-500' : 'border-gray-200'
                 } p-8 flex flex-col`}
               >
-                {plan.popular && (
+                {tier.badge && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                     <span className="bg-gold-500 text-petrol-600 text-sm font-bold px-4 py-1 rounded-full flex items-center gap-1">
                       <Sparkles className="h-4 w-4" />
-                      Piu popolare
+                      {tier.badge}
                     </span>
                   </div>
                 )}
 
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
-                  <p className="text-gray-500 text-sm mt-1">{plan.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900">{tier.name}</h3>
+                  <p className="text-gray-500 text-sm mt-1">{tier.description}</p>
                 </div>
 
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price === '0' ? 'Gratis' : `€${plan.price}`}</span>
-                  {plan.price !== '0' && (
-                    <span className="text-gray-500">{plan.period}</span>
+                  <span className="text-4xl font-bold text-gray-900">
+                    {formatPrice(tier)}
+                  </span>
+                  {tier.originalPrice && (
+                    <span className="ml-2 text-lg text-gray-400 line-through">
+                      €{tier.originalPrice}
+                    </span>
                   )}
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-grow">
-                  {plan.features.map((feature) => (
+                  {tier.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
                       <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-600 text-sm">{feature}</span>
@@ -145,14 +100,16 @@ export default function PricingPage() {
                 </ul>
 
                 <Link
-                  href={plan.href}
+                  href={tier.price === 0 ? '/auth/signup' : `/auth/signup?plan=${tier.slug}`}
                   className={`w-full py-3 px-4 rounded-lg font-medium text-center transition-colors flex items-center justify-center gap-2 ${
-                    plan.popular
+                    tier.ctaVariant === 'primary'
                       ? 'bg-petrol-600 hover:bg-petrol-700 text-white'
+                      : tier.ctaVariant === 'secondary'
+                      ? 'bg-gold-500 hover:bg-gold-600 text-petrol-600'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                   }`}
                 >
-                  {plan.cta}
+                  {tier.ctaText}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -171,11 +128,12 @@ export default function PricingPage() {
           <div className="space-y-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">
-                Posso provare il piano Pro gratuitamente?
+                Posso provare Vitaeology gratuitamente?
               </h3>
               <p className="text-gray-600">
-                Si, offriamo una prova gratuita di 14 giorni per il piano Pro.
-                Nessuna carta di credito richiesta per iniziare.
+                Sì! Il piano Explorer è completamente gratuito per sempre.
+                Include il test diagnostico completo, il radar chart e l&apos;accesso
+                limitato all&apos;AI Coach Fernando.
               </p>
             </div>
 
@@ -194,9 +152,20 @@ export default function PricingPage() {
                 Come funziona l&apos;AI Coach Fernando?
               </h3>
               <p className="text-gray-600">
-                Fernando e il tuo coach personale alimentato dall&apos;intelligenza artificiale.
+                Fernando è il tuo coach personale alimentato dall&apos;intelligenza artificiale.
                 Ti guida attraverso gli esercizi, risponde alle tue domande e ti aiuta
                 a sviluppare la tua leadership in modo personalizzato.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                I piani sono annuali o mensili?
+              </h3>
+              <p className="text-gray-600">
+                I piani Leader e Mentor sono con fatturazione annuale, il che ti permette
+                di risparmiare rispetto al pagamento mensile. Il piano Explorer è
+                gratuito per sempre.
               </p>
             </div>
 
@@ -205,7 +174,7 @@ export default function PricingPage() {
                 Posso annullare in qualsiasi momento?
               </h3>
               <p className="text-gray-600">
-                Si, puoi annullare il tuo abbonamento in qualsiasi momento dalla
+                Sì, puoi annullare il tuo abbonamento in qualsiasi momento dalla
                 sezione Abbonamento del tuo profilo. Non ci sono vincoli o penali.
               </p>
             </div>
@@ -220,7 +189,7 @@ export default function PricingPage() {
             Pronto a iniziare?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Il test diagnostico e completamente gratuito. Scopri il tuo potenziale oggi.
+            Il test diagnostico è completamente gratuito. Scopri il tuo potenziale oggi.
           </p>
           <Link
             href="/auth/signup"
