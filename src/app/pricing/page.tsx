@@ -64,11 +64,11 @@ export default function PricingPage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo-vitaeology.png"
+                src="/logo-horizontal.svg"
                 alt="Vitaeology"
-                width={200}
-                height={80}
-                className="h-14 w-auto"
+                width={220}
+                height={32}
+                className="h-8 w-auto"
                 priority
               />
             </Link>
