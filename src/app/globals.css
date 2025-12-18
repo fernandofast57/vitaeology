@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* Font caricati via next/font in layout.tsx:
+   - Inter (body/sans)
+   - Stoke 300 (display/heading/logo) - font con swash sulla V
+*/
 
 @layer base {
   :root {

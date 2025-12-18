@@ -1,5 +1,21 @@
 import type { Metadata } from 'next'
+import { Inter, Stoke } from 'next/font/google'
 import './globals.css'
+
+// Font per il body (sans-serif)
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+// Font display per titoli, logo e headings brand (serif con swash sulla V)
+const stoke = Stoke({
+  weight: '300',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-stoke',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -48,8 +64,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="it">
-      <body className="min-h-screen bg-gray-50">
+    <html lang="it" className={`${inter.variable} ${stoke.variable}`}>
+      <body className="min-h-screen bg-gray-50 font-sans">
         {children}
       </body>
     </html>

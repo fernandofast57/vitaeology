@@ -71,11 +71,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-stoke)', 'Stoke', 'Georgia', 'serif'],
+        stoke: ['var(--font-stoke)', 'Stoke', 'serif'],
         // Alias per componenti
-        heading: ['Playfair Display', 'Georgia', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-stoke)', 'Stoke', 'Georgia', 'serif'],
+        body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       // ========================================
       // Utilities aggiuntive Vitaeology
