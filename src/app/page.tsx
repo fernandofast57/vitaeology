@@ -9,16 +9,16 @@ export default function HomePage() {
       <header className="bg-white border-b border-gray-100">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/logo-vitaeology.png"
-                alt="Vitaeology - Tre passi in Libertà"
-                width={200}
-                height={80}
-                className="h-14 w-auto"
-                priority
+                src="/logo-icon.svg"
+                alt="Vitaeology"
+                width={40}
+                height={40}
+                className="h-10 w-10"
               />
-            </div>
+              <span className="text-2xl font-display font-bold text-petrol-600">Vitaeology</span>
+            </Link>
             <div className="flex items-center gap-4">
               <Link 
                 href="/auth/login" 

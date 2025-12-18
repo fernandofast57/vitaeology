@@ -56,15 +56,15 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
   return (
     <aside className={`fixed top-0 left-0 z-50 h-full w-64 bg-petrol-600 text-white transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
       <div className="flex items-center justify-between p-6 border-b border-white/10">
-        <Link href="/dashboard" className="flex items-center">
+        <Link href="/dashboard" className="flex items-center gap-2">
           <Image
-            src="/logo-vitaeology.png"
+            src="/logo-icon.svg"
             alt="Vitaeology"
-            width={220}
-            height={88}
-            className="h-16 w-auto"
-            priority
+            width={40}
+            height={40}
+            className="h-10 w-10"
           />
+          <span className="text-xl font-display font-bold text-white">Vitaeology</span>
         </Link>
         <button onClick={onClose} className="lg:hidden p-2 hover:bg-white/10 rounded-lg">
           <X className="w-5 h-5" />
