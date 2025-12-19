@@ -4,6 +4,53 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Message, UserContext, ChatResponse } from '@/lib/ai-coach/types';
 import { SignalType } from '@/types/ai-coach-learning';
 
+// Componente indicatore di pensiero con messaggi dinamici
+function ThinkingIndicator({ startTime }: { startTime: number }) {
+  const [dots, setDots] = useState('.');
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  // Animazione dots
+  useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setDots(prev => (prev === '...' ? '.' : prev + '.'));
+    }, 400);
+    return () => clearInterval(dotsInterval);
+  }, []);
+
+  // Tracker tempo trascorso
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      setElapsedSeconds(elapsed);
+    }, 1000);
+    return () => clearInterval(timeInterval);
+  }, [startTime]);
+
+  // Messaggio dinamico basato su tempo
+  const getMessage = () => {
+    if (elapsedSeconds < 3) {
+      return 'Fernando sta pensando';
+    } else if (elapsedSeconds < 6) {
+      return 'Sto elaborando una risposta completa';
+    } else {
+      return 'Ancora qualche secondo, grazie per la pazienza';
+    }
+  };
+
+  return (
+    <div className="flex justify-start">
+      <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 p-3 rounded-2xl rounded-bl-md">
+        <div className="w-6 h-6 bg-[#0A2540] rounded-full flex items-center justify-center flex-shrink-0">
+          <span className="text-white text-xs font-bold">F</span>
+        </div>
+        <span className="text-sm text-gray-600 dark:text-gray-300">
+          {getMessage()}<span className="inline-block w-4 text-left">{dots}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // Messaggio esteso con metadati per tracking
 interface ExtendedMessage extends Message {
   conversationId?: string;
@@ -27,6 +74,7 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const [messages, setMessages] = useState<ExtendedMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingStartTime, setLoadingStartTime] = useState<number>(0);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [feedbackLoading, setFeedbackLoading] = useState<string | null>(null);
@@ -445,6 +493,7 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
     setMessages(newMessages);
     setInput('');
     setIsLoading(true);
+    setLoadingStartTime(Date.now());
 
     try {
       const response = await fetch('/api/ai-coach', {
@@ -806,15 +855,7 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
           </div>
         ))}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-2xl rounded-bl-md">
-              <div className="flex gap-1">
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.1s]" />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]" />
-              </div>
-            </div>
-          </div>
+          <ThinkingIndicator startTime={loadingStartTime} />
         )}
         <div ref={messagesEndRef} />
       </div>
