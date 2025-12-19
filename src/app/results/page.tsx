@@ -16,11 +16,12 @@ import {
 // Tipi
 interface Characteristic {
   id: number
-  book_id: number
   pillar: string
-  name: string
-  description: string
-  order_index: number
+  name_familiar: string
+  name_barrios: string
+  slug: string
+  sort_order: number
+  description_validante: string | null
 }
 
 interface CharacteristicScore {
@@ -138,8 +139,8 @@ export default function ResultsPage() {
         const { data: characteristics } = await supabase
           .from('characteristics')
           .select('*')
-          .eq('book_id', 1)
-          .order('order_index', { ascending: true })
+          .eq('is_active', true)
+          .order('sort_order', { ascending: true })
 
         if (!characteristics) {
           setError('Errore nel caricamento delle caratteristiche')
@@ -187,10 +188,10 @@ export default function ResultsPage() {
           const scores = scoresByCharacteristic[char.id] || { points: 0, count: 0 }
           const maxScore = scores.count * 2 // Max 2 punti per domanda
           const percentage = maxScore > 0 ? Math.round((scores.points / maxScore) * 100) : 0
-          
+
           return {
             id: char.id,
-            name: char.name,
+            name: char.name_familiar || char.name_barrios,
             pillar: char.pillar,
             score: scores.points,
             maxScore: maxScore,
