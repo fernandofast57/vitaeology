@@ -103,16 +103,18 @@ export default function DashboardPage() {
             <TrialBanner daysRemaining={14} />
             <WelcomeHero userName={userName || 'Leader'} hasCompletedAssessment={assessment?.status === 'completed'} />
             <QuickStats assessmentsCompleted={assessment?.status === 'completed' ? 1 : 0} totalScore={assessment?.total_score || null} exercisesCompleted={exerciseStats.completed} currentStreak={exerciseStats.inProgress} />
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               <div className="lg:col-span-2">
                 <AssessmentCard assessment={assessment} />
               </div>
-              <div className="lg:col-span-1 space-y-6">
+              <div className="lg:col-span-1 flex flex-col gap-4 md:gap-6">
                 <MiniRadarPreview pillarScores={pillarScores} hasResults={assessment?.status === 'completed'} assessmentId={assessment?.id} />
                 <ExercisesCard stats={exerciseStats} />
               </div>
             </div>
-            <RecentActivity />
+            <div className="mt-4 md:mt-6">
+              <RecentActivity />
+            </div>
           </div>
         </main>
       </div>

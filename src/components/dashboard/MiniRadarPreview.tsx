@@ -24,7 +24,7 @@ const PILLAR_COLORS: Record<string, string> = {
 export default function MiniRadarPreview({ pillarScores, hasResults, assessmentId }: MiniRadarPreviewProps) {
   if (!hasResults) {
     return (
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6 h-full">
+      <div className="bg-white rounded-2xl border border-neutral-200 p-4 sm:p-6">
         <h3 className="text-lg font-bold text-neutral-900 mb-4">Il Tuo Profilo</h3>
         <div className="relative">
           <div className="h-48 bg-neutral-100 rounded-xl opacity-50" />
