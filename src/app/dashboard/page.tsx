@@ -20,6 +20,7 @@ export default function DashboardPage() {
   const [userId, setUserId] = useState('');
   const [assessment, setAssessment] = useState<any>(null);
   const [pillarScores, setPillarScores] = useState<any[]>([]);
+  const [characteristicScores, setCharacteristicScores] = useState<any[]>([]);
   const [exerciseStats, setExerciseStats] = useState({ total: 0, completed: 0, inProgress: 0, completionRate: 0 });
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -47,13 +48,67 @@ export default function DashboardPage() {
         if (assessmentData) {
           setAssessment(assessmentData);
           if (assessmentData.status === 'completed') {
-            const { data: resultsData } = await supabase
-              .from('assessment_results')
-              .select('pillar_scores')
-              .eq('assessment_id', assessmentData.id)
-              .single();
-            if (resultsData?.pillar_scores) {
-              setPillarScores(resultsData.pillar_scores);
+            // Calcola pillar scores da user_answers
+            const { data: characteristics } = await supabase
+              .from('characteristics')
+              .select('id, pillar, name_familiar')
+              .eq('is_active', true);
+
+            const { data: answers } = await supabase
+              .from('user_answers')
+              .select(`
+                question_id,
+                points_earned,
+                assessment_questions (
+                  characteristic_id
+                )
+              `)
+              .eq('assessment_id', assessmentData.id);
+
+            if (characteristics && answers && answers.length > 0) {
+              // Calcola punteggi per caratteristica
+              const scoresByChar: Record<number, { points: number; count: number }> = {};
+              answers.forEach((answer: any) => {
+                const charId = answer.assessment_questions?.characteristic_id;
+                if (charId) {
+                  if (!scoresByChar[charId]) scoresByChar[charId] = { points: 0, count: 0 };
+                  scoresByChar[charId].points += answer.points_earned;
+                  scoresByChar[charId].count += 1;
+                }
+              });
+
+              // Crea array punteggi caratteristiche (per Fernando AI)
+              const charScoresArray = characteristics.map((char: any) => {
+                const scores = scoresByChar[char.id] || { points: 0, count: 0 };
+                const maxPoints = scores.count * 2;
+                return {
+                  characteristicSlug: char.name_familiar,
+                  pillar: char.pillar,
+                  score: maxPoints > 0 ? Math.round((scores.points / maxPoints) * 100) : 0
+                };
+              }).filter((c: any) => c.score > 0); // Solo caratteristiche con risposte
+
+              setCharacteristicScores(charScoresArray);
+
+              // Aggrega per pilastro
+              const pillarTotals: Record<string, { points: number; maxPoints: number }> = {};
+              characteristics.forEach((char: any) => {
+                const scores = scoresByChar[char.id];
+                if (scores) {
+                  const pillar = char.pillar;
+                  if (!pillarTotals[pillar]) pillarTotals[pillar] = { points: 0, maxPoints: 0 };
+                  pillarTotals[pillar].points += scores.points;
+                  pillarTotals[pillar].maxPoints += scores.count * 2;
+                }
+              });
+
+              // Converti in array per il componente
+              const pillarScoresArray = Object.entries(pillarTotals).map(([pillar, data]) => ({
+                pillar,
+                score: data.maxPoints > 0 ? Math.round((data.points / data.maxPoints) * 100) : 0
+              }));
+
+              setPillarScores(pillarScoresArray);
             }
           }
         }
@@ -125,13 +180,7 @@ export default function DashboardPage() {
           userContext={{
             userId: userId || 'dev-user',
             userName: userName || undefined,
-            assessmentResults: pillarScores.length > 0
-              ? pillarScores.map((p: any) => ({
-                  characteristicSlug: p.pillar,
-                  score: p.score,
-                  pillar: p.pillar,
-                }))
-              : undefined,
+            assessmentResults: characteristicScores.length > 0 ? characteristicScores : undefined,
             completedExercisesCount: exerciseStats.completed,
             currentWeek: Math.ceil((exerciseStats.completed + 1) / 1),
           }}

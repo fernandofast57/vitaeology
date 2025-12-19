@@ -211,15 +211,25 @@ Poi aspetti. Non cambi argomento. Non torni al coaching.`;
     }
 
     if (context.assessmentResults && context.assessmentResults.length > 0) {
-      const topScores = [...context.assessmentResults]
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
+      const sorted = [...context.assessmentResults].sort((a, b) => b.score - a.score);
+      const topScores = sorted.slice(0, 3);
+      const bottomScores = sorted.slice(-3).reverse();
 
-      prompt += `\n\nDall'assessment, punti di forza gia evidenti:`;
+      prompt += `\n\nDall'assessment Leadership Autentica:`;
+
+      prompt += `\n\nPUNTI DI FORZA (caratteristiche dove gia opera al meglio):`;
       topScores.forEach(s => {
-        prompt += `\n- ${s.characteristicSlug}: ${s.score}/100`;
+        prompt += `\n- ${s.characteristicSlug} (${s.pillar}): ${s.score}%`;
       });
-      prompt += `\nUsa questi come risorse quando ha dubbi su di se.`;
+      prompt += `\nUsa questi come risorse quando ha dubbi su di se. Ricordagli dove gia eccelle.`;
+
+      prompt += `\n\nAREE DI ESPANSIONE (caratteristiche da espandere ad altri contesti):`;
+      bottomScores.forEach(s => {
+        prompt += `\n- ${s.characteristicSlug} (${s.pillar}): ${s.score}%`;
+      });
+      prompt += `\nNon parlare di "debolezze" o "mancanze". Cerca dove GIA usa queste capacita (anche in piccolo) e aiutalo ad espanderle.`;
+
+      prompt += `\n\nQuando ti chiede un programma di miglioramento, proponi esercizi pratici basati su queste aree, sempre partendo da dove gia fa bene.`;
     }
   }
 
