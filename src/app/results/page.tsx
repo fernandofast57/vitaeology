@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
   Tooltip
 } from 'recharts'
+import ChatWidget from '@/components/ai-coach/ChatWidget'
 
 // Tipi
 interface Characteristic {
@@ -91,9 +92,11 @@ function getLevelColor(percentage: number): string {
 
 export default function ResultsPage() {
   const router = useRouter()
-  
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [userId, setUserId] = useState<string>('')
+  const [userName, setUserName] = useState<string>('')
   const [totalScore, setTotalScore] = useState(0)
   const [characteristicScores, setCharacteristicScores] = useState<CharacteristicScore[]>([])
   const [pillarScores, setPillarScores] = useState<PillarScore[]>([])
@@ -114,6 +117,9 @@ export default function ResultsPage() {
           router.push('/auth/login?redirectTo=/results')
           return
         }
+
+        setUserId(user.id)
+        setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '')
 
         // Carica assessment completato
         const { data: assessment, error: assessmentError } = await supabase
@@ -489,6 +495,21 @@ charScores.forEach(score => {
           </div>
         </div>
 
+        {/* CTA Fernando AI Coach */}
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-8 text-white">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl sm:text-3xl">F</span>
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl font-bold mb-1">Crea il tuo Programma Personalizzato</h3>
+              <p className="text-indigo-100 text-sm sm:text-base">
+                Clicca sul pulsante chat in basso a destra e chiedi a Fernando di creare un programma di miglioramento basato sui tuoi risultati.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Azioni */}
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <button
@@ -498,14 +519,33 @@ charScores.forEach(score => {
             Vai alla Dashboard
           </button>
           <button
-            onClick={() => router.push('/test')}
+            onClick={() => router.push('/exercises')}
             className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-slate-700 font-semibold rounded-lg shadow hover:shadow-md transition-all text-sm sm:text-base"
           >
-            Rifai il Test
+            Vai agli Esercizi
           </button>
         </div>
 
       </div>
+
+      {/* Fernando AI Coach */}
+      {userId && (
+        <ChatWidget
+          userContext={{
+            userId,
+            userName: userName || undefined,
+            assessmentResults: characteristicScores.length > 0
+              ? characteristicScores.map(c => ({
+                  characteristicSlug: c.name,
+                  score: c.percentage,
+                  pillar: c.pillar
+                }))
+              : undefined,
+            completedExercisesCount: 0,
+            currentWeek: 1,
+          }}
+        />
+      )}
     </div>
   )
 }
