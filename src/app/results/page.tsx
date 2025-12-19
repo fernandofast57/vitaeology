@@ -293,12 +293,12 @@ charScores.forEach(score => {
   const bottom3 = sortedByScore.slice(-3).reverse()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 mb-4 sm:mb-8 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
             I Tuoi Risultati
           </h1>
           <p className="text-slate-600 mb-6">
@@ -311,20 +311,20 @@ charScores.forEach(score => {
           </p>
           
           {/* Score totale */}
-          <div className="inline-flex items-center justify-center w-32 h-32 rounded-full border-8"
+          <div className="inline-flex items-center justify-center w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 sm:border-8"
             style={{ borderColor: getLevelColor(totalScore) }}
           >
             <div className="text-center">
-              <div className="text-4xl font-bold" style={{ color: getLevelColor(totalScore) }}>
+              <div className="text-3xl sm:text-4xl font-bold" style={{ color: getLevelColor(totalScore) }}>
                 {totalScore}
               </div>
-              <div className="text-sm text-slate-500">su 100</div>
+              <div className="text-xs sm:text-sm text-slate-500">su 100</div>
             </div>
           </div>
           
           <div className="mt-4">
-            <span 
-              className="px-4 py-2 rounded-full text-white font-medium"
+            <span
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-white font-medium text-sm sm:text-base"
               style={{ backgroundColor: getLevelColor(totalScore) }}
             >
               {getLevel(totalScore)}
@@ -333,12 +333,12 @@ charScores.forEach(score => {
         </div>
 
         {/* Radar Chart */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 mb-4 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 text-center">
             Mappa delle 24 Caratteristiche
           </h2>
-          
-          <div className="h-[500px]">
+
+          <div className="h-[300px] sm:h-[400px] md:h-[500px]">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
                 <PolarGrid stroke="#e2e8f0" />
@@ -381,39 +381,39 @@ charScores.forEach(score => {
           </div>
 
           {/* Legenda pilastri */}
-          <div className="flex justify-center gap-6 mt-6 flex-wrap">
-            {Object.entries(PILLAR_COLORS).map(([name, color]) => (
-              <div key={name} className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded" style={{ backgroundColor: color }}></div>
-                <span className="text-sm text-slate-600">{name}</span>
+          <div className="flex justify-center gap-3 sm:gap-6 mt-4 sm:mt-6 flex-wrap">
+            {['Vision', 'Action', 'Relations', 'Adaptation'].map((name) => (
+              <div key={name} className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 rounded" style={{ backgroundColor: PILLAR_COLORS[name] }}></div>
+                <span className="text-xs sm:text-sm text-slate-600">{name}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Pilastri Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-4 sm:mb-8">
           {pillarScores.map(pillar => (
-            <div 
+            <div
               key={pillar.name}
               className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
-              <div 
-                className="p-4 text-white"
+              <div
+                className="p-3 sm:p-4 text-white"
                 style={{ backgroundColor: pillar.color }}
               >
-                <h3 className="font-bold text-lg">{pillar.name}</h3>
-                <div className="text-3xl font-bold mt-1">{pillar.score}%</div>
+                <h3 className="font-bold text-sm sm:text-lg">{pillar.name}</h3>
+                <div className="text-2xl sm:text-3xl font-bold mt-1">{pillar.score}%</div>
               </div>
-              <div className="p-4">
-                <div className="space-y-2">
+              <div className="p-3 sm:p-4">
+                <div className="space-y-1.5 sm:space-y-2">
                   {pillar.characteristics.map(char => (
-                    <div key={char.id} className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600 truncate mr-2">
+                    <div key={char.id} className="flex justify-between items-center gap-1">
+                      <span className="text-xs sm:text-sm text-slate-600 truncate flex-1 min-w-0">
                         {char.name}
                       </span>
-                      <span 
-                        className="text-sm font-semibold"
+                      <span
+                        className="text-xs sm:text-sm font-semibold flex-shrink-0"
                         style={{ color: getLevelColor(char.percentage) }}
                       >
                         {char.percentage}%
@@ -427,28 +427,28 @@ charScores.forEach(score => {
         </div>
 
         {/* Top e Bottom caratteristiche */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-8">
           {/* Top 3 */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-              <span className="text-2xl mr-2">⭐</span>
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center">
+              <span className="text-xl sm:text-2xl mr-2">⭐</span>
               Le Tue Forze
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {top3.map((char, idx) => (
-                <div key={char.id} className="flex items-center">
-                  <div 
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold mr-3"
+                <div key={char.id} className="flex items-center gap-2 sm:gap-3">
+                  <div
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0"
                     style={{ backgroundColor: PILLAR_COLORS[char.pillar] }}
                   >
                     {idx + 1}
                   </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900">{char.name}</div>
-                    <div className="text-sm text-slate-500">{char.pillar}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-slate-900 text-sm sm:text-base truncate">{char.name}</div>
+                    <div className="text-xs sm:text-sm text-slate-500">{char.pillar}</div>
                   </div>
-                  <div 
-                    className="text-xl font-bold"
+                  <div
+                    className="text-base sm:text-xl font-bold flex-shrink-0"
                     style={{ color: getLevelColor(char.percentage) }}
                   >
                     {char.percentage}%
@@ -459,26 +459,26 @@ charScores.forEach(score => {
           </div>
 
           {/* Bottom 3 */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center">
-              <span className="text-2xl mr-2">🎯</span>
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 sm:mb-4 flex items-center">
+              <span className="text-xl sm:text-2xl mr-2">🎯</span>
               Aree di Sviluppo
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {bottom3.map((char, idx) => (
-                <div key={char.id} className="flex items-center">
-                  <div 
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold mr-3"
+                <div key={char.id} className="flex items-center gap-2 sm:gap-3">
+                  <div
+                    className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0"
                     style={{ backgroundColor: PILLAR_COLORS[char.pillar] }}
                   >
                     {idx + 1}
                   </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900">{char.name}</div>
-                    <div className="text-sm text-slate-500">{char.pillar}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-slate-900 text-sm sm:text-base truncate">{char.name}</div>
+                    <div className="text-xs sm:text-sm text-slate-500">{char.pillar}</div>
                   </div>
-                  <div 
-                    className="text-xl font-bold"
+                  <div
+                    className="text-base sm:text-xl font-bold flex-shrink-0"
                     style={{ color: getLevelColor(char.percentage) }}
                   >
                     {char.percentage}%
@@ -490,16 +490,16 @@ charScores.forEach(score => {
         </div>
 
         {/* Azioni */}
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <button
             onClick={() => router.push('/dashboard')}
-            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base"
           >
             Vai alla Dashboard
           </button>
           <button
             onClick={() => router.push('/test')}
-            className="px-8 py-3 bg-white text-slate-700 font-semibold rounded-lg shadow hover:shadow-md transition-all"
+            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-slate-700 font-semibold rounded-lg shadow hover:shadow-md transition-all text-sm sm:text-base"
           >
             Rifai il Test
           </button>
