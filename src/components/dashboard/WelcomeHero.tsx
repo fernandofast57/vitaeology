@@ -18,29 +18,29 @@ export default function WelcomeHero({ userName, hasCompletedAssessment }: Welcom
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
       
       <div className="relative z-10">
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-gold-500" />
-              <span className="text-gold-500 text-sm font-medium">Vitaeology</span>
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-gold-500 flex-shrink-0" />
+              <span className="text-gold-500 text-xs md:text-sm font-medium">Vitaeology</span>
             </div>
-            
-            <h1 className="text-2xl md:text-3xl font-display font-bold text-white mb-2">
+
+            <h1 className="text-xl md:text-3xl font-display font-bold text-white mb-2 truncate">
               {greeting}, {userName}!
             </h1>
-            
-            <p className="text-white/80 text-sm md:text-base max-w-xl">
-              {hasCompletedAssessment 
+
+            <p className="text-white/80 text-sm md:text-base line-clamp-2 md:line-clamp-none">
+              {hasCompletedAssessment
                 ? "Ottimo lavoro! Hai completato l'assessment. Esplora i tuoi risultati."
                 : "Completa l'assessment per scoprire il tuo profilo di leadership."
               }
             </p>
           </div>
 
-          <div className="hidden md:block">
-            <Link 
+          <div className="flex-shrink-0">
+            <Link
               href={hasCompletedAssessment ? "/results" : "/test"}
-              className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-petrol-600 px-5 py-2.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-600 text-petrol-600 px-4 md:px-5 py-2 md:py-2.5 rounded-lg font-medium transition-colors text-sm md:text-base w-full md:w-auto"
             >
               {hasCompletedAssessment ? "Vedi Risultati" : "Inizia Assessment"}
               <ArrowRight className="w-4 h-4" />

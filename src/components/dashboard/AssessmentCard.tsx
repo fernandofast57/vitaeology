@@ -25,16 +25,16 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
   if (!assessment) {
     return (
       <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-        <div className="p-6 md:p-8">
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-petrol-600/10 rounded-xl">
-              <ClipboardCheck className="w-8 h-8 text-petrol-600" />
+        <div className="p-4 md:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 bg-petrol-600/10 rounded-xl flex-shrink-0">
+              <ClipboardCheck className="w-6 h-6 sm:w-8 sm:h-8 text-petrol-600" />
             </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-neutral-900 mb-1">Assessment Leadership Autentica</h2>
-              <p className="text-neutral-600 mb-4">Scopri il tuo profilo. 240 domande, circa 30 minuti.</p>
-              <Link href="/test" className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-6 py-3 rounded-xl font-medium transition-colors">
-                <Play className="w-5 h-5" />
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1">Assessment Leadership Autentica</h2>
+              <p className="text-sm sm:text-base text-neutral-600 mb-3 sm:mb-4">Scopri il tuo profilo. 240 domande, circa 30 minuti.</p>
+              <Link href="/test" className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+                <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                 Inizia il Test
               </Link>
             </div>
@@ -47,25 +47,25 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
   if (isInProgress) {
     return (
       <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-        <div className="p-6 md:p-8">
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-amber-100 rounded-xl">
-              <Clock className="w-8 h-8 text-amber-600" />
+        <div className="p-4 md:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+            <div className="p-2 sm:p-3 bg-amber-100 rounded-xl flex-shrink-0">
+              <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
             </div>
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-neutral-900 mb-1">Assessment in Corso</h2>
-              <div className="mb-4">
-                <div className="flex justify-between text-sm mb-2">
+            <div className="flex-1 min-w-0 w-full">
+              <h2 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1">Assessment in Corso</h2>
+              <div className="mb-3 sm:mb-4">
+                <div className="flex justify-between text-xs sm:text-sm mb-2">
                   <span className="text-neutral-600">Progresso</span>
                   <span className="font-medium">{assessment.questions_answered}/{totalQuestions}</span>
                 </div>
-                <div className="h-3 bg-neutral-100 rounded-full overflow-hidden">
+                <div className="h-2 sm:h-3 bg-neutral-100 rounded-full overflow-hidden">
                   <div className="h-full bg-amber-500 rounded-full" style={{ width: `${progress}%` }} />
                 </div>
               </div>
-              <Link href="/test" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-medium transition-colors">
+              <Link href="/test" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
                 Riprendi Test
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             </div>
           </div>
@@ -76,22 +76,20 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
 
   return (
     <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-      <div className="p-6 md:p-8">
-        <div className="flex items-start gap-4">
-          <div className="p-3 bg-emerald-100 rounded-xl">
-            <CheckCircle className="w-8 h-8 text-emerald-600" />
+      <div className="p-4 md:p-6 lg:p-8">
+        <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+          <div className="p-2 sm:p-3 bg-emerald-100 rounded-xl flex-shrink-0">
+            <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600" />
           </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold text-neutral-900 mb-1">Assessment Completato!</h2>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1">Assessment Completato!</h2>
             {assessment.total_score !== null && (
-              <p className="text-emerald-700 font-medium mb-4">Punteggio: {assessment.total_score}%</p>
+              <p className="text-sm sm:text-base text-emerald-700 font-medium mb-3 sm:mb-4">Punteggio: {assessment.total_score}%</p>
             )}
-            <div className="flex gap-3">
-              <Link href={`/results/${assessment.id}`} className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-6 py-3 rounded-xl font-medium transition-colors">
-                Vedi Risultati
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
+            <Link href={`/results/${assessment.id}`} className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+              Vedi Risultati
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </Link>
           </div>
         </div>
       </div>
