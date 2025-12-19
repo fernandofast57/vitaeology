@@ -31,6 +31,10 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const [feedbackLoading, setFeedbackLoading] = useState<string | null>(null);
   const [historyLoaded, setHistoryLoaded] = useState(false);
   const [reformulatingId, setReformulatingId] = useState<string | null>(null);
+  // Star rating states
+  const [starRatingMessageId, setStarRatingMessageId] = useState<string | null>(null);
+  const [starHoverValue, setStarHoverValue] = useState<number>(0);
+  const [starThanksMessageId, setStarThanksMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastAssistantTimestamp = useRef<number | null>(null);
   const lastConversationId = useRef<string | null>(null);
@@ -184,6 +188,8 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
             ? { ...msg, feedback: isHelpful ? 'positive' : 'negative' }
             : msg
         ));
+        // Mostra star rating dopo il feedback thumbs
+        setStarRatingMessageId(conversationId);
       }
     } catch (error) {
       console.error('Errore invio feedback:', error);
@@ -191,6 +197,38 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
       setFeedbackLoading(null);
     }
   }, [userContext.userId, feedbackLoading]);
+
+  // Funzione per inviare star rating
+  const sendStarRating = useCallback(async (
+    conversationId: string,
+    rating: number
+  ) => {
+    if (!userContext.userId) return;
+
+    try {
+      await fetch('/api/ai-coach/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          user_id: userContext.userId,
+          rating,
+        }),
+      });
+
+      // Nascondi stars e mostra "Grazie!"
+      setStarRatingMessageId(null);
+      setStarHoverValue(0);
+      setStarThanksMessageId(conversationId);
+
+      // Nascondi "Grazie!" dopo 2 secondi
+      setTimeout(() => {
+        setStarThanksMessageId(null);
+      }, 2000);
+    } catch (error) {
+      console.error('Errore invio star rating:', error);
+    }
+  }, [userContext.userId]);
 
   // Funzione per riformulare una risposta
   const handleReformulate = useCallback(async (
@@ -489,9 +527,13 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
                           </svg>
                         </button>
                       </>
+                    ) : starThanksMessageId === msg.conversationId ? (
+                      <span className="text-xs text-[#F4B942] font-medium animate-fadeIn">
+                        Grazie!
+                      </span>
                     ) : (
                       <span className={`text-xs ${msg.feedback === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
-                        {msg.feedback === 'positive' ? 'Grazie!' : 'Grazie per il feedback'}
+                        {msg.feedback === 'positive' ? '👍' : '👎'}
                       </span>
                     )}
 
@@ -528,6 +570,36 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
                       </svg>
                       Riformulato{(msg.reformulationCount || 0) > 1 ? ` (${msg.reformulationCount}x)` : ''}
                     </span>
+                  )}
+
+                  {/* Star Rating - appare dopo feedback thumbs */}
+                  {starRatingMessageId === msg.conversationId && (
+                    <div className="animate-fadeIn flex flex-col gap-1 mt-1">
+                      <span className="text-xs text-gray-500">Quanto è stata utile?</span>
+                      <div
+                        className="flex gap-0.5"
+                        onMouseLeave={() => setStarHoverValue(0)}
+                      >
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onClick={() => sendStarRating(msg.conversationId!, star)}
+                            onMouseEnter={() => setStarHoverValue(star)}
+                            className="p-0.5 transition-transform hover:scale-110"
+                            aria-label={`Valuta ${star} stelle`}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill={star <= starHoverValue ? '#F4B942' : '#D1D5DB'}
+                              className="w-5 h-5 transition-colors"
+                            >
+                              <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
