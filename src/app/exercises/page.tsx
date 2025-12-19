@@ -5,7 +5,9 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import ExercisesHeader from '@/components/exercises/ExercisesHeader';
 import ExercisesList from '@/components/exercises/ExercisesList';
-import type { ExerciseWithProgress } from '@/lib/types/exercises';
+import type { ExerciseWithProgress, ExerciseWithAccess, ExercisesAccessLevel } from '@/lib/types/exercises';
+import { canAccessExercise, getRequiredTierForExercise } from '@/lib/types/exercises';
+import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
 export const metadata = {
   title: 'Esercizi | Vitaeology',
@@ -21,6 +23,20 @@ export default async function ExercisesPage() {
   if (authError || !user) {
     redirect('/login');
   }
+
+  // Fetch profilo utente per tier subscription
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('subscription_tier, is_admin, role_id')
+    .eq('id', user.id)
+    .single();
+
+  // Determina livello accesso utente
+  const userTier = (profile?.subscription_tier || 'explorer') as SubscriptionTier;
+  const isStaffOrAdmin = profile?.is_admin || profile?.role_id;
+  const userAccessLevel: ExercisesAccessLevel = isStaffOrAdmin
+    ? 'all'
+    : (SUBSCRIPTION_TIERS[userTier]?.features?.exercises_access || 'basic') as ExercisesAccessLevel;
 
   // Fetch esercizi con progresso utente (usando server client)
   const { data: exercisesData } = await supabase
@@ -38,31 +54,44 @@ export default async function ExercisesPage() {
     (progressData || []).map(p => [p.exercise_id, p])
   );
 
-  const exercises: ExerciseWithProgress[] = (exercisesData || []).map(exercise => ({
-    ...exercise,
-    progress: progressMap.get(exercise.id) || null
-  }));
+  // Aggiungi info accesso a ogni esercizio
+  const exercises: ExerciseWithAccess[] = (exercisesData || []).map(exercise => {
+    const hasAccess = canAccessExercise(exercise.difficulty_level, userAccessLevel);
+    const requiredTierInfo = !hasAccess ? getRequiredTierForExercise(exercise.difficulty_level) : null;
 
-  // Calcola statistiche
-  const total = exercises.length;
-  const completed = exercises.filter(ex => ex.progress?.status === 'completed').length;
-  const inProgress = exercises.filter(ex => ex.progress?.status === 'in_progress').length;
+    return {
+      ...exercise,
+      progress: progressMap.get(exercise.id) || null,
+      isLocked: !hasAccess,
+      requiredTier: requiredTierInfo?.minTier,
+      requiredTierDisplayName: requiredTierInfo?.tierDisplayName
+    };
+  });
+
+  // Calcola statistiche (solo esercizi accessibili)
+  const accessibleExercises = exercises.filter(ex => !ex.isLocked);
+  const lockedCount = exercises.filter(ex => ex.isLocked).length;
+  const total = accessibleExercises.length;
+  const completed = accessibleExercises.filter(ex => ex.progress?.status === 'completed').length;
+  const inProgress = accessibleExercises.filter(ex => ex.progress?.status === 'in_progress').length;
   const notStarted = total - completed - inProgress;
   const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   const stats = {
-    total,
+    total: exercises.length,
+    accessible: total,
     completed,
     inProgress,
     notStarted,
+    lockedCount,
     completionRate
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <ExercisesHeader stats={stats} />
+      <ExercisesHeader stats={stats} userTier={userTier} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <ExercisesList exercises={exercises} />
+        <ExercisesList exercises={exercises} userTier={userTier} />
       </main>
     </div>
   );

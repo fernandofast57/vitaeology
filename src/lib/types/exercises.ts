@@ -95,3 +95,67 @@ export const STATUS_CONFIG: Record<ExerciseStatus, {
   in_progress: { label: 'In corso', color: 'bg-yellow-100 text-yellow-800', icon: '◐' },
   completed: { label: 'Completato', color: 'bg-green-100 text-green-800', icon: '●' }
 };
+
+// ============================================================
+// ACCESSO ESERCIZI BASATO SU SUBSCRIPTION TIER
+// ============================================================
+
+export type ExercisesAccessLevel = 'basic' | 'advanced' | 'all';
+
+/**
+ * Mappa difficoltà esercizio -> livello accesso richiesto
+ * - base: accessibile a tutti (explorer+)
+ * - intermedio: richiede mentor+ (advanced access)
+ * - avanzato: richiede mastermind+ (all access)
+ */
+export const DIFFICULTY_ACCESS_MAP: Record<DifficultyLevel, ExercisesAccessLevel> = {
+  base: 'basic',
+  intermedio: 'advanced',
+  avanzato: 'all'
+};
+
+/**
+ * Tier minimo richiesto per ogni livello di accesso
+ */
+export const ACCESS_TIER_REQUIREMENTS: Record<ExercisesAccessLevel, {
+  minTier: string;
+  tierDisplayName: string;
+}> = {
+  basic: { minTier: 'explorer', tierDisplayName: 'Explorer' },
+  advanced: { minTier: 'mentor', tierDisplayName: 'Mentor' },
+  all: { minTier: 'mastermind', tierDisplayName: 'Mastermind' }
+};
+
+/**
+ * Verifica se un utente può accedere a un esercizio basato sul suo tier
+ */
+export function canAccessExercise(
+  exerciseDifficulty: DifficultyLevel,
+  userAccessLevel: ExercisesAccessLevel
+): boolean {
+  const requiredAccess = DIFFICULTY_ACCESS_MAP[exerciseDifficulty];
+
+  // Gerarchia accesso: basic < advanced < all
+  const accessHierarchy: ExercisesAccessLevel[] = ['basic', 'advanced', 'all'];
+  const userLevel = accessHierarchy.indexOf(userAccessLevel);
+  const requiredLevel = accessHierarchy.indexOf(requiredAccess);
+
+  return userLevel >= requiredLevel;
+}
+
+/**
+ * Ottieni il tier minimo richiesto per accedere a un esercizio
+ */
+export function getRequiredTierForExercise(exerciseDifficulty: DifficultyLevel): {
+  minTier: string;
+  tierDisplayName: string;
+} {
+  const requiredAccess = DIFFICULTY_ACCESS_MAP[exerciseDifficulty];
+  return ACCESS_TIER_REQUIREMENTS[requiredAccess];
+}
+
+export interface ExerciseWithAccess extends ExerciseWithProgress {
+  isLocked: boolean;
+  requiredTier?: string;
+  requiredTierDisplayName?: string;
+}
