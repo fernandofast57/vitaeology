@@ -131,10 +131,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
       );
     }
 
-    // 9. Calcola metriche
+    // 9. Calcola metriche (token reali da Claude)
     const responseTimeMs = Date.now() - startTime;
-    const userMessageTokens = Math.ceil(newContent.length / 4);
-    const aiResponseTokens = Math.ceil(newAiResponse.length / 4);
+    const userMessageTokens = response.usage.input_tokens;
+    const aiResponseTokens = response.usage.output_tokens;
+    const modelUsed = response.model;
+
+    // Calcola costo API
+    const costPerInputToken = 3.00 / 1_000_000;
+    const costPerOutputToken = 15.00 / 1_000_000;
+    const apiCostUsd = (userMessageTokens * costPerInputToken) + (aiResponseTokens * costPerOutputToken);
 
     // 10. Aggiorna database con nuovo messaggio e risposta
     const { error: updateError } = await supabase
@@ -150,6 +156,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
         rag_chunks_used: ragResult.chunkIds.length > 0 ? ragResult.chunkIds : null,
         rag_similarity_scores: ragResult.similarityScores.length > 0 ? ragResult.similarityScores : null,
         response_time_ms: responseTimeMs,
+        model_used: modelUsed,
+        api_cost_usd: apiCostUsd,
       })
       .eq('id', conversationId);
 

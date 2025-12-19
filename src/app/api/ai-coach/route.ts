@@ -120,9 +120,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       assistantMessage.includes(keyword)
     );
 
-    // Conta token (approssimativo: ~4 caratteri per token)
-    const userMessageTokens = Math.ceil(lastUserMessage.length / 4);
-    const aiResponseTokens = Math.ceil(assistantMessage.length / 4);
+    // Estrai token usage dalla risposta Claude (valori reali)
+    const userMessageTokens = response.usage.input_tokens;
+    const aiResponseTokens = response.usage.output_tokens;
+    const modelUsed = response.model;
+
+    // Calcola costo API (prezzi Claude Sonnet 4)
+    // Input: $3 per 1M tokens, Output: $15 per 1M tokens
+    const costPerInputToken = 3.00 / 1_000_000;
+    const costPerOutputToken = 15.00 / 1_000_000;
+    const apiCostUsd = (userMessageTokens * costPerInputToken) + (aiResponseTokens * costPerOutputToken);
 
     // Salva conversazione nel database per il Learning System
     let conversationId: string | undefined;
@@ -142,6 +149,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
             rag_chunks_used: ragResult.chunkIds.length > 0 ? ragResult.chunkIds : null,
             rag_similarity_scores: ragResult.similarityScores.length > 0 ? ragResult.similarityScores : null,
             response_time_ms: responseTimeMs,
+            model_used: modelUsed,
+            api_cost_usd: apiCostUsd,
           })
           .select('id')
           .single();

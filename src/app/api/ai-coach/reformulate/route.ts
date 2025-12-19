@@ -59,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
     // 1. Verifica che la conversazione esista e controlla il conteggio
     const { data: conversation, error: fetchError } = await supabase
       .from('ai_coach_conversations')
-      .select('id, ai_response, reformulation_count, original_response')
+      .select('id, ai_response, reformulation_count, original_response, api_cost_usd')
       .eq('id', conversationId)
       .single();
 
@@ -104,10 +104,23 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
       );
     }
 
+    // Calcola costo API per la riformulazione
+    const inputTokens = response.usage.input_tokens;
+    const outputTokens = response.usage.output_tokens;
+    const costPerInputToken = 3.00 / 1_000_000;
+    const costPerOutputToken = 15.00 / 1_000_000;
+    const reformulationCost = (inputTokens * costPerInputToken) + (outputTokens * costPerOutputToken);
+
+    // Aggiungi al costo esistente
+    const existingCost = parseFloat(conversation.api_cost_usd) || 0;
+    const totalCostUsd = existingCost + reformulationCost;
+
     // 4. Aggiorna il database
     const updateData: Record<string, unknown> = {
       ai_response: newResponse,
       reformulation_count: currentCount + 1,
+      ai_response_tokens: outputTokens,
+      api_cost_usd: totalCostUsd,
     };
 
     // Salva la risposta originale solo alla prima riformulazione
