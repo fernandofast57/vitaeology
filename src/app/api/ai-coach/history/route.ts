@@ -8,6 +8,7 @@ interface ConversationHistory {
   user_message: string;
   ai_response: string;
   created_at: string;
+  is_edited?: boolean;
 }
 
 interface HistoryResponse {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<HistoryRes
     // Query per recuperare conversazioni recenti
     let query = supabase
       .from('ai_coach_conversations')
-      .select('id, session_id, user_message, ai_response, created_at')
+      .select('id, session_id, user_message, ai_response, created_at, is_edited')
       .eq('user_id', user.id)
       .order('created_at', { ascending: true });
 

@@ -11,6 +11,7 @@ interface ExtendedMessage extends Message {
   timestamp?: number;
   reformulationCount?: number;
   isReformulated?: boolean;
+  isEdited?: boolean;
 }
 
 interface ChatWidgetProps {
@@ -35,7 +36,13 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const [starRatingMessageId, setStarRatingMessageId] = useState<string | null>(null);
   const [starHoverValue, setStarHoverValue] = useState<number>(0);
   const [starThanksMessageId, setStarThanksMessageId] = useState<string | null>(null);
+  // Message editing states
+  const [editingMessageIndex, setEditingMessageIndex] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState('');
+  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+  const [hoveredMessageIndex, setHoveredMessageIndex] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const editTextareaRef = useRef<HTMLTextAreaElement>(null);
   const lastAssistantTimestamp = useRef<number | null>(null);
   const lastConversationId = useRef<string | null>(null);
 
@@ -65,11 +72,14 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
             user_message: string;
             ai_response: string;
             created_at: string;
+            is_edited?: boolean;
           }) => {
             historyMessages.push({
               role: 'user',
               content: conv.user_message,
               timestamp: new Date(conv.created_at).getTime(),
+              conversationId: conv.id, // Aggiungi conversationId anche al messaggio utente
+              isEdited: conv.is_edited || false,
             });
             historyMessages.push({
               role: 'assistant',
@@ -229,6 +239,136 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
       console.error('Errore invio star rating:', error);
     }
   }, [userContext.userId]);
+
+  // Limite tempo per modifica: 5 minuti
+  const EDIT_TIME_LIMIT_MS = 5 * 60 * 1000;
+
+  // Verifica se un messaggio utente è modificabile
+  const isMessageEditable = useCallback((msg: ExtendedMessage, index: number): boolean => {
+    // Solo messaggi utente
+    if (msg.role !== 'user') return false;
+    // Non già modificato
+    if (msg.isEdited) return false;
+    // Deve avere conversationId (messaggio salvato nel DB)
+    if (!msg.conversationId) return false;
+    // Entro 5 minuti
+    const messageTime = msg.timestamp || 0;
+    if (Date.now() - messageTime > EDIT_TIME_LIMIT_MS) return false;
+    // Tra gli ultimi 2 messaggi utente
+    const userMessages = messages
+      .map((m, idx) => ({ ...m, originalIndex: idx }))
+      .filter(m => m.role === 'user');
+    const lastTwoUserMsgs = userMessages.slice(-2);
+    return lastTwoUserMsgs.some(m => m.originalIndex === index);
+  }, [messages]);
+
+  // Focus textarea quando entra in editing
+  useEffect(() => {
+    if (editingMessageIndex !== null && editTextareaRef.current) {
+      editTextareaRef.current.focus();
+      editTextareaRef.current.setSelectionRange(
+        editContent.length,
+        editContent.length
+      );
+    }
+  }, [editingMessageIndex, editContent.length]);
+
+  // Inizia editing
+  const startEditing = useCallback((index: number, content: string) => {
+    setEditingMessageIndex(index);
+    setEditContent(content);
+  }, []);
+
+  // Annulla editing
+  const cancelEditing = useCallback(() => {
+    setEditingMessageIndex(null);
+    setEditContent('');
+  }, []);
+
+  // Gestione tasti durante editing
+  const handleEditKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      cancelEditing();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      handleEditSubmit();
+    }
+  }, []);
+
+  // Invia modifica
+  const handleEditSubmit = useCallback(async () => {
+    if (editingMessageIndex === null || !editContent.trim()) {
+      cancelEditing();
+      return;
+    }
+
+    const messageToEdit = messages[editingMessageIndex];
+    if (!messageToEdit?.conversationId) {
+      cancelEditing();
+      return;
+    }
+
+    // Se il contenuto non è cambiato, annulla
+    if (editContent.trim() === messageToEdit.content) {
+      cancelEditing();
+      return;
+    }
+
+    setIsSubmittingEdit(true);
+
+    try {
+      // Costruisci messaggi precedenti per contesto (tutti i messaggi prima di quello da modificare)
+      const previousMessages = messages
+        .slice(0, editingMessageIndex)
+        .map(m => ({ role: m.role, content: m.content }));
+
+      const response = await fetch('/api/ai-coach/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversationId: messageToEdit.conversationId,
+          newContent: editContent.trim(),
+          userContext,
+          previousMessages,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.newAiResponse) {
+        // Aggiorna messaggi: modifica messaggio utente e risposta AI
+        setMessages(prev => prev.map((msg, idx) => {
+          if (idx === editingMessageIndex) {
+            // Messaggio utente modificato
+            return {
+              ...msg,
+              content: editContent.trim(),
+              isEdited: true,
+            };
+          }
+          if (idx === editingMessageIndex + 1 && msg.role === 'assistant') {
+            // Risposta AI rigenerata
+            return {
+              ...msg,
+              content: data.newAiResponse,
+              feedback: null, // Reset feedback per nuova risposta
+              reformulationCount: 0,
+              isReformulated: false,
+            };
+          }
+          return msg;
+        }));
+      } else {
+        console.error('Errore modifica:', data.error);
+      }
+    } catch (error) {
+      console.error('Errore modifica messaggio:', error);
+    } finally {
+      setIsSubmittingEdit(false);
+      cancelEditing();
+    }
+  }, [editingMessageIndex, editContent, messages, userContext, cancelEditing]);
 
   // Funzione per riformulare una risposta
   const handleReformulate = useCallback(async (
@@ -487,17 +627,76 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
           <div
             key={index}
             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            onMouseEnter={() => msg.role === 'user' && setHoveredMessageIndex(index)}
+            onMouseLeave={() => msg.role === 'user' && setHoveredMessageIndex(null)}
           >
             <div className="flex flex-col max-w-[85%] sm:max-w-[80%]">
-              <div
-                className={`p-3 rounded-2xl break-words ${
-                  msg.role === 'user'
-                    ? 'bg-indigo-600 text-white rounded-br-md'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md'
-                }`}
-              >
-                <p className="text-sm whitespace-pre-wrap break-words overflow-hidden">{msg.content}</p>
-              </div>
+              {/* Messaggio utente - con supporto editing */}
+              {msg.role === 'user' && editingMessageIndex === index ? (
+                // Stato editing
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    ref={editTextareaRef}
+                    value={editContent}
+                    onChange={(e) => {
+                      setEditContent(e.target.value);
+                      e.target.style.height = 'auto';
+                      e.target.style.height = e.target.scrollHeight + 'px';
+                    }}
+                    onKeyDown={handleEditKeyDown}
+                    disabled={isSubmittingEdit}
+                    className="w-full p-3 rounded-lg border-2 border-[#0A2540] resize-none text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0A2540]/20 disabled:opacity-50"
+                    rows={2}
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={cancelEditing}
+                      disabled={isSubmittingEdit}
+                      className="px-3 py-1.5 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    >
+                      Annulla
+                    </button>
+                    <button
+                      onClick={handleEditSubmit}
+                      disabled={isSubmittingEdit || !editContent.trim()}
+                      className="px-3 py-1.5 text-sm text-white bg-[#0A2540] rounded-md hover:bg-[#0A2540]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmittingEdit ? 'Invio...' : 'Invia modifica'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                // Stato normale messaggio
+                <div
+                  className={`relative p-3 rounded-2xl break-words ${
+                    msg.role === 'user'
+                      ? 'bg-indigo-600 text-white rounded-br-md'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap break-words overflow-hidden pr-6">{msg.content}</p>
+
+                  {/* Icona modifica - solo per messaggi utente editabili e on hover */}
+                  {msg.role === 'user' && isMessageEditable(msg, index) && hoveredMessageIndex === index && (
+                    <button
+                      onClick={() => startEditing(index, msg.content)}
+                      className="absolute top-2 right-2 p-1 rounded text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                      title="Modifica messaggio"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Badge "Modificato" per messaggi utente editati */}
+              {msg.role === 'user' && msg.isEdited && editingMessageIndex !== index && (
+                <span className="text-[11px] text-gray-400 mt-1 mr-1 text-right">
+                  Modificato
+                </span>
+              )}
               {/* Feedback e riformula buttons per messaggi assistant */}
               {msg.role === 'assistant' && msg.conversationId && (
                 <div className="flex flex-col gap-1 mt-1 ml-1">
