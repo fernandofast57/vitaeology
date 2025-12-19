@@ -419,7 +419,7 @@ export default function TestPage() {
           </p>
 
           {/* Bottoni risposta */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {(['VERO', 'INCERTO', 'FALSO'] as const).map((option) => {
               const isSelected = currentAnswer?.answer === option
               const colors = {
@@ -427,21 +427,21 @@ export default function TestPage() {
                 'INCERTO': 'bg-yellow-500 hover:bg-yellow-600 border-yellow-600',
                 'FALSO': 'bg-red-500 hover:bg-red-600 border-red-600'
               }
-              
+
               return (
                 <button
                   key={option}
                   onClick={() => saveAnswer(option)}
                   disabled={saving}
                   className={`
-                    py-4 px-6 rounded-lg font-semibold text-lg transition-all
-                    ${isSelected 
-                      ? `${colors[option]} text-white ring-4 ring-offset-2` 
+                    py-3 px-2 sm:py-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-lg transition-all whitespace-nowrap
+                    ${isSelected
+                      ? `${colors[option]} text-white ring-2 sm:ring-4 ring-offset-1 sm:ring-offset-2`
                       : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-2 border-slate-200'
                     }
                     ${saving ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
-                  
+
                 >
                   {saving && isSelected ? '...' : option}
                 </button>
@@ -451,30 +451,32 @@ export default function TestPage() {
         </div>
 
         {/* Navigazione */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-2">
           <button
             onClick={goToPrevious}
             disabled={currentIndex === 0}
-            className="px-6 py-3 bg-white text-slate-700 rounded-lg shadow hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 sm:px-6 py-2 sm:py-3 bg-white text-slate-700 rounded-lg shadow hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
           >
-            ← Precedente
+            <span className="hidden sm:inline">← Precedente</span>
+            <span className="sm:hidden">← Prec</span>
           </button>
 
           {allAnswered ? (
             <button
               onClick={completeTest}
               disabled={saving}
-              className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-colors disabled:opacity-50"
+              className="px-4 sm:px-8 py-2 sm:py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition-colors disabled:opacity-50 text-sm sm:text-base"
             >
-              {saving ? 'Completamento...' : '✓ Completa Assessment'}
+              {saving ? '...' : <><span className="hidden sm:inline">✓ Completa Assessment</span><span className="sm:hidden">✓ Completa</span></>}
             </button>
           ) : (
             <button
               onClick={goToNext}
               disabled={currentIndex === questions.length - 1}
-              className="px-6 py-3 bg-white text-slate-700 rounded-lg shadow hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 sm:px-6 py-2 sm:py-3 bg-white text-slate-700 rounded-lg shadow hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
-              Successiva →
+              <span className="hidden sm:inline">Successiva →</span>
+              <span className="sm:hidden">Succ →</span>
             </button>
           )}
         </div>
