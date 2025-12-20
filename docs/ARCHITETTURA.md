@@ -142,6 +142,7 @@
 | `lib/ai-coach/daily-metrics.ts` | generateDailyMetrics | Metriche giornaliere AI |
 | `lib/ai-coach/weekly-report.ts` | generateWeeklyReport | Report settimanale |
 | `lib/ai-coach/email-report.ts` | sendEmailReport | Invio report via email |
+| `lib/ai-coach/implicit-signals.ts` | trackImplicitSignal, detectReformulation | Tracciamento segnali impliciti |
 
 ### Servizi Core
 | Percorso | Export | Funzionalità |
