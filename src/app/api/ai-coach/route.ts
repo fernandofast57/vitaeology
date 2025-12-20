@@ -5,6 +5,7 @@ import { ChatRequest, ChatResponse } from '@/lib/ai-coach/types';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
 import { getUserMemory, generateMemoryContext, createUserMemory } from '@/lib/ai-coach/user-memory';
+import { createCorrectionSuggestionService } from '@/lib/services/correction-suggestion';
 import { v4 as uuidv4 } from 'uuid';
 
 // Lazy initialization per evitare errori durante il build
@@ -90,8 +91,34 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       }
     }
 
-    // Costruisci system prompt con contesto RAG e memoria utente
-    const systemPrompt = buildSystemPrompt(userContext) + ragResult.context + memoryContext;
+    // Carica correzioni attive dal sistema di ottimizzazione
+    let correctionsContext = '';
+    let ragCorrectionsContext = '';
+    try {
+      const correctionService = createCorrectionSuggestionService(supabase);
+
+      // Carica istruzioni prompt
+      correctionsContext = await correctionService.generateCorrectionBlock();
+
+      // Carica chunk RAG correttivi
+      const ragChunks = await correctionService.getRAGChunks();
+      if (ragChunks.length > 0) {
+        ragCorrectionsContext = '\n\n## CONTENUTI CORRETTIVI (applica sempre)\n\n';
+        ragChunks.forEach(chunk => {
+          ragCorrectionsContext += chunk.content + '\n\n';
+        });
+        console.log(`🔧 ${ragChunks.length} chunk RAG correttivi caricati`);
+      }
+
+      if (correctionsContext) {
+        console.log('🔧 Correzioni prompt attive caricate');
+      }
+    } catch (corrError) {
+      console.error('Errore caricamento correzioni:', corrError);
+    }
+
+    // Costruisci system prompt con contesto RAG, memoria utente, correzioni e RAG correttivi
+    const systemPrompt = buildSystemPrompt(userContext) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext;
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
