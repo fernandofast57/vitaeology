@@ -17,7 +17,7 @@ interface SidebarProps {
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Assessment', href: '/test', icon: ClipboardCheck },
-  { name: 'Esercizi', href: '/exercises', icon: BookOpen, badge: 'Presto' },
+  { name: 'Esercizi', href: '/exercises', icon: BookOpen },
   { name: 'Progressi', href: '/progress', icon: TrendingUp },
 ];
 
@@ -88,7 +88,6 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
           <Link key={item.name} href={item.href} onClick={onClose} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${pathname === item.href ? 'bg-gold-500 text-petrol-600 font-medium' : 'text-white/80 hover:bg-white/10'}`}>
             <item.icon className="w-5 h-5" />
             <span>{item.name}</span>
-            {item.badge && <span className="ml-auto text-xs bg-white/20 px-2 py-0.5 rounded-full">{item.badge}</span>}
           </Link>
         ))}
         <div className="pt-6">
