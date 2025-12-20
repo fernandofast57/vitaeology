@@ -107,6 +107,20 @@ const config: Config = {
         'vitae': '0 1px 3px rgba(10, 37, 64, 0.1), 0 1px 2px rgba(10, 37, 64, 0.06)',
         'vitae-lg': '0 10px 15px -3px rgba(10, 37, 64, 0.1), 0 4px 6px -2px rgba(10, 37, 64, 0.05)',
       },
+      animation: {
+        'slideInLeft': 'slideInLeft 0.3s ease-out',
+        'fadeIn': 'fadeIn 0.2s ease-out',
+      },
+      keyframes: {
+        slideInLeft: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
     },
   },
   plugins: [],

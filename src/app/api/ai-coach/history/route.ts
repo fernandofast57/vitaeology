@@ -43,13 +43,22 @@ export async function GET(request: NextRequest): Promise<NextResponse<HistoryRes
       .order('created_at', { ascending: true });
 
     // Se c'è un sessionId specifico, filtra per quello
-    // Altrimenti prendi le conversazioni delle ultime 24 ore
+    // Altrimenti prendi l'ultima sessione attiva dell'utente
     if (sessionId) {
       query = query.eq('session_id', sessionId);
     } else {
-      // Prendi le conversazioni delle ultime 24 ore
-      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-      query = query.gte('created_at', twentyFourHoursAgo);
+      // Trova l'ultima sessione dell'utente (rimuove limite 24h)
+      const { data: lastSession } = await supabase
+        .from('ai_coach_conversations')
+        .select('session_id')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (lastSession?.session_id) {
+        query = query.eq('session_id', lastSession.session_id);
+      }
     }
 
     query = query.limit(limit);

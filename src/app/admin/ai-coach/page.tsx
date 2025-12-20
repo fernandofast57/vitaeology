@@ -230,6 +230,42 @@ export default function AICoachAdminDashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
+              <a
+                href="/admin/analytics"
+                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600"
+              >
+                Analytics
+              </a>
+              <a
+                href="/admin/quality-audit"
+                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 flex items-center gap-1.5"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                Quality Audit
+              </a>
+              <a
+                href="/admin/feedback-patterns"
+                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 flex items-center gap-1.5"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                </svg>
+                Patterns
+              </a>
+              <a
+                href="/admin/performance"
+                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600"
+              >
+                Performance
+              </a>
+              <a
+                href="/admin/api-costs"
+                className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600"
+              >
+                Costi API
+              </a>
               <button
                 onClick={() => router.push('/dashboard')}
                 className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-amber-500"

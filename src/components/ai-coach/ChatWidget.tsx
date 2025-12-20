@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Message, UserContext, ChatResponse } from '@/lib/ai-coach/types';
 import { SignalType } from '@/types/ai-coach-learning';
+import ConversationHistory from './ConversationHistory';
+import ExportButton from './ExportButton';
 
 // Componente indicatore di pensiero con messaggi dinamici
 function ThinkingIndicator({ startTime }: { startTime: number }) {
@@ -89,6 +91,9 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const [editContent, setEditContent] = useState('');
   const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
   const [hoveredMessageIndex, setHoveredMessageIndex] = useState<number | null>(null);
+  // Sidebar history states
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const editTextareaRef = useRef<HTMLTextAreaElement>(null);
   const lastAssistantTimestamp = useRef<number | null>(null);
@@ -161,6 +166,75 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
       setIsLoadingHistory(false);
     }
   }, [userContext.userId, historyLoaded]);
+
+  // Carica messaggi di una sessione specifica
+  const loadSessionMessages = useCallback(async (selectedSessionId: string) => {
+    if (!userContext.userId) return;
+
+    setIsLoadingHistory(true);
+    try {
+      const response = await fetch(`/api/ai-coach/history?sessionId=${selectedSessionId}`);
+      if (response.ok) {
+        const data = await response.json();
+
+        if (data.conversations && data.conversations.length > 0) {
+          const historyMessages: ExtendedMessage[] = [];
+          data.conversations.forEach((conv: {
+            id: string;
+            user_message: string;
+            ai_response: string;
+            created_at: string;
+            is_edited?: boolean;
+          }) => {
+            historyMessages.push({
+              role: 'user',
+              content: conv.user_message,
+              timestamp: new Date(conv.created_at).getTime(),
+              conversationId: conv.id,
+              isEdited: conv.is_edited || false,
+            });
+            historyMessages.push({
+              role: 'assistant',
+              content: conv.ai_response,
+              conversationId: conv.id,
+              feedback: null,
+              timestamp: new Date(conv.created_at).getTime(),
+            });
+          });
+
+          setMessages(historyMessages);
+          setSessionId(selectedSessionId);
+
+          // Aggiorna tracking
+          const lastMsg = historyMessages[historyMessages.length - 1];
+          if (lastMsg?.role === 'assistant' && lastMsg.timestamp) {
+            lastAssistantTimestamp.current = lastMsg.timestamp;
+            lastConversationId.current = lastMsg.conversationId || null;
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Errore caricamento sessione:', error);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  }, [userContext.userId]);
+
+  // Handler per selezionare una conversazione dalla sidebar
+  const handleSelectConversation = useCallback((selectedSessionId: string) => {
+    loadSessionMessages(selectedSessionId);
+    setIsMobileMenuOpen(false);
+  }, [loadSessionMessages]);
+
+  // Handler per nuova conversazione
+  const handleNewConversation = useCallback(() => {
+    setMessages([]);
+    setSessionId(null);
+    setHistoryLoaded(false);
+    lastAssistantTimestamp.current = null;
+    lastConversationId.current = null;
+    setIsMobileMenuOpen(false);
+  }, []);
 
   // Carica cronologia quando il widget viene aperto
   useEffect(() => {
@@ -582,9 +656,47 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   }
 
   return (
-    <div className="fixed inset-x-2 bottom-2 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-96 h-[85vh] sm:h-[500px] max-h-[600px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200 dark:border-gray-700">
-      {/* Header */}
-      <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-indigo-600 rounded-t-2xl">
+    <>
+      {/* Mobile sidebar overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] sm:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          {/* Sidebar panel */}
+          <div className="absolute left-0 top-0 bottom-0 w-72 animate-slideInLeft">
+            <ConversationHistory
+              currentSessionId={sessionId}
+              onSelectConversation={handleSelectConversation}
+              onNewConversation={handleNewConversation}
+              onClose={() => setIsMobileMenuOpen(false)}
+              isMobile={true}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Main chat container */}
+      <div className={`fixed inset-x-2 bottom-2 sm:inset-auto sm:bottom-6 sm:right-6 h-[85vh] sm:h-[520px] max-h-[650px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex z-50 border border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+        sidebarOpen ? 'sm:w-[680px]' : 'sm:w-96'
+      }`}>
+        {/* Desktop sidebar */}
+        {sidebarOpen && (
+          <div className="hidden sm:block w-64 border-r border-gray-200 dark:border-gray-700 rounded-l-2xl overflow-hidden">
+            <ConversationHistory
+              currentSessionId={sessionId}
+              onSelectConversation={handleSelectConversation}
+              onNewConversation={handleNewConversation}
+            />
+          </div>
+        )}
+
+        {/* Chat area */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Header */}
+          <div className={`flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-indigo-600 ${sidebarOpen ? 'rounded-tr-2xl' : 'rounded-t-2xl'}`}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
             <span className="text-xl">F</span>
@@ -595,15 +707,38 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Pulsante cronologia mobile (hamburger) */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="sm:hidden text-white/80 hover:text-white transition-colors p-1"
+            aria-label="Cronologia conversazioni"
+            title="Cronologia"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          {/* Pulsante cronologia desktop */}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="hidden sm:block text-white/80 hover:text-white transition-colors p-1"
+            aria-label={sidebarOpen ? 'Chiudi cronologia' : 'Apri cronologia'}
+            title={sidebarOpen ? 'Chiudi cronologia' : 'Cronologia'}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button>
+          {/* Pulsante export */}
+          {sessionId && messages.length > 0 && (
+            <ExportButton
+              sessionId={sessionId}
+              disabled={messages.length === 0}
+            />
+          )}
           {messages.length > 0 && (
             <button
-              onClick={() => {
-                setMessages([]);
-                setSessionId(null);
-                setHistoryLoaded(false);
-                lastAssistantTimestamp.current = null;
-                lastConversationId.current = null;
-              }}
+              onClick={handleNewConversation}
               className="text-white/80 hover:text-white transition-colors p-1"
               aria-label="Nuova conversazione"
               title="Nuova conversazione"
@@ -894,7 +1029,9 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
             </svg>
           </button>
         </div>
+        </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

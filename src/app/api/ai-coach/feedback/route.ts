@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { CreateFeedbackInput } from '@/types/ai-coach-learning';
+import { createPatternDetectionService } from '@/lib/services/pattern-detection';
 
 function getSupabaseClient() {
   return createClient(
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
     // Verifica che la conversazione esista e appartenga all'utente
     const { data: conversation, error: convError } = await supabase
       .from('ai_coach_conversations')
-      .select('id')
+      .select('id, ai_response, user_message')
       .eq('id', conversation_id)
       .eq('user_id', user_id)
       .single();
@@ -38,7 +39,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Inserisci o aggiorna il feedback
+    // Determina feedback_type
+    const feedback_type = is_helpful ? 'thumbs_up' : 'thumbs_down';
+
+    // Aggiorna la conversazione con feedback_type e rating
+    const { error: updateError } = await supabase
+      .from('ai_coach_conversations')
+      .update({
+        feedback_type,
+        user_rating: rating || null,
+        feedback_text: comment || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', conversation_id);
+
+    if (updateError) {
+      console.error('Errore aggiornamento conversazione:', updateError);
+    }
+
+    // Inserisci o aggiorna il feedback nella tabella dedicata
     const { data: feedback, error: fbError } = await supabase
       .from('ai_coach_feedback')
       .upsert(
@@ -59,17 +78,38 @@ export async function POST(request: NextRequest) {
 
     if (fbError) {
       console.error('Errore salvataggio feedback:', fbError);
-      return NextResponse.json(
-        { error: 'Errore salvataggio feedback' },
-        { status: 500 }
-      );
+      // Non fallire, continua con pattern detection
     }
 
-    console.log('Feedback salvato:', feedback?.id);
+    // Se thumbs_down, esegui pattern detection
+    let patternsDetected = 0;
+    if (!is_helpful && conversation.ai_response) {
+      try {
+        const patternService = createPatternDetectionService(supabase);
+        const results = await patternService.processThumbsDown(
+          conversation_id,
+          conversation_id, // message_id = conversation_id per ora
+          conversation.ai_response,
+          conversation.user_message || '',
+          comment
+        );
+        patternsDetected = results.length;
+
+        if (results.length > 0) {
+          console.log(`[Feedback] Pattern rilevati: ${results.map(r => r.pattern_name).join(', ')}`);
+        }
+      } catch (patternError) {
+        console.error('Errore pattern detection:', patternError);
+        // Non fallire la request
+      }
+    }
+
+    console.log('Feedback salvato:', feedback?.id, '| Patterns:', patternsDetected);
 
     return NextResponse.json({
       success: true,
       feedbackId: feedback?.id,
+      patternsDetected,
     });
 
   } catch (error) {
