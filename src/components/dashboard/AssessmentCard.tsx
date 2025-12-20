@@ -86,7 +86,7 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
             {assessment.total_score !== null && (
               <p className="text-sm sm:text-base text-emerald-700 font-medium mb-3 sm:mb-4">Punteggio: {assessment.total_score}%</p>
             )}
-            <Link href={`/results/${assessment.id}`} className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+            <Link href="/results" className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
               Vedi Risultati
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>

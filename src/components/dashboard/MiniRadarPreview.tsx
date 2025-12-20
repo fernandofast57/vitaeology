@@ -44,7 +44,7 @@ export default function MiniRadarPreview({ pillarScores, hasResults, assessmentI
     <div className="bg-white rounded-2xl border border-neutral-200 p-6 h-full">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-neutral-900">Il Tuo Profilo</h3>
-        <Link href={`/results/${assessmentId}`} className="inline-flex items-center gap-1 text-sm text-petrol-600">
+        <Link href="/results" className="inline-flex items-center gap-1 text-sm text-petrol-600">
           <Eye className="w-4 h-4" /> Dettagli
         </Link>
       </div>
