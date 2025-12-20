@@ -1,12 +1,16 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { ChatRequest, ChatResponse } from '@/lib/ai-coach/types';
+import { ChatRequest, ChatResponse, Message } from '@/lib/ai-coach/types';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
 import { getUserMemory, generateMemoryContext, createUserMemory } from '@/lib/ai-coach/user-memory';
 import { createCorrectionSuggestionService } from '@/lib/services/correction-suggestion';
 import { createExerciseRecommendationService } from '@/lib/services/exercise-recommendation';
+import {
+  trackImplicitSignal,
+  detectReformulation
+} from '@/lib/ai-coach/implicit-signals';
 import { v4 as uuidv4 } from 'uuid';
 
 // Lazy initialization per evitare errori durante il build
@@ -77,6 +81,34 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       console.log('⚠️ Nessun contesto RAG trovato');
     }
     console.log('🔍 [RAG DEBUG] ===================================\n');
+
+    // === TRACKING SEGNALI IMPLICITI ===
+    const userMessages = messages.filter((m: Message) => m.role === 'user');
+
+    if (userMessages.length > 1 && userContext?.userId) {
+      const previousUserMsg = userMessages[userMessages.length - 2];
+      const currentUserMsg = userMessages[userMessages.length - 1];
+
+      // Detecta riformulazione (domanda simile alla precedente)
+      if (detectReformulation(currentUserMsg.content, previousUserMsg.content)) {
+        // Salva segnale in background (non blocchiamo la risposta)
+        trackImplicitSignal({
+          conversationId: clientSessionId || sessionId,
+          userId: userContext.userId,
+          sessionId,
+          signalType: 'reformulated_question',
+          metadata: {
+            previousMessage: previousUserMsg.content.substring(0, 100),
+            currentMessage: currentUserMsg.content.substring(0, 100),
+          }
+        }).catch(err => console.error('[ImplicitSignals] Track error:', err));
+
+        console.log('🔄 Segnale implicito: riformulazione rilevata');
+      }
+
+      // Nota: detectImmediateQuestion richiede timestamp che non abbiamo nel Message
+      // TODO: aggiungere timestamp ai messaggi client-side per abilitare questo check
+    }
 
     // Carica memoria utente per personalizzazione
     let memoryContext = '';
