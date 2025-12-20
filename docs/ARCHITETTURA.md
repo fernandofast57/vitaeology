@@ -128,6 +128,11 @@
 |----------|------------|-------------|
 | `components/ui/Breadcrumb.tsx` | Breadcrumb | Navigazione breadcrumb |
 
+### Admin Components
+| Percorso | Componente | Descrizione |
+|----------|------------|-------------|
+| `components/admin/TwelveFactorsGrid.tsx` | TwelveFactorsGrid | Griglia 12 fattori (4 Prodotti × 3 Fattori) |
+
 ---
 
 ## ⚙️ SERVIZI
