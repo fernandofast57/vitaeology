@@ -41,6 +41,14 @@ export async function updateSession(request: NextRequest) {
   // Redirect logic
   const path = request.nextUrl.pathname
 
+  // Public routes - skip auth check completely
+  const publicRoutes = ['/challenge', '/api/challenge']
+  const isPublicRoute = publicRoutes.some(route => path.startsWith(route))
+
+  if (isPublicRoute) {
+    return supabaseResponse
+  }
+
   // Protected routes - redirect to login if not authenticated
   const protectedRoutes = ['/dashboard', '/test', '/results', '/exercises', '/settings', '/admin', '/profile', '/progress', '/subscription']
   const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
