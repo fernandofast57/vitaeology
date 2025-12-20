@@ -200,6 +200,7 @@
 | `ai_coach_usage_logs` | Log utilizzo API |
 | `ai_coach_implicit_signals` | Segnali impliciti soddisfazione/insoddisfazione |
 | `ai_coach_patterns` | Pattern comportamentali con soglie auto-correzione |
+| `ai_coach_prompt_versions` | Versioning system prompt con metriche prima/dopo |
 
 #### Tipi Pattern Auto-Correzione (`ai_coach_patterns.pattern_type`)
 | Tipo | Descrizione | Azione |
