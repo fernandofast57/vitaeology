@@ -36,7 +36,7 @@ export default function PerformancePage() {
       try {
         const response = await fetch('/api/admin/performance');
         if (response.status === 401) {
-          router.push('/auth/signin');
+          router.push('/auth/login');
           return;
         }
         if (response.status === 403) {

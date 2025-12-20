@@ -45,7 +45,7 @@ export default function ApiCostsPage() {
       try {
         const response = await fetch('/api/admin/api-costs');
         if (response.status === 401) {
-          router.push('/auth/signin');
+          router.push('/auth/login');
           return;
         }
         if (response.status === 403) {
