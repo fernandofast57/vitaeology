@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getExerciseById, getExerciseProgress } from '@/lib/supabase/exercises';
 import ExerciseDetail from '@/components/exercises/ExerciseDetail';
 import LockedExerciseView from '@/components/exercises/LockedExerciseView';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 import { canAccessExercise, getRequiredTierForExercise, ExercisesAccessLevel, DifficultyLevel } from '@/lib/types/exercises';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
@@ -66,6 +67,12 @@ export default async function ExercisePage({ params }: PageProps) {
     const requiredTierInfo = getRequiredTierForExercise(exercise.difficulty_level as DifficultyLevel);
     return (
       <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <Breadcrumb items={[
+            { label: 'Esercizi', href: '/exercises' },
+            { label: exercise.title }
+          ]} />
+        </div>
         <LockedExerciseView
           exercise={exercise}
           requiredTier={requiredTierInfo.minTier}
@@ -86,6 +93,12 @@ export default async function ExercisePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <Breadcrumb items={[
+          { label: 'Esercizi', href: '/exercises' },
+          { label: `Settimana ${exercise.week_number}: ${exercise.title}` }
+        ]} />
+      </div>
       <ExerciseDetail
         exercise={exercise}
         progress={progress}

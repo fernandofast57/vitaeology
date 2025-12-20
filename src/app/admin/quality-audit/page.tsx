@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 // Tipi allineati con API
 interface ConversationSample {
@@ -363,8 +364,19 @@ export default function QualityAuditPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0A2540] to-[#0d1f33]">
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 pt-4 sm:px-6 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: 'Admin', href: '/admin/ai-coach' },
+            { label: 'Quality Audit' }
+          ]}
+          homeHref="/dashboard"
+          variant="dark"
+        />
+      </div>
       {/* Header sticky */}
-      <header className="sticky top-0 z-20 bg-[#0A2540]/95 backdrop-blur border-b border-slate-700/50">
+      <header className="sticky top-0 z-20 bg-[#0A2540]/95 backdrop-blur border-b border-slate-700/50 mt-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

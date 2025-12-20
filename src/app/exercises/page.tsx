@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import ExercisesHeader from '@/components/exercises/ExercisesHeader';
 import ExercisesList from '@/components/exercises/ExercisesList';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 import type { ExerciseWithProgress, ExerciseWithAccess, ExercisesAccessLevel } from '@/lib/types/exercises';
 import { canAccessExercise, getRequiredTierForExercise } from '@/lib/types/exercises';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
@@ -89,6 +90,9 @@ export default async function ExercisesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <Breadcrumb items={[{ label: 'Esercizi' }]} />
+      </div>
       <ExercisesHeader stats={stats} userTier={userTier} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <ExercisesList exercises={exercises} userTier={userTier} />

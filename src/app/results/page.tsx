@@ -13,6 +13,7 @@ import {
   Tooltip
 } from 'recharts'
 import ChatWidget from '@/components/ai-coach/ChatWidget'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 // Tipi
 interface Characteristic {
@@ -301,6 +302,9 @@ charScores.forEach(score => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-4 sm:py-8 px-3 sm:px-4">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-4">
+          <Breadcrumb items={[{ label: 'Risultati Assessment' }]} />
+        </div>
 
         {/* Header */}
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 mb-4 sm:mb-8 text-center">

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import { TrendingUp, Target, CheckCircle, Clock, Award } from 'lucide-react';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 interface ExerciseProgress {
   id: string;
@@ -98,6 +99,7 @@ export default function ProgressPage() {
         <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} />
         <main className="p-4 md:p-6 lg:p-8">
           <div className="max-w-4xl mx-auto space-y-6">
+            <Breadcrumb items={[{ label: 'Progressi' }]} />
             {/* Header */}
             <div>
               <h1 className="text-2xl font-bold text-neutral-900">I tuoi Progressi</h1>

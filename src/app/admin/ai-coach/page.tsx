@@ -14,6 +14,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 interface MetricsSummary {
   totalConversations: number;
@@ -207,8 +208,15 @@ export default function AICoachAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 pt-4 sm:px-6 lg:px-8">
+        <Breadcrumb
+          items={[{ label: 'Admin' }, { label: 'AI Coach' }]}
+          homeHref="/dashboard"
+        />
+      </div>
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow">
+      <header className="bg-white dark:bg-gray-800 shadow mt-4">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>

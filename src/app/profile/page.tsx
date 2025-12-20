@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import { User, Mail, Calendar, Shield, Save } from 'lucide-react';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function ProfilePage() {
   const [userName, setUserName] = useState('');
@@ -113,6 +114,7 @@ export default function ProfilePage() {
         <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} />
         <main className="p-4 md:p-6 lg:p-8">
           <div className="max-w-2xl mx-auto space-y-6">
+            <Breadcrumb items={[{ label: 'Profilo' }]} />
             {/* Header */}
             <div>
               <h1 className="text-2xl font-bold text-neutral-900">Il tuo Profilo</h1>
