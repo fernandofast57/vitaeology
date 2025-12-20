@@ -54,143 +54,99 @@ export async function GET(): Promise<NextResponse> {
 
   try {
     // 1. Campiona conversazioni da valutare (non ancora auditate)
-    const { data: samples, error: samplesError } = await supabase.rpc(
+    // Prima prova RPC, poi fallback a query diretta
+    let samples: ConversationSample[] = [];
+
+    const { data: rpcSamples, error: rpcError } = await supabase.rpc(
       'sample_conversations_for_audit',
-      { p_limit: 10, p_days_back: 14 }
+      { sample_size: 10 }
     );
 
-    if (samplesError) {
-      console.error('Errore sampling conversazioni:', samplesError);
-      // Fallback: query diretta se RPC non esiste
-      const { data: fallbackSamples, error: fallbackError } = await supabase
+    if (!rpcError && rpcSamples) {
+      samples = rpcSamples;
+    } else {
+      // Fallback: query diretta
+      const { data: fallbackSamples } = await supabase
         .from('ai_coach_conversations')
         .select('id, session_id, user_id, user_message, ai_response, created_at, tokens_used')
         .not('ai_response', 'is', null)
         .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (fallbackError) {
-        return NextResponse.json(
-          { error: 'Errore caricamento conversazioni' },
-          { status: 500 }
-        );
-      }
-
-      // Verifica quali sono già auditate
-      const conversationIds = fallbackSamples?.map(s => s.id) || [];
-      const { data: existingAudits } = await supabase
-        .from('ai_coach_quality_audits')
-        .select('conversation_id')
-        .in('conversation_id', conversationIds);
-
-      const auditedIds = new Set(existingAudits?.map(a => a.conversation_id) || []);
-      const filteredSamples = fallbackSamples?.filter(s => !auditedIds.has(s.id)) || [];
-
-      return NextResponse.json({
-        samples: filteredSamples,
-        recentAudits: [],
-        summary: {
-          total_audits: 0,
-          avg_score: null,
-          excellent_count: 0,
-          needs_improvement_count: 0,
-        },
-        rpcAvailable: false,
-      });
-    }
-
-    // 2. Carica audit recenti
-    const { data: recentAudits, error: auditsError } = await supabase.rpc(
-      'get_recent_audits',
-      { p_limit: 20 }
-    );
-
-    let recentAuditsData: RecentAudit[] = [];
-    if (!auditsError && recentAudits) {
-      recentAuditsData = recentAudits;
-    } else {
-      // Fallback query diretta
-      const { data: fallbackAudits } = await supabase
-        .from('ai_coach_quality_audits')
-        .select(`
-          id,
-          conversation_id,
-          score_medio,
-          issues,
-          created_at
-        `)
-        .order('created_at', { ascending: false })
         .limit(20);
 
-      if (fallbackAudits) {
-        // Aggiungi preview messaggi
-        for (const audit of fallbackAudits) {
-          const { data: conv } = await supabase
-            .from('ai_coach_conversations')
-            .select('user_message')
-            .eq('id', audit.conversation_id)
-            .single();
+      if (fallbackSamples && fallbackSamples.length > 0) {
+        // Filtra quelle già auditate
+        const conversationIds = fallbackSamples.map(s => s.id);
+        const { data: existingAudits } = await supabase
+          .from('ai_coach_quality_audits')
+          .select('conversation_id')
+          .in('conversation_id', conversationIds);
 
-          recentAuditsData.push({
-            id: audit.id,
-            conversation_id: audit.conversation_id,
-            score_medio: Number(audit.score_medio),
-            issues: audit.issues || [],
-            created_at: audit.created_at,
-            user_message_preview: conv?.user_message?.slice(0, 60) || '',
-          });
-        }
+        const auditedIds = new Set(existingAudits?.map(a => a.conversation_id) || []);
+        samples = fallbackSamples.filter(s => !auditedIds.has(s.id)).slice(0, 10);
       }
     }
 
-    // 3. Carica summary settimanale
-    const { data: summaryData, error: summaryError } = await supabase.rpc(
-      'get_quality_audit_summary',
-      { p_days: 7 }
-    );
+    // 2. Carica audit recenti (query diretta, RPC non esiste)
+    let recentAuditsData: RecentAudit[] = [];
 
-    let summary: WeeklySummary = {
-      total_audits: 0,
-      avg_score: null,
-      excellent_count: 0,
-      needs_improvement_count: 0,
+    const { data: fallbackAudits } = await supabase
+      .from('ai_coach_quality_audits')
+      .select(`
+        id,
+        conversation_id,
+        score_validante,
+        score_user_agency,
+        score_comprensione,
+        score_conoscenza_operativa,
+        score_medio,
+        issues,
+        created_at
+      `)
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (fallbackAudits) {
+      for (const audit of fallbackAudits) {
+        const { data: conv } = await supabase
+          .from('ai_coach_conversations')
+          .select('user_message')
+          .eq('id', audit.conversation_id)
+          .single();
+
+        recentAuditsData.push({
+          id: audit.id,
+          conversation_id: audit.conversation_id,
+          score_medio: Number(audit.score_medio) || 0,
+          issues: audit.issues || [],
+          created_at: audit.created_at,
+          user_message_preview: conv?.user_message?.slice(0, 60) || '',
+        });
+      }
+    }
+
+    // 3. Calcola summary settimanale (query diretta)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const { data: weekAudits } = await supabase
+      .from('ai_coach_quality_audits')
+      .select('score_medio')
+      .gte('created_at', sevenDaysAgo);
+
+    const scores = weekAudits?.map(a => Number(a.score_medio)).filter(s => !isNaN(s) && s > 0) || [];
+
+    const summary: WeeklySummary = {
+      total_audits: weekAudits?.length || 0,
+      avg_score: scores.length > 0
+        ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100
+        : null,
+      excellent_count: scores.filter(s => s >= 4.0).length,
+      needs_improvement_count: scores.filter(s => s < 3.0).length,
     };
 
-    if (!summaryError && summaryData && summaryData.length > 0) {
-      const s = summaryData[0];
-      summary = {
-        total_audits: Number(s.total_audits) || 0,
-        avg_score: s.avg_score ? Number(s.avg_score) : null,
-        excellent_count: Number(s.excellent_count) || 0,
-        needs_improvement_count: Number(s.needs_improvement_count) || 0,
-      };
-    } else {
-      // Fallback: calcola manualmente
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-
-      const { data: weekAudits } = await supabase
-        .from('ai_coach_quality_audits')
-        .select('score_medio')
-        .gte('created_at', sevenDaysAgo);
-
-      if (weekAudits) {
-        const scores = weekAudits.map(a => Number(a.score_medio)).filter(s => !isNaN(s));
-        summary = {
-          total_audits: weekAudits.length,
-          avg_score: scores.length > 0
-            ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100
-            : null,
-          excellent_count: scores.filter(s => s >= 4.0).length,
-          needs_improvement_count: scores.filter(s => s < 3.0).length,
-        };
-      }
-    }
-
     return NextResponse.json({
-      samples: samples || [],
+      samples,
       recentAudits: recentAuditsData,
       summary,
-      rpcAvailable: true,
     });
 
   } catch (error) {
