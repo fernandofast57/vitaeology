@@ -155,28 +155,45 @@ export default function DashboardPage() {
       <div className="lg:pl-64">
         <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} />
         <main className="p-4 md:p-6 lg:p-8">
-          <div className="space-y-6 max-w-7xl mx-auto">
+          <div className="space-y-4 md:space-y-6 max-w-7xl mx-auto">
             <TrialBanner daysRemaining={14} />
             <WelcomeHero userName={userName || 'Leader'} hasCompletedAssessment={assessment?.status === 'completed'} />
             <QuickStats assessmentsCompleted={assessment?.status === 'completed' ? 1 : 0} totalScore={assessment?.total_score || null} exercisesCompleted={exerciseStats.completed} currentStreak={exerciseStats.inProgress} />
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-              <div className="lg:col-span-2">
-                <AssessmentCard assessment={assessment} />
+
+            {/* Layout diverso in base allo stato dell'assessment */}
+            {assessment?.status === 'completed' && userId ? (
+              /* Layout per utenti con assessment completato: esercizi in primo piano */
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="lg:col-span-2">
+                  <RecommendedExercises userId={userId} maxItems={5} showPriorityAreas={true} />
+                </div>
+                <div className="lg:col-span-1 flex flex-col gap-4 md:gap-6">
+                  <MiniRadarPreview pillarScores={pillarScores} hasResults={true} assessmentId={assessment?.id} />
+                  <ExercisesCard stats={exerciseStats} />
+                </div>
               </div>
-              <div className="lg:col-span-1 flex flex-col gap-4 md:gap-6">
-                <MiniRadarPreview pillarScores={pillarScores} hasResults={assessment?.status === 'completed'} assessmentId={assessment?.id} />
-                <ExercisesCard stats={exerciseStats} />
-              </div>
-            </div>
-            {/* Esercizi Raccomandati - mostra solo se c'è un assessment completato */}
-            {assessment?.status === 'completed' && userId && (
-              <div className="mt-4 md:mt-6">
-                <RecommendedExercises userId={userId} maxItems={5} showPriorityAreas={true} />
+            ) : (
+              /* Layout per utenti senza assessment: focus su completare il test */
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="lg:col-span-2">
+                  <AssessmentCard assessment={assessment} />
+                </div>
+                <div className="lg:col-span-1 flex flex-col gap-4 md:gap-6">
+                  <MiniRadarPreview pillarScores={pillarScores} hasResults={false} assessmentId={assessment?.id} />
+                  <ExercisesCard stats={exerciseStats} />
+                </div>
               </div>
             )}
-            <div className="mt-4 md:mt-6">
+
+            {/* Sezione secondaria: Assessment recap (solo se completato) o Recent Activity */}
+            {assessment?.status === 'completed' ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                <AssessmentCard assessment={assessment} />
+                <RecentActivity />
+              </div>
+            ) : (
               <RecentActivity />
-            </div>
+            )}
           </div>
         </main>
       </div>
