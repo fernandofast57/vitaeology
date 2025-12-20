@@ -199,6 +199,26 @@
 | `ai_coach_daily_metrics` | Metriche giornaliere |
 | `ai_coach_usage_logs` | Log utilizzo API |
 | `ai_coach_implicit_signals` | Segnali impliciti soddisfazione/insoddisfazione |
+| `ai_coach_patterns` | Pattern comportamentali con soglie auto-correzione |
+
+#### Tipi Pattern Auto-Correzione (`ai_coach_patterns.pattern_type`)
+| Tipo | Descrizione | Azione |
+|------|-------------|--------|
+| `unanswered_question` | Domanda senza risposta utile | Auto-correzione prompt |
+| `negative_feedback_cluster` | Cluster di feedback negativi | Review manuale |
+| `reformulation_trigger` | Pattern che causa riformulazioni | Auto-correzione |
+| `abandonment_trigger` | Pattern che causa abbandoni | Priorità alta |
+| `success_pattern` | Pattern di successo da replicare | Apprendimento |
+
+#### Stati Pattern (`ai_coach_patterns.status`)
+| Stato | Descrizione |
+|-------|-------------|
+| `identified` | Pattern identificato, in attesa |
+| `auto_corrected` | Correzione automatica applicata |
+| `pending_review` | In attesa review manuale |
+| `approved` | Correzione approvata |
+| `rejected` | Correzione rifiutata |
+| `resolved` | Pattern risolto |
 
 #### Tipi Segnali Impliciti (`ai_coach_implicit_signals.signal_type`)
 | Tipo | Descrizione | Indica |
