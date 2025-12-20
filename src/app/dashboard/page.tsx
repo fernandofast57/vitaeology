@@ -11,6 +11,7 @@ import MiniRadarPreview from '@/components/dashboard/MiniRadarPreview';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import ExercisesCard from '@/components/dashboard/ExercisesCard';
+import RecommendedExercises from '@/components/dashboard/RecommendedExercises';
 import ChatWidget from '@/components/ai-coach/ChatWidget';
 import { UserContext } from '@/lib/ai-coach/types';
 
@@ -167,6 +168,12 @@ export default function DashboardPage() {
                 <ExercisesCard stats={exerciseStats} />
               </div>
             </div>
+            {/* Esercizi Raccomandati - mostra solo se c'è un assessment completato */}
+            {assessment?.status === 'completed' && userId && (
+              <div className="mt-4 md:mt-6">
+                <RecommendedExercises userId={userId} maxItems={5} showPriorityAreas={true} />
+              </div>
+            )}
             <div className="mt-4 md:mt-6">
               <RecentActivity />
             </div>

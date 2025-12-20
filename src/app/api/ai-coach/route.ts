@@ -6,6 +6,7 @@ import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
 import { getUserMemory, generateMemoryContext, createUserMemory } from '@/lib/ai-coach/user-memory';
 import { createCorrectionSuggestionService } from '@/lib/services/correction-suggestion';
+import { createExerciseRecommendationService } from '@/lib/services/exercise-recommendation';
 import { v4 as uuidv4 } from 'uuid';
 
 // Lazy initialization per evitare errori durante il build
@@ -117,8 +118,22 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       console.error('Errore caricamento correzioni:', corrError);
     }
 
-    // Costruisci system prompt con contesto RAG, memoria utente, correzioni e RAG correttivi
-    const systemPrompt = buildSystemPrompt(userContext) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext;
+    // Carica raccomandazioni esercizi personalizzate
+    let exerciseRecommendationsContext = '';
+    if (userContext?.userId) {
+      try {
+        const recommendationService = createExerciseRecommendationService(supabase);
+        exerciseRecommendationsContext = await recommendationService.generateAICoachContext(userContext.userId);
+        if (exerciseRecommendationsContext) {
+          console.log('📚 Raccomandazioni esercizi caricate');
+        }
+      } catch (recError) {
+        console.error('Errore caricamento raccomandazioni:', recError);
+      }
+    }
+
+    // Costruisci system prompt con contesto RAG, memoria utente, correzioni, RAG correttivi e raccomandazioni
+    const systemPrompt = buildSystemPrompt(userContext) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext;
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
