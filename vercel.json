@@ -1,12 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/ai-coach/cron/daily-metrics",
+      "path": "/api/ai-coach/cron/combined",
       "schedule": "0 23 * * *"
-    },
-    {
-      "path": "/api/ai-coach/cron/weekly-report",
-      "schedule": "0 23 * * 0"
     },
     {
       "path": "/api/cron/send-challenge-emails",
