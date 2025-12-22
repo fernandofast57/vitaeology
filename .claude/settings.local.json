@@ -20,7 +20,13 @@
       "Bash(node scripts/verify-roles-system.js:*)",
       "Bash(node scripts/fix-roles-rls.js:*)",
       "Bash(node scripts/test-feedback-system.js:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(node scripts/debug-recommendations.js:*)",
+      "Bash(node scripts/fix-exercise-slugs.js:*)",
+      "Bash(npx tsc:*)",
+      "Bash(middleware)",
+      "Bash(tsconfig:*)",
+      "Bash(.env \")"
     ]
   }
 }

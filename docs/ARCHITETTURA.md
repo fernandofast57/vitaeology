@@ -148,6 +148,7 @@
 | `lib/ai-coach/weekly-report.ts` | generateWeeklyReport | Report settimanale |
 | `lib/ai-coach/email-report.ts` | sendEmailReport | Invio report via email |
 | `lib/ai-coach/implicit-signals.ts` | trackImplicitSignal, detectReformulation | Tracciamento segnali impliciti |
+| `lib/ai-coach/pattern-autocorrection.ts` | processPatternOccurrence, findOrCreatePattern | Auto-correzione pattern basata su soglie |
 
 ### Servizi Core
 | Percorso | Export | Funzionalità |

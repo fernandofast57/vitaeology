@@ -15,6 +15,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import Breadcrumb from '@/components/ui/Breadcrumb';
+import TwelveFactorsGrid from '@/components/admin/TwelveFactorsGrid';
 
 interface MetricsSummary {
   totalConversations: number;
@@ -400,6 +401,30 @@ export default function AICoachAdminDashboard() {
                 icon="⚡"
               />
             </div>
+
+            {/* 12 Fattori di Ottimizzazione */}
+            <TwelveFactorsGrid
+              institution={{
+                quantity: { value: metrics.totalConversations, trend: 'up', label: 'Conversazioni' },
+                quality: { value: `${metrics.avgRating.toFixed(1)}/5`, trend: metrics.avgRating >= 4 ? 'up' : 'stable', label: 'Rating' },
+                viability: { value: `${(metrics.helpfulRatio * 100).toFixed(0)}%`, trend: metrics.helpfulRatio >= 0.8 ? 'up' : 'down', label: 'Utilità' },
+              }}
+              generated={{
+                quantity: { value: dailyMetrics.reduce((sum, d) => sum + d.messages, 0), trend: 'up', label: 'Messaggi' },
+                quality: { value: `${Math.round(metrics.avgResponseTime)}ms`, trend: metrics.avgResponseTime < 3000 ? 'up' : 'down', label: 'Tempo' },
+                viability: { value: `€${metrics.totalApiCost.toFixed(2)}`, trend: 'stable', label: 'Costo' },
+              }}
+              repair={{
+                quantity: { value: patterns.filter(p => p.status === 'pending_review').length, trend: 'stable', label: 'Pending' },
+                quality: { value: metrics.patternsCorrected, trend: metrics.patternsCorrected > 0 ? 'up' : 'stable', label: 'Corretti' },
+                viability: { value: patterns.length, trend: 'stable', label: 'Totali' },
+              }}
+              correction={{
+                quantity: { value: patterns.filter(p => p.pattern_type === 'reformulation_trigger').length, trend: 'stable', label: 'Riformulazioni' },
+                quality: { value: patterns.filter(p => p.pattern_type === 'abandonment_trigger').length, trend: patterns.filter(p => p.pattern_type === 'abandonment_trigger').length > 0 ? 'down' : 'stable', label: 'Abbandoni' },
+                viability: { value: patterns.filter(p => p.pattern_type === 'success_pattern').length, trend: 'up', label: 'Successi' },
+              }}
+            />
 
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
