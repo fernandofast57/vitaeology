@@ -198,6 +198,18 @@ export default function ChallengeDayPage() {
       <main className="px-4 pb-16">
         <div className="max-w-3xl mx-auto space-y-8">
 
+          {/* Principle Section */}
+          {dayContent?.principle && (
+            <section className={`bg-${colors.badge} border border-${colors.badgeBorder} rounded-2xl p-6 md:p-8`}>
+              <h2 className={`text-sm font-semibold text-${colors.badgeText} uppercase tracking-wide mb-3`}>
+                Il Principio di Oggi
+              </h2>
+              <p className="text-lg md:text-xl text-white leading-relaxed">
+                {dayContent.principle}
+              </p>
+            </section>
+          )}
+
           {/* Video Section (if available) */}
           {dayContent?.videoUrl && (
             <section className="bg-slate-800/50 rounded-2xl overflow-hidden">
@@ -244,9 +256,16 @@ export default function ChallengeDayPage() {
           {/* Exercise Section */}
           {dayContent?.exercise && (
             <section className={`bg-${colors.badge} border border-${colors.badgeBorder} rounded-2xl p-6 md:p-8`}>
-              <h2 className={`text-xl font-semibold text-${colors.badgeText} mb-4 flex items-center gap-2`}>
-                <span>📝</span> Esercizio del Giorno
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className={`text-xl font-semibold text-${colors.badgeText} flex items-center gap-2`}>
+                  <span>📝</span> Esercizio del Giorno
+                </h2>
+                {dayContent.exercise.duration && (
+                  <span className="text-slate-400 text-sm bg-slate-800/50 px-3 py-1 rounded-full">
+                    ⏱️ {dayContent.exercise.duration}
+                  </span>
+                )}
+              </div>
               <p className="text-slate-200 mb-4">{dayContent.exercise.instruction}</p>
               {dayContent.exercise.steps && (
                 <ol className="space-y-2 text-slate-300">

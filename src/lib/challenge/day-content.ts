@@ -1,5 +1,6 @@
 // Contenuti delle Day Pages per le 3 Challenge
 // 7 giorni × 3 challenge = 21 pagine
+// AGGIORNATO da LEAD_MAGNET_CHALLENGE_VITAEOLOGY_v5_PULITO.md
 
 import { ChallengeType, DayNumber } from './discovery-data';
 
@@ -13,11 +14,13 @@ export interface ContentSection {
 export interface DayExercise {
   instruction: string;
   steps?: string[];
+  duration?: string;
 }
 
 export interface DayContent {
   title: string;
   subtitle: string;
+  principle: string;
   videoUrl?: string;
   sections: ContentSection[];
   exercise?: DayExercise;
@@ -27,681 +30,746 @@ export interface DayContent {
 export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> = {
   // =====================================================
   // LEADERSHIP AUTENTICA - 7 giorni
+  // Fonte: LEAD_MAGNET v5 - "7 Giorni per Riconoscere il Leader che Sei Già"
   // =====================================================
   leadership: {
     1: {
-      title: "Il Leader Nascosto",
-      subtitle: "Scopri la leadership che già opera in te",
+      title: "Quello che Già Fai Senza Accorgertene",
+      subtitle: "La scoperta che cambia tutto",
+      principle: "Essere leader significa essere un punto di riferimento per altri. Tu lo sei già — in alcuni momenti della tua vita — anche se non ci hai mai pensato in questi termini.",
       sections: [
         {
-          icon: "🎯",
-          title: "La Leadership Invisibile",
-          content: "Ogni giorno, senza rendertene conto, guidi. Quando qualcuno ti chiede un consiglio, quando prendi una decisione che altri seguono, quando indichi una direzione — stai già esercitando leadership.\n\nNon si tratta di titoli o ruoli formali. Si tratta di quei momenti in cui sei \"quello che sa la strada\".",
+          icon: "🚗",
+          title: "Già Lo Fai",
+          content: "Pensa a quando guidi l'auto su una strada che conosci bene, con un amico seduto accanto che non la conosce. In quel momento, tu sei il punto di riferimento. Lui si fida di te. Tu decidi dove andare. Non hai bisogno di un titolo o di un corso: sei semplicemente quello che sa la strada.\n\nLa stessa cosa succede in molte situazioni della tua vita, senza che tu ci faccia caso.",
           highlights: [
-            "La leadership non si costruisce, si riconosce",
-            "Già guidi in modi che non hai ancora notato",
-            "Il primo passo è vedere ciò che c'è già"
+            "Quando un collega ti chiede \"Tu cosa faresti?\"",
+            "Quando in famiglia aspettano che tu dica la tua prima di decidere",
+            "Quando qualcuno ti racconta un problema e vuole sapere cosa ne pensi"
           ]
         },
         {
-          icon: "🔍",
-          title: "L'Esercizio del Riconoscimento",
-          content: "Oggi il tuo compito è semplice: osserva. Nota quante volte qualcuno si rivolge a te per un consiglio, un'opinione, una decisione.\n\nNon cercare momenti straordinari. Cerca i piccoli momenti quotidiani in cui qualcuno ti ha considerato un punto di riferimento."
+          icon: "👓",
+          title: "Il Problema Non È Che Ti Manca",
+          content: "Il problema non è che ti manca questa capacità. Il problema è che non la *noti*. È come avere gli occhiali sul naso e cercarli ovunque: ci sono, ma non li vedi perché sono troppo vicini.\n\nQuesta settimana imparerai a notare ciò che già fai."
         }
       ],
       exercise: {
-        instruction: "Ripensa alla settimana scorsa e identifica almeno 3 momenti in cui qualcuno ha seguito una tua indicazione o chiesto il tuo parere.",
+        instruction: "Trova le Prove: Ripensa alla settimana appena passata e cerca 3 momenti in cui qualcuno si è rivolto a te.",
         steps: [
-          "Prendi carta e penna (o apri le note del telefono)",
-          "Ripercorri mentalmente gli ultimi 7 giorni",
-          "Scrivi ogni momento, anche piccolo, in cui hai guidato",
-          "Non giudicare — solo osserva e registra"
-        ]
+          "Siediti un momento e ripensa alla settimana appena passata",
+          "Cerca 3 momenti in cui qualcuno ti ha chiesto un consiglio, un'opinione o una decisione",
+          "Per ogni momento, scrivi: chi era, cosa ti ha chiesto, cosa hai risposto",
+          "Guarda quello che hai scritto: hai la prova che qualcuno ti considera già un punto di riferimento"
+        ],
+        duration: "5 minuti"
       },
       keyTakeaway: "La leadership che cerchi fuori è già dentro di te. Oggi iniziamo a vederla."
     },
     2: {
-      title: "Il Fuoco Interno",
-      subtitle: "La differenza tra \"via da\" e \"verso\"",
+      title: "La Voce che Sminuisce",
+      subtitle: "Perché dici \"non conta\" quando invece conta",
+      principle: "C'è una voce nella tua testa che sminuisce i tuoi successi. Funziona sempre allo stesso modo, quindi puoi imparare a riconoscerla.",
       sections: [
         {
-          icon: "🔥",
-          title: "Due Tipi di Motivazione",
-          content: "Esistono due forze che ci muovono: la fuga dal dolore (\"via da\") e l'attrazione verso qualcosa (\"verso\").\n\nChi scappa dal dolore si ferma appena il dolore diminuisce. Chi corre verso qualcosa non si ferma mai, perché l'obiettivo è davanti, non dietro.",
+          icon: "🗣️",
+          title: "L'Impostore Interno",
+          content: "Hai mai fatto un buon lavoro e subito dopo pensato \"Beh, chiunque l'avrebbe fatto\"? Oppure ricevuto un complimento e risposto \"Ma no, figurati, niente di speciale\"?\n\nQuella è la voce che sminuisce. La chiamiamo \"Impostore\" perché ti fa sentire un impostore — come se i tuoi successi non fossero davvero tuoi.",
           highlights: [
-            "\"Via da\" genera reazione, \"verso\" genera costruzione",
-            "Il leader autentico è guidato da visione, non da paura",
-            "La motivazione \"verso\" è più sostenibile nel tempo"
+            "Fai qualcosa di buono",
+            "La voce dice: \"Non conta\", \"È stato fortuna\", \"Chiunque l'avrebbe fatto\"",
+            "Tu non registri il successo",
+            "Ti sembra di non avere capacità"
+          ]
+        },
+        {
+          icon: "🏦",
+          title: "Il Salvadanaio Bucato",
+          content: "Immagina di avere un salvadanaio dove metti una moneta ogni volta che fai qualcosa di buono. Ma c'è un buco sul fondo: ogni moneta che metti cade fuori senza che tu la veda.\n\nAlla fine dell'anno apri il salvadanaio e lo trovi vuoto. Pensi: \"Non ho fatto niente di buono quest'anno.\" Ma non è vero — le monete c'erano, solo che non sono rimaste.\n\nLa voce che sminuisce è quel buco nel salvadanaio."
+        }
+      ],
+      exercise: {
+        instruction: "Vedi il Doppio Standard: riprendi i momenti di ieri e immagina che li avesse fatti qualcuno che stimi.",
+        steps: [
+          "Riprendi i momenti che hai scritto ieri",
+          "Per ogni momento, immagina che un collega che stimi — chiamiamolo Marco — abbia fatto esattamente la stessa cosa",
+          "Scrivi: \"Se Marco avesse dato quel consiglio, direi che...\"",
+          "Confronta: come giudichi l'azione quando la fa Marco? E quando la fai tu?",
+          "Nota la differenza: se riconosci valore quando lo fa Marco, quel valore c'è anche quando lo fai tu"
+        ],
+        duration: "5 minuti"
+      },
+      keyTakeaway: "Il valore di un'azione non cambia in base a chi la compie. Impara a riconoscere il tuo."
+    },
+    3: {
+      title: "Vedere le Cose Come Sono",
+      subtitle: "La capacità che sta alla base di tutto il resto",
+      principle: "Lucidità significa vedere una situazione per quello che è — non per quello che vorresti che fosse, non per quello che temi che sia. È come pulire gli occhiali: la realtà non cambia, ma tu la vedi meglio.",
+      sections: [
+        {
+          icon: "🚗",
+          title: "Il Parabrezza Sporco",
+          content: "Hai presente quando guidi con il parabrezza sporco? Vedi la strada, ma non benissimo. Tutto sembra un po' confuso. Poi ti fermi, pulisci il vetro, e improvvisamente vedi ogni dettaglio.\n\nLa lucidità funziona così: non cambia la realtà, ma ti permette di vederla senza distorsioni.",
+          highlights: [
+            "Vedere quello che vorresti (\"Andrà tutto bene\" quando i segnali dicono il contrario)",
+            "Vedere quello che temi (\"Sarà un disastro\" quando la situazione è gestibile)",
+            "La lucidità sta nel mezzo: vedere quello che c'è, né meglio né peggio"
           ]
         },
         {
           icon: "💡",
-          title: "Riconosci il Tuo Pattern",
-          content: "Pensa alle tue decisioni importanti degli ultimi mesi. Quante sono state prese per evitare qualcosa? Quante per costruire qualcosa?\n\nNon c'è giudizio qui. Solo consapevolezza. Entrambe le motivazioni sono umane. Ma sapere quale ti guida ti dà potere."
+          title: "La Buona Notizia",
+          content: "Hai già usato la lucidità. Ogni volta che hai preso una decisione difficile guardando in faccia una realtà scomoda — anche se non ti piaceva — hai usato questa capacità.\n\nNon è qualcosa da imparare da zero. È qualcosa da usare più spesso e più consapevolmente."
         }
       ],
       exercise: {
-        instruction: "Analizza 3 decisioni recenti e identifica se erano motivate dal \"via da\" o dal \"verso\".",
+        instruction: "Accendi la Luce su Qualcosa: pensa a qualcosa che stai evitando di guardare.",
         steps: [
-          "Scegli 3 decisioni significative degli ultimi 30 giorni",
-          "Per ognuna chiediti: stavo scappando da qualcosa o andando verso qualcosa?",
-          "Nota come ti sei sentito durante e dopo ogni decisione",
-          "Identifica un pattern ricorrente"
-        ]
+          "C'è qualcosa che stai evitando di guardare nella tua vita professionale?",
+          "Scrivi la situazione: \"Sto evitando di guardare: ___\"",
+          "Scrivi cosa temi di scoprire: \"Se guardo davvero, potrei scoprire che: ___\"",
+          "Scrivi cosa succede se non guardi: \"Se continuo a non guardare, tra 6 mesi: ___\""
+        ],
+        duration: "5 minuti"
       },
-      keyTakeaway: "Il fuoco che ti muove determina dove arrivi. Scegli di ardere verso qualcosa, non via da qualcosa."
-    },
-    3: {
-      title: "Il Coraggio che Costruisce",
-      subtitle: "Dalla resistenza alla creazione",
-      sections: [
-        {
-          icon: "🏗️",
-          title: "Resistere vs Costruire",
-          content: "C'è un coraggio che resiste e uno che costruisce. Il primo ti tiene in piedi quando tutto crolla. Il secondo ti fa avanzare quando niente ti spinge.\n\nResistere è necessario. Ma restare in modalità resistenza troppo a lungo ti blocca. Il vero salto avviene quando trasformi l'energia della resistenza in energia costruttiva.",
-          highlights: [
-            "La resistenza è sopravvivenza, la costruzione è crescita",
-            "Ogni difficoltà contiene materiale da costruzione",
-            "Il coraggio autentico sceglie di creare"
-          ]
-        },
-        {
-          icon: "⚡",
-          title: "Il Momento del Passaggio",
-          content: "Pensa a una situazione difficile che stai affrontando. Ti stai difendendo o stai costruendo qualcosa?\n\nNon è una critica — è un'osservazione. A volte serve difendersi. Ma chiedersi \"cosa posso costruire da qui?\" apre possibilità che la sola resistenza non vede."
-        }
-      ],
-      exercise: {
-        instruction: "Identifica una situazione in cui stai \"resistendo\" e chiediti cosa potresti costruire invece.",
-        steps: [
-          "Scegli una sfida attuale",
-          "Nota come la stai affrontando (resistenza o costruzione?)",
-          "Chiediti: cosa potrei costruire da questa situazione?",
-          "Scrivi almeno una possibilità costruttiva"
-        ]
-      },
-      keyTakeaway: "Il coraggio che conta non è quello che resiste al buio, ma quello che costruisce la luce."
+      keyTakeaway: "Se non vedi bene il problema, non puoi risolverlo. La lucidità è il primo passo."
     },
     4: {
-      title: "La Dedizione che Serve",
-      subtitle: "Distinguere l'ostinazione dalla dedizione autentica",
+      title: "Agire Anche con la Paura",
+      subtitle: "Il coraggio non è quello che pensi",
+      principle: "Il coraggio non è assenza di paura. È scegliere di agire anche se la paura c'è. È come attraversare una stanza buia: hai paura, ma cammini lo stesso.",
       sections: [
         {
-          icon: "🎯",
-          title: "Dedizione vs Ostinazione",
-          content: "La dedizione crea valore. L'ostinazione consuma energia. Sembrano simili — entrambe perseverano — ma portano a risultati opposti.\n\nLa dedizione autentica serve qualcosa di più grande di te. L'ostinazione serve il tuo bisogno di avere ragione.",
+          icon: "🚗",
+          title: "La Prima Volta al Volante",
+          content: "Pensa alla prima volta che hai guidato l'auto da solo, senza istruttore. Probabilmente avevi paura. Il cuore batteva forte, le mani erano sudate, controllavi lo specchietto ogni tre secondi.\n\nMa hai guidato lo stesso. Quella è stata un'azione coraggiosa. Non hai aspettato che la paura passasse. Hai agito *con* la paura.",
           highlights: [
-            "La dedizione è flessibile nei mezzi, ferma nel fine",
-            "L'ostinazione è rigida in tutto",
-            "Chiediti: sto servendo o sto dimostrando?"
+            "Prima di agire: il cervello immagina tutti gli scenari peggiori",
+            "Mentre agisci: l'attenzione si sposta sul compito, la paura diminuisce",
+            "Dopo aver agito: il cervello registra \"Ok, sono sopravvissuto\" e la prossima volta sarà più facile"
           ]
         },
         {
-          icon: "🪞",
-          title: "Lo Specchio della Dedizione",
-          content: "Pensa a un progetto o impegno a cui tieni molto. Perché lo porti avanti?\n\nSe la risposta è \"perché ho iniziato\" o \"per orgoglio\", potrebbe essere ostinazione. Se è \"perché crea valore\" o \"perché serve a qualcosa di importante\", è dedizione."
+          icon: "💪",
+          title: "Il Muscolo del Coraggio",
+          content: "Chi aspetta che la paura passi prima di agire, non agisce mai. Chi agisce nonostante la paura, allena il \"muscolo\" del coraggio — e ogni volta diventa un po' più facile.\n\nNon servono grandi gesti eroici. Il coraggio si costruisce con piccole azioni quotidiane."
         }
       ],
       exercise: {
-        instruction: "Esamina un impegno attuale e chiediti: sto servendo o sto dimostrando?",
+        instruction: "Il Passo Più Piccolo: riprendi la situazione di ieri e fai un passo minimo.",
         steps: [
-          "Scegli un progetto o impegno significativo",
-          "Scrivi i motivi per cui lo porti avanti",
-          "Onestamente, classifica ogni motivo: servizio o dimostrazione?",
-          "Decidi se continuare, modificare o lasciare andare"
-        ]
+          "Riprendi la situazione che hai scritto ieri — quella che stavi evitando di guardare",
+          "Chiediti: qual è il passo PIÙ PICCOLO che richiede un po' di coraggio?",
+          "Non la soluzione completa. Solo il passo più piccolo possibile",
+          "Scrivi: \"Il mio passo piccolo oggi è: ___\"",
+          "Fallo. Oggi, non domani"
+        ],
+        duration: "3 minuti + 1 azione"
       },
-      keyTakeaway: "La vera dedizione serve qualcosa di più grande. L'ostinazione serve solo l'ego."
+      keyTakeaway: "La paura non passa aspettando. Passa agendo. Un piccolo passo alla volta."
     },
     5: {
-      title: "I Principi Stabili",
-      subtitle: "Cosa tenere fisso e cosa adattare",
+      title: "Non Esaurirti",
+      subtitle: "Come durare nel tempo senza bruciarti",
+      principle: "Equilibrio significa sapere quando spingere e quando fermarti. È come correre una maratona: se parti troppo forte, non arrivi al traguardo.",
       sections: [
         {
-          icon: "⚓",
-          title: "L'Ancora e la Vela",
-          content: "I principi sono la tua ancora. Le strategie sono la tua vela. L'ancora ti tiene saldo quando la tempesta arriva. La vela ti permette di muoverti con il vento.\n\nChi confonde principi e strategie perde entrambi. Chi tiene fissi i valori e flessibili i metodi naviga qualsiasi mare.",
+          icon: "🔋",
+          title: "La Batteria del Telefono",
+          content: "Immagina di avere una batteria del telefono che si ricarica di notte e si scarica durante il giorno. Se usi il telefono normalmente, arrivi a sera con un po' di carica residua. Ma se lo usi al massimo — video, giochi, schermo sempre acceso — alle 3 del pomeriggio è già morto.\n\nTu funzioni allo stesso modo. Hai una quantità di energia disponibile ogni giorno.",
           highlights: [
-            "I valori non negoziano, le tattiche sì",
-            "La coerenza è nei principi, non nelle azioni",
-            "L'adattabilità senza principi è deriva"
+            "Alcune cose la consumano: riunioni stressanti, conflitti, decisioni difficili",
+            "Altre la ricaricano: una pausa, una conversazione piacevole, un compito completato",
+            "Se spendi più di quello che recuperi, vai in rosso"
           ]
         },
         {
-          icon: "📋",
-          title: "Il Tuo Inventario di Principi",
-          content: "Quali sono i principi che non negozieresti mai? Non quelli che pensi di dover avere, ma quelli che effettivamente guidano le tue decisioni.\n\nSe non li hai mai articolati, questo è il momento. Un leader senza principi chiari è una barca senza ancora."
+          icon: "🚗",
+          title: "Il Motore Non È Difettoso",
+          content: "Pensa a un'auto. Se la tieni sempre al massimo dei giri, il motore si surriscalda e si rompe. Non è che l'auto sia debole — è che nessun motore è progettato per andare sempre al massimo.\n\nTu non sei una macchina difettosa se hai bisogno di pause. Sei un essere umano con risorse limitate che vanno gestite."
         }
       ],
       exercise: {
-        instruction: "Scrivi i tuoi 3-5 principi non negoziabili.",
+        instruction: "Mappa la Tua Energia: dividi un foglio a metà e identifica cosa ti ricarica e cosa ti scarica.",
         steps: [
-          "Pensa a decisioni difficili del passato",
-          "Identifica cosa ti ha guidato in quelle scelte",
-          "Estrai i principi sottostanti",
-          "Scrivi ogni principio in una frase chiara"
-        ]
+          "Sulla metà sinistra scrivi: \"MI RICARICA\" — elenca almeno 5 cose",
+          "Sulla metà destra scrivi: \"MI SCARICA\" — elenca almeno 5 cose",
+          "Guarda la tua settimana: quanto tempo dedichi a ogni colonna?",
+          "Scegli UNA azione: ridurre qualcosa da \"SCARICA\" o aumentare qualcosa da \"RICARICA\""
+        ],
+        duration: "7 minuti"
       },
-      keyTakeaway: "I principi sono la tua bussola. Senza di essi, ogni direzione sembra uguale."
+      keyTakeaway: "L'equilibrio non è debolezza. È strategia per durare nel tempo."
     },
     6: {
-      title: "Dal Controllo alla Delega",
-      subtitle: "Costruire sistemi che funzionano senza di te",
+      title: "Il Tuo Modo Personale",
+      subtitle: "Non devi copiare nessuno",
+      principle: "Non esiste un modello unico di leader. Ognuno ha il suo stile naturale — alcuni sono più riflessivi, altri più decisi, altri più empatici. Tutti validi.",
       sections: [
         {
-          icon: "🔄",
-          title: "Il Paradosso del Controllo",
-          content: "Più controlli, meno controlli. Sembra un paradosso, ma è la verità della leadership efficace.\n\nChi cerca di controllare tutto finisce per controllare poco, perché esaurisce le proprie energie. Chi delega con fiducia costruisce sistemi che moltiplicano il suo impatto.",
+          icon: "🎵",
+          title: "Come i Cantanti",
+          content: "Pensa a tre cantanti che ti piacciono. Hanno voci diverse, stili diversi, modi diversi di stare sul palco. Sarebbe assurdo dire: \"L'unico modo giusto di cantare è il modo di Freddie Mercury.\" Ci sono mille modi giusti di cantare.\n\nLo stesso vale per essere un punto di riferimento. Non devi copiare lo stile di qualcun altro. Devi trovare il *tuo* modo naturale.",
           highlights: [
-            "Delegare non è perdere controllo, è espanderlo",
-            "I sistemi moltiplicano, il controllo diretto divide",
-            "La fiducia è un investimento, non un rischio"
+            "Lucido: Vede i problemi prima degli altri, anticipa, previene",
+            "Deciso: Prende decisioni che altri evitano, sblocca situazioni",
+            "Connettivo: Crea armonia tra le persone, costruisce squadra",
+            "Creativo: Trova soluzioni non convenzionali, innova",
+            "Stabile: Mantiene la calma sotto pressione, rassicura"
           ]
         },
         {
-          icon: "🛠️",
-          title: "Costruire Sistemi",
-          content: "Un sistema è una decisione che prendi una volta e funziona molte volte. Invece di decidere ogni giorno, crei una regola o un processo.\n\nQuali decisioni prendi ripetutamente? Quali processi potresti sistematizzare?"
+          icon: "🎯",
+          title: "Il Tuo Mix",
+          content: "Nessuno stile è migliore degli altri. E la maggior parte delle persone ha un mix, con uno stile dominante.\n\nSpesso gli altri vedono i nostri punti di forza meglio di noi."
         }
       ],
       exercise: {
-        instruction: "Identifica 3 decisioni ripetitive che potresti trasformare in sistemi o deleghe.",
+        instruction: "Trova il Tuo Stile: raccogli i tuoi esercizi precedenti e cerca il pattern.",
         steps: [
-          "Elenca le decisioni che prendi più spesso",
-          "Chiediti: questa decisione potrebbe essere un sistema?",
-          "Per ogni decisione, scrivi chi potrebbe prenderla o come automatizzarla",
-          "Scegli una da trasformare questa settimana"
-        ]
+          "Raccogli quello che hai scritto nei giorni scorsi",
+          "Cerca cosa hanno in comune. Quale modo di operare emerge?",
+          "Completa: \"Quando do il meglio di me come punto di riferimento, tendo a...\"",
+          "(Opzionale) Chiedi a 1-2 persone: \"Secondo te, qual è il mio punto di forza nelle situazioni difficili?\""
+        ],
+        duration: "7 minuti"
       },
-      keyTakeaway: "Il leader che vuole fare tutto, finisce per fare poco. Il leader che costruisce sistemi, moltiplica il suo impatto."
+      keyTakeaway: "Il tuo stile di leadership è unico. Non è un difetto, è la tua forza."
     },
     7: {
-      title: "La Comunicazione che Costruisce",
-      subtitle: "Comunicare per costruire insieme, non per convincere",
+      title: "Da Qui in Avanti",
+      subtitle: "Come continuare dopo questa settimana",
+      principle: "7 giorni sono l'inizio, non la fine. Per consolidare una capacità servono settimane e mesi di pratica. Ma adesso hai la base — sai cosa cercare e come cercarlo.",
       sections: [
         {
-          icon: "💬",
-          title: "Due Modi di Comunicare",
-          content: "C'è chi comunica per convincere e chi comunica per costruire. Il primo cerca di vincere. Il secondo cerca di creare insieme.\n\nLa comunicazione che costruisce non è soft o accomodante. È chiara, diretta, ma orientata a costruire qualcosa insieme piuttosto che a dimostrare chi ha ragione.",
+          icon: "🚗",
+          title: "Come Imparare a Guidare",
+          content: "Imparare qualcosa di nuovo è come imparare a guidare. La prima settimana di scuola guida non ti rende un pilota esperto — ti dà le basi. Poi, guidando tutti i giorni per mesi, quelle basi diventano automatiche.",
           highlights: [
-            "Convincere crea resistenza, costruire crea alleati",
-            "Ascoltare è la forma più potente di leadership",
-            "Le domande aprono, le affermazioni chiudono"
+            "Giorno 1: Sai che sei già punto di riferimento",
+            "Giorno 2: Conosci la voce che sminuisce",
+            "Giorno 3: Sai cos'è la lucidità",
+            "Giorno 4: Sai cos'è il coraggio",
+            "Giorno 5: Sai cos'è l'equilibrio",
+            "Giorno 6: Conosci il tuo stile naturale"
           ]
         },
         {
-          icon: "🤝",
-          title: "Il Potere delle Domande",
-          content: "Le domande giuste costruiscono più delle risposte giuste. Quando chiedi \"cosa ne pensi?\" o \"come lo vedi tu?\", non stai cedendo potere — lo stai moltiplicando.\n\nLa leadership autentica non ha paura di non sapere. Ha il coraggio di costruire insieme."
+          icon: "📈",
+          title: "La Regola del Consolidamento",
+          content: "21 giorni di pratica consapevole: l'abitudine inizia a formarsi.\n90 giorni: l'abitudine diventa stabile.\n12 mesi: trasformazione profonda.\n\nNon devi correre. Devi essere costante."
         }
       ],
       exercise: {
-        instruction: "Nella tua prossima conversazione importante, sostituisci un'affermazione con una domanda.",
+        instruction: "Il Tuo Piano per Continuare: definisci 3 obiettivi e il primo passo.",
         steps: [
-          "Identifica una conversazione importante in arrivo",
-          "Prepara una domanda invece di un'affermazione",
-          "Durante la conversazione, ascolta davvero la risposta",
-          "Nota come cambia la dinamica"
-        ]
+          "Scrivi 3 obiettivi su come vuoi essere quando sei punto di riferimento",
+          "Per ogni obiettivo, identifica quale capacità richiede (Lucidità, Coraggio, Equilibrio)",
+          "Scegli una strada: da solo o con Vitaeology",
+          "Scrivi: \"Il mio primo passo concreto questa settimana è: ___\""
+        ],
+        duration: "10 minuti"
       },
-      keyTakeaway: "Il leader autentico non convince — costruisce insieme. E per costruire insieme, prima ascolta."
+      keyTakeaway: "Hai le basi. Ora serve pratica costante. Il leader che cerchi è già dentro di te."
     }
   },
 
   // =====================================================
   // OLTRE GLI OSTACOLI - 7 giorni
+  // Fonte: LEAD_MAGNET v5 - "7 Giorni per Risvegliare il Risolutore che Hai Dentro"
   // =====================================================
   ostacoli: {
     1: {
-      title: "Il Filtro dei Pattern",
-      subtitle: "Riconoscere gli schemi che già hai risolto",
+      title: "Hai Già Risolto Cose Difficili",
+      subtitle: "La prova che non ti manca nulla",
+      principle: "Risolvere problemi è una capacità che hai già. L'hai usata molte volte senza farci caso. Il punto non è imparare qualcosa di nuovo — è usare consapevolmente ciò che già sai fare.",
       sections: [
         {
-          icon: "🔄",
-          title: "I Problemi Si Ripetono",
-          content: "Ogni problema che affronti ha delle somiglianze con problemi che hai già risolto. Il cervello tende a vedere ogni sfida come unica, ma i pattern sottostanti si ripetono.\n\nRiconoscere questi pattern significa accedere a soluzioni che già possiedi.",
-          highlights: [
-            "Il 90% dei problemi segue schemi ricorrenti",
-            "Hai già risolto versioni di questo problema",
-            "Vedere il pattern accelera la soluzione"
-          ]
+          icon: "🚲",
+          title: "Come Andare in Bicicletta",
+          content: "Pensa a quando impari ad andare in bicicletta. La prima volta qualcuno ti tiene. Poi, a un certo punto, pedali da solo. Non è successo nulla di magico — semplicemente il tuo corpo ha capito come stare in equilibrio.\n\nLa capacità di risolvere problemi funziona allo stesso modo. Non è qualcosa che devi \"imparare da zero\". È qualcosa che il tuo cervello già fa — in certi momenti, in certe condizioni."
         },
         {
-          icon: "🧠",
-          title: "Attivare il Filtro",
-          content: "Quando un problema arriva, prima di cercare soluzioni nuove, chiediti: ho già affrontato qualcosa di simile?\n\nNon cercare situazioni identiche. Cerca strutture simili. Un conflitto con un fornitore può avere la stessa struttura di un conflitto familiare risolto anni fa."
+          icon: "🔍",
+          title: "La Prova",
+          content: "Pensa all'ultimo anno. Sicuramente c'è stata almeno una situazione difficile che hai risolto. Magari una scadenza impossibile che hai rispettato. Un conflitto che hai gestito. Un problema tecnico che hai sistemato.\n\nIn quel momento, non hai chiamato un esperto di \"problem solving\". Hai usato la tua testa, le tue risorse, la tua esperienza. Hai risolto.",
+          highlights: [
+            "Non usi questa capacità sempre",
+            "A volte ti blocchi su problemi più piccoli di quelli che hai già risolto",
+            "Questa settimana impari ad attivarla quando serve — non solo quando capita"
+          ]
         }
       ],
       exercise: {
-        instruction: "Prendi un problema attuale e cerca almeno 3 situazioni passate con pattern simili.",
+        instruction: "Raccogli le Prove: trova 3 situazioni difficili che hai risolto negli ultimi 2-3 anni.",
         steps: [
-          "Descrivi il problema attuale in una frase",
-          "Estrai la struttura (es: \"conflitto su priorità\")",
-          "Cerca nella memoria situazioni con struttura simile",
-          "Nota come le hai risolte"
-        ]
+          "Pensa agli ultimi 2-3 anni della tua vita professionale",
+          "Trova 3 situazioni difficili che hai risolto tu",
+          "Per ogni situazione, scrivi: qual era il problema, cosa hai fatto che ha funzionato, come ti sei sentito dopo"
+        ],
+        duration: "5 minuti"
       },
-      keyTakeaway: "Non stai affrontando un problema nuovo. Stai affrontando un pattern che conosci già."
+      keyTakeaway: "La capacità risolutiva esiste in te. Queste prove lo dimostrano."
     },
     2: {
-      title: "Il Filtro dei Segnali",
-      subtitle: "Decodificare ciò che non viene detto",
+      title: "Vedere gli Schemi",
+      subtitle: "Come trovare la causa invece di rincorrere i sintomi",
+      principle: "I problemi non sono eventi isolati. Sono manifestazioni di schemi che si ripetono. Chi vede lo schema, risolve la causa. Chi non lo vede, rincorre i sintomi all'infinito.",
       sections: [
         {
-          icon: "📡",
-          title: "Oltre le Parole",
-          content: "Le parole dicono una cosa, i segnali ne dicono un'altra. Il tono, il timing, le esitazioni, il linguaggio del corpo — tutti comunicano informazioni che le parole nascondono.\n\nIl risolutore efficace legge entrambi i livelli.",
-          highlights: [
-            "Il 70% della comunicazione è non verbale",
-            "I segnali rivelano le vere priorità",
-            "L'intuizione è pattern recognition veloce"
-          ]
+          icon: "🚰",
+          title: "Il Rubinetto che Perde",
+          content: "Immagina di avere un rubinetto che perde. Ogni giorno metti uno straccio sotto per asciugare l'acqua. Ogni giorno lo straccio si bagna. Potresti andare avanti anni così.\n\nOppure puoi chiederti: \"Perché perde?\" Scopri che la guarnizione è usurata. Cambi la guarnizione. Il rubinetto smette di perdere. Non ti serve più lo straccio.\n\nLo straccio risolveva il *sintomo* (acqua per terra). La guarnizione risolve la *causa* (perché c'è acqua per terra)."
         },
         {
-          icon: "👁️",
-          title: "Allenare la Lettura",
-          content: "Nella prossima conversazione, nota cosa non viene detto. Quali argomenti vengono evitati? Dove c'è esitazione? Cosa dice il corpo mentre la bocca parla?"
+          icon: "🔄",
+          title: "Il Filtro dei Pattern",
+          content: "Questo vale per tutti i problemi. Un collaboratore sbaglia è un sintomo. Un collaboratore sbaglia sempre lo stesso tipo di errore è uno schema.\n\nLo schema rivela la causa (forse non ha capito una procedura, o gli manca uno strumento). Chi vede lo schema può intervenire sulla causa.",
+          highlights: [
+            "Il cervello umano è fatto per vedere schemi",
+            "Lo fa già in automatico in molte situazioni",
+            "La domanda \"Quale schema si ripete?\" accende questa capacità"
+          ]
         }
       ],
       exercise: {
-        instruction: "In una conversazione oggi, nota 3 segnali non verbali e cosa potrebbero significare.",
+        instruction: "Cerca lo Schema: prendi un problema attuale e cerca il pattern che si ripete.",
         steps: [
-          "Scegli una conversazione da osservare",
-          "Nota tono, pause, postura, sguardo",
-          "Chiediti: cosa stanno comunicando questi segnali?",
-          "Verifica (se appropriato) con una domanda aperta"
-        ]
+          "Pensa a un problema attuale che ti dà fastidio",
+          "Scrivi: \"Il problema è: ___\"",
+          "Fatti questa domanda: \"Se fossi un detective, quale schema ripetuto scoprirei?\"",
+          "Cerca: è già successo in passato? C'è un momento specifico in cui si presenta? C'è qualcuno coinvolto ogni volta?",
+          "Scrivi: \"Lo schema che vedo è: ___\""
+        ],
+        duration: "5 minuti"
       },
-      keyTakeaway: "La verità sta nei segnali. Chi sa leggerli risolve problemi che altri non vedono."
+      keyTakeaway: "I pattern si ripetono. Vederli ti permette di intervenire sulla causa, non sui sintomi."
     },
     3: {
-      title: "Il Filtro delle Risorse",
-      subtitle: "Combinare ciò che già possiedi",
+      title: "Leggere Tra le Righe",
+      subtitle: "Quello che non ti dicono ma puoi capire",
+      principle: "Le persone comunicano molto più di quello che dicono a parole. Il tono, i tempi, gli argomenti evitati — sono tutti segnali. Chi li legge, capisce cosa succede davvero.",
       sections: [
         {
-          icon: "🎒",
-          title: "L'Inventario Nascosto",
-          content: "Hai più risorse di quelle che pensi. Competenze trasferibili, relazioni, esperienze, tempo nascosto, energia non utilizzata.\n\nIl problema non è la mancanza di risorse. È la mancanza di consapevolezza delle risorse che già hai.",
+          icon: "🗣️",
+          title: "\"Va Tutto Bene\"",
+          content: "Hai presente quando qualcuno ti dice \"Va tutto bene\" ma dal tono capisci che non è vero? Oppure quando ti dicono \"Non c'è fretta\" e il giorno dopo ti sollecitano?\n\nLe parole sono solo una parte della comunicazione. Spesso la parte più piccola.",
           highlights: [
-            "Le risorse sono spesso invisibili finché non le cerchi",
-            "Ogni competenza è trasferibile in qualche modo",
-            "Le relazioni sono la risorsa più sottovalutata"
+            "Un cliente dice \"Ci pensiamo\" → Probabilmente ha obiezioni non espresse",
+            "Un capo dice \"Buon lavoro\" senza guardarti negli occhi → Forse non è così soddisfatto",
+            "Un collega evita sempre un certo argomento → Probabilmente c'è un problema lì"
           ]
         },
         {
-          icon: "🔧",
-          title: "La Combinazione Creativa",
-          content: "La creatività non è inventare dal nulla. È combinare in modo nuovo ciò che esiste. Quali risorse hai che, combinate diversamente, potrebbero risolvere il tuo problema attuale?"
+          icon: "📡",
+          title: "Il Filtro dei Segnali",
+          content: "Non si tratta di \"leggere nel pensiero\". Si tratta di prestare attenzione a segnali che sono lì, visibili, ma che spesso ignoriamo perché ci concentriamo solo sulle parole.\n\nI segnali da osservare: tono delle email, tempi di risposta, argomenti evitati, linguaggio del corpo."
         }
       ],
       exercise: {
-        instruction: "Fai un inventario di tutte le tue risorse per una sfida specifica.",
+        instruction: "Ascolta i Segnali: scegli una relazione professionale importante e decodifica i segnali.",
         steps: [
-          "Scegli una sfida attuale",
-          "Elenca: competenze, relazioni, esperienze, tempo, energia, denaro",
-          "Per ogni categoria, cerca risorse \"nascoste\"",
-          "Prova a combinare risorse in modo nuovo"
-        ]
+          "Scegli una relazione professionale importante (capo, cliente, collaboratore, socio)",
+          "Fatti questa domanda: \"Cosa mi sta comunicando che non dice a parole?\"",
+          "Analizza: tono delle email, tempi di risposta, argomenti evitati, linguaggio del corpo",
+          "Scrivi un'ipotesi: \"Credo che questa persona stia comunicando che: ___\""
+        ],
+        duration: "5 minuti"
       },
-      keyTakeaway: "La soluzione spesso non richiede nuove risorse, ma nuove combinazioni di quelle esistenti."
+      keyTakeaway: "Quello che non viene detto spesso è più importante di quello che viene detto."
     },
     4: {
-      title: "La Spirale delle Convinzioni",
-      subtitle: "Trasformare i Traditori Silenziosi",
+      title: "Trovare Risorse Nascoste",
+      subtitle: "Hai più carte in mano di quelle che vedi",
+      principle: "Quando affronti un problema, la prima reazione è \"non ho abbastanza risorse\". Quasi sempre è falso. Ci sono risorse che non stai vedendo.",
       sections: [
         {
-          icon: "🌀",
-          title: "I Traditori Silenziosi",
-          content: "Le convinzioni limitanti operano in silenzio. \"Non sono abbastanza bravo\", \"È troppo rischioso\", \"Non è il momento giusto\". Sembrano ragionevoli, ma sono sabotatrici.\n\nLe chiamiamo Traditori Silenziosi perché tradiscono il tuo potenziale mentre sembrano proteggerti.",
-          highlights: [
-            "Le convinzioni limitanti sembrano protezione",
-            "In realtà limitano il campo delle possibilità",
-            "Riconoscerle è il primo passo per trasformarle"
-          ]
+          icon: "🍳",
+          title: "Il Frigo che Sembra Vuoto",
+          content: "Immagina di dover cucinare una cena per degli ospiti che arrivano tra un'ora. Apri il frigo, lo guardi, e pensi \"Non c'è niente.\"\n\nMa se guardi meglio — se apri i cassetti, controlli il freezer, guardi nella dispensa — trovi ingredienti che non ricordavi di avere.\n\nIl problema non era che non c'era cibo. È che non avevi guardato dappertutto."
         },
         {
-          icon: "🔓",
-          title: "La Domanda Liberatoria",
-          content: "Per ogni convinzione limitante, chiediti: cosa sarebbe possibile se questa convinzione non fosse vera?\n\nNon devi credere che sia falsa. Basta immaginare cosa cambierebbe se lo fosse."
+          icon: "🔍",
+          title: "Il Filtro delle Risorse",
+          content: "La prima reazione è vedere cosa manca: tempo, soldi, competenze, persone. Ma se guardi meglio, trovi risorse che non consideravi.",
+          highlights: [
+            "Relazioni: qualcuno che conosco può aiutare?",
+            "Competenze trasferibili: cosa so fare che si applica anche qui?",
+            "Cose già fatte: ho già risolto qualcosa di simile?",
+            "Tempo nascosto: cosa sto facendo che potrei smettere di fare?",
+            "Errori passati: cosa ho imparato dai tentativi falliti?"
+          ]
         }
       ],
       exercise: {
-        instruction: "Identifica il tuo principale Traditore Silenzioso e sfidalo con la domanda liberatoria.",
+        instruction: "L'Inventario Completo: fai un inventario di tutte le risorse che hai per il tuo problema.",
         steps: [
-          "Nota i pensieri che precedono il blocco",
-          "Identifica la convinzione sottostante",
-          "Chiediti: cosa sarebbe possibile senza questa convinzione?",
-          "Scrivi almeno 3 possibilità"
-        ]
+          "Riprendi il problema che hai identificato",
+          "Fatti questa domanda: \"Cosa ho GIÀ che posso usare?\"",
+          "Rispondi per ogni categoria: Persone, Competenze, Cose già fatte, Strumenti, Tempo, Errori passati",
+          "Cerchia almeno 3 risorse che non avevi considerato inizialmente"
+        ],
+        duration: "7 minuti"
       },
-      keyTakeaway: "Le convinzioni che ti limitano oggi sono state protezioni ieri. Oggi puoi scegliere diversamente."
+      keyTakeaway: "Chi risolve problemi meglio non ha più risorse. Vede più risorse."
     },
     5: {
-      title: "Il Sistema A.Z.I.O.N.E.",
-      subtitle: "Da pensiero a risultato in 6 passi",
-      sections: [
-        {
-          icon: "📋",
-          title: "La Struttura dell'Azione",
-          content: "A.Z.I.O.N.E. è un sistema per trasformare idee in risultati:\n\n• Analizza la situazione\n• Zero in sull'obiettivo specifico\n• Identifica le risorse disponibili\n• Organizza i passi necessari\n• Naviga gli ostacoli prevedibili\n• Esegui con focus",
-          highlights: [
-            "La struttura libera, non limita",
-            "Ogni passo prepara il successivo",
-            "L'esecuzione è l'ultimo passo, non il primo"
-          ]
-        },
-        {
-          icon: "🎯",
-          title: "Un Solo Obiettivo",
-          content: "Il sistema funziona quando hai un obiettivo chiaro. Se l'obiettivo è vago, il sistema non può aiutarti. Prima di usare A.Z.I.O.N.E., chiediti: cosa voglio ottenere specificamente?"
-        }
-      ],
-      exercise: {
-        instruction: "Applica A.Z.I.O.N.E. a un obiettivo specifico che vuoi raggiungere.",
-        steps: [
-          "Definisci l'obiettivo in una frase specifica",
-          "Completa ogni lettera del sistema",
-          "Identifica il primo passo concreto",
-          "Metti in agenda quando lo farai"
-        ]
-      },
-      keyTakeaway: "Non ti mancano le idee. Ti manca un sistema per trasformarle in risultati."
-    },
-    6: {
-      title: "Il Sistema C.R.E.S.C.I.T.A.",
-      subtitle: "Estrarre valore da ogni esperienza",
-      sections: [
-        {
-          icon: "🌱",
-          title: "L'Apprendimento Sistematico",
-          content: "C.R.E.S.C.I.T.A. è un sistema per imparare da ogni esperienza:\n\n• Cosa è successo?\n• Risultato: cosa ho ottenuto?\n• Emozioni: cosa ho provato?\n• Strategia: cosa ha funzionato?\n• Correzione: cosa cambierei?\n• Integrazione: cosa porto con me?\n• Trasferimento: dove altro posso applicarlo?\n• Azione: cosa faccio ora?",
-          highlights: [
-            "Ogni esperienza contiene valore estraibile",
-            "L'errore diventa investimento",
-            "L'apprendimento è cumulativo"
-          ]
-        },
-        {
-          icon: "📚",
-          title: "Nessuna Esperienza Sprecata",
-          content: "Applicando C.R.E.S.C.I.T.A., trasformi anche i fallimenti in apprendimento. Non esiste più \"ho sbagliato\", solo \"ho imparato\"."
-        }
-      ],
-      exercise: {
-        instruction: "Applica C.R.E.S.C.I.T.A. a un'esperienza recente (positiva o negativa).",
-        steps: [
-          "Scegli un'esperienza degli ultimi 7 giorni",
-          "Rispondi a ogni lettera del sistema",
-          "Identifica l'apprendimento chiave",
-          "Decidi dove applicarlo"
-        ]
-      },
-      keyTakeaway: "Il risolutore non fallisce mai. O riesce, o impara. E imparare è riuscire."
-    },
-    7: {
-      title: "Il Risolutore Integrato",
-      subtitle: "Unire tutti gli strumenti in un sistema personale",
+      title: "Il Metodo 5 Minuti",
+      subtitle: "Come usare tutto insieme sotto pressione",
+      principle: "I tre filtri funzionano meglio insieme, in sequenza. Schema → Segnali → Risorse → Azione. Il tutto in 5 minuti, anche sotto pressione.",
       sections: [
         {
           icon: "🧩",
-          title: "L'Integrazione",
-          content: "In questi 7 giorni hai scoperto strumenti potenti: i 3 Filtri (Pattern, Segnali, Risorse), la Spirale delle Convinzioni, i Sistemi A.Z.I.O.N.E. e C.R.E.S.C.I.T.A.\n\nOra è il momento di integrarli nel tuo modo personale di affrontare i problemi.",
-          highlights: [
-            "Gli strumenti funzionano insieme",
-            "Ogni problema suggerisce quale usare",
-            "La pratica rende tutto automatico"
-          ]
+          title: "I Tre Ingredienti",
+          content: "Nei giorni scorsi hai visto tre strumenti separati:\n1. Cercare schemi (Giorno 2)\n2. Leggere segnali (Giorno 3)\n3. Trovare risorse (Giorno 4)\n\nSono come tre ingredienti di una ricetta. Separati sono utili. Insieme sono potenti."
         },
         {
-          icon: "🔮",
-          title: "Il Tuo Processo",
-          content: "Non devi usare tutti gli strumenti ogni volta. Devi sapere quale usare quando. Con la pratica, la scelta diventa istintiva."
+          icon: "⚡",
+          title: "La Sequenza",
+          content: "1. Prima lo schema: Capisci la struttura del problema (non solo i sintomi)\n2. Poi i segnali: Capisci cosa succede davvero (non solo quello che viene detto)\n3. Poi le risorse: Capisci cosa hai per agire (non solo cosa manca)\n4. Infine l'azione: Decidi il prossimo passo",
+          highlights: [
+            "Il cervello si blocca senza struttura",
+            "Le domande specifiche guidano il pensiero",
+            "Un'azione imperfetta è meglio di un'analisi infinita"
+          ]
         }
       ],
       exercise: {
-        instruction: "Crea il tuo \"protocollo problemi\" personale combinando gli strumenti che ti risuonano di più.",
+        instruction: "Il Metodo Completo: usa un timer di 5 minuti e applica tutti e tre i filtri.",
         steps: [
-          "Rivedi tutti gli strumenti dei 7 giorni",
-          "Scegli i 3-4 che ti sembrano più utili",
-          "Scrivi una sequenza personale",
-          "Testa il protocollo su un problema attuale"
-        ]
+          "Scegli un problema attuale. Imposta il timer a 5 minuti",
+          "MINUTO 1-2 — SCHEMA: \"Quale schema si ripete?\"",
+          "MINUTO 2-3 — SEGNALI: \"Cosa non viene detto? Quali bisogni nascosti?\"",
+          "MINUTO 3-4 — RISORSE: \"Cosa ho già che posso usare?\"",
+          "MINUTO 4-5 — AZIONE: \"Qual è UNA cosa concreta che faccio entro domani?\""
+        ],
+        duration: "5 minuti esatti"
       },
-      keyTakeaway: "Non impari a risolvere problemi. Ricordi che già sai farlo. Ora hai gli strumenti per farlo consapevolmente."
+      keyTakeaway: "Hai già le idee. Ora hai anche un sistema per trasformarle in risultati."
+    },
+    6: {
+      title: "I Traditori Silenziosi",
+      subtitle: "La voce che ti ferma prima di iniziare",
+      principle: "A volte vedi lo schema, i segnali e le risorse — ma resti bloccato. In quel caso il problema non è fuori. È una voce dentro che ti frena. Se la riconosci, perde potere.",
+      sections: [
+        {
+          icon: "🎭",
+          title: "Le Credenze Travestite",
+          content: "Hai presente quella vocina che dice \"E se va male?\" oppure \"Chi ti credi di essere?\" oppure \"Meglio non rischiare\"?\n\nQuella voce ha uno scopo: proteggerti. Cerca di evitarti fallimenti, figuracce, dolore. Il problema è che lo fa bloccandoti — anche quando agire sarebbe la cosa giusta."
+        },
+        {
+          icon: "🌀",
+          title: "I 3 Traditori Silenziosi",
+          content: "Le convinzioni limitanti operano in silenzio. I tre Traditori più comuni sono:\n\n• Il Paralizzante: \"Devo avere tutte le informazioni prima di agire\"\n• Il Timoroso: \"È meglio non agire che agire e sbagliare\"\n• Il Procrastinatore: \"Devo aspettare il momento perfetto\"\n\nSembrano ragionevoli, ma sono sabotatrici. Le chiamiamo Traditori Silenziosi perché tradiscono il tuo potenziale mentre sembrano proteggerti.",
+          highlights: [
+            "Il Paralizzante si traveste da \"prudenza\"",
+            "Il Timoroso si traveste da \"pensiero strategico\"",
+            "Il Procrastinatore si traveste da \"timing intelligente\""
+          ]
+        }
+      ],
+      exercise: {
+        instruction: "Riconosci e Rispondi: identifica quale Traditore ti ha bloccato e rispondigli.",
+        steps: [
+          "Riprendi l'azione del Giorno 5. L'hai già fatta?",
+          "Se no, chiediti: quale credenza mi ha fermato?",
+          "Identifica il Traditore (Paralizzante, Timoroso, Procrastinatore)",
+          "Rispondi per iscritto: \"Ti ho riconosciuto, [nome]. Ma la verità è: [il contrario]\"",
+          "Fai l'azione prima di sera"
+        ],
+        duration: "5 minuti"
+      },
+      keyTakeaway: "I Traditori perdono potere quando li riconosci. Smascherarli è metà della vittoria."
+    },
+    7: {
+      title: "Da Qui in Avanti",
+      subtitle: "Come continuare dopo questa settimana",
+      principle: "Gli strumenti si arrugginiscono se non li usi. L'unico modo per mantenere attiva la capacità risolutiva è usarla su problemi reali, regolarmente.",
+      sections: [
+        {
+          icon: "🗣️",
+          title: "Come una Lingua Straniera",
+          content: "Pensa a una lingua straniera che hai studiato a scuola. Se l'hai usata spesso, la ricordi ancora. Se non l'hai mai usata dopo, l'hai dimenticata.\n\nLa capacità risolutiva funziona allo stesso modo. Non basta \"sapere\" che esistono gli strumenti. Bisogna usarli.",
+          highlights: [
+            "Giorno 1: La prova che sai già risolvere",
+            "Giorno 2: Come vedere schemi ripetuti",
+            "Giorno 3: Come leggere segnali non detti",
+            "Giorno 4: Come trovare risorse nascoste",
+            "Giorno 5: Come usare tutto in 5 minuti",
+            "Giorno 6: Come riconoscere le voci che bloccano"
+          ]
+        },
+        {
+          icon: "📈",
+          title: "La Regola del Mantenimento",
+          content: "Uso frequente = rafforzamento\nNon uso = indebolimento\n\nNon serve usarli ogni giorno. Ma ogni volta che affronti un problema non banale, hai un'occasione per praticare."
+        }
+      ],
+      exercise: {
+        instruction: "Il Piano per Continuare: definisci il prossimo problema e quando userai il metodo.",
+        steps: [
+          "Scrivi: \"Il prossimo problema che affronterò con il metodo è: ___\"",
+          "Decidi quando userai il metodo (minimo: ogni settimana su un problema)",
+          "Imposta un promemoria nel calendario",
+          "Scrivi: \"Il mio primo passo questa settimana è: ___\""
+        ],
+        duration: "10 minuti"
+      },
+      keyTakeaway: "Hai gli strumenti. Ora usali regolarmente. Il risolutore è già in te — attivalo."
     }
   },
 
   // =====================================================
   // MICROFELICITÀ - 7 giorni
+  // Fonte: LEAD_MAGNET v5 - "7 Giorni per Notare il Benessere che Già Ti Attraversa"
   // =====================================================
   microfelicita: {
     1: {
-      title: "Il Segnale Debole",
-      subtitle: "I micro-momenti esistono. Basta riconoscerli.",
+      title: "Quello che Ti Perdi Ogni Giorno",
+      subtitle: "La scoperta più semplice (e più ignorata)",
+      principle: "Ogni giorno ti succedono piccole cose piacevoli. Non le noti. Il problema non è che mancano — è che non le registri.",
       sections: [
         {
-          icon: "✨",
-          title: "La Felicità Invisibile",
-          content: "Ogni giorno, decine di momenti positivi ti attraversano. Il calore del sole sulla pelle. L'aroma del caffè. Un sorriso inaspettato. Sono segnali deboli — esistono, ma il cervello li ignora.\n\nDaniel Kahneman ha scoperto che il cervello è \"velcro per il negativo, teflon per il positivo\". Le esperienze negative si attaccano, quelle positive scivolano via.",
-          highlights: [
-            "Perdi il 90% delle esperienze positive",
-            "Non perché non esistono, ma perché non le noti",
-            "7 secondi di attenzione cambiano tutto"
-          ]
+          icon: "📱",
+          title: "Guardare il Telefono",
+          content: "Immagina di camminare per strada guardando il telefono. Intorno a te ci sono persone, vetrine, alberi, un cielo interessante. Ma tu non vedi niente di tutto questo perché stai fissando lo schermo.\n\nQuesto è quello che succede con le piccole cose piacevoli della giornata. Ci sono — ma il tuo cervello è \"occupato\" con altro."
         },
         {
-          icon: "🔍",
-          title: "L'Esercizio del Notare",
-          content: "Oggi il tuo unico compito è notare. Non cercare grandi momenti. Cerca i piccoli segnali di benessere che normalmente ignori.\n\nQuando ne noti uno, fermati. Guardalo. Sentilo. Dagli 7 secondi."
+          icon: "🧠",
+          title: "Perché Succede",
+          content: "Il cervello umano è fatto per notare i problemi. È una questione di sopravvivenza: i nostri antenati che notavano i pericoli vivevano più a lungo. Quelli distratti venivano mangiati dai predatori.",
+          highlights: [
+            "50 piccole cose piacevoli al giorno → ne noti 2-3",
+            "10 cose negative al giorno → le noti tutte e 10",
+            "Fine giornata: \"Non è successo niente di buono\""
+          ]
         }
       ],
       exercise: {
-        instruction: "Oggi nota almeno 3 micro-momenti positivi e dai a ciascuno 7 secondi di attenzione.",
+        instruction: "Il Primo Inventario: stasera, prima di dormire, trova 3 momenti piacevoli della giornata.",
         steps: [
-          "Ogni volta che senti qualcosa di piacevole, fermati",
-          "Nota cosa stai provando e dove lo senti nel corpo",
-          "Resta con quella sensazione per 7 secondi",
-          "A fine giornata, scrivi i 3 momenti"
-        ]
+          "Siediti un momento e ripensa alla giornata di oggi",
+          "Cerca 3 momenti piacevoli, anche piccoli (un sapore, un silenzio, un sorriso, una luce)",
+          "Scrivi i 3 momenti brevemente",
+          "Se ne trovi meno di 3, è normale — il radar non è ancora calibrato"
+        ],
+        duration: "3 minuti"
       },
-      keyTakeaway: "La microfelicità non si costruisce. Si nota. È già lì. Basta fermarsi a vederla."
+      keyTakeaway: "Il benessere non manca. Non lo noti. Questa settimana impari a vederlo."
     },
     2: {
-      title: "Il Metodo R.A.D.A.R.",
-      subtitle: "7 secondi per intercettare il benessere",
+      title: "La Matematica dei Momenti",
+      subtitle: "Perché piccolo batte grande",
+      principle: "Il benessere quotidiano dipende da quante volte stai bene, non da quanto intensamente stai bene. 50 momenti piccoli battono 4 momenti grandi.",
       sections: [
         {
-          icon: "📡",
-          title: "R.A.D.A.R. — Il Tuo Sistema di Intercettazione",
-          content: "R.A.D.A.R. è un metodo in 5 passi per catturare la microfelicità:\n\n• Riconosci — nota che qualcosa di positivo sta accadendo\n• Amplifica — espandi la sensazione nel corpo\n• Dedica — dai 7 secondi di attenzione piena\n• Ancora — collegalo a un valore o significato\n• Registra — lascia che si imprima nella memoria",
+          icon: "🔢",
+          title: "Facciamo i Conti",
+          content: "Pensa ai momenti \"grandi\" di felicità: vacanze, promozioni, matrimoni. Quanti ne hai in un anno? 3-4.\n\nOra pensa ai momenti \"piccoli\": un caffè buono, una risata, un lavoro finito, un bel tramonto. Quanti potrebbero essercene ogni giorno? 50? 100?",
           highlights: [
-            "Riconoscere richiede allenamento",
-            "Amplificare moltiplica l'effetto",
-            "7 secondi creano memoria"
+            "Momenti grandi: ~4 all'anno",
+            "Momenti piccoli (se li noti): ~18.000 all'anno",
+            "Se il tuo benessere dipende solo dai grandi: 4 occasioni",
+            "Se noti i piccoli: migliaia di occasioni"
           ]
         },
         {
-          icon: "⏱️",
-          title: "Perché 7 Secondi?",
-          content: "La ricerca mostra che servono circa 12-20 secondi per creare una traccia memorabile. Ma 7 secondi di attenzione intenzionale sono sufficienti per iniziare il processo.\n\nSenza quei 7 secondi, il momento positivo svanisce come non fosse mai esistito."
+          icon: "🧠",
+          title: "L'Adattamento",
+          content: "C'è di più: i momenti grandi perdono effetto nel tempo. Il cervello si abitua. Una promozione ti rende felice per qualche settimana, poi torni allo stato normale.\n\nI momenti piccoli, invece, funzionano ogni volta — se li noti consapevolmente. Non c'è adattamento perché ogni momento è nuovo."
         }
       ],
       exercise: {
-        instruction: "Pratica R.A.D.A.R. almeno 3 volte oggi.",
+        instruction: "Intercetta in Tempo Reale: oggi intercetta 3 momenti piacevoli mentre succedono.",
         steps: [
-          "Quando noti un momento piacevole, di' internamente \"R.A.D.A.R.\"",
-          "Segui tutti e 5 i passi",
-          "Nota come cambia la tua esperienza",
-          "Ripeti almeno 3 volte durante la giornata"
-        ]
+          "Oggi l'obiettivo è intercettare 3 momenti *mentre succedono* — non alla sera a memoria",
+          "Quando succede qualcosa di piacevole: fermati mentalmente per 3 secondi",
+          "Di' a te stesso: \"Questo. Proprio questo.\"",
+          "Non analizzare. Solo nota.",
+          "Alla sera, conta: quanti ne hai intercettati?"
+        ],
+        duration: "3 secondi per volta, tutto il giorno"
       },
-      keyTakeaway: "R.A.D.A.R. non crea felicità. La intercetta. La felicità c'è già — R.A.D.A.R. ti aiuta a coglierla."
+      keyTakeaway: "La felicità non è trovare eventi straordinari. È notare eventi ordinari."
     },
     3: {
-      title: "I Cinque Canali",
-      subtitle: "La microfelicità arriva da più sensi",
+      title: "I 5 Passi per Notare",
+      subtitle: "R.A.D.A.R.: un metodo semplice da usare sempre",
+      principle: "R.A.D.A.R. = Rileva → Accogli → Distingui → Amplifica → Resta. Cinque passi per notare un momento piacevole mentre accade. Tempo totale: 10 secondi.",
       sections: [
         {
-          icon: "🌈",
-          title: "Oltre le Emozioni",
-          content: "La maggior parte delle persone cerca la felicità solo nelle emozioni. Ma la microfelicità arriva da 5 canali diversi:\n\n• Visivo — luce, colori, bellezza\n• Uditivo — suoni, silenzio, musica\n• Corporeo — sensazioni fisiche piacevoli\n• Olfattivo — profumi, sapori\n• Cognitivo — pensieri piacevoli, intuizioni",
-          highlights: [
-            "Se cerchi solo emozioni, perdi l'80%",
-            "Ogni canale offre opportunità costanti",
-            "Alcuni canali sono più \"tuoi\" di altri"
-          ]
+          icon: "⭐",
+          title: "La Stella Cadente",
+          content: "I momenti piacevoli piccoli durano pochissimo. Se non li \"catturi\" nei primi 2 secondi, svaniscono.\n\nÈ come vedere una stella cadente. Se non guardi subito, l'hai persa. Non puoi dire \"la guarderò dopo\" — dopo non c'è più."
         },
         {
-          icon: "🎨",
-          title: "Il Tuo Canale Dominante",
-          content: "Quale canale ti parla di più? Alcune persone sono più visive, altre più fisiche, altre più cognitive.\n\nScopri il tuo canale dominante, ma non ignorare gli altri. Sono tutti porte verso la microfelicità."
+          icon: "📡",
+          title: "I 5 Passi di R.A.D.A.R.",
+          content: "R = Rileva: Noti che sta succedendo qualcosa di piacevole (1-2 sec)\nA = Accogli: Lasci che la sensazione arrivi senza giudicarla (1-2 sec)\nD = Distingui: Ti chiedi \"Questo mi nutre o mi sabota?\" (1-2 sec)\nA = Amplifica: Mantieni l'attenzione per qualche secondo in più (3-5 sec)\nR = Resta: Lasci che il focus si ritiri naturalmente (2 sec)",
+          highlights: [
+            "Tempo totale: ~10 secondi",
+            "Sembra semplice — e lo è",
+            "La semplicità è il punto: deve essere così facile che lo fai davvero"
+          ]
         }
       ],
       exercise: {
-        instruction: "Oggi nota almeno un momento di microfelicità da ogni canale.",
+        instruction: "Le Prime 3 Prove: applica R.A.D.A.R. a 3 occasioni specifiche oggi.",
         steps: [
-          "Crea una lista con i 5 canali",
-          "Durante la giornata, cerca momenti da ogni canale",
-          "Segna cosa hai notato",
-          "Identifica il tuo canale più attivo"
-        ]
+          "OCCASIONE 1: Il primo caffè/tè della giornata — applica R.A.D.A.R.",
+          "OCCASIONE 2: Un momento di silenzio/pausa — applica R.A.D.A.R.",
+          "OCCASIONE 3: Qualsiasi momento a tua scelta — applica R.A.D.A.R.",
+          "Alla sera, scrivi: quante volte l'ho fatto? È stato facile o difficile?"
+        ],
+        duration: "30 secondi totali, distribuiti"
       },
-      keyTakeaway: "Hai 5 porte sempre aperte verso il benessere. Oggi le stai usando tutte?"
+      keyTakeaway: "R.A.D.A.R.: Rileva, Accogli, Distingui, Amplifica, Resta. 10 secondi per catturare il benessere."
     },
     4: {
-      title: "Gli Ostacoli Invisibili",
-      subtitle: "Cosa ti fa perdere i segnali positivi",
+      title: "Gli Errori da Evitare",
+      subtitle: "Se non funziona, probabilmente stai facendo uno di questi",
+      principle: "R.A.D.A.R. può fallire per 4 errori comuni. Tutti facili da correggere una volta che li conosci.",
       sections: [
         {
-          icon: "🚧",
-          title: "I 4 Ladri di Microfelicità",
-          content: "Quattro ostacoli comuni impediscono di notare la microfelicità:\n\n• La Fretta — non c'è mai tempo per fermarsi\n• Il Perfezionismo — niente è mai abbastanza\n• L'Abitudine — si dà per scontato ciò che c'è\n• La Distrazione — la mente è sempre altrove",
-          highlights: [
-            "Riconoscere l'ostacolo è metà della soluzione",
-            "Ognuno ha il suo ladro principale",
-            "Piccoli aggiustamenti fanno grandi differenze"
-          ]
+          icon: "🔍",
+          title: "Errore 1 e 2",
+          content: "ERRORE 1: Cercare invece di notare\nSintomo: \"Dove sono questi momenti? Non li trovo!\"\nCorrezione: Non cercare. Aspetta con attenzione aperta.\n\nERRORE 2: Aspettare sensazioni forti\nSintomo: \"Non sento niente di speciale\"\nCorrezione: Abbassa la soglia. Se qualcosa è piacevole anche solo un po', conta."
         },
         {
-          icon: "🔑",
-          title: "L'Antidoto",
-          content: "Per la Fretta: micro-pause intenzionali.\nPer il Perfezionismo: accettare il \"abbastanza buono\".\nPer l'Abitudine: lo sguardo del principiante.\nPer la Distrazione: ancore nel presente."
+          icon: "🧠",
+          title: "Errore 3 e 4",
+          content: "ERRORE 3: Analizzare troppo\nSintomo: \"Ma cosa significa? Perché lo provo?\"\nCorrezione: Prima senti (3 secondi), poi eventualmente analizza.\n\nERRORE 4: Fare R.A.D.A.R. solo in momenti speciali\nSintomo: \"Lo faccio quando sono rilassato\"\nCorrezione: Fallo durante attività normali — lavarsi le mani, camminare, sedersi."
         }
       ],
       exercise: {
-        instruction: "Identifica il tuo principale \"ladro di microfelicità\" e prova il suo antidoto.",
+        instruction: "Correggi il Tuo Errore: identifica quale errore ti appartiene di più e applica la correzione.",
         steps: [
-          "Rivedi i 4 ostacoli",
-          "Identifica quello che ti riguarda di più",
-          "Leggi l'antidoto corrispondente",
-          "Applicalo almeno 3 volte oggi"
-        ]
+          "Identifica il tuo errore principale (1, 2, 3 o 4)",
+          "Scrivi: \"Il mio errore è: ___\"",
+          "Applica la correzione specifica per quell'errore",
+          "Scegli UN momento ordinario della giornata e applica R.A.D.A.R. lì"
+        ],
+        duration: "5 minuti + pratica"
       },
-      keyTakeaway: "Non ti manca la felicità. Hai solo ostacoli che ti impediscono di vederla."
+      keyTakeaway: "Gli errori sono normali. Correggerli è semplice. Non smettere di provare."
     },
     5: {
-      title: "Nutriente vs Sabotante",
-      subtitle: "Non ogni piacere ti fa bene",
+      title: "Quando la Giornata È Dura",
+      subtitle: "R.A.D.A.R. non cancella il negativo — lo bilancia",
+      principle: "La microfelicità non nega i problemi. Aggiunge quello che manca. Anche nelle giornate difficili, qualcosa di piacevole c'è — solo che non lo vedi perché il negativo prende tutta l'attenzione.",
       sections: [
         {
-          icon: "⚖️",
-          title: "Due Tipi di Piacere",
-          content: "Esistono piaceri che nutrono e piaceri che sabotano. Sembrano uguali nel momento, ma lasciano tracce diverse.\n\nIl piacere nutriente costruisce. Lascia energia, chiarezza, soddisfazione.\nIl piacere sabotante compensa. Lascia vuoto, stanchezza, voglia di altro.",
-          highlights: [
-            "Il piacere nutriente dura oltre il momento",
-            "Il piacere sabotante richiede sempre più dose",
-            "Non è moralismo — è riconoscimento"
-          ]
+          icon: "🔦",
+          title: "Il Riflettore",
+          content: "Quando hai una giornata difficile, il cervello fa zoom sul negativo. Tutto il resto scompare dalla vista.\n\nÈ come avere un riflettore puntato su una cosa: quella cosa la vedi benissimo, ma tutto il resto della stanza è al buio."
         },
         {
-          icon: "🧭",
-          title: "Il Test del Dopo",
-          content: "Come ti senti 10 minuti dopo? Se ti senti bene, era nutriente. Se ti senti vuoto o peggio, era sabotante.\n\nNon devi eliminare i piaceri sabotanti. Devi saperli riconoscere per scegliere consapevolmente."
+          icon: "📊",
+          title: "Completare il Quadro",
+          content: "R.A.D.A.R. non serve a *negare* il negativo. Non ti sto dicendo \"pensa positivo\". Il negativo è reale e merita attenzione.\n\nR.A.D.A.R. serve a *completare* il quadro. A vedere tutto, non solo il negativo.\n\nÈ come fare un bilancio economico: se scrivi solo le spese, pensi \"Sono in rosso!\" Ma non hai scritto le entrate. Il bilancio vero include entrambe.",
+          highlights: [
+            "\"Nonostante\" non \"invece di\"",
+            "I due coesistono",
+            "R.A.D.A.R. aggiunge le \"entrate\" che il cervello ha ignorato"
+          ]
         }
       ],
       exercise: {
-        instruction: "Analizza 3 piaceri ricorrenti e classifica ciascuno come nutriente o sabotante.",
+        instruction: "Completa il Quadro: riconosci il negativo E cerca il positivo nonostante tutto.",
         steps: [
-          "Elenca 3 attività che ti danno piacere",
-          "Per ognuna, ricorda come ti sei sentito dopo",
-          "Classifica: nutriente o sabotante?",
-          "Decidi se cambiare qualcosa"
-        ]
+          "Scrivi cosa di negativo è successo oggi: \"Oggi il negativo è stato: ___\"",
+          "Domanda chiave: \"Nonostante tutto, cosa di positivo è successo?\"",
+          "Trova almeno 2 cose positive (anche piccole: ho respirato, ero al sicuro, qualcuno mi ha considerato)",
+          "Scrivi entrambi: il negativo E il positivo"
+        ],
+        duration: "5 minuti"
       },
-      keyTakeaway: "La microfelicità autentica nutre. Se dopo ti senti vuoto, era solo una compensazione."
+      keyTakeaway: "R.A.D.A.R. non nega il negativo. Lo bilancia con quello che c'è già di positivo."
     },
     6: {
-      title: "L'Amplificazione",
-      subtitle: "10 secondi per creare una traccia che resta",
+      title: "Come Farlo Diventare Automatico",
+      subtitle: "Il segreto per non dimenticare",
+      principle: "Un'abitudine nuova diventa automatica quando la colleghi a qualcosa che già fai. Non devi \"ricordarti\" di fare R.A.D.A.R. — il gesto che già fai te lo ricorda.",
+      sections: [
+        {
+          icon: "💊",
+          title: "Le Vitamine Vicino al Caffè",
+          content: "La maggior parte delle buone intenzioni fallisce per un motivo semplice: dipendono dalla memoria. \"Mi ricorderò di farlo\" — ma poi non te lo ricordi.\n\nMolte persone tengono le vitamine vicino al caffè. Perché? Perché il caffè lo bevono già ogni mattina senza pensarci. Vedere le vitamine mentre fanno il caffè glielo ricorda."
+        },
+        {
+          icon: "🔗",
+          title: "La Formula",
+          content: "Invece di \"mi ricorderò di fare R.A.D.A.R.\" dici:\n\n\"Quando [cosa che già faccio], faccio R.A.D.A.R.\"\n\nX può essere: bere il primo caffè, sederti in macchina, lavarti le mani dopo pranzo, aprire il laptop, chiudere la porta di casa.\n\nDopo qualche settimana, il collegamento diventa automatico.",
+          highlights: [
+            "Un solo aggancio è sufficiente",
+            "Meglio una cosa tutti i giorni che cinque cose per tre giorni",
+            "Puoi aggiungere un promemoria visivo (post-it, nota telefono)"
+          ]
+        }
+      ],
+      exercise: {
+        instruction: "Scegli il Tuo Aggancio: collega R.A.D.A.R. a qualcosa che già fai ogni giorno.",
+        steps: [
+          "Scorri la lista: caffè, sederti in macchina, aprire il laptop, lavarti le mani, inizio pasto, uscire di casa, tornare a casa",
+          "Scegli UNA di queste azioni",
+          "Scrivi: \"Quando ___, faccio R.A.D.A.R.\"",
+          "Fallo oggi almeno una volta"
+        ],
+        duration: "3 minuti + 1 pratica"
+      },
+      keyTakeaway: "Notare è il primo passo. Amplificare trasforma l'istante in memoria duratura."
+    },
+    7: {
+      title: "Da Qui in Avanti",
+      subtitle: "Come continuare dopo questa settimana",
+      principle: "7 giorni sono l'inizio. Servono 21 giorni perché qualcosa diventi abitudine. Servono mesi perché diventi parte di te. Ma adesso hai tutto quello che serve per iniziare.",
       sections: [
         {
           icon: "📈",
-          title: "Dall'Istante alla Memoria",
-          content: "Un momento positivo dura un secondo. Ma puoi trasformarlo in una memoria che dura anni. Il segreto è l'amplificazione intenzionale.\n\nQuando noti qualcosa di bello, non lasciarlo scivolare via. Tienilo. Espandilo. Rendilo tuo.",
+          title: "Le Fasi",
+          content: "Imparare qualcosa di nuovo ha fasi precise:\n\n• Base (Giorni 1-7): Capisci il concetto, fai le prime prove\n• Abitudine (Giorni 8-28): Lo fai regolarmente, a volte dimentichi\n• Automatismo (Mesi 2-3): Lo fai senza pensarci\n• Trasformazione (Mesi 4-12): Fa parte di come sei\n\nSei alla fine della fase Base. Hai capito cosa fare. Ora serve pratica.",
           highlights: [
-            "10 secondi di amplificazione = memoria duratura",
-            "Coinvolgere il corpo intensifica l'effetto",
-            "Collegare a valori crea significato"
+            "Giorno 1: I momenti ci sono — non li noti",
+            "Giorno 2: Tanti piccoli battono pochi grandi",
+            "Giorno 3: R.A.D.A.R. in 5 passi",
+            "Giorno 4: 4 errori comuni",
+            "Giorno 5: Non nega il negativo",
+            "Giorno 6: Collegalo a qualcosa che già fai"
           ]
         },
-        {
-          icon: "💫",
-          title: "Le 3 Tecniche di Amplificazione",
-          content: "1. Respira nel momento — inspira mentre senti la sensazione positiva\n2. Espandi nel corpo — senti dove la sensazione è più forte e lasciala diffondere\n3. Collega a un valore — chiediti: cosa significa questo per me?"
-        }
-      ],
-      exercise: {
-        instruction: "Pratica le 3 tecniche di amplificazione su almeno 3 momenti positivi oggi.",
-        steps: [
-          "Nota un momento positivo",
-          "Inspira profondamente mentre lo senti",
-          "Lascia la sensazione espandersi nel corpo",
-          "Chiediti: cosa significa questo per me?",
-          "Resta per 10 secondi pieni"
-        ]
-      },
-      keyTakeaway: "Non basta notare. Bisogna amplificare. Altrimenti il momento svanisce come non fosse mai esistito."
-    },
-    7: {
-      title: "Il Radar Integrato",
-      subtitle: "Unire tutto in una pratica quotidiana",
-      sections: [
         {
           icon: "🎯",
-          title: "Il Sistema Completo",
-          content: "In questi 7 giorni hai imparato:\n\n• I Segnali Deboli esistono e vanno cercati\n• R.A.D.A.R. li intercetta\n• I 5 Canali moltiplicano le opportunità\n• Gli Ostacoli vanno riconosciuti\n• Nutriente vs Sabotante guida le scelte\n• L'Amplificazione crea memoria",
-          highlights: [
-            "Il sistema diventa automatico con la pratica",
-            "5 minuti al giorno bastano",
-            "La qualità della vita cambia notando"
-          ]
-        },
-        {
-          icon: "🌅",
-          title: "La Pratica Quotidiana",
-          content: "Mattina: imposta l'intenzione di notare.\nDurante il giorno: R.A.D.A.R. sui momenti positivi.\nSera: ricorda 3 momenti e amplificali.\n\nQuesto è tutto. Semplice, ma trasformativo."
+          title: "La Regola per i Prossimi 21 Giorni",
+          content: "Fai R.A.D.A.R. almeno una volta al giorno, collegato all'aggancio che hai scelto.\n\nNon deve essere perfetto. Deve essere *costante*.\n\nObiettivo: 21 X di fila. Se salti un giorno, ricomincia il conteggio."
         }
       ],
       exercise: {
-        instruction: "Progetta la tua pratica quotidiana di microfelicità.",
+        instruction: "Il Piano per le Prossime 3 Settimane: conferma il tuo aggancio e inizia il conteggio.",
         steps: [
-          "Scegli un momento mattutino per l'intenzione",
-          "Identifica 3 momenti in cui praticare R.A.D.A.R.",
-          "Scegli un momento serale per la revisione",
-          "Scrivi il tuo piano in una frase"
-        ]
+          "Conferma il tuo aggancio: \"Quando ___, faccio R.A.D.A.R.\"",
+          "Imposta un modo per tenere traccia (calendario, app, nota)",
+          "Obiettivo: 21 X di fila",
+          "Rispondi: \"Se notassi 10 momenti positivi in più ogni giorno, come cambierebbe la mia settimana?\""
+        ],
+        duration: "10 minuti"
       },
-      keyTakeaway: "La felicità non è un obiettivo da raggiungere. È una realtà da notare. Oggi inizia a vederla."
+      keyTakeaway: "Il benessere che cerchi ti sta già attraversando. Ora sai come notarlo."
     }
   }
 };
 
-// Helper per ottenere il contenuto di un giorno specifico
-export function getDayContent(challenge: ChallengeType, day: DayNumber): DayContent {
-  return DAY_CONTENT[challenge][day];
+// Helper function per ottenere il contenuto di un giorno
+export function getDayContent(challengeType: ChallengeType, dayNumber: DayNumber): DayContent | null {
+  return DAY_CONTENT[challengeType]?.[dayNumber] || null;
 }
 
-// Helper per ottenere tutti i giorni di una challenge
-export function getChallengeDays(challenge: ChallengeType): DayContent[] {
-  return Object.values(DAY_CONTENT[challenge]);
+// Helper function per ottenere tutti i titoli dei giorni di una challenge
+export function getChallengeDayTitles(challengeType: ChallengeType): { day: DayNumber; title: string }[] {
+  const challenge = DAY_CONTENT[challengeType];
+  if (!challenge) return [];
+
+  return Object.entries(challenge).map(([day, content]) => ({
+    day: parseInt(day) as DayNumber,
+    title: content.title
+  }));
 }

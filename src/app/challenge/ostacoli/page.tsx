@@ -4,25 +4,25 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-// Varianti per A/B Testing
+// Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_2_OSTACOLI.md
 const VARIANTS = {
   A: {
-    headline: "Risveglia il Risolutore che Hai Dentro",
-    subheadline: "7 giorni per riconoscere la tua capacità di trasformare problemi in opportunità",
-    cta: "Inizia la Sfida Gratuita",
-    hook: "I 3 Segreti del Risolutore: Filtri, Convinzioni, Azione"
+    headline: "Sai Già Risolvere Problemi. L'Hai Dimenticato.",
+    subheadline: "In 7 giorni riattivi la capacità di risolvere situazioni difficili — quella che hai già usato decine di volte senza farci caso.",
+    cta: "Inizia la Challenge Gratuita",
+    hook: "Gratis. 7 email in 7 giorni. Nessun impegno."
   },
   B: {
-    headline: "Ogni Problema Ha una Soluzione. Tu la Conosci Già.",
-    subheadline: "La sfida che ti mostra come applicare ciò che già sai fare",
-    cta: "Scarica la Sfida",
-    hook: "Pattern + Segnali + Risorse = Il tuo sistema risolutivo personale"
+    headline: "Non Impari a Risolvere. Ricordi Come Si Fa.",
+    subheadline: "7 giorni per riattivare il risolutore che opera già in te — con strumenti che hai già usato.",
+    cta: "Inizia Ora",
+    hook: "5-7 minuti al giorno. Strumenti immediati, non teoria."
   },
   C: {
-    headline: "Non Impari a Risolvere. Ricordi Come Si Fa.",
-    subheadline: "7 giorni per riattivare il risolutore che opera già in te",
+    headline: "Risveglia il Risolutore che Hai Dentro",
+    subheadline: "Non è qualcosa che devi imparare da zero. È qualcosa che il tuo cervello già fa — in certi momenti.",
     cta: "Voglio Iniziare",
-    hook: "Dal sistema A.Z.I.O.N.E. testato in 50 anni di imprenditoria"
+    hook: "I 3 Filtri + Il Metodo 5 Minuti + I 3 Traditori Silenziosi"
   }
 };
 
@@ -242,17 +242,18 @@ function OstacoliLandingContent() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-12">
-            I 6 Strumenti che Riconoscerai:
+            Cosa Scoprirai in 7 Giorni
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { day: '1', title: 'Filtro dei Pattern', desc: 'Riconosci schemi che hai già risolto' },
-              { day: '2', title: 'Filtro dei Segnali', desc: 'Decodifica ciò che non viene detto' },
-              { day: '3', title: 'Filtro delle Risorse', desc: 'Combina ciò che già possiedi' },
-              { day: '4', title: 'Spirale delle Convinzioni', desc: 'Trasforma i Traditori Silenziosi' },
-              { day: '5', title: 'Sistema A.Z.I.O.N.E.', desc: 'Da pensiero a risultato in 6 passi' },
-              { day: '6', title: 'Sistema C.R.E.S.C.I.T.A.', desc: 'Estrai valore da ogni esperienza' },
+              { day: '1', title: 'Le Prove che Hai', desc: 'Le situazioni difficili che hai già risolto' },
+              { day: '2', title: 'Vedere gli Schemi', desc: 'Come trovare la causa invece di rincorrere i sintomi' },
+              { day: '3', title: 'Leggere Tra le Righe', desc: 'Quello che non ti dicono ma puoi capire' },
+              { day: '4', title: 'Risorse Nascoste', desc: 'Hai più carte in mano di quelle che vedi' },
+              { day: '5', title: 'Il Metodo 5 Minuti', desc: 'Schema → Segnali → Risorse → Azione, anche sotto pressione' },
+              { day: '6', title: 'I 3 Traditori Silenziosi', desc: 'Le credenze che ti bloccano travestite da prudenza' },
+              { day: '7', title: 'Da Qui in Avanti', desc: 'Come continuare da solo dopo questa settimana' },
             ].map((item) => (
               <div key={item.day} className="flex gap-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
                 <div className="flex-shrink-0 w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center">
@@ -277,8 +278,7 @@ function OstacoliLandingContent() {
           <h3 className="text-2xl font-bold text-white mb-2">Fernando Marongiu</h3>
           <p className="text-emerald-400 mb-4">Fondatore Vitaeology</p>
           <p className="text-slate-300 max-w-xl mx-auto">
-            &quot;Il risolutore non è qualcuno che ha più risposte. È qualcuno che ha imparato
-            a vedere pattern dove altri vedono caos. Questa sfida ti mostra i tuoi.&quot;
+            &quot;In mezzo secolo di lavoro ho affrontato crisi finanziarie, conflitti con soci, clienti che sparivano. Ho imparato che la capacità di risolvere problemi non si compra a un corso — si risveglia.&quot;
           </p>
         </div>
       </section>

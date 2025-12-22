@@ -4,25 +4,25 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-// Varianti per A/B Testing
+// Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_3_MICROFELICITA.md
 const VARIANTS = {
   A: {
-    headline: "Il Benessere che Già Ti Attraversa",
-    subheadline: "7 giorni per riconoscere le microfelicità che perdi ogni giorno",
-    cta: "Inizia la Sfida Gratuita",
-    hook: "R.A.D.A.R.: 7 secondi per intercettare ciò che sfugge"
+    headline: "Il Benessere che Cerchi Ti Sta Già Attraversando",
+    subheadline: "In 7 giorni impari a notare le piccole cose positive che succedono ogni giorno — e che il tuo cervello ignora.",
+    cta: "Inizia la Challenge Gratuita",
+    hook: "Gratis. 7 email in 7 giorni. Nessun impegno."
   },
   B: {
     headline: "Smetti di Cercare. Inizia a Notare.",
     subheadline: "La felicità non si costruisce. Si riconosce. Una microfelicità alla volta.",
-    cta: "Scarica la Sfida",
-    hook: "Basato sulla ricerca di Daniel Kahneman, applicato alla vita digitale"
+    cta: "Inizia Ora",
+    hook: "5-7 minuti al giorno. Nessuna filosofia astratta — solo pratica."
   },
   C: {
-    headline: "7 Secondi per Cambiare la Tua Giornata",
-    subheadline: "Non servono meditazioni di ore. Serve notare ciò che già c'è.",
+    headline: "50 Momenti Positivi al Giorno. Quanti ne Noti?",
+    subheadline: "Non è che non succede niente di buono. È che non lo noti. Questa sfida cambia questo.",
     cta: "Voglio Iniziare",
-    hook: "Il metodo che trasforma momenti invisibili in benessere consapevole"
+    hook: "Il metodo R.A.D.A.R. in 5 passi per intercettare il benessere"
   }
 };
 
@@ -221,17 +221,18 @@ function MicrofelicitaLandingContent() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-12">
-            In 7 Giorni Scoprirai:
+            Cosa Scoprirai in 7 Giorni
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { day: '1', title: 'Il Segnale Debole', desc: 'I micro-momenti esistono. Basta riconoscerli.' },
-              { day: '2', title: 'Il Metodo R.A.D.A.R.', desc: '7 secondi per intercettare il benessere' },
-              { day: '3', title: 'I Cinque Canali', desc: 'La microfelicità arriva da più sensi' },
-              { day: '4', title: 'Gli Ostacoli Invisibili', desc: 'Cosa ti fa perdere i segnali positivi' },
-              { day: '5', title: 'Nutriente vs Sabotante', desc: 'Non ogni piacere ti fa bene' },
-              { day: '6', title: 'L\'Amplificazione', desc: '10 secondi per creare una traccia che resta' },
+              { day: '1', title: 'Il Primo Inventario', desc: 'Quello che ti perdi ogni giorno senza accorgertene' },
+              { day: '2', title: 'La Matematica', desc: 'Perché 50 momenti piccoli battono 4 momenti grandi' },
+              { day: '3', title: 'R.A.D.A.R.', desc: 'I 5 passi per notare in tempo reale: Rileva-Accogli-Distingui-Amplifica-Resta' },
+              { day: '4', title: 'Gli Errori da Evitare', desc: 'I 4 modi in cui R.A.D.A.R. fallisce — e come correggerli' },
+              { day: '5', title: 'Quando È Dura', desc: 'R.A.D.A.R. non nega il negativo — lo bilancia' },
+              { day: '6', title: 'Farlo Automatico', desc: 'Come collegarlo a qualcosa che già fai ogni giorno' },
+              { day: '7', title: 'Da Qui in Avanti', desc: '21 giorni per consolidare l\'abitudine' },
             ].map((item) => (
               <div key={item.day} className="flex gap-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
                 <div className="flex-shrink-0 w-12 h-12 bg-violet-500/20 rounded-full flex items-center justify-center">
@@ -283,8 +284,7 @@ function MicrofelicitaLandingContent() {
           <h3 className="text-2xl font-bold text-white mb-2">Fernando Marongiu</h3>
           <p className="text-violet-400 mb-4">Fondatore Vitaeology</p>
           <p className="text-slate-300 max-w-xl mx-auto">
-            &quot;La microfelicità è già presente nella tua giornata. Non c&apos;è nulla da creare.
-            C&apos;è da imparare a riconoscere ciò che accade mentre accade.&quot;
+            &quot;Per decenni ho cercato la felicità nei risultati grandi. Ho capito che la qualità della vita quotidiana non dipende dai momenti straordinari — dipende da quanti momenti ordinari noti.&quot;
           </p>
         </div>
       </section>

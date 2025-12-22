@@ -1,5 +1,5 @@
 // Dati Discovery per le 3 Challenge - 7 giorni ciascuna
-// Importati dal documento CONFERME_SCOPERTA_21_GIORNI.md
+// AGGIORNATO per allinearsi con LEAD_MAGNET_CHALLENGE_VITAEOLOGY_v5_PULITO.md
 
 export type ChallengeType = 'leadership' | 'ostacoli' | 'microfelicita';
 export type DayNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -21,7 +21,7 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
   leadership: {
     1: {
       title: "Prima di Passare al Giorno 2",
-      intro: "Rifletti su quello che hai scoperto oggi.",
+      intro: "Rifletti su quello che hai scoperto oggi su \"Quello che Già Fai Senza Accorgertene\".",
       questions: [
         {
           text: "Ripensando alla settimana scorsa, hai trovato momenti in cui qualcuno si è rivolto a te per un consiglio o una decisione?",
@@ -32,18 +32,18 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
           ]
         },
         {
-          text: "Come ti sei sentito nel cercare questi momenti?",
+          text: "L'analogia della strada ti ha fatto vedere qualcosa di nuovo?",
           options: [
-            { value: 'A', text: "Sorpreso: non ci avevo mai pensato così" },
-            { value: 'B', text: "Curioso: voglio capire meglio cosa significa" },
-            { value: 'C', text: "Scettico: non sono sicuro che contino davvero" }
+            { value: 'A', text: "Sì, ora vedo che sono già \"quello che sa la strada\" in alcuni momenti" },
+            { value: 'B', text: "In parte, ci devo riflettere ancora" },
+            { value: 'C', text: "Non sono sicuro di cosa significhi per me" }
           ]
         },
         {
           text: "Cosa ti ha colpito di più del contenuto di oggi?",
           options: [
-            { value: 'A', text: "L'analogia della strada: sono già \"quello che sa la strada\" in alcuni momenti" },
-            { value: 'B', text: "L'idea che la leadership sia già presente, solo non notata" },
+            { value: 'A', text: "L'idea che la leadership sia già presente, solo non notata" },
+            { value: 'B', text: "Il confronto con gli occhiali sul naso che non trovi" },
             { value: 'C', text: "L'esercizio pratico: mi ha fatto vedere le cose diversamente" }
           ]
         }
@@ -52,30 +52,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     2: {
       title: "Prima di Passare al Giorno 3",
-      intro: "Rifletti sulla tua esperienza con il Fuoco Interno.",
+      intro: "Rifletti sulla \"Voce che Sminuisce\" che hai esplorato oggi.",
       questions: [
         {
-          text: "Pensando alle tue motivazioni principali, cosa ti spinge di più ad agire?",
+          text: "Hai riconosciuto la voce che dice \"Non conta\", \"È stato fortuna\", \"Chiunque l'avrebbe fatto\"?",
           options: [
-            { value: 'A', text: "Qualcosa che voglio costruire o creare" },
-            { value: 'B', text: "Qualcosa da cui voglio allontanarmi" },
-            { value: 'C', text: "Una combinazione di entrambi, a seconda della situazione" }
+            { value: 'A', text: "Sì, la riconosco bene — la sento spesso" },
+            { value: 'B', text: "A volte sì, ma non sempre" },
+            { value: 'C', text: "Non sono sicuro di averla identificata" }
           ]
         },
         {
-          text: "Hai identificato un momento questa settimana in cui hai agito spinto dal \"verso\" anziché dal \"via da\"?",
+          text: "L'immagine del salvadanaio bucato ti è stata utile?",
           options: [
-            { value: 'A', text: "Sì, e mi sono sentito diverso — più centrato" },
-            { value: 'B', text: "Ci sto ancora pensando" },
-            { value: 'C', text: "Non ancora, ma ora so cosa cercare" }
+            { value: 'A', text: "Sì, spiega perfettamente perché non ricordo i miei successi" },
+            { value: 'B', text: "È un'immagine interessante, ci penserò" },
+            { value: 'C', text: "Non mi ci ritrovo completamente" }
           ]
         },
         {
-          text: "Come cambierebbe la tua giornata se agissi più spesso dal \"verso\"?",
+          text: "Hai provato l'esercizio del doppio standard (Marco)?",
           options: [
-            { value: 'A', text: "Avrei più energia e meno stress" },
-            { value: 'B', text: "Prenderei decisioni più allineate con chi sono" },
-            { value: 'C', text: "Non sono sicuro, ma sono curioso di scoprirlo" }
+            { value: 'A', text: "Sì, e ho notato che giudico me stesso più duramente" },
+            { value: 'B', text: "L'ho fatto in parte, voglio approfondire" },
+            { value: 'C', text: "Non ancora, lo farò domani" }
           ]
         }
       ],
@@ -83,30 +83,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     3: {
       title: "Prima di Passare al Giorno 4",
-      intro: "Rifletti sul Coraggio che Costruisce.",
+      intro: "Rifletti sulla Lucidità: \"Vedere le Cose Come Sono\".",
       questions: [
         {
-          text: "Qual è la tua reazione più frequente di fronte a una sfida importante?",
+          text: "C'è qualcosa che stai evitando di guardare nella tua vita professionale?",
           options: [
-            { value: 'A', text: "Cerco di capire cosa posso costruire dalla situazione" },
-            { value: 'B', text: "Mi concentro su come resistere e non cedere" },
-            { value: 'C', text: "Dipende dalla situazione" }
+            { value: 'A', text: "Sì, e oggi ho iniziato a guardarla" },
+            { value: 'B', text: "Forse, ma non sono sicuro di cosa sia" },
+            { value: 'C', text: "No, credo di vedere le cose abbastanza chiaramente" }
           ]
         },
         {
-          text: "Hai notato situazioni in cui \"resistere\" ti ha tenuto bloccato?",
+          text: "L'immagine del parabrezza sporco ti ha aiutato a capire la lucidità?",
           options: [
-            { value: 'A', text: "Sì, ora vedo che avrei potuto costruire invece di resistere" },
-            { value: 'B', text: "Forse, ci devo pensare meglio" },
-            { value: 'C', text: "No, credo che resistere sia stato necessario" }
+            { value: 'A', text: "Sì, capisco che a volte vedo distorto" },
+            { value: 'B', text: "In parte, voglio capire meglio cosa distorce la mia visione" },
+            { value: 'C', text: "Non sono sicuro di avere il \"parabrezza sporco\"" }
           ]
         },
         {
-          text: "Cosa significa per te \"coraggio che costruisce\"?",
+          text: "Hai fatto l'esercizio \"Accendi la Luce su Qualcosa\"?",
           options: [
-            { value: 'A', text: "Usare le difficoltà come materiale da costruzione" },
-            { value: 'B', text: "Andare avanti anche quando è difficile" },
-            { value: 'C', text: "Scegliere di creare anziché solo sopravvivere" }
+            { value: 'A', text: "Sì, ho scritto cosa sto evitando e cosa temo di scoprire" },
+            { value: 'B', text: "L'ho iniziato, ma non l'ho completato" },
+            { value: 'C', text: "Non ancora, ci penserò stasera" }
           ]
         }
       ],
@@ -114,30 +114,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     4: {
       title: "Prima di Passare al Giorno 5",
-      intro: "Rifletti sulla Dedizione che Serve.",
+      intro: "Rifletti sul Coraggio: \"Agire Anche con la Paura\".",
       questions: [
         {
-          text: "Quando ti dedichi a un progetto, cosa ti guida di più?",
+          text: "Hai identificato il \"passo più piccolo\" che richiede coraggio?",
           options: [
-            { value: 'A', text: "Il valore che creo per gli altri" },
-            { value: 'B', text: "La soddisfazione personale del risultato" },
-            { value: 'C', text: "La necessità di portare a termine ciò che ho iniziato" }
+            { value: 'A', text: "Sì, e l'ho già fatto oggi" },
+            { value: 'B', text: "Sì, ma non l'ho ancora fatto" },
+            { value: 'C', text: "Non sono sicuro di quale sia" }
           ]
         },
         {
-          text: "Hai mai scambiato l'ostinazione per dedizione?",
+          text: "L'esempio della prima guida da soli ti è stato utile?",
           options: [
-            { value: 'A', text: "Sì, e ora capisco la differenza" },
-            { value: 'B', text: "Probabilmente sì, in alcune situazioni" },
-            { value: 'C', text: "Non credo, ma ci rifletterò" }
+            { value: 'A', text: "Sì, capisco che il coraggio non è assenza di paura" },
+            { value: 'B', text: "In parte, ci devo riflettere" },
+            { value: 'C', text: "Non mi ci ritrovo, le mie paure sono diverse" }
           ]
         },
         {
-          text: "Come riconosci quando la tua dedizione sta servendo davvero?",
+          text: "Cosa hai scoperto sulla relazione tra paura e azione?",
           options: [
-            { value: 'A', text: "Vedo risultati positivi per le persone coinvolte" },
-            { value: 'B', text: "Mi sento allineato con i miei valori" },
-            { value: 'C', text: "Sto ancora imparando a riconoscerlo" }
+            { value: 'A', text: "La paura diminuisce agendo, non aspettando" },
+            { value: 'B', text: "Che il coraggio si allena con piccoli passi" },
+            { value: 'C', text: "Sto ancora elaborando cosa significa per me" }
           ]
         }
       ],
@@ -145,30 +145,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     5: {
       title: "Prima di Passare al Giorno 6",
-      intro: "Rifletti sui Principi Stabili.",
+      intro: "Rifletti sull'Equilibrio: \"Non Esaurirti\".",
       questions: [
         {
-          text: "Quali sono i principi che non negozieresti mai?",
+          text: "Hai mappato cosa ti ricarica e cosa ti scarica?",
           options: [
-            { value: 'A', text: "Li ho chiari e mi guidano nelle decisioni difficili" },
-            { value: 'B', text: "Ne ho alcuni, ma potrei definirli meglio" },
-            { value: 'C', text: "Non ci ho mai pensato in modo strutturato" }
+            { value: 'A', text: "Sì, ho fatto la lista completa" },
+            { value: 'B', text: "Ho iniziato, ma voglio approfondire" },
+            { value: 'C', text: "Non ancora, lo farò stasera" }
           ]
         },
         {
-          text: "Come distingui ciò che deve restare fisso da ciò che può adattarsi?",
+          text: "L'analogia della batteria del telefono ti ha aiutato?",
           options: [
-            { value: 'A', text: "I valori restano fissi, le strategie si adattano" },
-            { value: 'B', text: "Decido caso per caso" },
-            { value: 'C', text: "A volte faccio fatica a distinguere" }
+            { value: 'A', text: "Sì, capisco che devo gestire la mia energia" },
+            { value: 'B', text: "In parte, ma tendo a ignorare i segnali di scarica" },
+            { value: 'C', text: "Non mi ci ritrovo, non sento di avere problemi di energia" }
           ]
         },
         {
-          text: "Hai vissuto situazioni in cui i tuoi principi sono stati messi alla prova?",
+          text: "Hai scelto UNA azione per riequilibrare?",
           options: [
-            { value: 'A', text: "Sì, e sono contento di averli mantenuti" },
-            { value: 'B', text: "Sì, e a volte ho ceduto — ma ho imparato" },
-            { value: 'C', text: "Non ricordo situazioni così significative" }
+            { value: 'A', text: "Sì, ridurrò qualcosa che mi scarica" },
+            { value: 'B', text: "Sì, aumenterò qualcosa che mi ricarica" },
+            { value: 'C', text: "Non ancora, ci sto pensando" }
           ]
         }
       ],
@@ -176,65 +176,65 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     6: {
       title: "Prima di Passare al Giorno 7",
-      intro: "Rifletti sulla Delega e i Sistemi.",
+      intro: "Rifletti su \"Il Tuo Modo Personale\" di essere leader.",
       questions: [
         {
-          text: "Quanto ti risulta facile delegare compiti importanti?",
+          text: "Hai identificato il tuo stile naturale tra i 5 tipi?",
           options: [
-            { value: 'A', text: "Lo faccio regolarmente, con fiducia" },
-            { value: 'B', text: "Lo faccio, ma controllo molto" },
-            { value: 'C', text: "Preferisco fare io, per sicurezza" }
+            { value: 'A', text: "Sì, mi riconosco principalmente in uno stile" },
+            { value: 'B', text: "Ho un mix, ma vedo un pattern dominante" },
+            { value: 'C', text: "Non sono sicuro, devo rifletterci ancora" }
           ]
         },
         {
-          text: "Hai sistemi che funzionano anche senza la tua presenza diretta?",
+          text: "Guardando i tuoi esercizi dei giorni scorsi, quale modo di operare emerge?",
           options: [
-            { value: 'A', text: "Sì, diversi — e mi danno libertà" },
-            { value: 'B', text: "Alcuni, ma c'è margine di miglioramento" },
-            { value: 'C', text: "Non ancora, ma capisco l'importanza" }
+            { value: 'A', text: "Tendo a essere lucido e anticipare i problemi" },
+            { value: 'B', text: "Tendo a creare connessione e armonia" },
+            { value: 'C', text: "Tendo a decidere e sbloccare situazioni" }
           ]
         },
         {
-          text: "Cosa ti frena di più nel delegare?",
+          text: "L'analogia dei cantanti con stili diversi ti ha aiutato?",
           options: [
-            { value: 'A', text: "La paura che non sia fatto bene" },
-            { value: 'B', text: "Il tempo necessario per formare qualcuno" },
-            { value: 'C', text: "Niente di particolare, è solo questione di abitudine" }
+            { value: 'A', text: "Sì, capisco che non devo copiare nessuno" },
+            { value: 'B', text: "In parte, ma a volte mi confronto con altri" },
+            { value: 'C', text: "Ci devo pensare, non ho ancora elaborato" }
           ]
         }
       ],
       ctaText: "PROSEGUI AL GIORNO 7 →"
     },
     7: {
-      title: "Completa la Sfida Leadership",
-      intro: "Ultima riflessione prima di completare il percorso.",
+      title: "Completa la Challenge",
+      intro: "Rifletti su \"Da Qui in Avanti\" e su tutta la settimana.",
       questions: [
         {
-          text: "Dopo questi 7 giorni, come vedi la tua leadership?",
+          text: "Qual è la scoperta più importante di questa settimana?",
           options: [
-            { value: 'A', text: "La riconosco come parte di me, già presente" },
-            { value: 'B', text: "La vedo più chiaramente, ma devo ancora integrarla" },
-            { value: 'C', text: "Ho ancora dubbi, ma sono sulla strada giusta" }
+            { value: 'A', text: "Che sono già punto di riferimento per altri" },
+            { value: 'B', text: "Che ho una voce interna che sminuisce i miei successi" },
+            { value: 'C', text: "Che ho uno stile unico di leadership" }
           ]
         },
         {
-          text: "Qual è stata la scoperta più significativa di questa settimana?",
+          text: "Hai definito il tuo piano per continuare?",
           options: [
-            { value: 'A', text: "Che la leadership non si costruisce, si riconosce" },
-            { value: 'B', text: "Che già guido in modi che non avevo notato" },
-            { value: 'C', text: "Che il mio approccio al coraggio/dedizione/principi può evolversi" }
+            { value: 'A', text: "Sì, ho scritto i 3 obiettivi e il primo passo" },
+            { value: 'B', text: "In parte, devo definire meglio i dettagli" },
+            { value: 'C', text: "Non ancora, ma so che voglio continuare" }
           ]
         },
         {
-          text: "Cosa farai nei prossimi 7 giorni?",
+          text: "Ti senti più capace di riconoscerti come leader?",
           options: [
-            { value: 'A', text: "Continuerò a notare i momenti di leadership quotidiani" },
-            { value: 'B', text: "Approfondirò con l'Assessment completo" },
-            { value: 'C', text: "Rifletterò su quanto scoperto prima di procedere" }
+            { value: 'A', text: "Sì, vedo le prove che prima non notavo" },
+            { value: 'B', text: "Un po' di più, ma c'è ancora lavoro da fare" },
+            { value: 'C', text: "Non molto, ma ho strumenti che prima non avevo" }
           ]
         }
       ],
-      ctaText: "COMPLETA LA SFIDA →"
+      ctaText: "COMPLETA LA CHALLENGE →"
     }
   },
 
@@ -244,30 +244,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
   ostacoli: {
     1: {
       title: "Prima di Passare al Giorno 2",
-      intro: "Rifletti sui pattern che hai iniziato a riconoscere.",
+      intro: "Rifletti su \"Hai Già Risolto Cose Difficili\".",
       questions: [
         {
-          text: "Hai identificato un problema recente che assomiglia a uno già risolto in passato?",
+          text: "Hai trovato 3 situazioni difficili che hai risolto negli ultimi 2-3 anni?",
           options: [
-            { value: 'A', text: "Sì, e vedere il pattern mi ha dato una nuova prospettiva" },
-            { value: 'B', text: "Forse, ma devo rifletterci meglio" },
-            { value: 'C', text: "Non ancora, continuerò a cercare" }
+            { value: 'A', text: "Sì, ne ho trovate anche più di 3" },
+            { value: 'B', text: "Ne ho trovate 2-3, con qualche sforzo" },
+            { value: 'C', text: "Faccio fatica a ricordarle, ma so che ci sono" }
           ]
         },
         {
-          text: "Come ti fa sentire l'idea che i problemi si ripetano in schemi?",
+          text: "L'analogia della bicicletta ti ha aiutato a capire?",
           options: [
-            { value: 'A', text: "Sollevato: significa che ho già le soluzioni" },
-            { value: 'B', text: "Curioso: voglio capire meglio i miei pattern" },
-            { value: 'C', text: "Scettico: ogni problema mi sembra unico" }
+            { value: 'A', text: "Sì, capisco che risolvere problemi è una capacità già mia" },
+            { value: 'B', text: "In parte, ma a volte mi sento ancora bloccato" },
+            { value: 'C', text: "Non sono sicuro che si applichi a me" }
           ]
         },
         {
-          text: "Cosa ti ha colpito di più del Filtro dei Pattern?",
+          text: "Come ti sei sentito nel ricordare i problemi che hai risolto?",
           options: [
-            { value: 'A', text: "L'idea che già risolvo problemi senza rendermene conto" },
-            { value: 'B', text: "La possibilità di usare esperienze passate in modo consapevole" },
-            { value: 'C', text: "L'esercizio pratico di mappare i pattern" }
+            { value: 'A', text: "Sorpreso: sono più capace di quanto pensassi" },
+            { value: 'B', text: "Curioso: voglio capire come attivare questa capacità" },
+            { value: 'C', text: "Scettico: quelli erano casi diversi" }
           ]
         }
       ],
@@ -275,30 +275,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     2: {
       title: "Prima di Passare al Giorno 3",
-      intro: "Rifletti sui segnali che hai imparato a decodificare.",
+      intro: "Rifletti su \"Vedere gli Schemi\".",
       questions: [
         {
-          text: "Hai notato segnali non verbali in una conversazione recente?",
+          text: "Hai identificato lo schema ripetuto nel problema che hai scelto?",
           options: [
-            { value: 'A', text: "Sì, e mi hanno dato informazioni che le parole non dicevano" },
-            { value: 'B', text: "Ci ho provato, ma non sono sicuro di averli letti bene" },
-            { value: 'C', text: "Non ci ho fatto caso, ma ora starò più attento" }
+            { value: 'A', text: "Sì, vedo un pattern che non avevo notato" },
+            { value: 'B', text: "Ho un'idea, ma non è ancora chiara" },
+            { value: 'C', text: "Non riesco a vedere uno schema, sembra tutto casuale" }
           ]
         },
         {
-          text: "Quanto ti fidi della tua intuizione quando qualcosa non ti torna?",
+          text: "L'esempio del rubinetto che perde ti ha aiutato?",
           options: [
-            { value: 'A', text: "Molto: di solito ha ragione" },
-            { value: 'B', text: "Abbastanza, ma verifico sempre" },
-            { value: 'C', text: "Poco: preferisco i fatti concreti" }
+            { value: 'A', text: "Sì, capisco la differenza tra sintomo e causa" },
+            { value: 'B', text: "In parte, devo applicarlo meglio ai miei problemi" },
+            { value: 'C', text: "Non mi è chiaro come tradurlo nella mia situazione" }
           ]
         },
         {
-          text: "Il Filtro dei Segnali ti ha fatto vedere qualcosa di nuovo?",
+          text: "La domanda \"Quale schema si ripete?\" ti sembra utile?",
           options: [
-            { value: 'A', text: "Sì, quante informazioni perdo normalmente" },
-            { value: 'B', text: "Mi ha confermato cose che già intuivo" },
-            { value: 'C', text: "Non ancora, ma continuerò a praticarlo" }
+            { value: 'A', text: "Sì, mi aiuta a cercare la struttura del problema" },
+            { value: 'B', text: "Potenzialmente, devo esercitarmi di più" },
+            { value: 'C', text: "Non sono sicuro di come usarla" }
           ]
         }
       ],
@@ -306,30 +306,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     3: {
       title: "Prima di Passare al Giorno 4",
-      intro: "Rifletti sulle risorse che già possiedi.",
+      intro: "Rifletti su \"Leggere Tra le Righe\".",
       questions: [
         {
-          text: "Hai fatto l'inventario delle tue risorse?",
+          text: "Hai scelto una relazione professionale e decodificato i segnali?",
           options: [
-            { value: 'A', text: "Sì, e ho scoperto di avere più di quanto pensassi" },
-            { value: 'B', text: "Ho iniziato, ma non è completo" },
-            { value: 'C', text: "Non ancora, lo farò" }
+            { value: 'A', text: "Sì, ho formulato un'ipotesi su cosa non viene detto" },
+            { value: 'B', text: "Ho iniziato, ma non sono sicuro dell'interpretazione" },
+            { value: 'C', text: "Non ancora, ci penserò domani" }
           ]
         },
         {
-          text: "Quali risorse hai sottovalutato finora?",
+          text: "Ti è mai capitato di dire \"Va tutto bene\" quando non era vero?",
           options: [
-            { value: 'A', text: "Le mie relazioni e il mio network" },
-            { value: 'B', text: "Le competenze trasferibili da altri contesti" },
-            { value: 'C', text: "Il tempo e l'energia che ho a disposizione" }
+            { value: 'A', text: "Sì, capisco come funziona la comunicazione nascosta" },
+            { value: 'B', text: "Sì, ma non ci avevo mai pensato dal lato di chi ascolta" },
+            { value: 'C', text: "Non spesso, tendo a essere diretto" }
           ]
         },
         {
-          text: "Come useresti le tue risorse per il problema attuale?",
+          text: "Quali segnali ti sembrano più facili da leggere?",
           options: [
-            { value: 'A', text: "Ho già alcune idee concrete" },
-            { value: 'B', text: "Devo combinare risorse che non avevo collegato" },
-            { value: 'C', text: "Ci sto ancora pensando" }
+            { value: 'A', text: "Tono delle email e tempi di risposta" },
+            { value: 'B', text: "Linguaggio del corpo e argomenti evitati" },
+            { value: 'C', text: "Non sono sicuro, devo prestare più attenzione" }
           ]
         }
       ],
@@ -337,30 +337,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     4: {
       title: "Prima di Passare al Giorno 5",
-      intro: "Rifletti sulle convinzioni che ti hanno frenato.",
+      intro: "Rifletti su \"Trovare Risorse Nascoste\".",
       questions: [
         {
-          text: "Hai identificato un Traditore Silenzioso che ti limita?",
+          text: "Hai fatto l'inventario completo delle tue risorse?",
           options: [
-            { value: 'A', text: "Sì, e riconoscerlo è già liberatorio" },
-            { value: 'B', text: "Ne ho trovati diversi, devo capire quale è il principale" },
-            { value: 'C', text: "Non sono sicuro, le mie convinzioni mi sembrano ragionevoli" }
+            { value: 'A', text: "Sì, ho trovato risorse che non consideravo" },
+            { value: 'B', text: "L'ho iniziato, ci sono ancora categorie da esplorare" },
+            { value: 'C', text: "Non ancora, lo farò stasera" }
           ]
         },
         {
-          text: "Qual è la convinzione che più spesso ti blocca?",
+          text: "L'analogia del frigo che sembra vuoto ti è stata utile?",
           options: [
-            { value: 'A', text: "\"Non sono abbastanza\" (competente/esperto/pronto)" },
-            { value: 'B', text: "\"È troppo rischioso\" o \"Non è il momento giusto\"" },
-            { value: 'C', text: "\"Gli altri sono meglio di me\" o \"Non merito\"" }
+            { value: 'A', text: "Sì, capisco che devo guardare meglio" },
+            { value: 'B', text: "In parte, ma le mie risorse sembrano davvero scarse" },
+            { value: 'C', text: "Non mi ci ritrovo, il mio frigo è davvero vuoto" }
           ]
         },
         {
-          text: "Come ti sentiresti senza quella convinzione?",
+          text: "Quale categoria di risorse ti ha sorpreso di più?",
           options: [
-            { value: 'A', text: "Libero di agire e sperimentare" },
-            { value: 'B', text: "Più coraggioso ma anche più esposto" },
-            { value: 'C', text: "Non saprei, quella convinzione mi protegge" }
+            { value: 'A', text: "Relazioni: persone che potrebbero aiutare" },
+            { value: 'B', text: "Errori passati: lezioni già apprese" },
+            { value: 'C', text: "Competenze trasferibili: cose che so fare" }
           ]
         }
       ],
@@ -368,30 +368,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     5: {
       title: "Prima di Passare al Giorno 6",
-      intro: "Rifletti sul Sistema A.Z.I.O.N.E.",
+      intro: "Rifletti su \"Il Metodo 5 Minuti\".",
       questions: [
         {
-          text: "Hai applicato il sistema A.Z.I.O.N.E. a un problema reale?",
+          text: "Hai applicato il metodo completo (Schema → Segnali → Risorse → Azione)?",
           options: [
-            { value: 'A', text: "Sì, e mi ha aiutato a strutturare il mio approccio" },
-            { value: 'B', text: "Ho iniziato, ma non ho completato tutti i passi" },
-            { value: 'C', text: "Non ancora, ma ho capito la logica" }
+            { value: 'A', text: "Sì, in 5 minuti come indicato" },
+            { value: 'B', text: "Sì, ma ci ho messo più tempo" },
+            { value: 'C', text: "Non ancora, voglio provarlo domani" }
           ]
         },
         {
-          text: "Qual è il passo che ti risulta più difficile?",
+          text: "Hai definito UNA azione concreta da fare entro domani?",
           options: [
-            { value: 'A', text: "Definire l'obiettivo con chiarezza" },
-            { value: 'B', text: "Passare dalla pianificazione all'azione" },
-            { value: 'C', text: "Valutare i risultati senza giudicarmi" }
+            { value: 'A', text: "Sì, e l'ho già fatta" },
+            { value: 'B', text: "Sì, la farò domani mattina" },
+            { value: 'C', text: "Non sono sicuro di quale azione scegliere" }
           ]
         },
         {
-          text: "Cosa cambia quando usi un sistema invece di improvvisare?",
+          text: "Usare tutti e tre i filtri insieme ti sembra utile?",
           options: [
-            { value: 'A', text: "Più chiarezza e meno ansia" },
-            { value: 'B', text: "Più struttura ma anche più rigidità" },
-            { value: 'C', text: "Non noto grande differenza, per ora" }
+            { value: 'A', text: "Sì, mi dà una struttura per pensare" },
+            { value: 'B', text: "Potenzialmente, devo esercitarmi" },
+            { value: 'C', text: "Sembra complicato, preferisco un approccio più semplice" }
           ]
         }
       ],
@@ -399,65 +399,65 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     6: {
       title: "Prima di Passare al Giorno 7",
-      intro: "Rifletti sul Sistema C.R.E.S.C.I.T.A.",
+      intro: "Rifletti sui \"3 Traditori Silenziosi\".",
       questions: [
         {
-          text: "Hai estratto un apprendimento da un'esperienza recente?",
+          text: "Quale Traditore ti ha bloccato più spesso?",
           options: [
-            { value: 'A', text: "Sì, e ho capito cosa posso fare diversamente" },
-            { value: 'B', text: "Ci ho provato, ma non è stato facile" },
-            { value: 'C', text: "Non ancora, ma ho capito il processo" }
+            { value: 'A', text: "Il Paralizzante: \"Devo avere tutte le informazioni\"" },
+            { value: 'B', text: "Il Timoroso: \"È meglio non agire che sbagliare\"" },
+            { value: 'C', text: "Il Procrastinatore: \"Devo aspettare il momento perfetto\"" }
           ]
         },
         {
-          text: "Cosa ti impedisce di solito di imparare dagli errori?",
+          text: "Hai risposto per iscritto al tuo Traditore?",
           options: [
-            { value: 'A', text: "Il giudizio su me stesso" },
-            { value: 'B', text: "La fretta di passare oltre" },
-            { value: 'C', text: "Non sapere come estrarre l'apprendimento" }
+            { value: 'A', text: "Sì, e mi ha aiutato a vedere che era una scusa" },
+            { value: 'B', text: "L'ho fatto mentalmente, non per iscritto" },
+            { value: 'C', text: "Non ancora, ci devo lavorare" }
           ]
         },
         {
-          text: "Come ti senti all'idea che ogni esperienza abbia valore?",
+          text: "Hai fatto l'azione che avevi rimandato (dal Giorno 5)?",
           options: [
-            { value: 'A', text: "Liberato: posso permettermi di sbagliare" },
-            { value: 'B', text: "Curioso: voglio vedere se funziona" },
-            { value: 'C', text: "Scettico: alcune esperienze sono solo negative" }
+            { value: 'A', text: "Sì, l'ho fatta oggi" },
+            { value: 'B', text: "Non ancora, ma so che il Traditore mi sta bloccando" },
+            { value: 'C', text: "No, e non sono sicuro che il problema sia il Traditore" }
           ]
         }
       ],
       ctaText: "PROSEGUI AL GIORNO 7 →"
     },
     7: {
-      title: "Completa la Sfida Ostacoli",
-      intro: "Ultima riflessione prima di completare il percorso.",
+      title: "Completa la Challenge",
+      intro: "Rifletti su \"Da Qui in Avanti\" e su tutta la settimana.",
       questions: [
         {
-          text: "Dopo questi 7 giorni, come vedi i problemi?",
+          text: "Qual è lo strumento più utile che hai acquisito questa settimana?",
           options: [
-            { value: 'A', text: "Come opportunità mascherate che posso decodificare" },
-            { value: 'B', text: "Con più strumenti per affrontarli" },
-            { value: 'C', text: "Ancora impegnativi, ma con una nuova prospettiva" }
+            { value: 'A', text: "Vedere gli schemi ripetuti (Filtro Pattern)" },
+            { value: 'B', text: "Leggere i segnali non detti (Filtro Segnali)" },
+            { value: 'C', text: "Trovare risorse nascoste (Filtro Risorse)" }
           ]
         },
         {
-          text: "Qual è stato lo strumento più utile per te?",
+          text: "Hai definito il prossimo problema su cui userai il metodo?",
           options: [
-            { value: 'A', text: "I 3 Filtri (Pattern, Segnali, Risorse)" },
-            { value: 'B', text: "La Spirale delle Convinzioni" },
-            { value: 'C', text: "I Sistemi A.Z.I.O.N.E. e C.R.E.S.C.I.T.A." }
+            { value: 'A', text: "Sì, so già quale sarà" },
+            { value: 'B', text: "Ho alcune idee, devo sceglierne una" },
+            { value: 'C', text: "Non ancora, ma so che userò il metodo" }
           ]
         },
         {
-          text: "Cosa farai nei prossimi 7 giorni?",
+          text: "Ti senti più capace di affrontare problemi difficili?",
           options: [
-            { value: 'A', text: "Applicherò gli strumenti a un problema reale" },
-            { value: 'B', text: "Approfondirò con l'Assessment completo" },
-            { value: 'C', text: "Integrerò gradualmente quanto appreso" }
+            { value: 'A', text: "Sì, ho strumenti concreti da usare" },
+            { value: 'B', text: "Un po' di più, ma devo esercitarmi" },
+            { value: 'C', text: "Non molto, ma ho capito cosa devo sviluppare" }
           ]
         }
       ],
-      ctaText: "COMPLETA LA SFIDA →"
+      ctaText: "COMPLETA LA CHALLENGE →"
     }
   },
 
@@ -467,30 +467,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
   microfelicita: {
     1: {
       title: "Prima di Passare al Giorno 2",
-      intro: "Rifletti sui segnali deboli che hai iniziato a notare.",
+      intro: "Rifletti su \"Quello che Ti Perdi Ogni Giorno\".",
       questions: [
         {
-          text: "Hai notato almeno un momento di microfelicità oggi?",
+          text: "Hai trovato 3 momenti piacevoli della giornata?",
           options: [
-            { value: 'A', text: "Sì, più di uno — sorprendente!" },
-            { value: 'B', text: "Uno, ma significativo" },
-            { value: 'C', text: "Non ancora, ma continuerò a cercare" }
+            { value: 'A', text: "Sì, ne ho trovati 3 o più" },
+            { value: 'B', text: "Ne ho trovati 1-2, con qualche sforzo" },
+            { value: 'C', text: "È stato difficile trovarne, il radar non è calibrato" }
           ]
         },
         {
-          text: "Com'era il momento che hai notato?",
+          text: "L'analogia del telefono che ti impedisce di vedere ti è stata utile?",
           options: [
-            { value: 'A', text: "Piccolo ma piacevole — non l'avrei mai considerato prima" },
-            { value: 'B', text: "Più intenso di quanto pensassi potesse essere" },
-            { value: 'C', text: "Non sono sicuro se contasse come microfelicità" }
+            { value: 'A', text: "Sì, capisco perché perdo i momenti positivi" },
+            { value: 'B', text: "In parte, ma non sono sicuro di essere così distratto" },
+            { value: 'C', text: "Non mi ci ritrovo, credo di notare abbastanza" }
           ]
         },
         {
-          text: "Cosa ti ha colpito dell'idea del Segnale Debole?",
+          text: "Come ti sei sentito nel cercare i momenti piacevoli?",
           options: [
-            { value: 'A', text: "Che la felicità esiste già, solo non la noto" },
-            { value: 'B', text: "Che il cervello è programmato per ignorare il positivo" },
-            { value: 'C', text: "Che 7 secondi possono fare la differenza" }
+            { value: 'A', text: "Sorpreso: ce n'erano più di quanto pensassi" },
+            { value: 'B', text: "Curioso: voglio vedere se domani ne trovo di più" },
+            { value: 'C', text: "Frustrato: non riesco a trovarli" }
           ]
         }
       ],
@@ -498,30 +498,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     2: {
       title: "Prima di Passare al Giorno 3",
-      intro: "Rifletti sul metodo R.A.D.A.R. che hai praticato.",
+      intro: "Rifletti su \"La Matematica dei Momenti\".",
       questions: [
         {
-          text: "Hai provato il metodo R.A.D.A.R. oggi?",
+          text: "Sei riuscito a intercettare 3 momenti mentre succedevano (non a memoria)?",
           options: [
-            { value: 'A', text: "Sì, più volte — diventa naturale" },
-            { value: 'B', text: "Una volta, con attenzione" },
-            { value: 'C', text: "Ho capito il metodo, lo proverò domani" }
+            { value: 'A', text: "Sì, ho detto \"Questo. Proprio questo.\" almeno 3 volte" },
+            { value: 'B', text: "1-2 volte, è più difficile che a memoria" },
+            { value: 'C', text: "Non ci sono riuscito, me ne sono ricordato solo alla sera" }
           ]
         },
         {
-          text: "Quale passo del R.A.D.A.R. ti risulta più facile?",
+          text: "L'idea che 50 momenti piccoli battono 4 momenti grandi ti ha colpito?",
           options: [
-            { value: 'A', text: "Riconoscere il momento" },
-            { value: 'B', text: "Amplificare la sensazione" },
-            { value: 'C', text: "Dedicare i 7 secondi di attenzione" }
+            { value: 'A', text: "Sì, cambia come vedo il benessere quotidiano" },
+            { value: 'B', text: "Interessante, ma devo ancora metabolizzarla" },
+            { value: 'C', text: "Non sono convinto, i momenti grandi contano di più" }
           ]
         },
         {
-          text: "Come cambia la tua esperienza quando usi il R.A.D.A.R.?",
+          text: "Quanti momenti hai intercettato in totale oggi?",
           options: [
-            { value: 'A', text: "Il momento dura di più e lascia una traccia" },
-            { value: 'B', text: "Mi sento più presente e consapevole" },
-            { value: 'C', text: "Non noto ancora grande differenza" }
+            { value: 'A', text: "3 o più" },
+            { value: 'B', text: "1-2" },
+            { value: 'C', text: "Nessuno in tempo reale" }
           ]
         }
       ],
@@ -529,30 +529,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     3: {
       title: "Prima di Passare al Giorno 4",
-      intro: "Rifletti sui 5 canali della microfelicità.",
+      intro: "Rifletti su R.A.D.A.R. (Rileva-Accogli-Distingui-Amplifica-Resta).",
       questions: [
         {
-          text: "Qual è il canale da cui ricevi più microfelicità?",
+          text: "Hai applicato R.A.D.A.R. alle 3 occasioni suggerite?",
           options: [
-            { value: 'A', text: "Visivo (luce, colori, bellezza)" },
-            { value: 'B', text: "Corporeo (sensazioni fisiche piacevoli)" },
-            { value: 'C', text: "Uditivo o olfattivo (suoni, profumi)" }
+            { value: 'A', text: "Sì, tutte e 3: caffè, silenzio, e una a scelta" },
+            { value: 'B', text: "1-2 occasioni, non tutte" },
+            { value: 'C', text: "Non ancora, ma ho capito il metodo" }
           ]
         },
         {
-          text: "Hai scoperto un canale che sottovalutavi?",
+          text: "Quale passo di R.A.D.A.R. ti è sembrato più facile?",
           options: [
-            { value: 'A', text: "Sì, e ora lo cerco attivamente" },
-            { value: 'B', text: "Forse il cognitivo — i pensieri piacevoli" },
-            { value: 'C', text: "Non ancora, ma ci farò attenzione" }
+            { value: 'A', text: "Rilevare: noto quando succede qualcosa di piacevole" },
+            { value: 'B', text: "Amplificare: mantengo l'attenzione per qualche secondo" },
+            { value: 'C', text: "Nessuno mi viene naturale, devo esercitarmi" }
           ]
         },
         {
-          text: "Come ti senti sapendo che hai 5 fonti di benessere?",
+          text: "L'idea della stella cadente ti ha aiutato a capire l'urgenza?",
           options: [
-            { value: 'A', text: "Più ricco: ho più opportunità di quanto pensassi" },
-            { value: 'B', text: "Curioso di esplorare i canali meno usati" },
-            { value: 'C', text: "Sopraffatto: sono troppe cose da notare" }
+            { value: 'A', text: "Sì, capisco che devo catturare subito" },
+            { value: 'B', text: "In parte, ma a volte me ne accorgo troppo tardi" },
+            { value: 'C', text: "Non mi ci ritrovo, i miei momenti durano di più" }
           ]
         }
       ],
@@ -560,30 +560,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     4: {
       title: "Prima di Passare al Giorno 5",
-      intro: "Rifletti sugli ostacoli che bloccano la microfelicità.",
+      intro: "Rifletti sugli \"Errori da Evitare\" con R.A.D.A.R.",
       questions: [
         {
-          text: "Quale ostacolo riconosci di più nella tua vita?",
+          text: "Quale errore riconosci come tuo?",
           options: [
-            { value: 'A', text: "La fretta: non mi fermo mai abbastanza" },
-            { value: 'B', text: "Il perfezionismo: niente è mai abbastanza buono" },
-            { value: 'C', text: "L'abitudine: do per scontato ciò che ho" }
+            { value: 'A', text: "Cercare invece di notare (\"Dove sono?\")" },
+            { value: 'B', text: "Aspettare sensazioni forti" },
+            { value: 'C', text: "Analizzare troppo o farlo solo in momenti speciali" }
           ]
         },
         {
-          text: "Hai notato un momento perso a causa di un ostacolo?",
+          text: "Hai applicato la correzione specifica?",
           options: [
-            { value: 'A', text: "Sì, e riconoscerlo mi ha fatto riflettere" },
-            { value: 'B', text: "Probabilmente sì, ma non ne sono consapevole" },
-            { value: 'C', text: "No, ma ora so cosa cercare" }
+            { value: 'A', text: "Sì, ho corretto il mio errore principale" },
+            { value: 'B', text: "Ci ho provato, non è stato facile" },
+            { value: 'C', text: "Non ancora, lo farò domani" }
           ]
         },
         {
-          text: "Cosa potresti fare per ridurre quell'ostacolo?",
+          text: "Hai applicato R.A.D.A.R. durante un'attività ordinaria?",
           options: [
-            { value: 'A', text: "Rallentare intenzionalmente in certi momenti" },
-            { value: 'B', text: "Accettare che non tutto deve essere perfetto" },
-            { value: 'C', text: "Riscoprire ciò che do per scontato" }
+            { value: 'A', text: "Sì, mentre mi lavavo le mani / camminavo / altro" },
+            { value: 'B', text: "Ho provato, ma mi sono dimenticato" },
+            { value: 'C', text: "No, l'ho fatto solo in momenti di pausa" }
           ]
         }
       ],
@@ -591,30 +591,30 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     5: {
       title: "Prima di Passare al Giorno 6",
-      intro: "Rifletti sulla differenza tra nutriente e sabotante.",
+      intro: "Rifletti su \"Quando la Giornata È Dura\".",
       questions: [
         {
-          text: "Hai identificato un piacere che ti sabota?",
+          text: "Hai scritto sia il negativo che il positivo della giornata?",
           options: [
-            { value: 'A', text: "Sì, e capisco perché non mi fa bene davvero" },
-            { value: 'B', text: "Forse, ma è difficile ammetterlo" },
-            { value: 'C', text: "Non credo di averne, i miei piaceri sono sani" }
+            { value: 'A', text: "Sì, ho completato il quadro con entrambi" },
+            { value: 'B', text: "Ho scritto il negativo, fatico a trovare il positivo" },
+            { value: 'C', text: "Non l'ho fatto, la giornata non era particolarmente dura" }
           ]
         },
         {
-          text: "Come distingui un piacere nutriente da uno sabotante?",
+          text: "L'idea del bilancio (entrate + uscite) ti ha aiutato?",
           options: [
-            { value: 'A', text: "Il nutriente lascia energia, il sabotante lascia vuoto" },
-            { value: 'B', text: "Il nutriente costruisce, il sabotante compensa" },
-            { value: 'C', text: "Non è sempre chiaro, dipende dal contesto" }
+            { value: 'A', text: "Sì, capisco che R.A.D.A.R. non nega il negativo" },
+            { value: 'B', text: "In parte, ma quando sto male faccio fatica" },
+            { value: 'C', text: "Non sono convinto, sembra \"pensiero positivo\"" }
           ]
         },
         {
-          text: "Cosa proverai a cambiare questa settimana?",
+          text: "Hai trovato almeno 2 cose positive nonostante il negativo?",
           options: [
-            { value: 'A', text: "Sostituire un sabotante con un nutriente" },
-            { value: 'B', text: "Ridurre la frequenza di un sabotante" },
-            { value: 'C', text: "Prima osserverò meglio i miei pattern" }
+            { value: 'A', text: "Sì, anche se piccole" },
+            { value: 'B', text: "Con fatica, solo 1" },
+            { value: 'C', text: "No, oggi era troppo difficile" }
           ]
         }
       ],
@@ -622,75 +622,81 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
     },
     6: {
       title: "Prima di Passare al Giorno 7",
-      intro: "Rifletti sulla tecnica di amplificazione.",
+      intro: "Rifletti su \"Come Farlo Diventare Automatico\".",
       questions: [
         {
-          text: "Hai praticato i 10 secondi di amplificazione?",
+          text: "Hai scelto il tuo aggancio?",
           options: [
-            { value: 'A', text: "Sì, e il momento è diventato più memorabile" },
-            { value: 'B', text: "Ci ho provato, ma mi sono distratto" },
-            { value: 'C', text: "Non ancora, ma ho capito come fare" }
+            { value: 'A', text: "Sì: \"Quando ___, faccio R.A.D.A.R.\"" },
+            { value: 'B', text: "Ho alcune opzioni, devo sceglierne una" },
+            { value: 'C', text: "Non ancora, non so cosa scegliere" }
           ]
         },
         {
-          text: "Cosa succede quando amplifichi un momento positivo?",
+          text: "L'analogia delle vitamine vicino al caffè ti è stata utile?",
           options: [
-            { value: 'A', text: "Si ancora nella memoria, lo ricordo dopo" },
-            { value: 'B', text: "Mi sento più grato e presente" },
-            { value: 'C', text: "Non noto ancora grande differenza" }
+            { value: 'A', text: "Sì, capisco che devo collegare a qualcosa che già faccio" },
+            { value: 'B', text: "In parte, ma tendo a dimenticarmi comunque" },
+            { value: 'C', text: "Non mi ci ritrovo, non funziona così per me" }
           ]
         },
         {
-          text: "Quale tecnica di amplificazione preferisci?",
+          text: "Hai fatto R.A.D.A.R. collegato all'aggancio almeno una volta oggi?",
           options: [
-            { value: 'A', text: "Respirare nel momento e sentirlo nel corpo" },
-            { value: 'B', text: "Collegare il momento a un valore importante" },
-            { value: 'C', text: "Condividere il momento con qualcuno" }
+            { value: 'A', text: "Sì, almeno una volta" },
+            { value: 'B', text: "Ho provato, ma non mi sono ricordato" },
+            { value: 'C', text: "Non ancora, inizio domani" }
           ]
         }
       ],
       ctaText: "PROSEGUI AL GIORNO 7 →"
     },
     7: {
-      title: "Completa la Sfida Microfelicità",
-      intro: "Ultima riflessione prima di completare il percorso.",
+      title: "Completa la Challenge",
+      intro: "Rifletti su \"Da Qui in Avanti\" e su tutta la settimana.",
       questions: [
         {
-          text: "Dopo questi 7 giorni, noti più microfelicità?",
+          text: "Qual è la scoperta più importante di questa settimana?",
           options: [
-            { value: 'A', text: "Sì, decisamente — sono ovunque" },
-            { value: 'B', text: "Di più, ma devo ancora allenarmi" },
-            { value: 'C', text: "A volte, quando mi ricordo di cercarle" }
+            { value: 'A', text: "I momenti piacevoli ci sono, solo non li notavo" },
+            { value: 'B', text: "Tanti piccoli momenti battono pochi grandi" },
+            { value: 'C', text: "R.A.D.A.R. funziona se lo collego a qualcosa" }
           ]
         },
         {
-          text: "Qual è stata la scoperta più significativa?",
+          text: "Hai confermato il tuo aggancio per i prossimi 21 giorni?",
           options: [
-            { value: 'A', text: "Che la felicità non si costruisce, si riconosce" },
-            { value: 'B', text: "Che ho 5 canali di benessere sempre disponibili" },
-            { value: 'C', text: "Che gli ostacoli interni sono i veri blocchi" }
+            { value: 'A', text: "Sì, so esattamente quando farò R.A.D.A.R." },
+            { value: 'B', text: "Ho un'idea, devo renderla più concreta" },
+            { value: 'C', text: "Non ancora, ma voglio continuare" }
           ]
         },
         {
-          text: "Cosa continuerai a fare dopo la sfida?",
+          text: "Come cambierebbe la tua settimana se notassi 10 momenti positivi in più ogni giorno?",
           options: [
-            { value: 'A', text: "Praticare il R.A.D.A.R. ogni giorno" },
-            { value: 'B', text: "Esplorare tutti i 5 canali consapevolmente" },
-            { value: 'C', text: "Approfondire con l'Assessment completo" }
+            { value: 'A', text: "Mi sentirei più soddisfatto e sereno" },
+            { value: 'B', text: "Vedrei le giornate in modo più equilibrato" },
+            { value: 'C', text: "Non sono sicuro, ma sono curioso di scoprirlo" }
           ]
         }
       ],
-      ctaText: "COMPLETA LA SFIDA →"
+      ctaText: "COMPLETA LA CHALLENGE →"
     }
   }
 };
 
-// Helper per ottenere i dati di un giorno specifico
-export function getDiscoveryData(challenge: ChallengeType, day: DayNumber): DiscoveryData {
-  return DISCOVERY_DATA[challenge][day];
+// Helper per ottenere i dati di discovery
+export function getDiscoveryData(challengeType: ChallengeType, dayNumber: DayNumber): DiscoveryData | null {
+  return DISCOVERY_DATA[challengeType]?.[dayNumber] || null;
 }
 
 // Helper per ottenere tutti i giorni di una challenge
-export function getChallengeDiscoveryDays(challenge: ChallengeType): DiscoveryData[] {
-  return Object.values(DISCOVERY_DATA[challenge]);
+export function getChallengeDiscoveryDays(challengeType: ChallengeType): { day: DayNumber; title: string }[] {
+  const challenge = DISCOVERY_DATA[challengeType];
+  if (!challenge) return [];
+
+  return Object.entries(challenge).map(([day, data]) => ({
+    day: parseInt(day) as DayNumber,
+    title: data.title
+  }));
 }

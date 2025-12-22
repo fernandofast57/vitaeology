@@ -4,25 +4,25 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-// Varianti per A/B Testing
+// Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_1_LEADERSHIP.md
 const VARIANTS = {
   A: {
-    headline: "Riconosci il Leader che Sei Già",
-    subheadline: "7 giorni per scoprire le caratteristiche di leadership che già operano in te",
-    cta: "Inizia la Sfida Gratuita",
-    hook: "50 anni di esperienza imprenditoriale condensati in 7 rivelazioni"
+    headline: "Il Leader che Cerchi È Già Dentro di Te",
+    subheadline: "In 7 giorni imparerai a riconoscere le capacità di leadership che già possiedi — e che usi senza accorgertene.",
+    cta: "Inizia la Challenge Gratuita",
+    hook: "Gratis. 7 email in 7 giorni. Nessun impegno."
   },
   B: {
-    headline: "Il Leader che Cerchi Sei Tu",
-    subheadline: "La sfida che rivela ciò che già possiedi, senza aggiungere nulla",
-    cta: "Scarica la Sfida",
-    hook: "24 caratteristiche dei geni. 7 giorni. Una trasformazione silenziosa."
+    headline: "Smetti di Cercare. Inizia a Riconoscere.",
+    subheadline: "7 giorni per vedere il leader autentico che opera già dentro di te — senza aggiungere nulla.",
+    cta: "Inizia Ora",
+    hook: "5-7 minuti al giorno. Esercizi pratici. Nessuna teoria astratta."
   },
   C: {
-    headline: "Smetti di Cercare. Inizia a Riconoscere.",
-    subheadline: "7 giorni per vedere il leader autentico che opera già dentro di te",
+    headline: "Riconosci il Leader che Sei Già",
+    subheadline: "Le capacità che cerchi le hai già. Le usi in certi momenti della tua vita. È tempo di vederle.",
     cta: "Voglio Iniziare",
-    hook: "Dal ciclo ERRORE→COSA→RIPROVA di Fernando Marongiu"
+    hook: "Basato sul framework delle 24 caratteristiche di leadership"
   }
 };
 
@@ -188,17 +188,18 @@ function LeadershipLandingContent() {
       <section className="py-16 px-4 bg-slate-800/50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-12">
-            In 7 Giorni Riconoscerai:
+            Cosa Scoprirai in 7 Giorni
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { day: '1', title: 'Il Fuoco Interno', desc: 'La differenza tra motivazione reattiva e motivazione autentica' },
-              { day: '2', title: 'Il Coraggio che Costruisce', desc: 'Perché resistere ti fa sentire forte, ma costruire ti rende libero' },
-              { day: '3', title: 'La Dedizione che Serve', desc: 'Come distinguere ostinazione travestita da servizio autentico' },
-              { day: '4', title: 'Principi Stabili', desc: 'Cosa tenere fisso e cosa adattare nelle decisioni' },
-              { day: '5', title: 'Dal Controllo alla Delega', desc: 'Come costruire sistemi che funzionano senza di te' },
-              { day: '6', title: 'La Comunicazione che Costruisce', desc: 'Comunicare per costruire insieme, non per convincere' },
+              { day: '1', title: 'Il Leader Nascosto', desc: 'I momenti in cui sei già punto di riferimento per altri' },
+              { day: '2', title: 'La Voce che Sminuisce', desc: 'Come riconoscere la voce interna che sminuisce i tuoi successi' },
+              { day: '3', title: 'Vedere le Cose Come Sono', desc: 'La lucidità: vedere le situazioni per quello che sono davvero' },
+              { day: '4', title: 'Agire con la Paura', desc: 'Il coraggio: agire anche quando la paura c\'è' },
+              { day: '5', title: 'Non Esaurirti', desc: 'L\'equilibrio: sapere quando spingere e quando fermarti' },
+              { day: '6', title: 'Il Tuo Modo Personale', desc: 'Il tuo stile di leadership — diverso da tutti gli altri' },
+              { day: '7', title: 'Da Qui in Avanti', desc: 'Come continuare da solo dopo questa settimana' },
             ].map((item) => (
               <div key={item.day} className="flex gap-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
                 <div className="flex-shrink-0 w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
@@ -223,8 +224,7 @@ function LeadershipLandingContent() {
           <h3 className="text-2xl font-bold text-white mb-2">Fernando Marongiu</h3>
           <p className="text-amber-400 mb-4">Fondatore Vitaeology</p>
           <p className="text-slate-300 max-w-xl mx-auto">
-            &quot;Tra quel ragazzo confuso del &apos;73 e il me al telefono del &apos;25 ci sono 24 comprensioni.
-            Alcune mi sono costate anni. Questa sfida è la mappa delle prime 6.&quot;
+            &quot;Ho 50 anni di esperienza come imprenditore. Ho capito una cosa: la leadership non è qualcosa che acquisisci da fuori. È qualcosa che riconosci dentro.&quot;
           </p>
         </div>
       </section>
