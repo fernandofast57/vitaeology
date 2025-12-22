@@ -4,9 +4,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { getChallengeEmail, CHALLENGE_CONFIG } from '@/lib/email/challenge-day-templates';
+
+// Dynamic import to avoid build issues
+let emailTemplates: typeof import('@/lib/email/challenge-day-templates') | null = null;
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 function getSupabaseClient() {
   return createClient(
@@ -37,6 +40,12 @@ interface CompleteRequestBody {
 
 export async function POST(request: NextRequest) {
   try {
+    // Load email templates dynamically
+    if (!emailTemplates) {
+      emailTemplates = await import('@/lib/email/challenge-day-templates');
+    }
+    const { getChallengeEmail, CHALLENGE_CONFIG } = emailTemplates;
+
     const body: CompleteRequestBody = await request.json();
     const { email, challengeType, dayNumber, responses } = body;
 
@@ -200,7 +209,8 @@ export async function POST(request: NextRequest) {
           subject: 'Complimenti! Hai completato la Sfida dei 7 Giorni',
           html: generateCompletionEmail(
             subscriber.nome || 'Amico/a',
-            normalizedChallenge
+            normalizedChallenge,
+            CHALLENGE_CONFIG
           ),
           tags: [{ name: 'challenge', value: 'challenge-completed' }]
         });
@@ -268,7 +278,8 @@ export async function POST(request: NextRequest) {
 }
 
 // Email di completamento challenge
-function generateCompletionEmail(nome: string, challenge: string): string {
+function generateCompletionEmail(nome: string, challenge: string, challengeConfig: Record<string, { color: string; name: string }>): string {
+  const CHALLENGE_CONFIG = challengeConfig;
   const config = CHALLENGE_CONFIG[challenge as keyof typeof CHALLENGE_CONFIG];
   const color = config?.color || '#D4AF37';
   const challengeName = config?.name || 'Sfida';
