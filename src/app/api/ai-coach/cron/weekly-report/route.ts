@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateWeeklyReport } from '@/lib/ai-coach/weekly-report';
 import { sendWeeklyReportEmail } from '@/lib/ai-coach/email-report';
 
+export const dynamic = 'force-dynamic';
+
 // Questo endpoint viene chiamato da Vercel Cron ogni lunedi
 // Configurato in vercel.json
 

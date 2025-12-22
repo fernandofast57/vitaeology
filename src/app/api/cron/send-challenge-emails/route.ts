@@ -6,6 +6,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { getChallengeEmail } from '@/lib/email/challenge-day-templates';
 
+export const dynamic = 'force-dynamic';
+
 function getSupabaseClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { jsPDF } from 'jspdf';
 
+export const dynamic = 'force-dynamic';
+
 interface ConversationMessage {
   user_message: string;
   ai_response: string;

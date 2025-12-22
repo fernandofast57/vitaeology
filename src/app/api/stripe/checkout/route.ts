@@ -3,6 +3,8 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { PRICING_TIERS, type PricingTierSlug } from '@/config/pricing';
 
+export const dynamic = 'force-dynamic';
+
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { runDailyMetricsJob } from '@/lib/ai-coach/daily-metrics';
 
+export const dynamic = 'force-dynamic';
+
 // Questo endpoint puo essere chiamato da:
 // - Vercel Cron Jobs (configurare in vercel.json)
 // - Servizio esterno (cron-job.org, etc.)

@@ -5,8 +5,9 @@ import { createClient } from '@supabase/supabase-js';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
 import { getUserMemory, generateMemoryContext } from '@/lib/ai-coach/user-memory';
-
 import { UserContext } from '@/lib/ai-coach/types';
+
+export const dynamic = 'force-dynamic';
 
 interface EditRequest {
   conversationId: string;

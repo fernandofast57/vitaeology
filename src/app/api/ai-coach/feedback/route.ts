@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import { CreateFeedbackInput } from '@/types/ai-coach-learning';
 import { createPatternDetectionService } from '@/lib/services/pattern-detection';
 
+export const dynamic = 'force-dynamic';
+
 function getSupabaseClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

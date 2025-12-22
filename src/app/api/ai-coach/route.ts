@@ -13,6 +13,8 @@ import {
 } from '@/lib/ai-coach/implicit-signals';
 import { v4 as uuidv4 } from 'uuid';
 
+export const dynamic = 'force-dynamic';
+
 // Lazy initialization per evitare errori durante il build
 function getSupabaseClient() {
   return createClient(

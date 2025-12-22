@@ -3,6 +3,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+export const dynamic = 'force-dynamic';
+
 interface ReformulateRequest {
   conversationId: string;
   originalResponse: string;

@@ -8,6 +8,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { createExerciseRecommendationService } from '@/lib/services/exercise-recommendation';
 
+export const dynamic = 'force-dynamic';
+
 function getServiceClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
