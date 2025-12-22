@@ -336,3 +336,4 @@ function generateCompletionEmail(nome: string, challenge: string): string {
 </html>
   `;
 }
+// forced redeploy lun 22 dic 2025 17:19:03
