@@ -1,10 +1,17 @@
-// Cron job per inviare email giornaliere delle Challenge
+// Cron job per sistema email ibrido Challenge
 // Eseguito ogni giorno alle 8:00 UTC da Vercel Cron
+// Logica: Reminder 48h → Force Advance 72h → Recovery 3 giorni
 
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { getChallengeEmail } from '@/lib/email/challenge-day-templates';
+import {
+  getChallengeEmail,
+  getReminderEmail,
+  getForceAdvanceEmail,
+  getRecoveryEmail,
+  CHALLENGE_CONFIG
+} from '@/lib/email/challenge-day-templates';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,26 +26,30 @@ function getResendClient() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-// Calcola quale giorno di email inviare basandosi sulla data di iscrizione
-function calculateDayToSend(subscribedAt: string): number {
-  const subscriptionDate = new Date(subscribedAt);
-  const today = new Date();
+// Helper: calcola ore fa
+function hoursAgo(hours: number): string {
+  const date = new Date();
+  date.setHours(date.getHours() - hours);
+  return date.toISOString();
+}
 
-  // Reset time to midnight for accurate day calculation
-  subscriptionDate.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
+// Helper: calcola giorni fa
+function daysAgo(days: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date.toISOString();
+}
 
-  const diffTime = today.getTime() - subscriptionDate.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-  // Day 1 email is sent on subscription (handled by subscribe route)
-  // Day 2 email after 1 day, Day 3 after 2 days, etc.
-  return diffDays + 1;
+interface CronResults {
+  reminders: number;
+  forceAdvance: number;
+  recovery: number;
+  errors: string[];
 }
 
 export async function GET(request: NextRequest) {
   try {
-    // Verifica CRON_SECRET per sicurezza
+    // 1. Verifica CRON_SECRET per sicurezza
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
 
@@ -53,132 +64,265 @@ export async function GET(request: NextRequest) {
     const supabase = getSupabaseClient();
     const resend = getResendClient();
 
-    // Query subscribers attivi con current_day < 7
-    const { data: subscribers, error: queryError } = await supabase
-      .from('challenge_subscribers')
-      .select('*')
-      .eq('status', 'active')
-      .lt('current_day', 7);
+    const results: CronResults = {
+      reminders: 0,
+      forceAdvance: 0,
+      recovery: 0,
+      errors: []
+    };
 
-    if (queryError) {
-      console.error('Query error:', queryError);
-      return NextResponse.json(
-        { error: 'Database query failed' },
-        { status: 500 }
-      );
-    }
+    // ============================================================
+    // 2. REMINDER 48h - Utenti inattivi dopo email day_content
+    // ============================================================
+    try {
+      const { data: reminderCandidates } = await supabase
+        .from('challenge_subscribers')
+        .select('*')
+        .eq('status', 'active')
+        .lt('current_day', 7)
+        .eq('last_email_type', 'day_content')
+        .lt('last_email_sent_at', hoursAgo(48));
 
-    if (!subscribers || subscribers.length === 0) {
-      return NextResponse.json({
-        success: true,
-        message: 'No active subscribers to email',
-        sent: 0
-      });
-    }
+      if (reminderCandidates && reminderCandidates.length > 0) {
+        for (const subscriber of reminderCandidates) {
+          try {
+            const emailContent = getReminderEmail(
+              subscriber.challenge,
+              subscriber.current_day,
+              subscriber.nome || 'Amico/a'
+            );
 
-    let emailsSent = 0;
-    let emailsSkipped = 0;
-    let emailsFailed = 0;
-    const errors: string[] = [];
+            const config = CHALLENGE_CONFIG[subscriber.challenge as keyof typeof CHALLENGE_CONFIG];
 
-    for (const subscriber of subscribers) {
-      try {
-        const dayToSend = calculateDayToSend(subscriber.subscribed_at);
+            await resend.emails.send({
+              from: 'Fernando <fernando@vitaeology.com>',
+              to: subscriber.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              tags: [
+                { name: 'challenge', value: config?.tag || 'challenge' },
+                { name: 'email_type', value: 'reminder' }
+              ]
+            });
 
-        // Skip if day to send equals current_day (already sent)
-        // or if day to send is not the next day (not time yet)
-        if (dayToSend <= subscriber.current_day) {
-          emailsSkipped++;
-          continue;
+            // Aggiorna subscriber
+            await supabase
+              .from('challenge_subscribers')
+              .update({
+                last_email_sent_at: new Date().toISOString(),
+                last_email_type: 'reminder'
+              })
+              .eq('id', subscriber.id);
+
+            // Log evento email
+            await supabase.from('challenge_email_events').insert({
+              subscriber_id: subscriber.id,
+              challenge: subscriber.challenge,
+              day_number: subscriber.current_day,
+              event_type: 'sent',
+              created_at: new Date().toISOString()
+            });
+
+            results.reminders++;
+
+          } catch (emailError) {
+            const errorMsg = `Reminder ${subscriber.email}: ${emailError instanceof Error ? emailError.message : 'Unknown'}`;
+            results.errors.push(errorMsg);
+            console.error(errorMsg);
+          }
         }
-
-        // Skip if trying to send day > 7
-        if (dayToSend > 7) {
-          // Mark as completed
-          await supabase
-            .from('challenge_subscribers')
-            .update({
-              status: 'completed',
-              current_day: 7
-            })
-            .eq('id', subscriber.id);
-          emailsSkipped++;
-          continue;
-        }
-
-        // Get email content
-        const emailContent = getChallengeEmail(
-          subscriber.challenge,
-          dayToSend as 1 | 2 | 3 | 4 | 5 | 6 | 7,
-          subscriber.nome || 'Amico/a'
-        );
-
-        // Send email
-        const emailResult = await resend.emails.send({
-          from: 'Fernando <fernando@vitaeology.com>',
-          to: subscriber.email,
-          subject: emailContent.subject,
-          html: emailContent.html,
-          tags: [
-            { name: 'challenge', value: subscriber.challenge },
-            { name: 'day', value: String(dayToSend) }
-          ]
-        });
-
-        // Log email event
-        await supabase.from('challenge_email_events').insert({
-          subscriber_id: subscriber.id,
-          challenge: subscriber.challenge,
-          day: dayToSend,
-          email_type: 'daily',
-          status: 'sent',
-          resend_id: emailResult.data?.id || null,
-          created_at: new Date().toISOString()
-        });
-
-        // Update subscriber current_day
-        const updateData: { current_day: number; status?: string } = {
-          current_day: dayToSend
-        };
-
-        // If day 7, mark as completed
-        if (dayToSend === 7) {
-          updateData.status = 'completed';
-        }
-
-        await supabase
-          .from('challenge_subscribers')
-          .update(updateData)
-          .eq('id', subscriber.id);
-
-        emailsSent++;
-
-      } catch (emailError) {
-        emailsFailed++;
-        const errorMessage = emailError instanceof Error ? emailError.message : 'Unknown error';
-        errors.push(`${subscriber.email}: ${errorMessage}`);
-
-        // Log failed email
-        await supabase.from('challenge_email_events').insert({
-          subscriber_id: subscriber.id,
-          challenge: subscriber.challenge,
-          day: calculateDayToSend(subscriber.subscribed_at),
-          email_type: 'daily',
-          status: 'failed',
-          error_message: errorMessage,
-          created_at: new Date().toISOString()
-        });
       }
+    } catch (queryError) {
+      console.error('Query reminder error:', queryError);
     }
 
-    console.log(`Challenge emails: sent=${emailsSent}, skipped=${emailsSkipped}, failed=${emailsFailed}`);
+    // ============================================================
+    // 3. FORCE ADVANCE 72h - Auto-sblocco giorno successivo
+    // ============================================================
+    try {
+      const { data: forceAdvanceCandidates } = await supabase
+        .from('challenge_subscribers')
+        .select('*')
+        .eq('status', 'active')
+        .lt('current_day', 7)
+        .eq('last_email_type', 'reminder')
+        .lt('last_email_sent_at', hoursAgo(72));
+
+      if (forceAdvanceCandidates && forceAdvanceCandidates.length > 0) {
+        for (const subscriber of forceAdvanceCandidates) {
+          try {
+            const nextDay = subscriber.current_day + 1;
+
+            // Se nextDay > 7, marca come completato
+            if (nextDay > 7) {
+              await supabase
+                .from('challenge_subscribers')
+                .update({
+                  status: 'completed',
+                  completed_at: new Date().toISOString(),
+                  current_day: 7
+                })
+                .eq('id', subscriber.id);
+              continue;
+            }
+
+            const emailContent = getForceAdvanceEmail(
+              subscriber.challenge,
+              nextDay,
+              subscriber.nome || 'Amico/a'
+            );
+
+            const config = CHALLENGE_CONFIG[subscriber.challenge as keyof typeof CHALLENGE_CONFIG];
+
+            await resend.emails.send({
+              from: 'Fernando <fernando@vitaeology.com>',
+              to: subscriber.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              tags: [
+                { name: 'challenge', value: config?.tag || 'challenge' },
+                { name: 'email_type', value: 'force_advance' },
+                { name: 'day', value: String(nextDay) }
+              ]
+            });
+
+            // Aggiorna subscriber con nuovo giorno
+            const updateData: {
+              current_day: number;
+              last_email_sent_at: string;
+              last_email_type: string;
+              status?: string;
+              completed_at?: string;
+            } = {
+              current_day: nextDay,
+              last_email_sent_at: new Date().toISOString(),
+              last_email_type: 'day_content'
+            };
+
+            // Se giorno 7, marca completato
+            if (nextDay === 7) {
+              updateData.status = 'completed';
+              updateData.completed_at = new Date().toISOString();
+            }
+
+            await supabase
+              .from('challenge_subscribers')
+              .update(updateData)
+              .eq('id', subscriber.id);
+
+            // Log evento email
+            await supabase.from('challenge_email_events').insert({
+              subscriber_id: subscriber.id,
+              challenge: subscriber.challenge,
+              day_number: nextDay,
+              event_type: 'sent',
+              created_at: new Date().toISOString()
+            });
+
+            // Registra in day_completions
+            await supabase.from('challenge_day_completions').upsert({
+              subscriber_id: subscriber.id,
+              challenge: subscriber.challenge,
+              day_number: nextDay,
+              email_sent_at: new Date().toISOString()
+            }, {
+              onConflict: 'subscriber_id,challenge,day_number'
+            });
+
+            results.forceAdvance++;
+
+          } catch (emailError) {
+            const errorMsg = `ForceAdvance ${subscriber.email}: ${emailError instanceof Error ? emailError.message : 'Unknown'}`;
+            results.errors.push(errorMsg);
+            console.error(errorMsg);
+          }
+        }
+      }
+    } catch (queryError) {
+      console.error('Query force advance error:', queryError);
+    }
+
+    // ============================================================
+    // 4. RECOVERY 3 giorni post-completamento
+    // ============================================================
+    try {
+      const { data: recoveryCandidates } = await supabase
+        .from('challenge_subscribers')
+        .select('*')
+        .eq('status', 'completed')
+        .eq('converted_to_assessment', false)
+        .lt('completed_at', daysAgo(3))
+        .neq('last_email_type', 'recovery');
+
+      if (recoveryCandidates && recoveryCandidates.length > 0) {
+        for (const subscriber of recoveryCandidates) {
+          try {
+            const emailContent = getRecoveryEmail(
+              subscriber.challenge,
+              subscriber.nome || 'Amico/a'
+            );
+
+            const config = CHALLENGE_CONFIG[subscriber.challenge as keyof typeof CHALLENGE_CONFIG];
+
+            await resend.emails.send({
+              from: 'Fernando <fernando@vitaeology.com>',
+              to: subscriber.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              tags: [
+                { name: 'challenge', value: config?.tag || 'challenge' },
+                { name: 'email_type', value: 'recovery' }
+              ]
+            });
+
+            // Aggiorna subscriber
+            await supabase
+              .from('challenge_subscribers')
+              .update({
+                last_email_sent_at: new Date().toISOString(),
+                last_email_type: 'recovery'
+              })
+              .eq('id', subscriber.id);
+
+            // Log evento A/B
+            await supabase.from('ab_test_events').insert({
+              challenge: subscriber.challenge,
+              variant: subscriber.variant || 'A',
+              event_type: 'recovery_email_sent',
+              subscriber_id: subscriber.id,
+              created_at: new Date().toISOString()
+            });
+
+            results.recovery++;
+
+          } catch (emailError) {
+            const errorMsg = `Recovery ${subscriber.email}: ${emailError instanceof Error ? emailError.message : 'Unknown'}`;
+            results.errors.push(errorMsg);
+            console.error(errorMsg);
+          }
+        }
+      }
+    } catch (queryError) {
+      console.error('Query recovery error:', queryError);
+    }
+
+    // ============================================================
+    // 5. Return risultati
+    // ============================================================
+    const totalSent = results.reminders + results.forceAdvance + results.recovery;
+
+    console.log(`Challenge emails cron: reminders=${results.reminders}, forceAdvance=${results.forceAdvance}, recovery=${results.recovery}, errors=${results.errors.length}`);
 
     return NextResponse.json({
       success: true,
-      sent: emailsSent,
-      skipped: emailsSkipped,
-      failed: emailsFailed,
-      errors: errors.length > 0 ? errors : undefined
+      sent: {
+        reminders: results.reminders,
+        forceAdvance: results.forceAdvance,
+        recovery: results.recovery,
+        total: totalSent
+      },
+      errors: results.errors.length > 0 ? results.errors : undefined,
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {

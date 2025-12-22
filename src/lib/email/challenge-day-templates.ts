@@ -720,5 +720,301 @@ function generateEmailWrapper(
   `;
 }
 
+// ============================================================
+// EMAIL SISTEMA IBRIDO - Reminder, Force Advance, Conversion
+// ============================================================
+
+/**
+ * Email reminder per utenti inattivi
+ * Tono: incoraggiante, non pressante
+ */
+export function getReminderEmail(
+  challenge: string,
+  day: number,
+  nome: string
+): EmailContent {
+  const challengeKey = challenge as ChallengeKey;
+  const config = CHALLENGE_CONFIG[challengeKey];
+  const color = config?.color || '#D4AF37';
+  const challengeName = config?.name || 'Sfida';
+  const urlPath = config?.urlPath || 'leadership';
+  const dayUrl = `https://vitaeology.com/challenge/${urlPath}/day/${day}`;
+
+  return {
+    subject: `${nome}, il tuo percorso ti aspetta`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Georgia, serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <p style="color: #666; font-size: 14px; margin-bottom: 5px;">${challengeName}</p>
+    <h1 style="color: ${color}; margin: 0; font-size: 24px;">Il tuo Giorno ${day} ti aspetta</h1>
+  </div>
+
+  <p>Ciao ${nome},</p>
+
+  <p>Ho notato che non hai ancora completato il <strong>Giorno ${day}</strong> della tua sfida.</p>
+
+  <p>Nessuna fretta. La vita e piena di impegni e a volte le cose scivolano.</p>
+
+  <p>Ma volevo ricordarti che il tuo percorso e ancora li, pronto per te. Bastano <strong>5-10 minuti</strong> per completare l'esercizio di oggi.</p>
+
+  <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0;">
+    <p style="margin: 0; color: #666;">
+      <em>"Il momento perfetto non esiste. Esiste solo il momento in cui decidi di iniziare."</em>
+    </p>
+  </div>
+
+  <div style="text-align: center; margin: 40px 0;">
+    <a href="${dayUrl}" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 14px 28px; text-decoration: none; border-radius: 8px;">
+      Riprendi il Giorno ${day} →
+    </a>
+  </div>
+
+  <p>Sono qui se hai bisogno.</p>
+
+  <p>Un abbraccio,</p>
+  <p><strong>Fernando Marongiu</strong><br>
+  <span style="color: #666; font-size: 14px;">Fondatore Vitaeology</span></p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="font-size: 12px; color: #999; text-align: center;">
+    Hai ricevuto questa email perche ti sei iscritto alla Sfida ${challengeName}.<br>
+    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
+  </p>
+
+</body>
+</html>
+    `
+  };
+}
+
+/**
+ * Email per avanzamento forzato (quando l'utente e inattivo da troppo tempo)
+ * Tono: comprensivo, flessibile
+ */
+export function getForceAdvanceEmail(
+  challenge: string,
+  day: number,
+  nome: string
+): EmailContent {
+  const challengeKey = challenge as ChallengeKey;
+  const config = CHALLENGE_CONFIG[challengeKey];
+  const color = config?.color || '#D4AF37';
+  const challengeName = config?.name || 'Sfida';
+  const urlPath = config?.urlPath || 'leadership';
+  const dayUrl = `https://vitaeology.com/challenge/${urlPath}/day/${day}`;
+
+  return {
+    subject: `Giorno ${day}: proseguiamo insieme`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Georgia, serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <p style="color: #666; font-size: 14px; margin-bottom: 5px;">${challengeName}</p>
+    <h1 style="color: ${color}; margin: 0; font-size: 24px;">Giorno ${day} di 7</h1>
+  </div>
+
+  <p>Ciao ${nome},</p>
+
+  <p>So che la vita a volte ci travolge. Non sempre riusciamo a seguire i ritmi che ci eravamo prefissati.</p>
+
+  <p>Per questo ho deciso di sbloccarti il <strong>Giorno ${day}</strong>. Non voglio che ti senta indietro o sotto pressione.</p>
+
+  <div style="background: linear-gradient(135deg, ${color}15, ${color}05); padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid ${color};">
+    <p style="margin: 0;"><strong>Il tuo percorso e flessibile:</strong></p>
+    <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+      <li>Puoi completare i giorni saltati quando vuoi</li>
+      <li>Ogni esercizio resta disponibile per sempre</li>
+      <li>Non c'e un "ritardo" - c'e solo il tuo ritmo</li>
+    </ul>
+  </div>
+
+  <p>L'importante e che continui, anche se a modo tuo.</p>
+
+  <div style="text-align: center; margin: 40px 0;">
+    <a href="${dayUrl}" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 14px 28px; text-decoration: none; border-radius: 8px;">
+      Vai al Giorno ${day} →
+    </a>
+  </div>
+
+  <p>Ci vediamo dall'altra parte.</p>
+
+  <p><strong>Fernando Marongiu</strong><br>
+  <span style="color: #666; font-size: 14px;">Fondatore Vitaeology</span></p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="font-size: 12px; color: #999; text-align: center;">
+    Hai ricevuto questa email perche ti sei iscritto alla Sfida ${challengeName}.<br>
+    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
+  </p>
+
+</body>
+</html>
+    `
+  };
+}
+
+/**
+ * Email di conversione post-challenge
+ * Tono: celebrativo, motivante
+ */
+export function getConversionEmail(
+  challenge: string,
+  nome: string
+): EmailContent {
+  const challengeKey = challenge as ChallengeKey;
+  const config = CHALLENGE_CONFIG[challengeKey];
+  const color = config?.color || '#D4AF37';
+  const challengeName = config?.name || 'Sfida';
+
+  return {
+    subject: `Complimenti ${nome}! Scopri il tuo profilo completo`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Georgia, serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <div style="font-size: 48px; margin-bottom: 10px;">🏆</div>
+    <h1 style="color: ${color}; margin: 0; font-size: 28px;">Complimenti, ${nome}!</h1>
+    <p style="color: #666; font-size: 16px;">Hai completato la ${challengeName}</p>
+  </div>
+
+  <p>Ciao ${nome},</p>
+
+  <p>Ce l'hai fatta! <strong>7 giorni di crescita</strong>, portati a termine.</p>
+
+  <p>In questi giorni hai scoperto strumenti pratici che puoi usare per sempre. Ma c'e molto di piu da scoprire.</p>
+
+  <div style="background: linear-gradient(135deg, ${color}22, ${color}08); padding: 25px; border-radius: 12px; margin: 30px 0;">
+    <h2 style="color: ${color}; margin-top: 0; font-size: 20px;">Scopri il tuo Profilo Completo</h2>
+    <p>L'<strong>Assessment Vitaeology</strong> e un test scientifico che mappa le tue capacita di leadership in 5 dimensioni:</p>
+    <ul style="margin: 15px 0; padding-left: 20px;">
+      <li><strong>Autenticita</strong> - Chi sei veramente come leader</li>
+      <li><strong>Lucidita</strong> - Come leggi le situazioni</li>
+      <li><strong>Coraggio</strong> - Come affronti le sfide</li>
+      <li><strong>Equilibrio</strong> - Come gestisci le energie</li>
+      <li><strong>Capacita Risolutiva</strong> - Come risolvi i problemi</li>
+    </ul>
+    <p style="margin-bottom: 0;"><strong>Tempo richiesto:</strong> 15 minuti<br>
+    <strong>Risultato:</strong> Report personalizzato + esercizi su misura</p>
+  </div>
+
+  <div style="text-align: center; margin: 40px 0;">
+    <a href="https://vitaeology.com/test" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px;">
+      Fai l'Assessment Gratuito →
+    </a>
+    <p style="color: #999; font-size: 13px; margin-top: 12px;">Gratuito • 15 minuti • Risultati immediati</p>
+  </div>
+
+  <p>Il leader che cerchi e gia dentro di te. L'Assessment ti aiuta a vederlo chiaramente.</p>
+
+  <p>In bocca al lupo!</p>
+  <p><strong>Fernando Marongiu</strong><br>
+  <span style="color: #666; font-size: 14px;">Fondatore Vitaeology</span></p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="font-size: 12px; color: #999; text-align: center;">
+    Hai ricevuto questa email perche hai completato la Sfida ${challengeName}.<br>
+    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
+  </p>
+
+</body>
+</html>
+    `
+  };
+}
+
+/**
+ * Email recovery per chi non ha fatto l'Assessment dopo la challenge
+ * Tono: gentile promemoria, soft urgency
+ */
+export function getRecoveryEmail(
+  challenge: string,
+  nome: string
+): EmailContent {
+  const challengeKey = challenge as ChallengeKey;
+  const config = CHALLENGE_CONFIG[challengeKey];
+  const color = config?.color || '#D4AF37';
+  const challengeName = config?.name || 'Sfida';
+
+  return {
+    subject: `${nome}, il tuo Assessment ti aspetta`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Georgia, serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h1 style="color: ${color}; margin: 0; font-size: 24px;">Il prossimo passo ti aspetta</h1>
+  </div>
+
+  <p>Ciao ${nome},</p>
+
+  <p>Qualche giorno fa hai completato la <strong>${challengeName}</strong>. Complimenti ancora!</p>
+
+  <p>Volevo ricordarti che c'e un passo successivo che potrebbe interessarti: l'<strong>Assessment Vitaeology</strong>.</p>
+
+  <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0;">
+    <p style="margin: 0 0 15px 0;"><strong>Perche fare l'Assessment?</strong></p>
+    <ul style="margin: 0; padding-left: 20px;">
+      <li>Scopri le tue <strong>5 dimensioni di leadership</strong></li>
+      <li>Ricevi un <strong>report personalizzato</strong></li>
+      <li>Ottieni <strong>esercizi su misura</strong> per te</li>
+      <li>Traccia i tuoi <strong>progressi nel tempo</strong></li>
+    </ul>
+  </div>
+
+  <p>Hai gia dimostrato impegno completando la sfida. L'Assessment e il modo per trasformare quell'impegno in crescita concreta.</p>
+
+  <div style="text-align: center; margin: 40px 0;">
+    <a href="https://vitaeology.com/test" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 14px 28px; text-decoration: none; border-radius: 8px;">
+      Fai l'Assessment →
+    </a>
+    <p style="color: #999; font-size: 13px; margin-top: 12px;">Gratuito • 15 minuti</p>
+  </div>
+
+  <p>Il momento giusto e quando ti senti pronto. Ma ricorda: il momento perfetto non esiste.</p>
+
+  <p>Un abbraccio,</p>
+  <p><strong>Fernando Marongiu</strong><br>
+  <span style="color: #666; font-size: 14px;">Fondatore Vitaeology</span></p>
+
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+
+  <p style="font-size: 12px; color: #999; text-align: center;">
+    Hai ricevuto questa email perche hai partecipato alla Sfida ${challengeName}.<br>
+    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
+  </p>
+
+</body>
+</html>
+    `
+  };
+}
+
 // Export per test e uso diretto
 export { CHALLENGE_CONFIG, DAY_TITLES };
