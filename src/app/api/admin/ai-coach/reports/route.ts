@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { markReportReviewed } from '@/lib/ai-coach/weekly-report';
 import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   // Verifica che l'utente sia admin
   const adminCheck = await verifyAdminFromRequest();

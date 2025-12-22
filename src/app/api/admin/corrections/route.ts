@@ -15,6 +15,8 @@ import {
   CorrectionSuggestion,
 } from '@/lib/services/correction-suggestion';
 
+export const dynamic = 'force-dynamic';
+
 function getServiceClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

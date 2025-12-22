@@ -4,6 +4,8 @@ import { getRecentMetrics } from '@/lib/ai-coach/daily-metrics';
 import { getLatestReport } from '@/lib/ai-coach/weekly-report';
 import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
+export const dynamic = 'force-dynamic';
+
 function getSupabaseClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
