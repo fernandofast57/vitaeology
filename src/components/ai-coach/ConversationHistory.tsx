@@ -127,7 +127,7 @@ export default function ConversationHistory({
   // Initial load
   useEffect(() => {
     fetchConversations(true);
-  }, []);
+  }, [fetchConversations]);
 
   // Debounced search
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function ConversationHistory({
       fetchConversations(true, search);
     }, 300);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, fetchConversations]);
 
   // Elimina conversazione
   const handleDelete = async (sessionId: string) => {

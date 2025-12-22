@@ -70,6 +70,7 @@ interface ChatWidgetProps {
 // Soglie per segnali impliciti
 const LONG_PAUSE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minuti
 const IMMEDIATE_REPLY_THRESHOLD_MS = 30 * 1000; // 30 secondi
+const EDIT_TIME_LIMIT_MS = 5 * 60 * 1000; // 5 minuti per modificare un messaggio
 
 export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -362,9 +363,6 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
     }
   }, [userContext.userId]);
 
-  // Limite tempo per modifica: 5 minuti
-  const EDIT_TIME_LIMIT_MS = 5 * 60 * 1000;
-
   // Verifica se un messaggio utente è modificabile
   const isMessageEditable = useCallback((msg: ExtendedMessage, index: number): boolean => {
     // Solo messaggi utente
@@ -405,17 +403,6 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
   const cancelEditing = useCallback(() => {
     setEditingMessageIndex(null);
     setEditContent('');
-  }, []);
-
-  // Gestione tasti durante editing
-  const handleEditKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      cancelEditing();
-    }
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
-      e.preventDefault();
-      handleEditSubmit();
-    }
   }, []);
 
   // Invia modifica
@@ -491,6 +478,17 @@ export default function ChatWidget({ userContext }: ChatWidgetProps) {
       cancelEditing();
     }
   }, [editingMessageIndex, editContent, messages, userContext, cancelEditing]);
+
+  // Gestione tasti durante editing
+  const handleEditKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      cancelEditing();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      handleEditSubmit();
+    }
+  }, [cancelEditing, handleEditSubmit]);
 
   // Funzione per riformulare una risposta
   const handleReformulate = useCallback(async (

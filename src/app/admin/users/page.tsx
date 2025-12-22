@@ -95,7 +95,7 @@ export default function AdminUsersPage() {
       fetchUsers(1);
     }, 300);
     return () => clearTimeout(timer);
-  }, [search, roleFilter]);
+  }, [search, roleFilter, fetchUsers]);
 
   async function handleAssignRole(userId: string, roleName: string) {
     try {

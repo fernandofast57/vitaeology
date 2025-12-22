@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
@@ -42,14 +42,7 @@ export default function ABTestingDashboard() {
 
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchData();
-    // Auto-refresh ogni 30 secondi
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     try {
       // Fetch variant performance
       const { data: variants } = await supabase
@@ -77,7 +70,14 @@ export default function ABTestingDashboard() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchData();
+    // Auto-refresh ogni 30 secondi
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   const challenges = ['leadership-autentica', 'oltre-ostacoli', 'microfelicita'];
   const challengeNames: Record<string, string> = {
