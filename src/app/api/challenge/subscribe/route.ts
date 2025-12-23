@@ -135,6 +135,7 @@ export async function POST(request: NextRequest) {
     try {
       await resend.emails.send({
         from: 'Fernando <fernando@vitaeology.com>',
+        replyTo: 'fernando@vitaeology.com',
         to: email,
         subject: config.emailSubject,
         html: generateWelcomeEmail(nome || 'Amico/a', challenge, config),

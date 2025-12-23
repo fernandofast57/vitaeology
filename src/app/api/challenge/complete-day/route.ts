@@ -164,6 +164,7 @@ export async function POST(request: NextRequest) {
 
         await resend.emails.send({
           from: 'Fernando <fernando@vitaeology.com>',
+          replyTo: 'fernando@vitaeology.com',
           to: email,
           subject: emailContent.subject,
           html: emailContent.html,
@@ -205,6 +206,7 @@ export async function POST(request: NextRequest) {
         // Invia email di conversione/congratulazioni
         await resend.emails.send({
           from: 'Fernando <fernando@vitaeology.com>',
+          replyTo: 'fernando@vitaeology.com',
           to: email,
           subject: 'Complimenti! Hai completato la Sfida dei 7 Giorni',
           html: generateCompletionEmail(

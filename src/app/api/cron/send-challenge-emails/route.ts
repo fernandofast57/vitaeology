@@ -96,6 +96,7 @@ export async function GET(request: NextRequest) {
 
             await resend.emails.send({
               from: 'Fernando <fernando@vitaeology.com>',
+              replyTo: 'fernando@vitaeology.com',
               to: subscriber.email,
               subject: emailContent.subject,
               html: emailContent.html,
@@ -176,6 +177,7 @@ export async function GET(request: NextRequest) {
 
             await resend.emails.send({
               from: 'Fernando <fernando@vitaeology.com>',
+              replyTo: 'fernando@vitaeology.com',
               to: subscriber.email,
               subject: emailContent.subject,
               html: emailContent.html,
@@ -266,6 +268,7 @@ export async function GET(request: NextRequest) {
 
             await resend.emails.send({
               from: 'Fernando <fernando@vitaeology.com>',
+              replyTo: 'fernando@vitaeology.com',
               to: subscriber.email,
               subject: emailContent.subject,
               html: emailContent.html,
