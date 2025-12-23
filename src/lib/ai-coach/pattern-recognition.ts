@@ -58,7 +58,7 @@ function extractKeywords(text: string): string[] {
     'il', 'lo', 'la', 'i', 'gli', 'le', 'un', 'uno', 'una',
     'di', 'a', 'da', 'in', 'con', 'su', 'per', 'tra', 'fra',
     'che', 'e', 'o', 'ma', 'se', 'come', 'quando', 'dove',
-    'chi', 'cosa', 'quale', 'quanto', 'perche', 'non', 'sono',
+    'chi', 'cosa', 'quale', 'quanto', 'perché', 'non', 'sono',
     'ho', 'hai', 'ha', 'mi', 'ti', 'ci', 'vi', 'si', 'essere',
     'avere', 'fare', 'dire', 'andare', 'venire', 'potere', 'volere',
   ];

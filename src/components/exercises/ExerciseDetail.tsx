@@ -65,7 +65,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
 
   const handleComplete = async () => {
     if (ratingDifficulty === 0 || ratingUsefulness === 0) {
-      setError('Valuta difficolta e utilita prima di completare.');
+      setError('Valuta difficoltà e utilità prima di completare.');
       return;
     }
     setIsLoading(true);
@@ -219,7 +219,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Completa Esercizio</h2>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Difficolta percepita</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Difficoltà percepita</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -233,7 +233,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
                 </div>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Utilita esercizio</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Utilità esercizio</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button

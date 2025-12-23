@@ -24,7 +24,7 @@ const CHALLENGE_CONFIG = {
     tag: 'challenge-ostacoli'
   },
   'microfelicita': {
-    name: 'Microfelicita',
+    name: 'Microfelicità',
     color: '#8B5CF6', // Violet
     urlPath: 'microfelicita',
     tag: 'challenge-microfelicita'

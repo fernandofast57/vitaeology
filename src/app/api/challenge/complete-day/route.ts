@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     if (existingCompletion) {
       return NextResponse.json(
-        { error: 'Questo giorno e gia stato completato' },
+        { error: 'Questo giorno è già stato completato' },
         { status: 409 }
       );
     }
@@ -307,7 +307,7 @@ function generateCompletionEmail(nome: string, challenge: string, challengeConfi
 
   <p>In questi 7 giorni hai:</p>
   <ul>
-    <li>Scoperto capacita che gia possiedi</li>
+    <li>Scoperto capacità che già possiedi</li>
     <li>Imparato strumenti pratici da usare ogni giorno</li>
     <li>Fatto esercizi concreti che ti hanno dato risultati immediati</li>
   </ul>
