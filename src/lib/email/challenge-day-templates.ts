@@ -1,7 +1,7 @@
 // Template email per i 7 giorni delle Challenge
 // Basati su LEAD_MAGNET_CHALLENGE_VITAEOLOGY_v5_PULITO.md
 
-type ChallengeKey = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
+type ChallengeKey = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicità';
 type DayNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 interface EmailContent {
@@ -23,11 +23,11 @@ const CHALLENGE_CONFIG = {
     urlPath: 'ostacoli',
     tag: 'challenge-ostacoli'
   },
-  'microfelicita': {
+  'microfelicità': {
     name: 'Microfelicità',
     color: '#8B5CF6', // Violet
-    urlPath: 'microfelicita',
-    tag: 'challenge-microfelicita'
+    urlPath: 'microfelicità',
+    tag: 'challenge-microfelicità'
   }
 };
 
@@ -93,7 +93,7 @@ const DAY_TITLES: Record<ChallengeKey, Record<DayNumber, { title: string; subjec
       subject: "Giorno 7: Come una lingua straniera"
     }
   },
-  'microfelicita': {
+  'microfelicità': {
     1: {
       title: "Quello che Ti Perdi Ogni Giorno",
       subject: "Giorno 1: I 50 momenti che non vedi"
@@ -146,7 +146,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <p style="margin: 10px 0 0 0;">Ripensa alla settimana appena passata e cerca 3 momenti in cui qualcuno ti ha chiesto un consiglio, un'opinione o una decisione. Per ogni momento, scrivi chi era, cosa ti ha chiesto, cosa hai risposto.</p>
     </div>
 
-    <p>Guarda quello che hai scritto: hai la <strong>prova</strong> che qualcuno ti considera giàun punto di riferimento.</p>
+    <p>Guarda quello che hai scritto: hai la <strong>prova</strong> che qualcuno ti considera già un punto di riferimento.</p>
   `,
   2: (nome) => `
     <p>Ciao ${nome},</p>
@@ -155,7 +155,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Quella è la<strong>voce che sminuisce</strong>. La chiamiamo "Impostore" perchéti fa sentire un impostore — come se i tuoi successi non fossero davvero tuoi.</p>
 
-    <p>Immagina di avere un <strong>salvadanaio</strong> dove metti una moneta ogni volta che fai qualcosa di buono. Ma c'èun buco sul fondo: ogni moneta che metti cade fuori senza che tu la veda.</p>
+    <p>Immagina di avere un <strong>salvadanaio</strong> dove metti una moneta ogni volta che fai qualcosa di buono. Ma c'è un buco sul fondo: ogni moneta che metti cade fuori senza che tu la veda.</p>
 
     <p>Alla fine dell'anno apri il salvadanaio e lo trovi vuoto. Pensi: "Non ho fatto niente di buono quest'anno." Ma non è vero — le monete c'erano, solo che non sono rimaste.</p>
 
@@ -193,9 +193,9 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Pensa alla <strong>prima volta che hai guidato</strong> l'auto da solo, senza istruttore. Probabilmente avevi paura. Il cuore batteva forte, le mani erano sudate.</p>
 
-    <p>Ma hai guidato lo stesso. Quella èstata un'azione coraggiosa.</p>
+    <p>Ma hai guidato lo stesso. Quella è stata un'azione coraggiosa.</p>
 
-    <p>Il <strong>coraggio</strong> non èassenza di paura. È scegliere di agire anche se la paura c'e.</p>
+    <p>Il <strong>coraggio</strong> non è assenza di paura. È scegliere di agire anche se la paura c'e.</p>
 
     <p>Come funziona:</p>
     <ul>
@@ -206,7 +206,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (3 minuti + 1 azione):</strong></p>
-      <p style="margin: 10px 0 0 0;">Riprendi la situazione di ieri — quella che stavi evitando. Qual è ilpasso PIU PICCOLO che richiede un po' di coraggio? Non la soluzione completa. Solo il passo piùpiccolo possibile. Fallo oggi.</p>
+      <p style="margin: 10px 0 0 0;">Riprendi la situazione di ieri — quella che stavi evitando. Qual è il passo PIU PICCOLO che richiede un po' di coraggio? Non la soluzione completa. Solo il passo più piccolo possibile. Fallo oggi.</p>
     </div>
 
     <p><em>La paura non passa aspettando. Passa agendo.</em></p>
@@ -216,7 +216,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Immagina di avere una <strong>batteria del telefono</strong> che si ricarica di notte e si scarica durante il giorno. Se usi il telefono normalmente, arrivi a sera con un po' di carica residua. Ma se lo usi al massimo — video, giochi, schermo sempre acceso — alle 3 del pomeriggio è già morto.</p>
 
-    <p>Tu funzioni allo stesso modo. Hai una quantitàdi energia disponibile ogni giorno:</p>
+    <p>Tu funzioni allo stesso modo. Hai una quantità di energia disponibile ogni giorno:</p>
     <ul>
       <li>Alcune cose la <strong>consumano</strong>: riunioni stressanti, conflitti, decisioni difficili</li>
       <li>Altre la <strong>ricaricano</strong>: una pausa, una conversazione piacevole, un compito completato</li>
@@ -234,9 +234,9 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
   6: (nome) => `
     <p>Ciao ${nome},</p>
 
-    <p>Pensa a tre <strong>cantanti</strong> che ti piacciono. Hanno voci diverse, stili diversi, modi diversi di stare sul palco. Sarebbe assurdo dire: "L'unico modo giusto di cantare è ilmodo di Freddie Mercury."</p>
+    <p>Pensa a tre <strong>cantanti</strong> che ti piacciono. Hanno voci diverse, stili diversi, modi diversi di stare sul palco. Sarebbe assurdo dire: "L'unico modo giusto di cantare è il modo di Freddie Mercury."</p>
 
-    <p>Lo stesso vale per essere un punto di riferimento. Non devi copiare lo stile di qualcun altro. Devi trovare il <strong>tuo modo naturale</strong>.</p>
+    <p>Lo stesso vale per essere un punto di riferimento. Non serve copiare lo stile di qualcun altro. Il punto è trovare il <strong>tuo modo naturale</strong>.</p>
 
     <p>Gli stili naturali più comuni:</p>
     <ul>
@@ -261,11 +261,11 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Ecco cosa hai imparato questa settimana:</p>
     <ul>
-      <li><strong>Giorno 1</strong>: Sai che sei giàpunto di riferimento</li>
+      <li><strong>Giorno 1</strong>: Sai che sei già punto di riferimento</li>
       <li><strong>Giorno 2</strong>: Conosci la voce che sminuisce</li>
-      <li><strong>Giorno 3</strong>: Sai cos'èla lucidita</li>
-      <li><strong>Giorno 4</strong>: Sai cos'èil coraggio</li>
-      <li><strong>Giorno 5</strong>: Sai cos'èl'equilibrio</li>
+      <li><strong>Giorno 3</strong>: Sai cos'è la lucidità</li>
+      <li><strong>Giorno 4</strong>: Sai cos'è il coraggio</li>
+      <li><strong>Giorno 5</strong>: Sai cos'è l'equilibrio</li>
       <li><strong>Giorno 6</strong>: Conosci il tuo stile naturale</li>
     </ul>
 
@@ -278,7 +278,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio finale (10 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Scrivi 3 obiettivi su come vuoi essere quando sei punto di riferimento. Per ogni obiettivo, identifica quale capacitàrichiede. Scrivi: "Il mio primo passo concreto questa settimana e: ___"</p>
+      <p style="margin: 10px 0 0 0;">Scrivi 3 obiettivi su come vuoi essere quando sei punto di riferimento. Per ogni obiettivo, identifica quale capacità richiede. Scrivi: "Il mio primo passo concreto questa settimana e: ___"</p>
     </div>
 
     <p><em>Hai le basi. Ora serve pratica costante. Il leader che cerchi è già dentro di te.</em></p>
@@ -301,7 +301,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <p style="margin: 10px 0 0 0;">Trova 3 situazioni difficili che hai risolto negli ultimi 2-3 anni. Per ogni situazione, scrivi: qual era il problema, cosa hai fatto che ha funzionato, come ti sei sentito dopo.</p>
     </div>
 
-    <p><em>La capacitàrisolutiva esiste in te. Queste prove lo dimostrano.</em></p>
+    <p><em>La capacità risolutiva esiste in te. Queste prove lo dimostrano.</em></p>
   `,
   2: (nome) => `
     <p>Ciao ${nome},</p>
@@ -326,13 +326,13 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Hai presente quando qualcuno ti dice <strong>"Va tutto bene"</strong> ma dal tono capisci che non è vero?</p>
 
-    <p>Le parole sono solo una parte della comunicazione. Spesso la parte piùpiccola.</p>
+    <p>Le parole sono solo una parte della comunicazione. Spesso la parte più piccola.</p>
 
     <p>I segnali da osservare:</p>
     <ul>
       <li>Un cliente dice "Ci pensiamo" → Probabilmente ha obiezioni non espresse</li>
-      <li>Un capo dice "Buon lavoro" senza guardarti negli occhi → Forse non ècosi soddisfatto</li>
-      <li>Un collega evita sempre un certo argomento → Probabilmente c'èun problema li</li>
+      <li>Un capo dice "Buon lavoro" senza guardarti negli occhi → Forse non è così soddisfatto</li>
+      <li>Un collega evita sempre un certo argomento → Probabilmente c'è un problema li</li>
     </ul>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #10B981; margin: 20px 0;">
@@ -353,18 +353,18 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Le <strong>risorse nascoste</strong>:</p>
     <ul>
-      <li>Relazioni: qualcuno che conosco puòaiutare?</li>
+      <li>Relazioni: qualcuno che conosco può aiutare?</li>
       <li>Competenze trasferibili: cosa so fare che si applica anche qui?</li>
-      <li>Cose giàfatte: ho giàrisolto qualcosa di simile?</li>
+      <li>Cose già fatte: ho già risolto qualcosa di simile?</li>
       <li>Errori passati: cosa ho imparato dai tentativi falliti?</li>
     </ul>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #10B981; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (7 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Riprendi il problema che hai identificato. Fatti questa domanda: "Cosa ho GIA che posso usare?" Rispondi per ogni categoria: Persone, Competenze, Cose giàfatte, Strumenti, Errori passati.</p>
+      <p style="margin: 10px 0 0 0;">Riprendi il problema che hai identificato. Fatti questa domanda: "Cosa ho GIA che posso usare?" Rispondi per ogni categoria: Persone, Competenze, Cose già fatte, Strumenti, Errori passati.</p>
     </div>
 
-    <p><em>Chi risolve problemi meglio non ha piùrisorse. Vede piùrisorse.</em></p>
+    <p><em>Chi risolve problemi meglio non ha più risorse. Vede più risorse.</em></p>
   `,
   5: (nome) => `
     <p>Ciao ${nome},</p>
@@ -384,11 +384,11 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <p style="margin: 10px 0 0 0;">Scegli un problema attuale. Imposta il timer a 5 minuti.<br>
       MINUTO 1-2: "Quale schema si ripete?"<br>
       MINUTO 2-3: "Cosa non viene detto?"<br>
-      MINUTO 3-4: "Cosa ho giàche posso usare?"<br>
+      MINUTO 3-4: "Cosa ho già che posso usare?"<br>
       MINUTO 4-5: "Qual e UNA cosa concreta che faccio entro domani?"</p>
     </div>
 
-    <p><em>Hai giàle idee. Ora hai anche un sistema per trasformarle in risultati.</em></p>
+    <p><em>Hai già le idee. Ora hai anche un sistema per trasformarle in risultati.</em></p>
   `,
   6: (nome) => `
     <p>Ciao ${nome},</p>
@@ -416,11 +416,11 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Pensa a una <strong>lingua straniera</strong> che hai studiato a scuola. Se l'hai usata spesso, la ricordi ancora. Se non l'hai mai usata dopo, l'hai dimenticata.</p>
 
-    <p>La capacitàrisolutiva funziona allo stesso modo. Non basta "sapere" che esistono gli strumenti. Bisogna <strong>usarli</strong>.</p>
+    <p>La capacità risolutiva funziona allo stesso modo. Non basta "sapere" che esistono gli strumenti. Bisogna <strong>usarli</strong>.</p>
 
     <p>Ecco cosa hai imparato:</p>
     <ul>
-      <li><strong>Giorno 1</strong>: La prova che sai giàrisolvere</li>
+      <li><strong>Giorno 1</strong>: La prova che sai già risolvere</li>
       <li><strong>Giorno 2</strong>: Come vedere schemi ripetuti</li>
       <li><strong>Giorno 3</strong>: Come leggere segnali non detti</li>
       <li><strong>Giorno 4</strong>: Come trovare risorse nascoste</li>
@@ -439,7 +439,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
   `
 };
 
-// Contenuti email per Microfelicita
+// Contenuti email per Microfelicità
 const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
   1: (nome) => `
     <p>Ciao ${nome},</p>
@@ -457,7 +457,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #8B5CF6; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (3 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Stasera, prima di dormire, trova 3 momenti piacevoli della giornata. Anche piccoli (un sapore, un silenzio, un sorriso, una luce). Se ne trovi meno di 3, è normale — il radar non èancora calibrato.</p>
+      <p style="margin: 10px 0 0 0;">Stasera, prima di dormire, trova 3 momenti piacevoli della giornata. Anche piccoli (un sapore, un silenzio, un sorriso, una luce). Se ne trovi meno di 3, è normale — il radar non è ancora calibrato.</p>
     </div>
 
     <p><em>Il benessere non manca. Non lo noti. Questa settimana impari a vederlo.</em></p>
@@ -465,7 +465,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
   2: (nome) => `
     <p>Ciao ${nome},</p>
 
-    <p>Pensa ai momenti "grandi" di felicita: vacanze, promozioni, matrimoni. Quanti ne hai in un anno? <strong>3-4</strong>.</p>
+    <p>Pensa ai momenti "grandi" di felicità: vacanze, promozioni, matrimoni. Quanti ne hai in un anno? <strong>3-4</strong>.</p>
 
     <p>Ora pensa ai momenti "piccoli": un caffè buono, una risata, un lavoro finito, un bel tramonto. Quanti potrebbero essercene ogni giorno? <strong>50? 100?</strong></p>
 
@@ -513,7 +513,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
   4: (nome) => `
     <p>Ciao ${nome},</p>
 
-    <p>R.A.D.A.R. puòfallire per <strong>4 errori comuni</strong>. Tutti facili da correggere una volta che li conosci.</p>
+    <p>R.A.D.A.R. può fallire per <strong>4 errori comuni</strong>. Tutti facili da correggere una volta che li conosci.</p>
 
     <p><strong>ERRORE 1: Cercare invece di notare</strong><br>
     Sintomo: "Dove sono questi momenti? Non li trovo!"<br>
@@ -529,7 +529,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p><strong>ERRORE 4: Fare R.A.D.A.R. solo in momenti speciali</strong><br>
     Sintomo: "Lo faccio quando sono rilassato"<br>
-    Correzione: Fallo durante attivitànormali — lavarsi le mani, camminare, sedersi.</p>
+    Correzione: Fallo durante attività normali — lavarsi le mani, camminare, sedersi.</p>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #8B5CF6; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (5 minuti + pratica):</strong></p>
@@ -556,7 +556,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
       Trova almeno 2 cose positive (anche piccole). Scrivi entrambi: il negativo E il positivo.</p>
     </div>
 
-    <p><em>R.A.D.A.R. non nega il negativo. Lo bilancia con quello che c'ègiàdi positivo.</em></p>
+    <p><em>R.A.D.A.R. non nega il negativo. Lo bilancia con quello che c'è già di positivo.</em></p>
   `,
   6: (nome) => `
     <p>Ciao ${nome},</p>
@@ -599,7 +599,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <li>Giorno 3: R.A.D.A.R. in 5 passi</li>
       <li>Giorno 4: 4 errori comuni</li>
       <li>Giorno 5: Non nega il negativo</li>
-      <li>Giorno 6: Collegalo a qualcosa che giàfai</li>
+      <li>Giorno 6: Collegalo a qualcosa che già fai</li>
     </ul>
 
     <p><strong>La Regola per i Prossimi 21 Giorni:</strong><br>
@@ -611,10 +611,10 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <p style="margin: 10px 0 0 0;">Conferma il tuo aggancio: "Quando ___, faccio R.A.D.A.R."<br>
       Imposta un modo per tenere traccia (calendario, app, nota).<br>
       Obiettivo: 21 X di fila.<br>
-      Rispondi: "Se notassi 10 momenti positivi in piùogni giorno, come cambierebbe la mia settimana?"</p>
+      Rispondi: "Se notassi 10 momenti positivi in più ogni giorno, come cambierebbe la mia settimana?"</p>
     </div>
 
-    <p><em>Il benessere che cerchi ti sta giàattraversando. Ora sai come notarlo.</em></p>
+    <p><em>Il benessere che cerchi ti sta già attraversando. Ora sai come notarlo.</em></p>
   `
 };
 
@@ -652,7 +652,7 @@ export function getChallengeEmail(
     case 'oltre-ostacoli':
       contentFn = OSTACOLI_EMAILS[day];
       break;
-    case 'microfelicita':
+    case 'microfelicità':
       contentFn = MICROFELICITA_EMAILS[day];
       break;
     default:
@@ -838,7 +838,7 @@ export function getForceAdvanceEmail(
     <ul style="margin: 10px 0 0 0; padding-left: 20px;">
       <li>Puoi completare i giorni saltati quando vuoi</li>
       <li>Ogni esercizio resta disponibile per sempre</li>
-      <li>Non c'èun "ritardo" - c'èsolo il tuo ritmo</li>
+      <li>Non c'è un "ritardo" - c'è solo il tuo ritmo</li>
     </ul>
   </div>
 
@@ -902,17 +902,17 @@ export function getConversionEmail(
 
   <p>Ce l'hai fatta! <strong>7 giorni di crescita</strong>, portati a termine.</p>
 
-  <p>In questi giorni hai scoperto strumenti pratici che puoi usare per sempre. Ma c'èmolto di piùda scoprire.</p>
+  <p>In questi giorni hai scoperto strumenti pratici che puoi usare per sempre. Ma c'è molto di più da scoprire.</p>
 
   <div style="background: linear-gradient(135deg, ${color}22, ${color}08); padding: 25px; border-radius: 12px; margin: 30px 0;">
     <h2 style="color: ${color}; margin-top: 0; font-size: 20px;">Scopri il tuo Profilo Completo</h2>
-    <p>L'<strong>Assessment Vitaeology</strong> è untest scientifico che mappa le tue capacitàdi leadership in 5 dimensioni:</p>
+    <p>L'<strong>Assessment Vitaeology</strong> è un test scientifico che mappa le tue capacità di leadership in 5 dimensioni:</p>
     <ul style="margin: 15px 0; padding-left: 20px;">
-      <li><strong>Autenticita</strong> - Chi sei veramente come leader</li>
-      <li><strong>Lucidita</strong> - Come leggi le situazioni</li>
+      <li><strong>Autenticità</strong> - Chi sei veramente come leader</li>
+      <li><strong>Lucidità</strong> - Come leggi le situazioni</li>
       <li><strong>Coraggio</strong> - Come affronti le sfide</li>
       <li><strong>Equilibrio</strong> - Come gestisci le energie</li>
-      <li><strong>Capacita Risolutiva</strong> - Come risolvi i problemi</li>
+      <li><strong>Capacità Risolutiva</strong> - Come risolvi i problemi</li>
     </ul>
     <p style="margin-bottom: 0;"><strong>Tempo richiesto:</strong> 15 minuti<br>
     <strong>Risultato:</strong> Report personalizzato + esercizi su misura</p>
@@ -976,7 +976,7 @@ export function getRecoveryEmail(
 
   <p>Qualche giorno fa hai completato la <strong>${challengeName}</strong>. Complimenti ancora!</p>
 
-  <p>Volevo ricordarti che c'èun passo successivo che potrebbe interessarti: l'<strong>Assessment Vitaeology</strong>.</p>
+  <p>Volevo ricordarti che c'è un passo successivo che potrebbe interessarti: l'<strong>Assessment Vitaeology</strong>.</p>
 
   <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0;">
     <p style="margin: 0 0 15px 0;"><strong>Perchéfare l'Assessment?</strong></p>
@@ -988,7 +988,7 @@ export function getRecoveryEmail(
     </ul>
   </div>
 
-  <p>Hai giàdimostrato impegno completando la sfida. L'Assessment è ilmodo per trasformare quell'impegno in crescita concreta.</p>
+  <p>Hai già dimostrato impegno completando la sfida. L'Assessment è il modo per trasformare quell'impegno in crescita concreta.</p>
 
   <div style="text-align: center; margin: 40px 0;">
     <a href="https://vitaeology.com/test" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 14px 28px; text-decoration: none; border-radius: 8px;">
