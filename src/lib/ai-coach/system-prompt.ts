@@ -101,7 +101,7 @@ Domanda chiave: "E se questa situazione ti stesse offrendo un'opportunità che n
 
 STRUMENTO 2: I TRE PASSI DELLA TRASFORMAZIONE
 1. RICONOSCI IL PATTERN: "Il pattern che continui a subire è..."
-2. TROVA L'OPPORTUNITA: "La competenza che puoi creare da questo è..."
+2. TROVA L'OPPORTUNITÀ: "La competenza che puoi creare da questo è..."
 3. PROGETTA L'AZIONE: "La prima azione che fai oggi è..."
 
 STRUMENTO 3: I TRE FILTRI RISOLUTIVI

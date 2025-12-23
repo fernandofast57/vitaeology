@@ -143,7 +143,7 @@ export default function AICoachAdminDashboard() {
   function exportToCSV() {
     if (dailyMetrics.length === 0) return;
 
-    const headers = ['Data', 'Conversazioni', 'Messaggi', 'Rating', 'Tasso Utilita %', 'Costo API €', 'Tempo Risposta ms', 'Pattern Corretti'];
+    const headers = ['Data', 'Conversazioni', 'Messaggi', 'Rating', 'Tasso Utilità %', 'Costo API €', 'Tempo Risposta ms', 'Pattern Corretti'];
     const rows = dailyMetrics.map(m => [
       m.date,
       m.conversations,
@@ -375,7 +375,7 @@ export default function AICoachAdminDashboard() {
                 icon="⭐"
               />
               <MetricCard
-                title="Tasso Utilita"
+                title="Tasso Utilità"
                 value={`${(metrics.helpfulRatio * 100).toFixed(0)}%`}
                 subtitle="Feedback positivi"
                 highlight={metrics.helpfulRatio >= 0.8}
@@ -449,7 +449,7 @@ export default function AICoachAdminDashboard() {
               {/* Rating & Helpful Chart */}
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Qualita Risposte
+                  Qualità Risposte
                 </h3>
                 <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={formattedDailyMetrics}>
@@ -460,7 +460,7 @@ export default function AICoachAdminDashboard() {
                     <Tooltip />
                     <Legend />
                     <Line yAxisId="left" type="monotone" dataKey="rating" stroke="#10B981" name="Rating (0-5)" strokeWidth={2} />
-                    <Line yAxisId="right" type="monotone" dataKey="helpfulPercent" stroke="#3B82F6" name="Utilita %" strokeWidth={2} />
+                    <Line yAxisId="right" type="monotone" dataKey="helpfulPercent" stroke="#3B82F6" name="Utilità %" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -513,7 +513,7 @@ export default function AICoachAdminDashboard() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Conv.</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Msg</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rating</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utilita</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utilità</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Costo</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Risposta</th>
                     </tr>

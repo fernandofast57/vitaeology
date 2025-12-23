@@ -101,7 +101,7 @@ export default function HomePage() {
               </h3>
               <p className="text-gray-600">
                 Visualizza i tuoi risultati con un grafico radar interattivo. 
-                Identifica punti di forza e aree di miglioramento.
+                Identifica i tuoi punti di forza e le aree dove puoi crescere.
               </p>
             </div>
 

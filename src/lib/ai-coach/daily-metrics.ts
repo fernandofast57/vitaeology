@@ -40,7 +40,7 @@ export async function calculateDailyMetrics(
       ? conversations.reduce((sum, c) => sum + (c.response_time_ms || 0), 0) / conversations.length
       : null;
 
-    // PRODOTTO 2: Qualita (rating e helpful ratio)
+    // PRODOTTO 2: Qualità (rating e helpful ratio)
     const { data: feedbackData } = await supabase
       .from('ai_coach_feedback')
       .select('rating, is_helpful, conversation_id')

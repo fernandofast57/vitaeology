@@ -26,7 +26,10 @@
       "Bash(npx tsc:*)",
       "Bash(middleware)",
       "Bash(tsconfig:*)",
-      "Bash(.env \")"
+      "Bash(.env \")",
+      "Bash(dig:*)",
+      "Bash(__NEW_LINE__ echo \"\")",
+      "Bash(nslookup:*)"
     ]
   }
 }

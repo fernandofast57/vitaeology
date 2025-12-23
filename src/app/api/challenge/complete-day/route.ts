@@ -317,9 +317,9 @@ function generateCompletionEmail(nome: string, challenge: string, challengeConfi
   <div style="background: linear-gradient(135deg, ${color}22, ${color}11); padding: 25px; border-radius: 12px; margin: 30px 0;">
     <h2 style="color: ${color}; margin-top: 0;">Il Prossimo Passo</h2>
     <p>Se hai trovato valore in questi 7 giorni, immagina cosa potresti ottenere con un <strong>percorso completo</strong> di sviluppo personale.</p>
-    <p>Vitaeology offre programmi strutturati che ti guidano in un percorso di trasformazione profonda, con:</p>
+    <p>Vitaeology offre programmi strutturati per costruire il tuo percorso di trasformazione profonda, con:</p>
     <ul>
-      <li>Assessment completo delle tue capacita</li>
+      <li>Assessment completo delle tue capacità</li>
       <li>Esercizi personalizzati sulla tua situazione</li>
       <li>AI Coach disponibile 24/7</li>
       <li>Tracking dei progressi nel tempo</li>
