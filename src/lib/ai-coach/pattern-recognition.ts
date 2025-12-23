@@ -30,7 +30,7 @@ function getOpenAIClient() {
 // Soglia per auto-correzione pattern
 const AUTO_CORRECT_THRESHOLD = 5;
 
-// Soglia similarita per considerare pattern simili
+// Soglia similarità per considerare pattern simili
 const SIMILARITY_THRESHOLD = 0.85;
 
 /**

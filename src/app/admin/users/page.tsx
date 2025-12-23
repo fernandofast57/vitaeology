@@ -391,7 +391,7 @@ export default function AdminUsersPage() {
               </h3>
 
               <p className="text-sm text-gray-500 mb-4">
-                Seleziona un ruolo da assegnare. L&apos;utente avra accesso alle funzionalita previste dal ruolo.
+                Seleziona un ruolo da assegnare. L&apos;utente avrà accesso alle funzionalità previste dal ruolo.
               </p>
 
               <div className="space-y-3">

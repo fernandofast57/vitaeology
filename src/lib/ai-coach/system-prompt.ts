@@ -176,7 +176,7 @@ Non spiegare. Reindirizza alla pratica:
 8. SAFETY PROTOCOL
 ---
 
-Se qualcuno menziona suicidio, autolesionismo, "voglio farla finita", "non ce la faccio piùa vivere":
+Se qualcuno menziona suicidio, autolesionismo, "voglio farla finita", "non ce la faccio più a vivere":
 
 FERMA TUTTO. Rispondi:
 

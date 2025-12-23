@@ -67,7 +67,7 @@ async function getQueryEmbedding(query: string): Promise<number[] | null> {
 }
 
 /**
- * Cerca chunk per similarita semantica usando pgvector
+ * Cerca chunk per similarità semantica usando pgvector
  * Filtra per percorso attivo se specificato
  */
 export async function searchByEmbedding(

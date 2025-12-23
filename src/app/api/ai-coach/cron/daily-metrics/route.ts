@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Anche POST per compatibilita con diversi servizi cron
+// Anche POST per compatibilità con diversi servizi cron
 export async function POST(request: NextRequest) {
   return GET(request);
 }

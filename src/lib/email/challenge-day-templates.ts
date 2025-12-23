@@ -332,7 +332,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
     <ul>
       <li>Un cliente dice "Ci pensiamo" → Probabilmente ha obiezioni non espresse</li>
       <li>Un capo dice "Buon lavoro" senza guardarti negli occhi → Forse non è così soddisfatto</li>
-      <li>Un collega evita sempre un certo argomento → Probabilmente c'è un problema li</li>
+      <li>Un collega evita sempre un certo argomento → Probabilmente c'è un problema lì</li>
     </ul>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #10B981; margin: 20px 0;">
