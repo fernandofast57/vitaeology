@@ -3,7 +3,7 @@ import { runDailyMetricsJob } from '@/lib/ai-coach/daily-metrics';
 
 export const dynamic = 'force-dynamic';
 
-// Questo endpoint puo essere chiamato da:
+// Questo endpoint può essere chiamato da:
 // - Vercel Cron Jobs (configurare in vercel.json)
 // - Servizio esterno (cron-job.org, etc.)
 // - Manualmente per test

@@ -1,10 +1,11 @@
 # STILE VITAEOLOGY - Guida Completa alla Scrittura
 ## Documento Unificato per Testi Autentici in Italiano
 
-**Versione:** 1.0  
+**Versione:** 1.1  
 **Data:** 23 Dicembre 2025  
 **Autore:** Fernando Marongiu  
 **Scopo:** Garantire che TUTTI i testi Vitaeology suonino come scritti da Fernando, non tradotti dall'inglese o generati da AI
+**Changelog v1.1:** Aggiunta sezione 1.8 - Accenti obbligatori su monosillabi (lì/là/sì/né/è/dà)
 
 ---
 
@@ -29,8 +30,8 @@
 | 5 | Tono motivazionale americano | Tono pragmatico italiano |
 | 6 | "Devi", "Dovresti" (prescrittivo) | "Puoi", "Potresti" (possibilità) |
 | 7 | Frasi > 40 parole | Spezza con punto |
-| 8 | Gerundi anglofoni | Forme italiane naturali |
-| 9 | Astrattezza senza esempi | Sempre esempi concreti |
+| 8 | Accenti mancanti: "li, la, si, ne, e" | "lì, là, sì, né, è" (monosillabi) |
+| 9 | Accenti mancanti: "perche, piu, gia" | "perché, più, già" (parole comuni) |
 | 10 | Linguaggio generico AI | Voce autentica Fernando |
 
 ---
@@ -136,6 +137,76 @@ Preposizione + articolo = forma contratta OBBLIGATORIA.
 
 **✅ CORRETTO (2 frasi):**
 > "Il leader autentico comprende il valore della motivazione intrinseca e riconosce i segnali di disagio nel suo team. Questo gli permette di creare un ambiente dove le persone si sentono valorizzate e possono esprimere il loro potenziale."
+
+---
+
+## 1.8 ACCENTI OBBLIGATORI SU MONOSILLABI E AVVERBI 🔴
+
+In italiano, molti monosillabi cambiano COMPLETAMENTE significato con o senza accento. Errore grave confonderli.
+
+### Monosillabi con accento obbligatorio:
+
+| ❌ Senza accento | ✅ Con accento | Significato corretto |
+|------------------|----------------|----------------------|
+| li | **lì** | avverbio di luogo (there) |
+| la | **là** | avverbio di luogo (over there) |
+| si | **sì** | affermazione (yes) |
+| ne | **né** | congiunzione negativa (nor) |
+| se | **sé** | pronome riflessivo (himself/herself) |
+| da | **dà** | verbo dare, 3ª persona (gives) |
+| e | **è** | verbo essere, 3ª persona (is) |
+| che | **ché** | congiunzione causale (because) - raro |
+
+### Parole comuni che richiedono accento:
+
+| ❌ Errore | ✅ Corretto |
+|-----------|-------------|
+| pero | **però** |
+| perche | **perché** |
+| cioe | **cioè** |
+| piu | **più** |
+| gia | **già** |
+| cosi | **così** |
+| puo | **può** |
+| sara | **sarà** |
+| fara | **farà** |
+| andra | **andrà** |
+| verra | **verrà** |
+| meta | **metà** (half) vs meta (goal) |
+
+### Contesto d'uso - Esempi:
+
+| ❌ Errore | ✅ Corretto |
+|-----------|-------------|
+| "c'è un problema li" | "c'è un problema **lì**" |
+| "vai la" | "vai **là**" |
+| "si, sono d'accordo" | "**sì**, sono d'accordo" |
+| "ne questo ne quello" | "**né** questo **né** quello" |
+| "pensa a se stesso" | "pensa a **sé** stesso" |
+| "lui da il permesso" | "lui **dà** il permesso" |
+| "questo e importante" | "questo **è** importante" |
+
+### Pattern CTRL+F per trovare errori:
+
+```bash
+# Cerca monosillabi sospetti (verificare contesto)
+grep -n " li " [file]      # potrebbe essere "lì"
+grep -n " la " [file]      # potrebbe essere "là" (raro)
+grep -n " si " [file]      # potrebbe essere "sì"
+grep -n " ne " [file]      # potrebbe essere "né"
+grep -n " da " [file]      # potrebbe essere "dà"
+grep -n " e " [file]       # potrebbe essere "è"
+
+# Parole sicuramente errate (sempre correggere)
+grep -n "pero[^a-z]" [file]    # → però
+grep -n "perche[^a-z]" [file]  # → perché
+grep -n "cioe[^a-z]" [file]    # → cioè
+grep -n "piu[^a-z]" [file]     # → più
+grep -n "gia[^a-z]" [file]     # → già
+grep -n "cosi[^a-z]" [file]    # → così
+```
+
+**ATTENZIONE:** "li" (pronome: "li vedo") vs "lì" (avverbio: "vado lì") - verificare sempre il contesto!
 
 ---
 
