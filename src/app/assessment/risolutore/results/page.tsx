@@ -306,7 +306,7 @@ export default function RisolutoreResultsPage() {
             Vuoi potenziare le tue capacità di Risolutore?
           </h2>
           <p className="mb-6 opacity-90">
-            Scopri il libro "Oltre gli Ostacoli" e la Challenge di 7 giorni
+            Scopri il libro &ldquo;Oltre gli Ostacoli&rdquo; e la Challenge di 7 giorni
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button

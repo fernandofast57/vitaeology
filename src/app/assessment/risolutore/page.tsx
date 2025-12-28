@@ -185,7 +185,7 @@ export default function AssessmentRisolutorePage() {
           <div className="text-emerald-500 text-5xl mb-4">🔒</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Assessment Bloccato</h2>
           <p className="text-gray-600 mb-6">
-            Per accedere all'assessment "Oltre gli Ostacoli" devi prima acquistare il libro o completare la Challenge di 7 giorni.
+            Per accedere all&apos;assessment &ldquo;Oltre gli Ostacoli&rdquo; devi prima acquistare il libro o completare la Challenge di 7 giorni.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
