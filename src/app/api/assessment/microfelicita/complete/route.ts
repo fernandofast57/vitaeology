@@ -6,6 +6,8 @@ import {
   completeMicrofelicitaAssessment,
 } from '@/lib/supabase/microfelicita';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   try {
     const supabase = await createClient();

@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { loadLiteQuestions } from '@/lib/supabase/assessment';
 import { sortQuestionsByPillar } from '@/lib/assessment-scoring';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const supabase = await createClient();

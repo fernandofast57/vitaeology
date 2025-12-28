@@ -6,6 +6,8 @@ import {
   completeRisolutoreAssessment,
 } from '@/lib/supabase/risolutore';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   try {
     const supabase = await createClient();

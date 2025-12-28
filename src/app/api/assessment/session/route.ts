@@ -8,6 +8,8 @@ import {
 } from '@/lib/supabase/assessment';
 import { checkAssessmentAccess } from '@/lib/assessment-access';
 
+export const dynamic = 'force-dynamic';
+
 // GET - Recupera sessione in corso o crea nuova
 export async function GET() {
   try {

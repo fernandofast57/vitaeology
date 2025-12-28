@@ -7,6 +7,8 @@ import {
   updateCurrentQuestion,
 } from '@/lib/supabase/assessment';
 
+export const dynamic = 'force-dynamic';
+
 interface AnswerPayload {
   questionId: number;
   rawScore: number;

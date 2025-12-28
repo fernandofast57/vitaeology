@@ -8,6 +8,8 @@ import {
 } from '@/lib/supabase/risolutore';
 import { checkAssessmentAccess } from '@/lib/assessment-access';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
   try {
     const supabase = await createClient();

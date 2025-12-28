@@ -7,6 +7,8 @@ import {
   updateMicrofelicitaCurrentQuestion,
 } from '@/lib/supabase/microfelicita';
 
+export const dynamic = 'force-dynamic';
+
 interface AnswerPayload {
   questionId: number;
   rawScore: number;

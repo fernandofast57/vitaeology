@@ -7,6 +7,8 @@ import {
   updateRisolutoreCurrentQuestion,
 } from '@/lib/supabase/risolutore';
 
+export const dynamic = 'force-dynamic';
+
 interface AnswerPayload {
   questionId: number;
   rawScore: number; // 0=FALSO, 1=INCERTO, 2=VERO
