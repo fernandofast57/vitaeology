@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import WelcomeHero from '@/components/dashboard/WelcomeHero';
 import AssessmentCard from '@/components/dashboard/AssessmentCard';
+import AssessmentsOverview from '@/components/dashboard/AssessmentsOverview';
 import QuickStats from '@/components/dashboard/QuickStats';
 import TrialBanner from '@/components/dashboard/TrialBanner';
 import RecentActivity from '@/components/dashboard/RecentActivity';
@@ -185,15 +186,11 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Sezione secondaria: Assessment recap (solo se completato) o Recent Activity */}
-            {assessment?.status === 'completed' ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                <AssessmentCard assessment={assessment} />
-                <RecentActivity />
-              </div>
-            ) : (
-              <RecentActivity />
-            )}
+            {/* Overview dei 3 Assessment */}
+            <AssessmentsOverview />
+
+            {/* Sezione secondaria: Recent Activity */}
+            <RecentActivity />
           </div>
         </main>
       </div>

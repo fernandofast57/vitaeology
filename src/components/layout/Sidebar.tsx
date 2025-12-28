@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Shield, Users, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Shield, Users, BarChart3, Target, Sparkles, ChevronDown } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 interface SidebarProps {
@@ -16,9 +16,14 @@ interface SidebarProps {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Assessment', href: '/test', icon: ClipboardCheck },
   { name: 'Esercizi', href: '/exercises', icon: BookOpen },
   { name: 'Progressi', href: '/progress', icon: TrendingUp },
+];
+
+const assessmentNav = [
+  { name: 'Leadership Autentica', href: '/assessment/lite', icon: BookOpen, color: 'text-amber-400' },
+  { name: 'Oltre gli Ostacoli', href: '/assessment/risolutore', icon: Target, color: 'text-emerald-400' },
+  { name: 'Microfelicità', href: '/assessment/microfelicita', icon: Sparkles, color: 'text-violet-400' },
 ];
 
 const accountNav = [
@@ -34,6 +39,7 @@ const adminNav = [
 export default function Sidebar({ isOpen, onClose, userEmail, userName }: SidebarProps) {
   const pathname = usePathname();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [assessmentOpen, setAssessmentOpen] = useState(pathname.startsWith('/assessment'));
   const supabase = createClient();
 
   useEffect(() => {
@@ -90,6 +96,35 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
             <span>{item.name}</span>
           </Link>
         ))}
+
+        {/* Assessment Submenu */}
+        <div>
+          <button
+            onClick={() => setAssessmentOpen(!assessmentOpen)}
+            className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg ${pathname.startsWith('/assessment') ? 'bg-gold-500/20 text-gold-400' : 'text-white/80 hover:bg-white/10'}`}
+          >
+            <div className="flex items-center gap-3">
+              <ClipboardCheck className="w-5 h-5" />
+              <span>Assessment</span>
+            </div>
+            <ChevronDown className={`w-4 h-4 transition-transform ${assessmentOpen ? 'rotate-180' : ''}`} />
+          </button>
+          {assessmentOpen && (
+            <div className="mt-1 ml-4 space-y-1">
+              {assessmentNav.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={onClose}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm ${pathname === item.href || pathname.startsWith(item.href) ? 'bg-gold-500 text-petrol-600 font-medium' : `${item.color} hover:bg-white/10`}`}
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
         <div className="pt-6">
           <p className="text-xs font-semibold text-white/40 uppercase mb-3 px-3">Account</p>
           {accountNav.map((item) => (

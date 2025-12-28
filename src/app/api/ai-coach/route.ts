@@ -12,6 +12,7 @@ import {
   detectReformulation
 } from '@/lib/ai-coach/implicit-signals';
 import { v4 as uuidv4 } from 'uuid';
+import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,53 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         { message: 'Nessun messaggio fornito' },
         { status: 400 }
       );
+    }
+
+    // === VERIFICA LIMITI AI COACH PER TIER ===
+    let dailyLimit = 5; // Default per explorer o utenti non autenticati
+    let userTier: SubscriptionTier = 'explorer';
+
+    if (userContext?.userId) {
+      // Recupera profilo utente per tier
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('subscription_tier')
+        .eq('id', userContext.userId)
+        .single();
+
+      if (profile?.subscription_tier) {
+        userTier = profile.subscription_tier as SubscriptionTier;
+        const tierConfig = SUBSCRIPTION_TIERS[userTier];
+        if (tierConfig) {
+          const limit = tierConfig.features.ai_coach_messages_per_day;
+          dailyLimit = limit === 'unlimited' ? 999999 : limit;
+        }
+      }
+
+      // Verifica limite giornaliero (solo per tier non illimitati)
+      if (dailyLimit < 999999) {
+        const { data: limitCheck, error: limitError } = await supabase
+          .rpc('check_ai_coach_limit', {
+            p_user_id: userContext.userId,
+            p_daily_limit: dailyLimit
+          });
+
+        if (limitError) {
+          console.error('Errore verifica limite AI Coach:', limitError);
+        } else if (limitCheck && limitCheck.length > 0 && !limitCheck[0].can_send) {
+          console.log(`⚠️ Limite AI Coach raggiunto: ${limitCheck[0].current_count}/${dailyLimit} (tier: ${userTier})`);
+          return NextResponse.json(
+            {
+              message: `Hai raggiunto il limite giornaliero di ${dailyLimit} messaggi per il tuo piano ${SUBSCRIPTION_TIERS[userTier].display_name}. Passa a un piano superiore per più messaggi.`,
+              limitReached: true,
+              currentCount: limitCheck[0].current_count,
+              dailyLimit: dailyLimit,
+              tier: userTier
+            },
+            { status: 429 }
+          );
+        }
+      }
     }
 
     // Recupera current_path dell'utente dal profilo o usa quello dalla request
@@ -236,6 +284,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         } else {
           conversationId = convData?.id;
           console.log('✅ Conversazione salvata:', conversationId);
+        }
+
+        // Incrementa contatore utilizzo giornaliero AI Coach
+        const { data: newCount, error: incrementError } = await supabase
+          .rpc('increment_daily_usage', { p_user_id: userContext.userId });
+
+        if (incrementError) {
+          console.error('Errore incremento contatore AI Coach:', incrementError);
+        } else {
+          console.log(`📊 AI Coach usage: ${newCount}/${dailyLimit} (tier: ${userTier})`);
         }
       } catch (dbError) {
         console.error('Errore DB conversazione:', dbError);

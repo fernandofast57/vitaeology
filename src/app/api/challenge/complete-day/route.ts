@@ -3,10 +3,8 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
-
-// Dynamic import to avoid build issues
-let emailTemplates: typeof import('@/lib/email/challenge-day-templates') | null = null;
+import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
+import { sendChallengeEmail } from '@/lib/email/challenge-emails';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -16,10 +14,6 @@ function getSupabaseClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
-}
-
-function getResendClient() {
-  return new Resend(process.env.RESEND_API_KEY);
 }
 
 // Mappa challenge type dal frontend al database
@@ -40,12 +34,6 @@ interface CompleteRequestBody {
 
 export async function POST(request: NextRequest) {
   try {
-    // Load email templates dynamically
-    if (!emailTemplates) {
-      emailTemplates = await import('@/lib/email/challenge-day-templates');
-    }
-    const { getChallengeEmail, CHALLENGE_CONFIG } = emailTemplates;
-
     const body: CompleteRequestBody = await request.json();
     const { email, challengeType, dayNumber, responses } = body;
 
@@ -144,9 +132,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const resend = getResendClient();
     let emailSent = false;
     let nextDay: number | undefined;
+
+    // Cast challenge type per sendChallengeEmail
+    type ChallengeType = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
+    const challengeTypeForEmail = normalizedChallenge as ChallengeType;
 
     // 5. Gestisci email in base al giorno
     if (dayNumber < 7) {
@@ -154,47 +145,45 @@ export async function POST(request: NextRequest) {
       nextDay = dayNumber + 1;
 
       try {
-        const emailContent = getChallengeEmail(
-          normalizedChallenge,
-          nextDay as 1 | 2 | 3 | 4 | 5 | 6 | 7,
-          subscriber.nome || 'Amico/a'
+        const result = await sendChallengeEmail(
+          email,
+          'day_content',
+          challengeTypeForEmail,
+          nextDay,
+          subscriber.nome || undefined
         );
 
-        const config = CHALLENGE_CONFIG[normalizedChallenge as keyof typeof CHALLENGE_CONFIG];
+        emailSent = result.success;
 
-        await resend.emails.send({
-          from: 'Fernando <fernando@vitaeology.com>',
-          replyTo: 'fernando@vitaeology.com',
-          to: email,
-          subject: emailContent.subject,
-          html: emailContent.html,
-          tags: [{ name: 'challenge', value: config?.tag || 'challenge' }]
-        });
-
-        emailSent = true;
+        if (!result.success) {
+          console.error('Errore invio email giorno successivo:', result.error);
+        }
 
         // Registra invio email nel day_completions del giorno successivo
-        await supabase
-          .from('challenge_day_completions')
-          .upsert({
-            subscriber_id: subscriber.id,
-            challenge: normalizedChallenge,
-            day_number: nextDay,
-            email_sent_at: new Date().toISOString()
-          }, {
-            onConflict: 'subscriber_id,challenge,day_number'
-          });
+        if (emailSent) {
+          await supabase
+            .from('challenge_day_completions')
+            .upsert({
+              subscriber_id: subscriber.id,
+              challenge: normalizedChallenge,
+              day_number: nextDay,
+              email_sent_at: new Date().toISOString()
+            }, {
+              onConflict: 'subscriber_id,challenge,day_number'
+            });
+        }
 
       } catch (emailError) {
         console.error('Errore invio email giorno successivo:', emailError);
         // Non bloccare - email fallita ma completamento registrato
       }
 
-      // Aggiorna subscriber
+      // Aggiorna subscriber con last_activity_at
       await supabase
         .from('challenge_subscribers')
         .update({
           current_day: nextDay,
+          last_activity_at: new Date().toISOString(),
           last_email_sent_at: emailSent ? new Date().toISOString() : subscriber.last_email_sent_at,
           last_email_type: emailSent ? `day_${nextDay}` : subscriber.last_email_type
         })
@@ -203,34 +192,33 @@ export async function POST(request: NextRequest) {
     } else {
       // Giorno 7 completato - challenge finita!
       try {
-        // Invia email di conversione/congratulazioni
-        await resend.emails.send({
-          from: 'Fernando <fernando@vitaeology.com>',
-          replyTo: 'fernando@vitaeology.com',
-          to: email,
-          subject: 'Complimenti! Hai completato la Sfida dei 7 Giorni',
-          html: generateCompletionEmail(
-            subscriber.nome || 'Amico/a',
-            normalizedChallenge,
-            CHALLENGE_CONFIG
-          ),
-          tags: [{ name: 'challenge', value: 'challenge-completed' }]
-        });
+        const result = await sendChallengeEmail(
+          email,
+          'challenge_complete',
+          challengeTypeForEmail,
+          undefined,
+          subscriber.nome || undefined
+        );
 
-        emailSent = true;
+        emailSent = result.success;
+
+        if (!result.success) {
+          console.error('Errore invio email completamento:', result.error);
+        }
       } catch (emailError) {
         console.error('Errore invio email completamento:', emailError);
       }
 
-      // Marca challenge come completata
+      // Marca challenge come completata con last_activity_at
       await supabase
         .from('challenge_subscribers')
         .update({
           status: 'completed',
           completed_at: new Date().toISOString(),
+          last_activity_at: new Date().toISOString(),
           current_day: 7,
           last_email_sent_at: emailSent ? new Date().toISOString() : subscriber.last_email_sent_at,
-          last_email_type: 'completion'
+          last_email_type: 'challenge_complete'
         })
         .eq('id', subscriber.id);
 
@@ -246,6 +234,27 @@ export async function POST(request: NextRequest) {
         },
         created_at: new Date().toISOString()
       });
+
+      // Concedi accesso all'assessment corrispondente
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', email.toLowerCase())
+        .single();
+
+      if (profile) {
+        const assessmentType = CHALLENGE_TO_ASSESSMENT[normalizedChallenge];
+        if (assessmentType) {
+          await grantAssessmentAccess(
+            supabase,
+            profile.id,
+            assessmentType,
+            'challenge_complete',
+            subscriber.id
+          );
+          console.log(`✅ Access granted: ${assessmentType} to user ${profile.id} (challenge: ${normalizedChallenge})`);
+        }
+      }
     }
 
     // Response
@@ -279,74 +288,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Email di completamento challenge
-function generateCompletionEmail(nome: string, challenge: string, challengeConfig: Record<string, { color: string; name: string }>): string {
-  const CHALLENGE_CONFIG = challengeConfig;
-  const config = CHALLENGE_CONFIG[challenge as keyof typeof CHALLENGE_CONFIG];
-  const color = config?.color || '#D4AF37';
-  const challengeName = config?.name || 'Sfida';
-
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="font-family: Georgia, serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-
-  <div style="text-align: center; margin-bottom: 30px;">
-    <div style="font-size: 48px; margin-bottom: 10px;">🎉</div>
-    <h1 style="color: ${color}; margin: 0;">Complimenti, ${nome}!</h1>
-    <p style="color: #666; font-size: 18px;">Hai completato la ${challengeName}</p>
-  </div>
-
-  <p>Ciao ${nome},</p>
-
-  <p>Ce l'hai fatta. <strong>7 giorni di crescita personale</strong>, completati.</p>
-
-  <p>In questi 7 giorni hai:</p>
-  <ul>
-    <li>Scoperto capacità che già possiedi</li>
-    <li>Imparato strumenti pratici da usare ogni giorno</li>
-    <li>Fatto esercizi concreti che ti hanno dato risultati immediati</li>
-  </ul>
-
-  <p>Ma questo e solo l'inizio.</p>
-
-  <div style="background: linear-gradient(135deg, ${color}22, ${color}11); padding: 25px; border-radius: 12px; margin: 30px 0;">
-    <h2 style="color: ${color}; margin-top: 0;">Il Prossimo Passo</h2>
-    <p>Se hai trovato valore in questi 7 giorni, immagina cosa potresti ottenere con un <strong>percorso completo</strong> di sviluppo personale.</p>
-    <p>Vitaeology offre programmi strutturati per costruire il tuo percorso di trasformazione profonda, con:</p>
-    <ul>
-      <li>Assessment completo delle tue capacità</li>
-      <li>Esercizi personalizzati sulla tua situazione</li>
-      <li>AI Coach disponibile 24/7</li>
-      <li>Tracking dei progressi nel tempo</li>
-    </ul>
-  </div>
-
-  <div style="text-align: center; margin: 40px 0;">
-    <a href="https://vitaeology.com/assessment" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px;">
-      Scopri il tuo potenziale completo →
-    </a>
-  </div>
-
-  <p>Grazie per aver fatto questo percorso con me.</p>
-
-  <p>Un abbraccio,</p>
-  <p><strong>Fernando Marongiu</strong><br>
-  <span style="color: #666; font-size: 14px;">Fondatore Vitaeology</span></p>
-
-  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-
-  <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai completato la Sfida ${challengeName}. Questa e l'ultima email della serie.<br>
-    <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
-  </p>
-
-</body>
-</html>
-  `;
-}
-// forced redeploy lun 22 dic 2025 17:19:03
+// Email gestite da sendChallengeEmail in @/lib/email/challenge-emails.ts
