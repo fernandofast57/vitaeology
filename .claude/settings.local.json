@@ -32,7 +32,9 @@
       "Bash(nslookup:*)",
       "Bash(wc:*)",
       "Bash(node scripts/verify-risolutore.js:*)",
-      "Bash(node scripts/verify-microfelicita.js:*)"
+      "Bash(node scripts/verify-microfelicita.js:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm run lint)"
     ]
   }
 }

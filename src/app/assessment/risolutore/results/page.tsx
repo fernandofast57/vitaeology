@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Radar,
@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { RisolutoreResults, LEVEL_CONFIG } from '@/lib/risolutore-scoring';
 
-export default function RisolutoreResultsPage() {
+function RisolutoreResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const assessmentId = searchParams.get('id');
@@ -335,5 +335,24 @@ export default function RisolutoreResultsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+        <p className="text-gray-600">Caricamento...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function RisolutoreResultsPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <RisolutoreResultsContent />
+    </Suspense>
   );
 }

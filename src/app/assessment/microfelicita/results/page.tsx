@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Radar,
@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import { MicrofelicitaResults, PROFILE_CONFIG } from '@/lib/microfelicita-scoring';
 
-export default function MicrofelicitaResultsPage() {
+function MicrofelicitaResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const assessmentId = searchParams.get('id');
@@ -229,5 +229,24 @@ export default function MicrofelicitaResultsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500 mx-auto mb-4"></div>
+        <p className="text-gray-600">Caricamento...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function MicrofelicitaResultsPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <MicrofelicitaResultsContent />
+    </Suspense>
   );
 }
