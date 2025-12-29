@@ -1,1 +1,12 @@
-{}
+{
+  "crons": [
+    {
+      "path": "/api/ai-coach/cron/combined",
+      "schedule": "0 23 * * *"
+    },
+    {
+      "path": "/api/cron/challenge-emails",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
