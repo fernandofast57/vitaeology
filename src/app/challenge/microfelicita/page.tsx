@@ -3,6 +3,12 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useBehavioralTracking } from '@/hooks/useBehavioralTracking';
+import {
+  ExitIntentPopup,
+  EngagementBadge,
+  ReturnVisitorBanner,
+} from '@/components/behavioral';
 
 // Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_3_MICROFELICITA.md
 const VARIANTS = {
@@ -37,6 +43,11 @@ function MicrofelicitaLandingContent() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [variant, setVariant] = useState<VariantKey>('A');
+
+  // Behavioral tracking (passa variante per analytics)
+  const [behavior, behaviorActions] = useBehavioralTracking('microfelicita', variant);
+  const [exitPopupDismissed, setExitPopupDismissed] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   const utmSource = searchParams.get('utm_source') || '';
   const utmMedium = searchParams.get('utm_medium') || '';
@@ -76,6 +87,7 @@ function MicrofelicitaLandingContent() {
 
       if (response.ok) {
         setSuccess(true);
+        behaviorActions.trackConversion();
         if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
           (window as unknown as { gtag: (cmd: string, event: string, params: object) => void }).gtag('event', 'challenge_signup', {
             challenge: 'microfelicita',
@@ -90,6 +102,42 @@ function MicrofelicitaLandingContent() {
       setError('Errore di connessione. Riprova.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handler per exit intent popup
+  const handleExitIntentSubmit = async (exitEmail: string) => {
+    setEmail(exitEmail);
+    setNome('Visitatore');
+
+    const response = await fetch('/api/challenge/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: exitEmail,
+        nome: 'Visitatore',
+        challenge: 'microfelicita',
+        variant,
+        utmSource,
+        utmMedium,
+        utmCampaign
+      })
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Errore iscrizione');
+    }
+
+    setSuccess(true);
+    behaviorActions.trackExitIntentConverted();
+
+    if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
+      (window as unknown as { gtag: (cmd: string, event: string, params: object) => void }).gtag('event', 'challenge_signup', {
+        challenge: 'microfelicita',
+        variant,
+        source: 'exit_intent'
+      });
     }
   };
 
@@ -122,6 +170,19 @@ function MicrofelicitaLandingContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-900 to-slate-900">
+      {/* Return Visitor Banner */}
+      {behavior.isReturnVisitor && !bannerDismissed && !success && (
+        <ReturnVisitorBanner
+          isVisible={true}
+          onDismiss={() => setBannerDismissed(true)}
+          challengeType="microfelicita"
+          visitCount={behavior.visitCount}
+          onCtaClick={() => {
+            document.querySelector('input[type="email"]')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
+      )}
+
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -154,6 +215,8 @@ function MicrofelicitaLandingContent() {
               placeholder="Il tuo nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
+              onFocus={() => behaviorActions.trackFormFocus()}
+              onBlur={() => behaviorActions.trackFormBlur()}
               required
               className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-violet-500"
             />
@@ -162,6 +225,8 @@ function MicrofelicitaLandingContent() {
               placeholder="La tua email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => behaviorActions.trackFormFocus()}
+              onBlur={() => behaviorActions.trackFormBlur()}
               required
               className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-violet-500"
             />
@@ -173,6 +238,16 @@ function MicrofelicitaLandingContent() {
             >
               {loading ? 'Iscrizione in corso...' : content.cta}
             </button>
+            {/* Engagement Badge */}
+            {behavior.engagementScore > 60 && !success && (
+              <div className="flex justify-center">
+                <EngagementBadge
+                  isVisible={true}
+                  score={behavior.engagementScore}
+                  challengeType="microfelicita"
+                />
+              </div>
+            )}
           </form>
 
           <p className="text-slate-500 text-sm mt-4">
@@ -304,6 +379,8 @@ function MicrofelicitaLandingContent() {
               placeholder="La tua email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => behaviorActions.trackFormFocus()}
+              onBlur={() => behaviorActions.trackFormBlur()}
               required
               className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-violet-500"
             />
@@ -314,6 +391,16 @@ function MicrofelicitaLandingContent() {
             >
               {content.cta}
             </button>
+            {/* Engagement Badge */}
+            {behavior.engagementScore > 60 && !success && (
+              <div className="flex justify-center">
+                <EngagementBadge
+                  isVisible={true}
+                  score={behavior.engagementScore}
+                  challengeType="microfelicita"
+                />
+              </div>
+            )}
           </form>
         </div>
       </section>
@@ -324,6 +411,21 @@ function MicrofelicitaLandingContent() {
           <p>&copy; 2025 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
         </div>
       </footer>
+
+      {/* Exit Intent Popup */}
+      {behavior.isExitIntent && !exitPopupDismissed && !success && (
+        <ExitIntentPopup
+          isVisible={true}
+          onDismiss={() => {
+            setExitPopupDismissed(true);
+            behaviorActions.dismissExitIntent();
+          }}
+          onSubmit={handleExitIntentSubmit}
+          challengeType="microfelicita"
+          engagementScore={behavior.engagementScore}
+          scrollDepth={behavior.maxScrollDepth}
+        />
+      )}
     </div>
   );
 }
