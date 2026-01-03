@@ -121,10 +121,16 @@ export default function ABTestingDashboard() {
               Aggiorna
             </button>
             <Link
+              href="/admin/behavioral"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+            >
+              Behavioral Analytics
+            </Link>
+            <Link
               href="/admin/ai-coach"
               className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition"
             >
-              Torna alla Dashboard
+              AI Coach
             </Link>
           </div>
         </div>
