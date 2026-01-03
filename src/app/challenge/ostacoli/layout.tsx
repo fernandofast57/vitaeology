@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.vitaeology.com/logo-vitaeology.png',
-        width: 800,
-        height: 600,
+        url: 'https://www.vitaeology.com/og/challenge/ostacoli',
+        width: 1200,
+        height: 630,
         alt: 'Sfida Oltre gli Ostacoli - Vitaeology',
       },
     ],
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sfida 7 Giorni Oltre gli Ostacoli',
     description: 'Trasforma i blocchi in trampolini. 7 giorni di esercizi pratici gratuiti.',
-    images: ['https://www.vitaeology.com/logo-vitaeology.png'],
+    images: ['https://www.vitaeology.com/og/challenge/ostacoli'],
   },
 };
 

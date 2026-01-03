@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://www.vitaeology.com/logo-vitaeology.png',
-        width: 800,
-        height: 600,
+        url: 'https://www.vitaeology.com/og/challenge/leadership',
+        width: 1200,
+        height: 630,
         alt: 'Sfida Leadership Autentica - Vitaeology',
       },
     ],
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sfida 7 Giorni Leadership Autentica',
     description: 'Scopri il leader che è in te. 7 giorni di esercizi pratici gratuiti.',
-    images: ['https://www.vitaeology.com/logo-vitaeology.png'],
+    images: ['https://www.vitaeology.com/og/challenge/leadership'],
   },
 };
 
