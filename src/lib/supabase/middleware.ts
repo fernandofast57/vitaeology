@@ -4,6 +4,21 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Bypass auth in development
 const isDevelopment = process.env.NODE_ENV === 'development'
 
+// Route protection configuration
+const ROUTE_CONFIG = {
+  // Public routes - no auth required
+  public: ['/challenge', '/api/challenge', '/api/analytics/behavioral', '/libro', '/og'],
+
+  // Auth required routes
+  protected: ['/dashboard', '/test', '/results', '/exercises', '/settings', '/profile', '/progress', '/subscription', '/assessment'],
+
+  // Admin required routes (role_level >= 80 or is_admin = true)
+  admin: ['/admin'],
+
+  // Auth redirect routes (redirect to dashboard if logged in)
+  authRedirect: ['/auth/login', '/auth/signup'],
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -23,7 +38,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({
             request,
           })
@@ -41,18 +56,22 @@ export async function updateSession(request: NextRequest) {
   // Redirect logic
   const path = request.nextUrl.pathname
 
-  // Public routes - skip auth check completely
-  const publicRoutes = ['/challenge', '/api/challenge']
-  const isPublicRoute = publicRoutes.some(route => path.startsWith(route))
-
+  // 1. Public routes - skip auth check completely
+  const isPublicRoute = ROUTE_CONFIG.public.some(route => path.startsWith(route))
   if (isPublicRoute) {
     return supabaseResponse
   }
 
-  // Protected routes - redirect to login if not authenticated
-  const protectedRoutes = ['/dashboard', '/test', '/results', '/exercises', '/settings', '/admin', '/profile', '/progress', '/subscription']
-  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
+  // 2. Auth redirect routes - redirect to dashboard if already authenticated
+  const isAuthRoute = ROUTE_CONFIG.authRedirect.some(route => path.startsWith(route))
+  if (isAuthRoute && user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
 
+  // 3. Protected routes - redirect to login if not authenticated
+  const isProtectedRoute = ROUTE_CONFIG.protected.some(route => path.startsWith(route))
   if (isProtectedRoute && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
@@ -60,14 +79,32 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Auth routes - redirect to dashboard if already authenticated
-  const authRoutes = ['/auth/login', '/auth/signup']
-  const isAuthRoute = authRoutes.some(route => path.startsWith(route))
+  // 4. Admin routes - check admin access
+  const isAdminRoute = ROUTE_CONFIG.admin.some(route => path.startsWith(route))
+  if (isAdminRoute) {
+    if (!user) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/login'
+      url.searchParams.set('redirect', path)
+      return NextResponse.redirect(url)
+    }
 
-  if (isAuthRoute && user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    // Check admin status from profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_admin, role_id, roles(level)')
+      .eq('id', user.id)
+      .single()
+
+    const roleLevel = (profile?.roles as { level?: number })?.level ?? 0
+    const isAdmin = profile?.is_admin === true || roleLevel >= 80
+
+    if (!isAdmin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      url.searchParams.set('error', 'unauthorized')
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse
