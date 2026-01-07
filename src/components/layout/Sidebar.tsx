@@ -32,7 +32,9 @@ const accountNav = [
 ];
 
 const adminNav = [
-  { name: 'AI Coach', href: '/admin/ai-coach', icon: BarChart3 },
+  { name: 'Behavioral', href: '/admin/behavioral', icon: BarChart3 },
+  { name: 'A/B Testing', href: '/admin/ab-testing', icon: Target },
+  { name: 'AI Coach', href: '/admin/ai-coach', icon: Sparkles },
   { name: 'Utenti', href: '/admin/users', icon: Users },
 ];
 
