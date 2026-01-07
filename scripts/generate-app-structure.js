@@ -18,6 +18,24 @@ if (process.platform === 'win32') {
 const srcPath = path.join(__dirname, '..', 'src');
 const appPath = path.join(srcPath, 'app');
 
+// Carica descrizioni da file JSON
+const descriptionsPath = path.join(__dirname, '..', 'docs', 'page-descriptions.json');
+let descriptions = { pages: {}, api: {} };
+try {
+  descriptions = JSON.parse(fs.readFileSync(descriptionsPath, 'utf8'));
+} catch (e) {
+  console.log('⚠️  File descrizioni non trovato, usando descrizioni vuote');
+}
+
+// Funzione helper per ottenere descrizione
+function getPageDescription(route) {
+  return descriptions.pages[route] || '';
+}
+
+function getApiDescription(route) {
+  return descriptions.api[route] || '';
+}
+
 // Risultati
 const pages = [];
 const apiEndpoints = [];
@@ -250,7 +268,8 @@ function generateMarkdown(pages, apiEndpoints, components, libs, pageGroups, api
   pages.forEach(p => {
     const auth = p.requiresAuth ? '🔒' : '🌐';
     const type = p.type === 'client' ? 'Client' : 'Server';
-    md += `| \`${p.route}\` | ${type} | ${auth} | |\n`;
+    const desc = getPageDescription(p.route);
+    md += `| \`${p.route}\` | ${type} | ${auth} | ${desc} |\n`;
   });
 
   md += `\n### Legenda
@@ -270,7 +289,8 @@ function generateMarkdown(pages, apiEndpoints, components, libs, pageGroups, api
     md += `| Endpoint | Metodi | Descrizione |\n`;
     md += `|----------|--------|-------------|\n`;
     apiGroups[section].forEach(e => {
-      md += `| \`${e.route}\` | ${e.methods.join(', ')} | |\n`;
+      const desc = getApiDescription(e.route);
+      md += `| \`${e.route}\` | ${e.methods.join(', ')} | ${desc} |\n`;
     });
     md += '\n';
   });

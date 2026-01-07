@@ -16,48 +16,48 @@
 
 | Route | Tipo | Auth | Descrizione |
 |-------|------|------|-------------|
-| `/` | Server | 🌐 | |
-| `/admin` | Server | 🌐 | |
-| `/admin/ab-testing` | Client | 🌐 | |
-| `/admin/ai-coach` | Client | 🌐 | |
-| `/admin/analytics` | Client | 🌐 | |
-| `/admin/api-costs` | Client | 🌐 | |
-| `/admin/behavioral` | Client | 🌐 | |
-| `/admin/challenges` | Client | 🌐 | |
-| `/admin/corrections` | Client | 🌐 | |
-| `/admin/feedback-patterns` | Client | 🌐 | |
-| `/admin/performance` | Client | 🌐 | |
-| `/admin/quality-audit` | Client | 🌐 | |
-| `/admin/users` | Client | 🌐 | |
-| `/assessment/lite` | Client | 🌐 | |
-| `/assessment/lite/results` | Client | 🌐 | |
-| `/assessment/microfelicita` | Client | 🌐 | |
-| `/assessment/microfelicita/results` | Client | 🌐 | |
-| `/assessment/risolutore` | Client | 🌐 | |
-| `/assessment/risolutore/results` | Client | 🌐 | |
-| `/auth/forgot-password` | Client | 🌐 | |
-| `/auth/login` | Client | 🌐 | |
-| `/auth/reset-password` | Client | 🌐 | |
-| `/auth/signup` | Client | 🌐 | |
-| `/challenge/[type]/complete` | Client | 🔒 | |
-| `/challenge/[type]/day/[day]` | Client | 🔒 | |
-| `/challenge/leadership` | Client | 🌐 | |
-| `/challenge/microfelicita` | Client | 🌐 | |
-| `/challenge/ostacoli` | Client | 🌐 | |
-| `/contact` | Client | 🌐 | |
-| `/dashboard` | Client | 🔒 | |
-| `/exercises` | Server | 🔒 | |
-| `/exercises/[exerciseId]` | Server | 🔒 | |
-| `/libro/[slug]` | Server | 🌐 | |
-| `/libro/[slug]/grazie` | Server | 🌐 | |
-| `/pricing` | Server | 🌐 | |
-| `/privacy` | Server | 🌐 | |
-| `/profile` | Client | 🔒 | |
-| `/progress` | Client | 🔒 | |
-| `/results` | Client | 🔒 | |
-| `/subscription` | Client | 🔒 | |
-| `/terms` | Server | 🌐 | |
-| `/test` | Client | 🔒 | |
+| `/` | Server | 🌐 | Homepage principale con presentazione Vitaeology |
+| `/admin` | Server | 🌐 | Dashboard amministrazione principale |
+| `/admin/ab-testing` | Client | 🌐 | Gestione test A/B varianti landing |
+| `/admin/ai-coach` | Client | 🌐 | Monitoraggio e statistiche AI Coach |
+| `/admin/analytics` | Client | 🌐 | Analytics generali piattaforma |
+| `/admin/api-costs` | Client | 🌐 | Monitoraggio costi API Claude/OpenAI |
+| `/admin/behavioral` | Client | 🌐 | Dashboard tracking comportamentale |
+| `/admin/challenges` | Client | 🌐 | Gestione challenge 7 giorni |
+| `/admin/corrections` | Client | 🌐 | Gestione correzioni AI Coach |
+| `/admin/feedback-patterns` | Client | 🌐 | Pattern feedback utenti |
+| `/admin/performance` | Client | 🌐 | Metriche performance sistema |
+| `/admin/quality-audit` | Client | 🌐 | Audit qualità risposte AI |
+| `/admin/users` | Client | 🌐 | Gestione utenti e ruoli |
+| `/assessment/lite` | Client | 🌐 | Assessment Leadership 72 domande |
+| `/assessment/lite/results` | Client | 🌐 | Risultati assessment Leadership |
+| `/assessment/microfelicita` | Client | 🌐 | Assessment Microfelicità 47 domande |
+| `/assessment/microfelicita/results` | Client | 🌐 | Risultati assessment Microfelicità |
+| `/assessment/risolutore` | Client | 🌐 | Assessment Risolutore 47 domande |
+| `/assessment/risolutore/results` | Client | 🌐 | Risultati assessment Risolutore |
+| `/auth/forgot-password` | Client | 🌐 | Recupero password dimenticata |
+| `/auth/login` | Client | 🌐 | Login utenti |
+| `/auth/reset-password` | Client | 🌐 | Reset password con token |
+| `/auth/signup` | Client | 🌐 | Registrazione nuovi utenti |
+| `/challenge/[type]/complete` | Client | 🔒 | Pagina completamento challenge |
+| `/challenge/[type]/day/[day]` | Client | 🔒 | Contenuto giornaliero challenge |
+| `/challenge/leadership` | Client | 🌐 | Landing challenge Leadership 7 giorni |
+| `/challenge/microfelicita` | Client | 🌐 | Landing challenge Microfelicità 7 giorni |
+| `/challenge/ostacoli` | Client | 🌐 | Landing challenge Ostacoli 7 giorni |
+| `/contact` | Client | 🌐 | Pagina contatti |
+| `/dashboard` | Client | 🔒 | Dashboard utente principale |
+| `/exercises` | Server | 🔒 | Lista esercizi disponibili |
+| `/exercises/[exerciseId]` | Server | 🔒 | Dettaglio singolo esercizio |
+| `/libro/[slug]` | Server | 🌐 | Landing page acquisto libro |
+| `/libro/[slug]/grazie` | Server | 🌐 | Thank you page post-acquisto |
+| `/pricing` | Server | 🌐 | Pagina prezzi e piani |
+| `/privacy` | Server | 🌐 | Privacy policy |
+| `/profile` | Client | 🔒 | Profilo utente |
+| `/progress` | Client | 🔒 | Progresso percorso utente |
+| `/results` | Client | 🔒 | Risultati assessment utente |
+| `/subscription` | Client | 🔒 | Gestione abbonamento |
+| `/terms` | Server | 🌐 | Termini e condizioni |
+| `/test` | Client | 🔒 | Pagina test sviluppo |
 
 ### Legenda
 - 🔒 Richiede autenticazione
@@ -73,121 +73,121 @@
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/admin/ai-coach/dashboard` | GET | |
-| `/api/admin/ai-coach/patterns` | POST | |
-| `/api/admin/ai-coach/reports` | POST | |
-| `/api/admin/analytics` | GET | |
-| `/api/admin/api-costs` | GET | |
-| `/api/admin/behavioral-analytics` | GET | |
-| `/api/admin/behavioral-stats` | GET | |
-| `/api/admin/corrections` | GET, POST, DELETE, PATCH | |
-| `/api/admin/feedback-patterns` | GET, PATCH | |
-| `/api/admin/performance` | GET | |
-| `/api/admin/quality-audit` | GET, POST | |
-| `/api/admin/users` | GET | |
-| `/api/admin/users/[userId]/role` | PUT, DELETE | |
+| `/api/admin/ai-coach/dashboard` | GET | Stats dashboard AI Coach |
+| `/api/admin/ai-coach/patterns` | POST | Gestione pattern riconosciuti |
+| `/api/admin/ai-coach/reports` | POST | Generazione report AI Coach |
+| `/api/admin/analytics` | GET | Dati analytics aggregati |
+| `/api/admin/api-costs` | GET | Costi API per periodo |
+| `/api/admin/behavioral-analytics` | GET | Analytics comportamentali dettagliati |
+| `/api/admin/behavioral-stats` | GET | Statistiche behavioral aggregate |
+| `/api/admin/corrections` | GET, POST, DELETE, PATCH | CRUD correzioni risposte |
+| `/api/admin/feedback-patterns` | GET, PATCH | Pattern feedback utenti |
+| `/api/admin/performance` | GET | Metriche performance |
+| `/api/admin/quality-audit` | GET, POST | Audit qualità risposte |
+| `/api/admin/users` | GET | Lista utenti |
+| `/api/admin/users/[userId]/role` | PUT, DELETE | Modifica ruolo utente |
 
 ### /api/ai-coach
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/ai-coach` | POST | |
-| `/api/ai-coach/conversations` | GET, DELETE | |
-| `/api/ai-coach/cron/combined` | GET | |
-| `/api/ai-coach/cron/daily-metrics` | GET, POST | |
-| `/api/ai-coach/cron/weekly-report` | GET, POST | |
-| `/api/ai-coach/edit` | POST | |
-| `/api/ai-coach/export` | GET | |
-| `/api/ai-coach/feedback` | POST | |
-| `/api/ai-coach/history` | GET | |
-| `/api/ai-coach/reformulate` | POST | |
-| `/api/ai-coach/signals` | POST | |
+| `/api/ai-coach` | POST | Endpoint principale chat AI Coach |
+| `/api/ai-coach/conversations` | GET, DELETE | Gestione conversazioni |
+| `/api/ai-coach/cron/combined` | GET | Cron job combinato |
+| `/api/ai-coach/cron/daily-metrics` | GET, POST | Metriche giornaliere |
+| `/api/ai-coach/cron/weekly-report` | GET, POST | Report settimanale |
+| `/api/ai-coach/edit` | POST | Modifica messaggio AI |
+| `/api/ai-coach/export` | GET | Export conversazioni |
+| `/api/ai-coach/feedback` | POST | Feedback su risposte AI |
+| `/api/ai-coach/history` | GET | Storico conversazioni |
+| `/api/ai-coach/reformulate` | POST | Riformulazione risposta |
+| `/api/ai-coach/signals` | POST | Segnali impliciti utente |
 
 ### /api/analytics
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/analytics/behavioral` | POST | |
+| `/api/analytics/behavioral` | POST | Raccolta eventi behavioral |
 
 ### /api/assessment
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/assessment/answer` | POST | |
-| `/api/assessment/complete` | POST | |
-| `/api/assessment/microfelicita/answer` | POST | |
-| `/api/assessment/microfelicita/complete` | POST | |
-| `/api/assessment/microfelicita/questions` | GET | |
-| `/api/assessment/microfelicita/results/[id]` | GET | |
-| `/api/assessment/microfelicita/session` | POST | |
-| `/api/assessment/questions` | GET | |
-| `/api/assessment/results/[id]` | GET | |
-| `/api/assessment/risolutore/answer` | POST | |
-| `/api/assessment/risolutore/complete` | POST | |
-| `/api/assessment/risolutore/questions` | GET | |
-| `/api/assessment/risolutore/results/[id]` | GET | |
-| `/api/assessment/risolutore/session` | POST | |
-| `/api/assessment/session` | GET, DELETE | |
+| `/api/assessment/answer` | POST | Salva risposta assessment |
+| `/api/assessment/complete` | POST | Completa assessment |
+| `/api/assessment/microfelicita/answer` | POST | Risposta Microfelicità |
+| `/api/assessment/microfelicita/complete` | POST | Completa Microfelicità |
+| `/api/assessment/microfelicita/questions` | GET | Domande Microfelicità |
+| `/api/assessment/microfelicita/results/[id]` | GET | Risultati Microfelicità |
+| `/api/assessment/microfelicita/session` | POST | Sessione Microfelicità |
+| `/api/assessment/questions` | GET | Domande Leadership |
+| `/api/assessment/results/[id]` | GET | Risultati Leadership |
+| `/api/assessment/risolutore/answer` | POST | Risposta Risolutore |
+| `/api/assessment/risolutore/complete` | POST | Completa Risolutore |
+| `/api/assessment/risolutore/questions` | GET | Domande Risolutore |
+| `/api/assessment/risolutore/results/[id]` | GET | Risultati Risolutore |
+| `/api/assessment/risolutore/session` | POST | Sessione Risolutore |
+| `/api/assessment/session` | GET, DELETE | Gestione sessione assessment |
 
 ### /api/callback
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/auth/callback` | GET | |
+| `/auth/callback` | GET | Callback OAuth Supabase |
 
 ### /api/challenge
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/challenge/check-unlock` | GET, POST | |
-| `/api/challenge/complete-day` | POST | |
-| `/api/challenge/subscribe` | POST | |
-| `/og/challenge/[type]` | GET | |
+| `/api/challenge/check-unlock` | GET, POST | Verifica sblocco giorno |
+| `/api/challenge/complete-day` | POST | Completa giorno challenge |
+| `/api/challenge/subscribe` | POST | Iscrizione challenge |
+| `/og/challenge/[type]` | GET | Generazione immagine OG |
 
 ### /api/coach
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/coach/feedback` | GET, POST | |
+| `/api/coach/feedback` | GET, POST | Feedback coach |
 
 ### /api/cron
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/cron/challenge-emails` | GET, POST | |
-| `/api/cron/send-challenge-emails` | GET | |
+| `/api/cron/challenge-emails` | GET, POST | Invio email challenge |
+| `/api/cron/send-challenge-emails` | GET | Trigger email challenge |
 
 ### /api/libro
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/libro/checkout` | POST | |
+| `/api/libro/checkout` | POST | Checkout acquisto libro |
 
 ### /api/recommendations
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/recommendations` | GET, POST | |
+| `/api/recommendations` | GET, POST | Raccomandazioni esercizi |
 
 ### /api/signout
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/auth/signout` | POST | |
+| `/auth/signout` | POST | Logout utente |
 
 ### /api/stripe
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/stripe/checkout` | POST | |
-| `/api/stripe/portal` | POST | |
-| `/api/stripe/webhook` | POST | |
+| `/api/stripe/checkout` | POST | Checkout Stripe |
+| `/api/stripe/portal` | POST | Portal gestione Stripe |
+| `/api/stripe/webhook` | POST | Webhook Stripe |
 
 ### /api/test-post
 
 | Endpoint | Metodi | Descrizione |
 |----------|--------|-------------|
-| `/api/test-post` | GET, POST | |
+| `/api/test-post` | GET, POST | Endpoint test |
 
 ---
 
