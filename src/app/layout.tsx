@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter, Stoke, Crimson_Text, Libre_Baskerville } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
+
+// Google Analytics 4 Measurement ID
+// TODO: Sostituire con ID reale da Google Analytics
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'
 
 // Font per il body (sans-serif)
 const inter = Inter({
@@ -82,6 +87,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it" className={`${inter.variable} ${stoke.variable} ${crimsonText.variable} ${libreBaskerville.variable}`}>
+      <head>
+        {/* Google Analytics 4 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', {
+              page_title: document.title,
+              page_location: window.location.href,
+            });
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen bg-gray-50 font-sans">
         {children}
       </body>
