@@ -56,11 +56,18 @@ export async function GET() {
         const pillarCounts: PillarScores = { ESSERE: 0, SENTIRE: 0, PENSARE: 0, AGIRE: 0 };
         const pillarTotals: PillarScores = { ESSERE: 0, SENTIRE: 0, PENSARE: 0, AGIRE: 0 };
 
-        charScores.forEach((cs: { score_percentage: number | null; characteristics: { pillar: string } | null }) => {
-          const pillar = cs.characteristics?.pillar as keyof PillarScores;
+        charScores.forEach((cs) => {
+          // characteristics può essere oggetto o array a seconda della relazione Supabase
+          const chars = cs.characteristics as { pillar: string } | { pillar: string }[] | null;
+          let pillar: string | undefined;
+          if (Array.isArray(chars)) {
+            pillar = chars[0]?.pillar;
+          } else {
+            pillar = chars?.pillar;
+          }
           if (pillar && pillar in pillarTotals) {
-            pillarTotals[pillar] += cs.score_percentage || 0;
-            pillarCounts[pillar]++;
+            pillarTotals[pillar as keyof PillarScores] += cs.score_percentage || 0;
+            pillarCounts[pillar as keyof PillarScores]++;
           }
         });
 
@@ -81,9 +88,9 @@ export async function GET() {
 
     // 5. Determina quale libro/percorso usare
     type BookWithSlug = { slug: string };
-    const bookSlug = profile?.current_path ||
-                     (assessment?.books as BookWithSlug | null)?.slug ||
-                     'leadership';
+    const books = assessment?.books as BookWithSlug | BookWithSlug[] | null;
+    const bookFromAssessment = Array.isArray(books) ? books[0]?.slug : books?.slug;
+    const bookSlug = profile?.current_path || bookFromAssessment || 'leadership';
 
     // 6. Ottieni esercizi già completati
     const { data: completed } = await supabase
