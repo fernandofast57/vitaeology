@@ -14,7 +14,8 @@ interface ExercisesListProps {
 
 function groupByMonth(exercises: ExerciseWithAccess[]): Record<string, ExerciseWithAccess[]> {
   return exercises.reduce((acc, exercise) => {
-    const month = exercise.month_name;
+    // Fallback: se month_name vuoto, usa "Altri Esercizi"
+    const month = exercise.month_name?.trim() || 'Altri Esercizi';
     if (!acc[month]) {
       acc[month] = [];
     }
