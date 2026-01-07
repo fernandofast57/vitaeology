@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Shield, Users, BarChart3, Target, Sparkles, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, ClipboardCheck, BookOpen, TrendingUp, User, CreditCard, LogOut, X, Shield, Users, BarChart3, Target, Sparkles, ChevronDown, Mail } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 interface SidebarProps {
@@ -32,6 +32,7 @@ const accountNav = [
 ];
 
 const adminNav = [
+  { name: 'Challenge Email', href: '/admin/challenges', icon: Mail },
   { name: 'Behavioral', href: '/admin/behavioral', icon: BarChart3 },
   { name: 'A/B Testing', href: '/admin/ab-testing', icon: Target },
   { name: 'AI Coach', href: '/admin/ai-coach', icon: Sparkles },
