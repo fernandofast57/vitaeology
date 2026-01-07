@@ -132,8 +132,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Invia email di benvenuto
+    let welcomeEmailSent = false;
     try {
-      await resend.emails.send({
+      const { error: emailError } = await resend.emails.send({
         from: 'Fernando <fernando@vitaeology.com>',
         replyTo: 'fernando@vitaeology.com',
         to: email,
@@ -141,9 +142,38 @@ export async function POST(request: NextRequest) {
         html: generateWelcomeEmail(nome || 'Amico/a', challenge, config),
         tags: [{ name: 'challenge', value: config.tag }]
       });
+
+      if (!emailError) {
+        welcomeEmailSent = true;
+      }
     } catch (emailError) {
       console.error('Email send error:', emailError);
       // Non bloccare se email fallisce
+    }
+
+    // Aggiorna subscriber con info email inviata (CRITICO per il cron job)
+    if (welcomeEmailSent) {
+      await supabase
+        .from('challenge_subscribers')
+        .update({
+          last_email_sent_at: new Date().toISOString(),
+          last_email_type: 'welcome',
+          current_day: 1 // Pronto per ricevere Day 1 content
+        })
+        .eq('id', subscriber.id);
+
+      // Log evento email per analytics (non bloccare se fallisce)
+      try {
+        await supabase.from('challenge_email_events').insert({
+          subscriber_id: subscriber.id,
+          challenge,
+          day_number: 0,
+          event_type: 'sent',
+          created_at: new Date().toISOString()
+        });
+      } catch {
+        // Ignora errori di logging
+      }
     }
 
     return NextResponse.json({
