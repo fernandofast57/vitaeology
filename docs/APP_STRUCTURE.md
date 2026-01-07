@@ -17,18 +17,19 @@
 | Route | Tipo | Auth | Descrizione |
 |-------|------|------|-------------|
 | `/` | Server | 🌐 | Homepage principale con presentazione Vitaeology |
-| `/admin` | Server | 🌐 | Dashboard amministrazione principale |
-| `/admin/ab-testing` | Client | 🌐 | Gestione test A/B varianti landing |
-| `/admin/ai-coach` | Client | 🌐 | Monitoraggio e statistiche AI Coach |
-| `/admin/analytics` | Client | 🌐 | Analytics generali piattaforma |
-| `/admin/api-costs` | Client | 🌐 | Monitoraggio costi API Claude/OpenAI |
-| `/admin/behavioral` | Client | 🌐 | Dashboard tracking comportamentale |
-| `/admin/challenges` | Client | 🌐 | Gestione challenge 7 giorni |
-| `/admin/corrections` | Client | 🌐 | Gestione correzioni AI Coach |
-| `/admin/feedback-patterns` | Client | 🌐 | Pattern feedback utenti |
-| `/admin/performance` | Client | 🌐 | Metriche performance sistema |
-| `/admin/quality-audit` | Client | 🌐 | Audit qualità risposte AI |
-| `/admin/users` | Client | 🌐 | Gestione utenti e ruoli |
+| `/admin` | Server | 🔒 | Dashboard amministrazione principale |
+| `/admin/ab-testing` | Client | 🔒 | Gestione test A/B varianti landing |
+| `/admin/ai-coach` | Client | 🔒 | Monitoraggio e statistiche AI Coach |
+| `/admin/analytics` | Client | 🔒 | Analytics generali piattaforma |
+| `/admin/api-costs` | Client | 🔒 | Monitoraggio costi API Claude/OpenAI |
+| `/admin/behavioral` | Client | 🔒 | Dashboard tracking comportamentale |
+| `/admin/challenges` | Client | 🔒 | Gestione challenge 7 giorni |
+| `/admin/corrections` | Client | 🔒 | Gestione correzioni AI Coach |
+| `/admin/feedback-patterns` | Client | 🔒 | Pattern feedback utenti |
+| `/admin/funnel` | Client | 🔒 |  |
+| `/admin/performance` | Client | 🔒 | Metriche performance sistema |
+| `/admin/quality-audit` | Client | 🔒 | Audit qualità risposte AI |
+| `/admin/users` | Client | 🔒 | Gestione utenti e ruoli |
 | `/assessment/lite` | Client | 🌐 | Assessment Leadership 72 domande |
 | `/assessment/lite/results` | Client | 🌐 | Risultati assessment Leadership |
 | `/assessment/microfelicita` | Client | 🌐 | Assessment Microfelicità 47 domande |
@@ -82,6 +83,7 @@
 | `/api/admin/behavioral-stats` | GET | Statistiche behavioral aggregate |
 | `/api/admin/corrections` | GET, POST, DELETE, PATCH | CRUD correzioni risposte |
 | `/api/admin/feedback-patterns` | GET, PATCH | Pattern feedback utenti |
+| `/api/admin/funnel-analysis` | GET |  |
 | `/api/admin/performance` | GET | Metriche performance |
 | `/api/admin/quality-audit` | GET, POST | Audit qualità risposte |
 | `/api/admin/users` | GET | Lista utenti |
@@ -141,6 +143,7 @@
 |----------|--------|-------------|
 | `/api/challenge/check-unlock` | GET, POST | Verifica sblocco giorno |
 | `/api/challenge/complete-day` | POST | Completa giorno challenge |
+| `/api/challenge/feedback` | GET, POST |  |
 | `/api/challenge/subscribe` | POST | Iscrizione challenge |
 | `/og/challenge/[type]` | GET | Generazione immagine OG |
 
@@ -156,6 +159,13 @@
 |----------|--------|-------------|
 | `/api/cron/challenge-emails` | GET, POST | Invio email challenge |
 | `/api/cron/send-challenge-emails` | GET | Trigger email challenge |
+
+### /api/exercises
+
+| Endpoint | Metodi | Descrizione |
+|----------|--------|-------------|
+| `/api/exercises/recommendations` | GET |  |
+| `/api/exercises/recommended` | GET |  |
 
 ### /api/libro
 
@@ -399,8 +409,8 @@
 
 ## Statistiche
 
-- **Pagine totali:** 42
-- **API endpoints:** 55
+- **Pagine totali:** 43
+- **API endpoints:** 59
 - **Componenti:** 32
 - **Librerie:** 38
 

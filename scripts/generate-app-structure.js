@@ -36,6 +36,29 @@ function getApiDescription(route) {
   return descriptions.api[route] || '';
 }
 
+// Percorsi protetti per layout (richiedono autenticazione)
+const protectedPaths = [
+  '/admin',           // Tutte le pagine admin
+  '/dashboard',       // Dashboard utente
+  '/profile',         // Profilo
+  '/exercises',       // Esercizi
+  '/progress',        // Progressi
+  '/subscription',    // Gestione abbonamento
+  '/results',         // Risultati assessment
+  '/challenge/*/day', // Giorni challenge (richiede iscrizione)
+  '/challenge/*/complete' // Completamento challenge
+];
+
+// Funzione per verificare se un path è protetto
+function isProtectedPath(route) {
+  return protectedPaths.some(pattern => {
+    // Converti pattern wildcard in regex
+    const regexPattern = pattern.replace(/\*/g, '[^/]+');
+    const regex = new RegExp(`^${regexPattern}($|/)`);
+    return regex.test(route);
+  });
+}
+
 // Risultati
 const pages = [];
 const apiEndpoints = [];
@@ -60,13 +83,16 @@ function scanDirectory(dir, basePath = '') {
       const route = basePath || '/';
       const content = fs.readFileSync(fullPath, 'utf-8');
       const hasClient = content.includes("'use client'");
-      const hasAuth = content.includes('getUser') || content.includes('useAuth');
+      // Verifica auth: sia contenuto che path protetto
+      const hasContentAuth = content.includes('getUser') || content.includes('useAuth');
+      const hasPathAuth = isProtectedPath(route);
+      const requiresAuth = hasContentAuth || hasPathAuth;
 
       pages.push({
         route,
         file: fullPath.replace(srcPath, 'src'),
         type: hasClient ? 'client' : 'server',
-        requiresAuth: hasAuth
+        requiresAuth
       });
     } else if (item === 'route.tsx' || item === 'route.ts') {
       // È un API endpoint
