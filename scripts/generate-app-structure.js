@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+// -*- coding: utf-8 -*-
 /**
  * Genera una mappa completa della struttura dell'applicazione
  * - Tutte le pagine (routes)
@@ -7,6 +9,11 @@
 
 const fs = require('fs');
 const path = require('path');
+
+// Forza output UTF-8 su Windows
+if (process.platform === 'win32') {
+  process.stdout.setEncoding('utf8');
+}
 
 const srcPath = path.join(__dirname, '..', 'src');
 const appPath = path.join(srcPath, 'app');
@@ -214,8 +221,10 @@ console.log(`  Librerie:           ${libs.length}`);
 // Genera anche file markdown
 const mdContent = generateMarkdown(pages, apiEndpoints, components, libs, pageGroups, apiGroups);
 const mdPath = path.join(__dirname, '..', 'docs', 'APP_STRUCTURE.md');
-fs.writeFileSync(mdPath, mdContent);
-console.log(`\n✅ Documentazione salvata in: docs/APP_STRUCTURE.md`);
+// Scrivi con BOM UTF-8 per compatibilità Windows
+const BOM = '\uFEFF';
+fs.writeFileSync(mdPath, BOM + mdContent, { encoding: 'utf8' });
+console.log('\nDocumentazione salvata in: docs/APP_STRUCTURE.md');
 
 function generateMarkdown(pages, apiEndpoints, components, libs, pageGroups, apiGroups) {
   let md = `# Vitaeology - Struttura Applicazione

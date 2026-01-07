@@ -1,4 +1,4 @@
-# Vitaeology - Struttura Applicazione
+﻿# Vitaeology - Struttura Applicazione
 
 > Generato automaticamente il 07/01/2026
 
