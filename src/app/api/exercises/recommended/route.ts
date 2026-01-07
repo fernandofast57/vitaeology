@@ -8,6 +8,14 @@ interface PillarScores {
   AGIRE: number;
 }
 
+// Mappa pillar DB (inglese) → API (italiano)
+const PILLAR_MAP: Record<string, keyof PillarScores> = {
+  'Vision': 'ESSERE',
+  'Relations': 'SENTIRE',
+  'Adaptation': 'PENSARE',
+  'Action': 'AGIRE'
+};
+
 export async function GET() {
   try {
     const supabase = await createClient();
@@ -59,15 +67,17 @@ export async function GET() {
         charScores.forEach((cs) => {
           // characteristics può essere oggetto o array a seconda della relazione Supabase
           const chars = cs.characteristics as { pillar: string } | { pillar: string }[] | null;
-          let pillar: string | undefined;
+          let dbPillar: string | undefined;
           if (Array.isArray(chars)) {
-            pillar = chars[0]?.pillar;
+            dbPillar = chars[0]?.pillar;
           } else {
-            pillar = chars?.pillar;
+            dbPillar = chars?.pillar;
           }
+          // Mappa pillar DB (inglese) → italiano
+          const pillar = dbPillar ? PILLAR_MAP[dbPillar] : undefined;
           if (pillar && pillar in pillarTotals) {
-            pillarTotals[pillar as keyof PillarScores] += cs.score_percentage || 0;
-            pillarCounts[pillar as keyof PillarScores]++;
+            pillarTotals[pillar] += cs.score_percentage || 0;
+            pillarCounts[pillar]++;
           }
         });
 
