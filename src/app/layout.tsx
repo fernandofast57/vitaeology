@@ -34,6 +34,7 @@ const libreBaskerville = Libre_Baskerville({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.vitaeology.com'),
   title: {
     default: 'Vitaeology - Leadership Autentica',
     template: '%s | Vitaeology',
