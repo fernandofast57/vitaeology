@@ -31,15 +31,23 @@ export async function GET() {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 403 });
   }
 
+  // Mapping: display name → db slug
+  const challengeMap: Record<string, string> = {
+    'leadership': 'leadership-autentica',
+    'ostacoli': 'oltre-ostacoli',
+    'microfelicita': 'microfelicita'
+  };
   const challengeTypes = ['leadership', 'ostacoli', 'microfelicita'];
   const funnelData: FunnelData[] = [];
 
   for (const challengeType of challengeTypes) {
+    const dbSlug = challengeMap[challengeType];
+
     // 1. Totale iscritti
     const { count: totalSubscribers } = await supabase
       .from('challenge_subscribers')
       .select('*', { count: 'exact', head: true })
-      .eq('challenge', challengeType);
+      .eq('challenge', dbSlug);
 
     // 2. Completamenti per giorno
     const dayCompletions: number[] = [];
@@ -47,7 +55,7 @@ export async function GET() {
       const { count } = await supabase
         .from('challenge_subscribers')
         .select('*', { count: 'exact', head: true })
-        .eq('challenge', challengeType)
+        .eq('challenge', dbSlug)
         .gte('current_day', day);
 
       dayCompletions.push(count || 0);
