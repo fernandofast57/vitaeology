@@ -17,7 +17,15 @@ interface ExerciseStats {
 interface ExercisesHeaderProps {
   stats: ExerciseStats;
   userTier: SubscriptionTier;
+  currentPath: string;
 }
+
+// Mappa book_slug → nome display
+const PATH_DISPLAY_NAMES: Record<string, { name: string; color: string }> = {
+  leadership: { name: 'Leadership Autentica', color: 'text-amber-600' },
+  risolutore: { name: 'Oltre gli Ostacoli', color: 'text-emerald-600' },
+  microfelicita: { name: 'Microfelicità Digitale', color: 'text-violet-600' }
+};
 
 const TIER_COLORS: Record<SubscriptionTier, string> = {
   explorer: 'bg-gray-100 text-gray-700 border-gray-300',
@@ -27,9 +35,10 @@ const TIER_COLORS: Record<SubscriptionTier, string> = {
   partner_elite: 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 border-amber-400'
 };
 
-export default function ExercisesHeader({ stats, userTier }: ExercisesHeaderProps) {
+export default function ExercisesHeader({ stats, userTier, currentPath }: ExercisesHeaderProps) {
   const tierConfig = SUBSCRIPTION_TIERS[userTier];
   const tierColorClass = TIER_COLORS[userTier];
+  const pathInfo = PATH_DISPLAY_NAMES[currentPath] || { name: 'Percorso', color: 'text-gray-600' };
 
   return (
     <div className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-6">
@@ -37,10 +46,10 @@ export default function ExercisesHeader({ stats, userTier }: ExercisesHeaderProp
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
-              I Tuoi 52 Esercizi Settimanali
+              Esercizi: <span className={pathInfo.color}>{pathInfo.name}</span>
             </h1>
             <p className="text-gray-600">
-              Sviluppa la tua leadership autentica con esercizi pratici.
+              Sviluppa le tue competenze con {stats.total} esercizi pratici.
             </p>
           </div>
           <div className={`inline-flex items-center px-4 py-2 rounded-full border ${tierColorClass}`}>
