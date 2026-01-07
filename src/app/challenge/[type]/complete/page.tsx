@@ -7,6 +7,13 @@ import { createClient } from '@/lib/supabase/client';
 import { useFullChallengeProgress } from '@/hooks/useDiscoveryProgress';
 import type { ChallengeType } from '@/lib/challenge/discovery-data';
 
+// Feedback state type
+interface FeedbackState {
+  nextAction: string;
+  missingFeedback: string;
+  submitted: boolean;
+}
+
 const CHALLENGE_CONFIG = {
   leadership: {
     name: 'Leadership Autentica',
@@ -61,9 +68,37 @@ export default function ChallengeCompletePage() {
   const challengeType = params.type as ChallengeType;
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [feedback, setFeedback] = useState<FeedbackState>({
+    nextAction: '',
+    missingFeedback: '',
+    submitted: false
+  });
   const supabase = createClient();
 
   const { isComplete, completionPercentage, isLoading } = useFullChallengeProgress(challengeType);
+
+  // Handle feedback submission
+  const handleFeedback = async () => {
+    try {
+      const response = await fetch('/api/challenge/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          challenge_type: challengeType,
+          next_action: feedback.nextAction,
+          missing_feedback: feedback.missingFeedback || null
+        })
+      });
+
+      if (response.ok) {
+        setFeedback(prev => ({ ...prev, submitted: true }));
+      }
+    } catch (error) {
+      console.error('Errore invio feedback:', error);
+      // Continua comunque per UX
+      setFeedback(prev => ({ ...prev, submitted: true }));
+    }
+  };
 
   const isValidChallenge = ['leadership', 'ostacoli', 'microfelicita'].includes(challengeType);
   const config = CHALLENGE_CONFIG[challengeType] || CHALLENGE_CONFIG.leadership;
@@ -185,6 +220,133 @@ export default function ChallengeCompletePage() {
               <div className="text-slate-400 text-sm">Completamento</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Feedback Section */}
+      <section className="py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          {!feedback.submitted ? (
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+              <h3 className="text-xl font-bold text-white mb-2">Prima di continuare...</h3>
+              <p className="text-slate-400 mb-6">Una domanda veloce per personalizzare il tuo percorso</p>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="text-white font-medium block mb-3">Cosa vorresti fare adesso?</label>
+                  <div className="space-y-3">
+                    {[
+                      { value: 'assessment', label: 'Capire meglio i miei punti forti', icon: '📊' },
+                      { value: 'exercises', label: 'Iniziare subito con esercizi pratici', icon: '🎯' },
+                      { value: 'coach', label: "Parlare con l'AI Coach dei miei dubbi", icon: '🤖' },
+                      { value: 'book', label: 'Voglio approfondire con il libro', icon: '📖' },
+                      { value: 'time', label: 'Ho bisogno di tempo per elaborare', icon: '⏳' }
+                    ].map((option) => (
+                      <label
+                        key={option.value}
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
+                          feedback.nextAction === option.value
+                            ? `bg-${config.badge} border-${config.accent}`
+                            : 'bg-slate-700/50 hover:bg-slate-700'
+                        } border border-slate-600`}
+                      >
+                        <input
+                          type="radio"
+                          name="nextAction"
+                          value={option.value}
+                          checked={feedback.nextAction === option.value}
+                          onChange={(e) => setFeedback(prev => ({ ...prev, nextAction: e.target.value }))}
+                          className="sr-only"
+                        />
+                        <span className="text-xl">{option.icon}</span>
+                        <span className="text-white">{option.label}</span>
+                        {feedback.nextAction === option.value && (
+                          <svg className={`w-5 h-5 ml-auto text-${config.badgeText}`} fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-white font-medium block mb-2">
+                    C&apos;è qualcosa che ti è mancato? <span className="text-slate-400 font-normal">(opzionale)</span>
+                  </label>
+                  <textarea
+                    placeholder="Aiutaci a migliorare..."
+                    value={feedback.missingFeedback}
+                    onChange={(e) => setFeedback(prev => ({ ...prev, missingFeedback: e.target.value }))}
+                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 text-white placeholder-slate-400 focus:outline-none focus:border-slate-500 min-h-[80px]"
+                  />
+                </div>
+
+                <button
+                  onClick={handleFeedback}
+                  disabled={!feedback.nextAction}
+                  className={`w-full py-3 px-6 rounded-lg font-semibold transition ${
+                    feedback.nextAction
+                      ? `bg-${config.accent} hover:bg-${config.accentHover} text-white`
+                      : 'bg-slate-600 text-slate-400 cursor-not-allowed'
+                  }`}
+                >
+                  Continua →
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50 text-center">
+              <div className={`text-${config.badgeText} text-4xl mb-4`}>✓</div>
+              <p className="text-white font-medium mb-6">Grazie per il feedback!</p>
+
+              {feedback.nextAction === 'assessment' && (
+                <Link
+                  href={`/assessment/${challengeType === 'ostacoli' ? 'risolutore' : challengeType === 'microfelicita' ? 'microfelicita' : 'lite'}`}
+                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+                >
+                  Fai l&apos;Assessment →
+                </Link>
+              )}
+              {feedback.nextAction === 'exercises' && (
+                <Link
+                  href="/exercises"
+                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+                >
+                  Vai agli Esercizi →
+                </Link>
+              )}
+              {feedback.nextAction === 'coach' && (
+                <Link
+                  href="/dashboard"
+                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+                >
+                  Parla con Fernando →
+                </Link>
+              )}
+              {feedback.nextAction === 'book' && (
+                <Link
+                  href={`/libro/${challengeType === 'ostacoli' ? 'risolutore' : challengeType}`}
+                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+                >
+                  Scopri il Libro →
+                </Link>
+              )}
+              {feedback.nextAction === 'time' && (
+                <div>
+                  <p className="text-slate-400 mb-4">
+                    Prenditi il tempo che ti serve. Quando sei pronto, troverai tutto nella dashboard.
+                  </p>
+                  <Link
+                    href="/dashboard"
+                    className="inline-block bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-8 rounded-lg transition"
+                  >
+                    Vai alla Dashboard
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
