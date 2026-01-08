@@ -138,7 +138,7 @@ export default function AffiliatePage() {
       {/* ═══════════════════════════════════════════════════════════
           SEZIONE 2: IL PRINCIPIO
           ═══════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-16 px-4 bg-white relative -mt-px">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-6">
             Il principio è semplice
