@@ -1,6 +1,6 @@
 // ============================================================================
 // PAGE: /affiliate
-// Descrizione: Landing completa per reclutamento affiliati
+// Descrizione: Landing Evangelista - Per chi già parla di Vitaeology
 // Conformità: VITAEOLOGY_MEGA_PROMPT v4.3 | Principio Validante
 // ============================================================================
 
@@ -58,16 +58,15 @@ export default function AffiliatePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Registrazione Completata</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Richiesta Inviata</h2>
           <p className="text-slate-600 mb-6">
-            Riceverai una email di conferma quando il tuo account sarà attivato.
-            Di solito entro 24-48 ore.
+            Riceverai il tuo link personale entro 24 ore.
           </p>
           <Link
-            href="/"
+            href="/dashboard"
             className="inline-block px-6 py-3 bg-[#0A2540] text-white rounded-lg hover:bg-[#0A2540]/90 transition"
           >
-            Torna alla Home
+            Torna alla Dashboard
           </Link>
         </div>
       </div>
@@ -76,345 +75,353 @@ export default function AffiliatePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* HERO */}
+
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 1: RICONOSCIMENTO
+          Principio: Chi già agisce, si riconosce
+          ═══════════════════════════════════════════════════════════ */}
       <section className="bg-[#0A2540] text-white py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Condividi ciò che usi.<br />
-            Guadagna aiutando altri.
-          </h1>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Sei già utente Vitaeology? Aiuta altri professionisti a scoprire
-            il percorso che stai facendo. Guadagni commissioni ricorrenti
-            su ogni persona che porti.
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[#F4B942] text-sm font-medium tracking-wide mb-4">
+            PROGRAMMA PARTNER
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <span className="bg-white/10 px-4 py-2 rounded-full">
-              Fino al 45% ricorrente
-            </span>
-            <span className="bg-white/10 px-4 py-2 rounded-full">
-              Cookie 90 giorni
-            </span>
-            <span className="bg-white/10 px-4 py-2 rounded-full">
-              Bonus fino a 1.000 euro/mese
-            </span>
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            Parli già di Vitaeology<br />a colleghi e amici?
+          </h1>
+          <p className="text-xl text-gray-300 mb-4">
+            È naturale. Quando qualcosa funziona, lo condividi.
+          </p>
+          <p className="text-gray-400">
+            Il programma partner riconosce quello che fai già.
+            Non ti chiede di diventare qualcun altro.
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 2: NON SEI UN VENDITORE
+          Principio: Chi già agisce, continuerà
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
+            Non ti stiamo chiedendo di vendere
+          </h2>
+          <div className="space-y-4 text-gray-700">
+            <p>
+              Se qualcuno ti chiede consiglio su come crescere professionalmente,
+              cosa rispondi?
+            </p>
+            <p>
+              Se un collega si lamenta di non avere tempo per formarsi,
+              cosa gli suggerisci?
+            </p>
+            <p>
+              Se il tuo percorso con Vitaeology sta funzionando,
+              probabilmente ne parli già.
+            </p>
+            <p className="font-medium text-[#0A2540]">
+              Il programma partner non ti trasforma in promotore.
+              Premia quello che fai già naturalmente.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* COS'È VITAEOLOGY */}
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 3: COME FUNZIONA
+          Principio: Semplicità
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+            Come funziona
+          </h2>
+          <div className="space-y-6">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+                1
+              </div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540] mb-1">Ricevi un link personale</h3>
+                <p className="text-gray-600">
+                  Porta alla challenge gratuita di 5 giorni, con il tuo codice di riferimento.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+                2
+              </div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540] mb-1">Lo condividi quando ha senso</h3>
+                <p className="text-gray-600">
+                  In una conversazione, via messaggio, sui social. Quando e come preferisci.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+                3
+              </div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540] mb-1">La persona prova gratis</h3>
+                <p className="text-gray-600">
+                  5 giorni per capire se Vitaeology fa per lei. Nessun pagamento richiesto.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-[#F4B942] text-[#0A2540] rounded-full flex items-center justify-center font-bold text-sm">
+                4
+              </div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540] mb-1">Se si abbona, ricevi una commissione</h3>
+                <p className="text-gray-600">
+                  Su quel pagamento e su tutti i rinnovi futuri. Finché resta cliente.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 4: PERCHÉ LA TUA VOCE CONTA
+          Principio: Chi è come me, mi convince + Chi sa, è credibile
+          ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
-            Cosa promuovi
+            Perché la tua voce conta
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <p className="text-gray-700 mb-4">
-                Vitaeology è un percorso di sviluppo della leadership basato su
-                <strong> 24 caratteristiche concrete</strong>, non teoria astratta.
+                Quando qualcuno vede una pubblicità, alza le difese.
               </p>
               <p className="text-gray-700 mb-4">
-                Ogni settimana l&apos;utente riceve un esercizio pratico di 15-20 minuti.
-                Un AI Coach personale lo guida nel percorso. Un radar visivo mostra
-                i progressi nel tempo.
+                Quando un collega gli dice <em>&quot;Questo mi sta aiutando&quot;</em>, ascolta.
               </p>
               <p className="text-gray-700">
-                Non è un corso da guardare. È un percorso da fare.
+                Tu non stai promuovendo qualcosa che non conosci.
+                Stai condividendo qualcosa che usi.
+                Questa differenza si sente.
               </p>
             </div>
             <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="font-semibold text-[#0A2540] mb-4">Il percorso</h3>
+              <h3 className="font-semibold text-[#0A2540] mb-4">Tu puoi rispondere a:</h3>
               <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start gap-3">
-                  <span className="text-[#F4B942] font-bold">1.</span>
-                  <span>Challenge gratuita 5 giorni (assaggio)</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4B942]">→</span>
+                  <span>&quot;Ma funziona davvero?&quot;</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-[#F4B942] font-bold">2.</span>
-                  <span>Assessment 240 domande (mappa competenze)</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4B942]">→</span>
+                  <span>&quot;Quanto tempo richiede?&quot;</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-[#F4B942] font-bold">3.</span>
-                  <span>52 esercizi settimanali (un anno di pratica)</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4B942]">→</span>
+                  <span>&quot;Cosa cambia rispetto a un corso?&quot;</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-[#F4B942] font-bold">4.</span>
-                  <span>AI Coach disponibile sempre (supporto continuo)</span>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#F4B942]">→</span>
+                  <span>&quot;Tu cosa ne stai ricavando?&quot;</span>
                 </li>
               </ul>
+              <p className="text-sm text-gray-500 mt-4">
+                Risposte che vengono dall&apos;esperienza, non da una brochure.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* A CHI SERVE */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
-            A chi puoi parlarne
-          </h2>
-          <p className="text-gray-700 mb-8">
-            Vitaeology non è per tutti. È per professionisti che:
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="text-3xl mb-4">👔</div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">
-                Hanno responsabilità
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Gestiscono team, progetti, decisioni. Imprenditori, manager,
-                professionisti con 5+ anni di esperienza.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="text-3xl mb-4">📈</div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">
-                Vogliono crescere
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Sentono di poter migliorare come leader. Non cercano
-                certificati, cercano risultati concreti.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="text-3xl mb-4">⏱️</div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">
-                Hanno poco tempo
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Non possono seguire corsi di 40 ore. Preferiscono
-                15-20 minuti a settimana, ma costanti.
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-            <p className="text-blue-800 text-sm">
-              <strong>In pratica:</strong> pensa ai tuoi colleghi, ex colleghi,
-              clienti, fornitori. Chi ha un ruolo di responsabilità e potrebbe
-              beneficiare di un percorso strutturato sulla leadership?
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* COME FUNZIONA */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
-            Come funziona
-          </h2>
-          <div className="grid md:grid-cols-4 gap-4">
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-[#0A2540] text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                1
-              </div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">Condividi</h3>
-              <p className="text-gray-600 text-sm">
-                Mandi il tuo link a qualcuno che potrebbe beneficiarne
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-[#0A2540] text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                2
-              </div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">Challenge</h3>
-              <p className="text-gray-600 text-sm">
-                La persona fa la challenge gratuita di 5 giorni
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-[#0A2540] text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                3
-              </div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">Abbonamento</h3>
-              <p className="text-gray-600 text-sm">
-                Se decide di continuare, si abbona (Leader o Mentor)
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-[#F4B942] text-[#0A2540] rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                4
-              </div>
-              <h3 className="font-semibold text-[#0A2540] mb-2">Commissione</h3>
-              <p className="text-gray-600 text-sm">
-                Tu ricevi commissione su ogni pagamento, inclusi i rinnovi
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 bg-gray-50 rounded-xl p-6">
-            <h3 className="font-semibold text-[#0A2540] mb-3">Nessuna pressione</h3>
-            <p className="text-gray-700">
-              Non devi convincere nessuno. Condividi il link alla challenge gratuita.
-              La persona prova per 5 giorni senza pagare. Se il percorso fa per lei,
-              si abbona. Se non fa per lei, non succede nulla.
-            </p>
-            <p className="text-gray-700 mt-3">
-              Il tuo cookie dura <strong>90 giorni</strong>. Se clicca oggi e si abbona
-              tra due mesi, la commissione è comunque tua.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* REQUISITO */}
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 5: IL REQUISITO
+          Principio: Chi seleziona, ha valore
+          ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-[#0A2540]">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-6">
-            Un requisito importante
+            Chi può partecipare
           </h2>
-          <p className="text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
-            Per diventare affiliato Vitaeology devi essere un utente con abbonamento attivo.
+          <p className="text-xl text-gray-300 mb-4">
+            Il programma è riservato a chi ha un abbonamento Vitaeology attivo.
           </p>
-          <div className="bg-white/10 rounded-xl p-6 max-w-2xl mx-auto text-left">
-            <p className="text-gray-300 mb-4">
-              <strong className="text-white">Perché?</strong> Perché chi promuove Vitaeology
-              deve conoscerlo davvero. Non vogliamo affiliati che parlano di qualcosa
-              che non hanno mai provato.
-            </p>
-            <p className="text-gray-300">
-              Quando qualcuno ti chiede &quot;Ma funziona?&quot;, tu puoi rispondere dalla tua esperienza.
-              Questo fa la differenza tra una raccomandazione autentica e una pubblicità.
-            </p>
-          </div>
+          <p className="text-gray-400 max-w-xl mx-auto">
+            Non è una limitazione. È una garanzia.
+            Chi parla di Vitaeology lo sta usando davvero.
+            Le sue parole hanno peso perché vengono dall&apos;esperienza.
+          </p>
         </div>
       </section>
 
-      {/* COMMISSIONI */}
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 6: COSA RICEVI
+          Principio: Chi riceve, restituisce (ma qui riceve lui)
+          ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
-            Quanto guadagni
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+            Cosa ricevi
           </h2>
 
-          {/* Tabella Base */}
-          <div className="mb-8">
-            <h3 className="font-semibold text-gray-700 mb-4">Commissione base (dipende dal tuo abbonamento)</h3>
-            <div className="overflow-x-auto">
+          <div className="space-y-6 mb-10">
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl">💰</div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540]">Commissione ricorrente</h3>
+                <p className="text-gray-600">
+                  Dal 25% al 40% su ogni pagamento, in base al tuo abbonamento.
+                  Non solo il primo: tutti i rinnovi, per sempre.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl">📈</div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540]">Bonus automatici</h3>
+                <p className="text-gray-600">
+                  +3% quando raggiungi 10 clienti attivi, +5% a 30 clienti.
+                  Nessuna richiesta, si attiva da solo.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl">🏆</div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540]">Premi milestone</h3>
+                <p className="text-gray-600">
+                  500 euro al mese con 50 clienti attivi, 1.000 euro al mese con 100.
+                  Per chi costruisce una community.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl">⏱️</div>
+              <div>
+                <h3 className="font-semibold text-[#0A2540]">Cookie 90 giorni</h3>
+                <p className="text-gray-600">
+                  Chi clicca il tuo link oggi e si abbona tra due mesi,
+                  la commissione è tua.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabella commissioni - collassabile */}
+          <details className="bg-gray-50 rounded-xl p-4">
+            <summary className="font-semibold text-[#0A2540] cursor-pointer">
+              Vedi dettaglio commissioni per livello
+            </summary>
+            <div className="mt-4 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-medium text-gray-600">Tuo abbonamento</th>
-                    <th className="text-center py-3 px-4 font-medium text-gray-600">Commissione</th>
-                    <th className="text-right py-3 px-4 font-medium text-gray-600">Esempio su Leader 149 euro</th>
+                    <th className="text-left py-2 px-2 font-medium text-gray-600">Tuo abbonamento</th>
+                    <th className="text-center py-2 px-2 font-medium text-gray-600">Base</th>
+                    <th className="text-center py-2 px-2 font-medium text-gray-600">+10 cli</th>
+                    <th className="text-center py-2 px-2 font-medium text-gray-600">+30 cli</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-gray-700">
                   <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4">Leader (149 euro/anno)</td>
-                    <td className="text-center py-3 px-4 font-semibold">25%</td>
-                    <td className="text-right py-3 px-4 text-gray-600">37,25 euro</td>
+                    <td className="py-2 px-2">Leader (149 euro/anno)</td>
+                    <td className="text-center py-2 px-2">25%</td>
+                    <td className="text-center py-2 px-2">28%</td>
+                    <td className="text-center py-2 px-2">30%</td>
                   </tr>
                   <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4">Mentor (490 euro/anno)</td>
-                    <td className="text-center py-3 px-4 font-semibold">30%</td>
-                    <td className="text-right py-3 px-4 text-gray-600">44,70 euro</td>
+                    <td className="py-2 px-2">Mentor (490 euro/anno)</td>
+                    <td className="text-center py-2 px-2">30%</td>
+                    <td className="text-center py-2 px-2">33%</td>
+                    <td className="text-center py-2 px-2">35%</td>
                   </tr>
                   <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4">Mastermind (2.997 euro)</td>
-                    <td className="text-center py-3 px-4 font-semibold">35%</td>
-                    <td className="text-right py-3 px-4 text-gray-600">52,15 euro</td>
+                    <td className="py-2 px-2">Mastermind (2.997 euro)</td>
+                    <td className="text-center py-2 px-2">35%</td>
+                    <td className="text-center py-2 px-2">38%</td>
+                    <td className="text-center py-2 px-2">40%</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4">Consulente certificato</td>
-                    <td className="text-center py-3 px-4 font-semibold">40%</td>
-                    <td className="text-right py-3 px-4 text-gray-600">59,60 euro</td>
+                    <td className="py-2 px-2">Consulente certificato</td>
+                    <td className="text-center py-2 px-2">40%</td>
+                    <td className="text-center py-2 px-2">43%</td>
+                    <td className="text-center py-2 px-2">45%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
+          </details>
+        </div>
+      </section>
 
-          {/* Bonus Performance */}
-          <div className="mb-8">
-            <h3 className="font-semibold text-gray-700 mb-4">Bonus performance (automatici)</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-green-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">10+ clienti attivi</span>
-                  <span className="font-bold text-green-700">+3%</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">Es: Leader 25% → 28%</p>
-              </div>
-              <div className="bg-green-50 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">30+ clienti attivi</span>
-                  <span className="font-bold text-green-700">+5%</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">Es: Leader 25% → 30%</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bonus Milestone */}
-          <div className="mb-8">
-            <h3 className="font-semibold text-gray-700 mb-4">Bonus milestone (ricorrenti)</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-[#F4B942]/10 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">50+ clienti attivi</span>
-                  <span className="font-bold text-[#0A2540]">500 euro/mese</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">6.000 euro/anno extra</p>
-              </div>
-              <div className="bg-[#F4B942]/10 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">100+ clienti attivi</span>
-                  <span className="font-bold text-[#0A2540]">1.000 euro/mese</span>
-                </div>
-                <p className="text-sm text-gray-500 mt-1">12.000 euro/anno extra</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Esempio Concreto */}
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="font-semibold text-[#0A2540] mb-4">Esempio concreto</h3>
-            <p className="text-gray-700 mb-4">
-              <strong>Marco</strong> è utente Mentor (490 euro/anno).
-              Diventa affiliato e nel primo anno porta 15 clienti Leader.
-            </p>
-            <div className="grid md:grid-cols-3 gap-4 text-center">
-              <div>
-                <p className="text-sm text-gray-500">Commissione base</p>
-                <p className="text-xl font-bold text-[#0A2540]">30%</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Bonus (10+ clienti)</p>
-                <p className="text-xl font-bold text-green-600">+3%</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Totale</p>
-                <p className="text-xl font-bold text-[#F4B942]">33%</p>
-              </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <p className="text-gray-700">
-                <strong>Guadagno anno 1:</strong> 15 x 149 euro x 33% = <strong>737 euro</strong><br />
-                <strong>Costo Mentor:</strong> 490 euro<br />
-                <strong>Net:</strong> +247 euro + il valore del percorso che sta facendo
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 7: DOMANDE COMUNI
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+            Domande comuni
+          </h2>
+          <div className="space-y-4">
+            <details className="bg-white rounded-lg p-4 shadow-sm">
+              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+                Devo postare sui social tutti i giorni?
+              </summary>
+              <p className="text-gray-700 mt-3">
+                No. Non devi fare nulla che non faresti già. Se vuoi postare, bene.
+                Se preferisci parlare solo a persone che conosci, va bene lo stesso.
+                Non ci sono obblighi.
               </p>
-              <p className="text-gray-600 text-sm mt-2">
-                E i rinnovi degli anni successivi generano commissioni senza nuovo sforzo.
+            </details>
+            <details className="bg-white rounded-lg p-4 shadow-sm">
+              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+                Quando ricevo i soldi?
+              </summary>
+              <p className="text-gray-700 mt-3">
+                Le commissioni maturano dopo 30 giorni (per coprire eventuali rimborsi).
+                Quando il saldo raggiunge 50 euro, puoi richiedere il pagamento.
+                Arriva entro 5 giorni lavorativi.
               </p>
-            </div>
+            </details>
+            <details className="bg-white rounded-lg p-4 shadow-sm">
+              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+                Cosa succede se qualcuno chiede il rimborso?
+              </summary>
+              <p className="text-gray-700 mt-3">
+                Se il rimborso avviene entro 30 giorni, la commissione viene annullata.
+                Dopo i 30 giorni, la commissione è tua anche se il cliente disdice.
+              </p>
+            </details>
+            <details className="bg-white rounded-lg p-4 shadow-sm">
+              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+                Devo avere un sito o una newsletter?
+              </summary>
+              <p className="text-gray-700 mt-3">
+                No. Molti partner condividono il link solo via WhatsApp o in conversazioni dirette.
+                Funziona benissimo. Se hai un sito o una newsletter, meglio. Ma non è necessario.
+              </p>
+            </details>
           </div>
         </div>
       </section>
 
-      {/* FORM */}
-      <section className="py-16 px-4 bg-gray-50" id="registrati">
+      {/* ═══════════════════════════════════════════════════════════
+          SEZIONE 8: FORM
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-white" id="registrati">
         <div className="max-w-xl mx-auto">
           <h2 className="text-2xl font-bold text-[#0A2540] mb-2 text-center">
-            Diventa Partner
+            Attiva il programma partner
           </h2>
           <p className="text-gray-600 text-center mb-8">
-            Se hai già un abbonamento Vitaeology attivo, compila il form.
-            Riceverai accesso alla dashboard affiliati.
+            Se hai un abbonamento Vitaeology attivo, compila il form.
+            Riceverai il tuo link personale entro 24 ore.
           </p>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6">
+          <form onSubmit={handleSubmit} className="bg-gray-50 rounded-xl p-6">
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                 {error}
@@ -431,7 +438,7 @@ export default function AffiliatePage() {
                   required
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
                   placeholder="Mario"
                 />
               </div>
@@ -443,7 +450,7 @@ export default function AffiliatePage() {
                   type="text"
                   value={formData.cognome}
                   onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
                   placeholder="Rossi"
                 />
               </div>
@@ -458,7 +465,7 @@ export default function AffiliatePage() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
                 placeholder="mario@esempio.it"
               />
             </div>
@@ -468,24 +475,24 @@ export default function AffiliatePage() {
                 Sito Web / Social (opzionale)
               </label>
               <input
-                type="url"
+                type="text"
                 value={formData.sito_web}
                 onChange={(e) => setFormData({ ...formData, sito_web: e.target.value })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent"
-                placeholder="https://tuosito.it"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                placeholder="linkedin.com/in/tuoprofilo"
               />
             </div>
 
             <div className="mb-6">
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Come promuoverai Vitaeology?
+                Come condividerai il link? (opzionale)
               </label>
               <textarea
                 value={formData.come_promuovera}
                 onChange={(e) => setFormData({ ...formData, come_promuovera: e.target.value })}
-                rows={3}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent"
-                placeholder="Es: Passaparola con colleghi, post LinkedIn, newsletter..."
+                rows={2}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                placeholder="Es: Conversazioni con colleghi, LinkedIn, WhatsApp..."
               />
             </div>
 
@@ -501,7 +508,7 @@ export default function AffiliatePage() {
                 <span className="text-sm text-slate-600">
                   Accetto i{' '}
                   <Link href="/affiliate/termini" className="text-[#0A2540] underline">
-                    termini del programma affiliati
+                    termini del programma
                   </Link>{' '}
                   e la{' '}
                   <Link href="/privacy" className="text-[#0A2540] underline">
@@ -516,67 +523,16 @@ export default function AffiliatePage() {
               disabled={loading}
               className="w-full py-3 bg-[#0A2540] text-white font-semibold rounded-lg hover:bg-[#0A2540]/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Invio in corso...' : 'Richiedi Accesso Partner'}
+              {loading ? 'Invio in corso...' : 'Attiva il programma'}
             </button>
           </form>
 
-          <p className="text-sm text-gray-500 text-center mt-4">
+          <p className="text-sm text-gray-500 text-center mt-6">
             Non hai ancora un abbonamento?{' '}
             <Link href="/challenge/leadership" className="text-[#0A2540] underline">
               Inizia dalla challenge gratuita
             </Link>
           </p>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-8 text-center">
-            Domande frequenti
-          </h2>
-          <div className="space-y-4">
-            <details className="bg-gray-50 rounded-lg p-4">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
-                Devo fare il venditore?
-              </summary>
-              <p className="text-gray-700 mt-3">
-                No. Condividi il link quando ha senso farlo. Se qualcuno ti parla
-                di voler crescere professionalmente, puoi dirgli &quot;Sto facendo un
-                percorso interessante, ti mando il link alla prova gratuita&quot;.
-                Nessuna pressione, nessuno script.
-              </p>
-            </details>
-            <details className="bg-gray-50 rounded-lg p-4">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
-                Quando ricevo i pagamenti?
-              </summary>
-              <p className="text-gray-700 mt-3">
-                Le commissioni maturano dopo 30 giorni (periodo di rimborso).
-                Quando il tuo saldo raggiunge 50 euro, puoi richiedere il payout.
-                I pagamenti vengono elaborati entro 5 giorni lavorativi.
-              </p>
-            </details>
-            <details className="bg-gray-50 rounded-lg p-4">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
-                Cosa succede se qualcuno disdice?
-              </summary>
-              <p className="text-gray-700 mt-3">
-                Se un cliente disdice entro 30 giorni, la commissione viene annullata.
-                Dopo i 30 giorni, la commissione è tua anche se il cliente disdice successivamente.
-              </p>
-            </details>
-            <details className="bg-gray-50 rounded-lg p-4">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
-                Posso promuovere sui social?
-              </summary>
-              <p className="text-gray-700 mt-3">
-                Sì, ma con autenticità. Racconta la tua esperienza, non fare spam.
-                Un post che dice &quot;Sto facendo questo percorso e mi sta aiutando su X&quot;
-                funziona meglio di &quot;Compra questo corso fantastico!!!&quot;.
-              </p>
-            </details>
-          </div>
         </div>
       </section>
 
