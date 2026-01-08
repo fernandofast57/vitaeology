@@ -8,6 +8,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AffiliatePage() {
   const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ export default function AffiliatePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Richiesta Inviata</h2>
+          <h2 className="text-2xl font-display font-bold text-slate-800 mb-2">Richiesta Inviata</h2>
           <p className="text-slate-600 mb-6">
             Riceverai il tuo link personale entro 24 ore.
           </p>
@@ -76,6 +77,37 @@ export default function AffiliatePage() {
   return (
     <div className="min-h-screen bg-gray-50">
 
+      {/* Header - identico alla homepage */}
+      <header className="bg-white border-b border-gray-100">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo-horizontal.svg"
+                alt="Vitaeology"
+                width={220}
+                height={32}
+                className="h-8 w-auto"
+              />
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/auth/login"
+                className="text-petrol-600 hover:text-petrol-700 font-medium"
+              >
+                Accedi
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="btn-primary"
+              >
+                Inizia Gratis
+              </Link>
+            </div>
+          </div>
+        </nav>
+      </header>
+
       {/* ═══════════════════════════════════════════════════════════
           SEZIONE 1: RICONOSCIMENTO
           Principio: Chi già agisce, si riconosce
@@ -85,7 +117,7 @@ export default function AffiliatePage() {
           <p className="text-[#F4B942] text-sm font-medium tracking-wide mb-4">
             PROGRAMMA PARTNER
           </p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 leading-tight">
             Parli già di Vitaeology<br />a colleghi e amici?
           </h1>
           <p className="text-xl text-gray-300 mb-4">
@@ -104,7 +136,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-6">
             Non ti stiamo chiedendo di vendere
           </h2>
           <div className="space-y-4 text-gray-700">
@@ -134,7 +166,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
             Come funziona
           </h2>
           <div className="space-y-6">
@@ -192,7 +224,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-6">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-6">
             Perché la tua voce conta
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -243,7 +275,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-[#0A2540]">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-6">
+          <h2 className="text-2xl font-display font-bold text-white mb-6">
             Chi può partecipare
           </h2>
           <p className="text-xl text-gray-300 mb-4">
@@ -263,7 +295,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
             Cosa ricevi
           </h2>
 
@@ -362,7 +394,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
             Domande comuni
           </h2>
           <div className="space-y-4">
@@ -413,7 +445,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white" id="registrati">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-2 text-center">
+          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-2 text-center">
             Attiva il programma partner
           </h2>
           <p className="text-gray-600 text-center mb-8">
