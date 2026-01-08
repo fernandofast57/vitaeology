@@ -59,13 +59,13 @@ export default function AffiliatePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-display font-bold text-slate-800 mb-2">Richiesta Inviata</h2>
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-2">Richiesta Inviata</h2>
           <p className="text-slate-600 mb-6">
             Riceverai il tuo link personale entro 24 ore.
           </p>
           <Link
             href="/dashboard"
-            className="inline-block px-6 py-3 bg-[#0A2540] text-white rounded-lg hover:bg-[#0A2540]/90 transition"
+            className="inline-block px-6 py-3 bg-petrol-600 text-white rounded-lg hover:bg-petrol-600/90 transition"
           >
             Torna alla Dashboard
           </Link>
@@ -112,12 +112,12 @@ export default function AffiliatePage() {
           SEZIONE 1: RICONOSCIMENTO
           Principio: Chi già agisce, si riconosce
           ═══════════════════════════════════════════════════════════ */}
-      <section className="bg-[#0A2540] text-white py-20 px-4">
+      <section className="bg-petrol-600 text-white py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[#F4B942] text-sm font-medium tracking-wide mb-4">
+          <p className="text-gold-500 text-sm font-medium tracking-wide mb-4">
             PROGRAMMA PARTNER
           </p>
-          <h1 className="text-3xl md:text-4xl font-display font-bold mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
             Parli già di Vitaeology<br />a colleghi e amici?
           </h1>
           <p className="text-xl text-gray-300 mb-4">
@@ -136,7 +136,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-6">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-6">
             Non ti stiamo chiedendo di vendere
           </h2>
           <div className="space-y-4 text-gray-700">
@@ -152,7 +152,7 @@ export default function AffiliatePage() {
               Se il tuo percorso con Vitaeology sta funzionando,
               probabilmente ne parli già.
             </p>
-            <p className="font-medium text-[#0A2540]">
+            <p className="font-medium text-petrol-600">
               Il programma partner non ti trasforma in promotore.
               Premia quello che fai già naturalmente.
             </p>
@@ -166,49 +166,49 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
             Come funziona
           </h2>
           <div className="space-y-6">
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-8 h-8 bg-petrol-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                 1
               </div>
               <div>
-                <h3 className="font-semibold text-[#0A2540] mb-1">Ricevi un link personale</h3>
+                <h3 className="font-semibold text-petrol-600 mb-1">Ricevi un link personale</h3>
                 <p className="text-gray-600">
                   Porta alla challenge gratuita di 5 giorni, con il tuo codice di riferimento.
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-8 h-8 bg-petrol-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                 2
               </div>
               <div>
-                <h3 className="font-semibold text-[#0A2540] mb-1">Lo condividi quando ha senso</h3>
+                <h3 className="font-semibold text-petrol-600 mb-1">Lo condividi quando ha senso</h3>
                 <p className="text-gray-600">
                   In una conversazione, via messaggio, sui social. Quando e come preferisci.
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#0A2540] text-white rounded-full flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-8 h-8 bg-petrol-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
                 3
               </div>
               <div>
-                <h3 className="font-semibold text-[#0A2540] mb-1">La persona prova gratis</h3>
+                <h3 className="font-semibold text-petrol-600 mb-1">La persona prova gratis</h3>
                 <p className="text-gray-600">
                   5 giorni per capire se Vitaeology fa per lei. Nessun pagamento richiesto.
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#F4B942] text-[#0A2540] rounded-full flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-8 h-8 bg-gold-500 text-petrol-600 rounded-full flex items-center justify-center font-bold text-sm">
                 4
               </div>
               <div>
-                <h3 className="font-semibold text-[#0A2540] mb-1">Se si abbona, ricevi una commissione</h3>
+                <h3 className="font-semibold text-petrol-600 mb-1">Se si abbona, ricevi una commissione</h3>
                 <p className="text-gray-600">
                   Su quel pagamento e su tutti i rinnovi futuri. Finché resta cliente.
                 </p>
@@ -224,7 +224,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-6">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-6">
             Perché la tua voce conta
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -242,22 +242,22 @@ export default function AffiliatePage() {
               </p>
             </div>
             <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="font-semibold text-[#0A2540] mb-4">Tu puoi rispondere a:</h3>
+              <h3 className="font-semibold text-petrol-600 mb-4">Tu puoi rispondere a:</h3>
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <span className="text-[#F4B942]">→</span>
+                  <span className="text-gold-500">→</span>
                   <span>&quot;Ma funziona davvero?&quot;</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#F4B942]">→</span>
+                  <span className="text-gold-500">→</span>
                   <span>&quot;Quanto tempo richiede?&quot;</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#F4B942]">→</span>
+                  <span className="text-gold-500">→</span>
                   <span>&quot;Cosa cambia rispetto a un corso?&quot;</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#F4B942]">→</span>
+                  <span className="text-gold-500">→</span>
                   <span>&quot;Tu cosa ne stai ricavando?&quot;</span>
                 </li>
               </ul>
@@ -273,9 +273,9 @@ export default function AffiliatePage() {
           SEZIONE 5: IL REQUISITO
           Principio: Chi seleziona, ha valore
           ═══════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 bg-[#0A2540]">
+      <section className="py-16 px-4 bg-petrol-600">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-display font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-6">
             Chi può partecipare
           </h2>
           <p className="text-xl text-gray-300 mb-4">
@@ -295,7 +295,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
             Cosa ricevi
           </h2>
 
@@ -303,7 +303,7 @@ export default function AffiliatePage() {
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl">💰</div>
               <div>
-                <h3 className="font-semibold text-[#0A2540]">Commissione ricorrente</h3>
+                <h3 className="font-semibold text-petrol-600">Commissione ricorrente</h3>
                 <p className="text-gray-600">
                   Dal 25% al 40% su ogni pagamento, in base al tuo abbonamento.
                   Non solo il primo: tutti i rinnovi, per sempre.
@@ -313,7 +313,7 @@ export default function AffiliatePage() {
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl">📈</div>
               <div>
-                <h3 className="font-semibold text-[#0A2540]">Bonus automatici</h3>
+                <h3 className="font-semibold text-petrol-600">Bonus automatici</h3>
                 <p className="text-gray-600">
                   +3% quando raggiungi 10 clienti attivi, +5% a 30 clienti.
                   Nessuna richiesta, si attiva da solo.
@@ -323,7 +323,7 @@ export default function AffiliatePage() {
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl">🏆</div>
               <div>
-                <h3 className="font-semibold text-[#0A2540]">Premi milestone</h3>
+                <h3 className="font-semibold text-petrol-600">Premi milestone</h3>
                 <p className="text-gray-600">
                   500 euro al mese con 50 clienti attivi, 1.000 euro al mese con 100.
                   Per chi costruisce una community.
@@ -333,7 +333,7 @@ export default function AffiliatePage() {
             <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl">⏱️</div>
               <div>
-                <h3 className="font-semibold text-[#0A2540]">Cookie 90 giorni</h3>
+                <h3 className="font-semibold text-petrol-600">Cookie 90 giorni</h3>
                 <p className="text-gray-600">
                   Chi clicca il tuo link oggi e si abbona tra due mesi,
                   la commissione è tua.
@@ -344,7 +344,7 @@ export default function AffiliatePage() {
 
           {/* Tabella commissioni - collassabile */}
           <details className="bg-gray-50 rounded-xl p-4">
-            <summary className="font-semibold text-[#0A2540] cursor-pointer">
+            <summary className="font-semibold text-petrol-600 cursor-pointer">
               Vedi dettaglio commissioni per livello
             </summary>
             <div className="mt-4 overflow-x-auto">
@@ -394,12 +394,12 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-8">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
             Domande comuni
           </h2>
           <div className="space-y-4">
             <details className="bg-white rounded-lg p-4 shadow-sm">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+              <summary className="font-semibold text-petrol-600 cursor-pointer">
                 Devo postare sui social tutti i giorni?
               </summary>
               <p className="text-gray-700 mt-3">
@@ -409,7 +409,7 @@ export default function AffiliatePage() {
               </p>
             </details>
             <details className="bg-white rounded-lg p-4 shadow-sm">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+              <summary className="font-semibold text-petrol-600 cursor-pointer">
                 Quando ricevo i soldi?
               </summary>
               <p className="text-gray-700 mt-3">
@@ -419,7 +419,7 @@ export default function AffiliatePage() {
               </p>
             </details>
             <details className="bg-white rounded-lg p-4 shadow-sm">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+              <summary className="font-semibold text-petrol-600 cursor-pointer">
                 Cosa succede se qualcuno chiede il rimborso?
               </summary>
               <p className="text-gray-700 mt-3">
@@ -428,7 +428,7 @@ export default function AffiliatePage() {
               </p>
             </details>
             <details className="bg-white rounded-lg p-4 shadow-sm">
-              <summary className="font-semibold text-[#0A2540] cursor-pointer">
+              <summary className="font-semibold text-petrol-600 cursor-pointer">
                 Devo avere un sito o una newsletter?
               </summary>
               <p className="text-gray-700 mt-3">
@@ -445,7 +445,7 @@ export default function AffiliatePage() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 bg-white" id="registrati">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-2xl font-display font-bold text-[#0A2540] mb-2 text-center">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-2 text-center">
             Attiva il programma partner
           </h2>
           <p className="text-gray-600 text-center mb-8">
@@ -470,7 +470,7 @@ export default function AffiliatePage() {
                   required
                   value={formData.nome}
                   onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent bg-white"
                   placeholder="Mario"
                 />
               </div>
@@ -482,7 +482,7 @@ export default function AffiliatePage() {
                   type="text"
                   value={formData.cognome}
                   onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent bg-white"
                   placeholder="Rossi"
                 />
               </div>
@@ -497,7 +497,7 @@ export default function AffiliatePage() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent bg-white"
                 placeholder="mario@esempio.it"
               />
             </div>
@@ -510,7 +510,7 @@ export default function AffiliatePage() {
                 type="text"
                 value={formData.sito_web}
                 onChange={(e) => setFormData({ ...formData, sito_web: e.target.value })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent bg-white"
                 placeholder="linkedin.com/in/tuoprofilo"
               />
             </div>
@@ -523,7 +523,7 @@ export default function AffiliatePage() {
                 value={formData.come_promuovera}
                 onChange={(e) => setFormData({ ...formData, come_promuovera: e.target.value })}
                 rows={2}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#F4B942] focus:border-transparent bg-white"
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent bg-white"
                 placeholder="Es: Conversazioni con colleghi, LinkedIn, WhatsApp..."
               />
             </div>
@@ -535,15 +535,15 @@ export default function AffiliatePage() {
                   required
                   checked={formData.accetta_termini}
                   onChange={(e) => setFormData({ ...formData, accetta_termini: e.target.checked })}
-                  className="mt-1 w-4 h-4 text-[#F4B942] rounded focus:ring-[#F4B942]"
+                  className="mt-1 w-4 h-4 text-gold-500 rounded focus:ring-gold-500"
                 />
                 <span className="text-sm text-slate-600">
                   Accetto i{' '}
-                  <Link href="/affiliate/termini" className="text-[#0A2540] underline">
+                  <Link href="/affiliate/termini" className="text-petrol-600 underline">
                     termini del programma
                   </Link>{' '}
                   e la{' '}
-                  <Link href="/privacy" className="text-[#0A2540] underline">
+                  <Link href="/privacy" className="text-petrol-600 underline">
                     privacy policy
                   </Link>
                 </span>
@@ -553,7 +553,7 @@ export default function AffiliatePage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#0A2540] text-white font-semibold rounded-lg hover:bg-[#0A2540]/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-petrol-600 text-white font-semibold rounded-lg hover:bg-petrol-600/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Invio in corso...' : 'Attiva il programma'}
             </button>
@@ -561,7 +561,7 @@ export default function AffiliatePage() {
 
           <p className="text-sm text-gray-500 text-center mt-6">
             Non hai ancora un abbonamento?{' '}
-            <Link href="/challenge/leadership" className="text-[#0A2540] underline">
+            <Link href="/challenge/leadership" className="text-petrol-600 underline">
               Inizia dalla challenge gratuita
             </Link>
           </p>
@@ -573,9 +573,9 @@ export default function AffiliatePage() {
         <div className="max-w-6xl mx-auto text-center text-slate-600 text-sm">
           <p>© 2026 Vitaeology. Tutti i diritti riservati.</p>
           <div className="mt-2 space-x-4">
-            <Link href="/privacy" className="hover:text-[#0A2540]">Privacy</Link>
-            <Link href="/terms" className="hover:text-[#0A2540]">Termini</Link>
-            <Link href="/contact" className="hover:text-[#0A2540]">Contatti</Link>
+            <Link href="/privacy" className="hover:text-petrol-600">Privacy</Link>
+            <Link href="/terms" className="hover:text-petrol-600">Termini</Link>
+            <Link href="/contact" className="hover:text-petrol-600">Contatti</Link>
           </div>
         </div>
       </footer>
