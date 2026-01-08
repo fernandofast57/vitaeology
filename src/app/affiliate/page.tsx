@@ -109,20 +109,30 @@ export default function AffiliatePage() {
       {/* ═══════════════════════════════════════════════════════════
           SEZIONE 1: HERO
           Messaggio centrale: Il passaparola nasce dall'esperienza
+          Gradient: blu petrolio + tocco dei 3 percorsi (oro, verde, viola)
           ═══════════════════════════════════════════════════════════ */}
-      <section className="bg-petrol-600 text-white py-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gold-500 text-sm font-medium tracking-wide mb-4">
-            PROGRAMMA PARTNER
-          </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
-            Il passaparola nasce dall&apos;esperienza.
-          </h1>
-          <p className="text-xl text-gray-300">
-            Se stai facendo il percorso Vitaeology e ne parli con altri,
-            il programma partner riconosce questo.
-          </p>
+      <section
+        className="relative text-white"
+        style={{
+          background: 'linear-gradient(120deg, #0A2540 0%, #0A2540 60%, #D4AF37 75%, #10B981 88%, #8B5CF6 100%)'
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <div className="max-w-3xl">
+            <p className="text-gold-500 text-sm font-medium tracking-wide mb-4">
+              PROGRAMMA PARTNER
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
+              Il passaparola nasce dall&apos;esperienza.
+            </h1>
+            <p className="mt-6 text-xl text-gray-300 leading-relaxed">
+              Se stai facendo il percorso Vitaeology e ne parli con altri,
+              il programma partner riconosce questo.
+            </p>
+          </div>
         </div>
+        {/* Taglio diagonale come homepage */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-white" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 0)' }} />
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
