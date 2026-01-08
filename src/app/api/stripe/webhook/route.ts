@@ -7,6 +7,16 @@ import { sendBookEmail, sendTrilogyEmail } from '@/lib/email/send-book-email';
 
 export const dynamic = 'force-dynamic';
 
+// ============================================================================
+// AFFILIATE PRODUCT MAP - Mappa price ID Stripe -> prodotti Vitaeology
+// ============================================================================
+const AFFILIATE_PRODUCT_MAP: Record<string, string> = {
+  // Subscription annuali
+  [process.env.STRIPE_PRICE_LEADER_ANNUAL || 'price_1SfitcHtGer2Hvotf8O7NlBs']: 'leader',
+  [process.env.STRIPE_PRICE_MENTOR_ANNUAL || 'price_1Sfiw6HtGer2HvotaaY1IV2I']: 'mentor',
+  // Espandibile per coaching, mastermind, corporate
+};
+
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
 }
@@ -275,6 +285,175 @@ export async function POST(request: NextRequest) {
               updated_at: new Date().toISOString(),
             })
             .eq('id', profile.id);
+        }
+        break;
+      }
+
+      // =====================================================================
+      // AFFILIATE COMMISSION: Crea commissione su pagamento riuscito
+      // =====================================================================
+      case 'invoice.paid': {
+        const invoice = event.data.object as Stripe.Invoice;
+
+        // Salta se non è una subscription
+        if (!invoice.subscription) break;
+
+        const subscriptionId = typeof invoice.subscription === 'string'
+          ? invoice.subscription
+          : invoice.subscription?.id;
+        const customerId = typeof invoice.customer === 'string'
+          ? invoice.customer
+          : invoice.customer?.id;
+
+        if (!subscriptionId || !customerId) break;
+
+        // Trova utente da customer Stripe
+        const { data: userProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('stripe_customer_id', customerId)
+          .single();
+
+        if (!userProfile) break;
+
+        // Cerca tracking affiliato per questo utente
+        const { data: tracking } = await supabase
+          .from('subscription_affiliate_tracking')
+          .select('affiliate_id, affiliate_click_id')
+          .eq('user_id', userProfile.id)
+          .eq('is_active', true)
+          .single();
+
+        let affiliateId = tracking?.affiliate_id;
+        let clickId = tracking?.affiliate_click_id;
+
+        // Se non c'è tracking, cerca nei click recenti
+        if (!affiliateId) {
+          const { data: recentClick } = await supabase
+            .from('affiliate_clicks')
+            .select('id, affiliate_id')
+            .eq('user_id', userProfile.id)
+            .in('stato_conversione', ['signup', 'challenge_started', 'challenge_complete'])
+            .order('clicked_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (recentClick) {
+            affiliateId = recentClick.affiliate_id;
+            clickId = recentClick.id;
+
+            // Crea tracking per rinnovi futuri
+            await supabase
+              .from('subscription_affiliate_tracking')
+              .upsert({
+                user_id: userProfile.id,
+                stripe_subscription_id: subscriptionId,
+                affiliate_id: affiliateId,
+                affiliate_click_id: clickId,
+                is_active: true
+              });
+          }
+        }
+
+        // Se abbiamo un affiliato, crea commissione
+        if (affiliateId) {
+          const priceId = invoice.lines.data[0]?.price?.id || '';
+          const prodotto = AFFILIATE_PRODUCT_MAP[priceId] || 'unknown';
+          const importo = (invoice.amount_paid || 0) / 100;
+
+          // Determina tipo: initial o recurring
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          const isInitial = subscription.metadata?.affiliate_commission_created !== 'true';
+
+          // Crea commissione via funzione DB
+          const { data: commissionId, error: commissionError } = await supabase
+            .rpc('create_affiliate_commission_from_stripe', {
+              p_affiliate_id: affiliateId,
+              p_click_id: clickId,
+              p_customer_user_id: userProfile.id,
+              p_customer_email: invoice.customer_email || '',
+              p_stripe_subscription_id: subscriptionId,
+              p_stripe_invoice_id: invoice.id,
+              p_prodotto: prodotto,
+              p_prezzo_euro: importo,
+              p_tipo: isInitial ? 'initial' : 'recurring'
+            });
+
+          if (commissionError) {
+            console.error('Errore creazione commissione affiliato:', commissionError);
+          } else {
+            console.log(`✅ Commissione affiliato creata: ${commissionId}`);
+
+            // Marca subscription per evitare doppie commissioni initial
+            if (isInitial) {
+              await stripe.subscriptions.update(subscriptionId, {
+                metadata: { affiliate_commission_created: 'true' }
+              });
+            }
+
+            // Aggiorna click come convertito
+            if (clickId) {
+              await supabase
+                .from('affiliate_clicks')
+                .update({
+                  stato_conversione: 'converted',
+                  converted_at: new Date().toISOString(),
+                  subscription_id: subscriptionId,
+                  commissione_id: commissionId
+                })
+                .eq('id', clickId);
+            }
+          }
+        }
+        break;
+      }
+
+      // =====================================================================
+      // AFFILIATE REFUND: Gestisce rimborsi annullando commissioni
+      // =====================================================================
+      case 'charge.refunded': {
+        const charge = event.data.object as Stripe.Charge;
+        const paymentIntentId = typeof charge.payment_intent === 'string'
+          ? charge.payment_intent
+          : charge.payment_intent?.id;
+
+        if (!paymentIntentId) break;
+
+        // Trova commissione associata al payment intent
+        const { data: commission } = await supabase
+          .from('affiliate_commissions')
+          .select('id, affiliate_id, importo_commissione_euro, stato')
+          .eq('stripe_payment_intent_id', paymentIntentId)
+          .single();
+
+        if (commission && commission.stato !== 'paid') {
+          // Marca commissione come rimborsata
+          await supabase
+            .from('affiliate_commissions')
+            .update({
+              stato: 'refunded',
+              refunded_at: new Date().toISOString()
+            })
+            .eq('id', commission.id);
+
+          // Aggiorna saldo affiliato (decrementa)
+          const { data: currentAffiliate } = await supabase
+            .from('affiliates')
+            .select('saldo_disponibile_euro')
+            .eq('id', commission.affiliate_id)
+            .single();
+
+          if (currentAffiliate) {
+            const newBalance = Math.max(0,
+              Number(currentAffiliate.saldo_disponibile_euro) - Number(commission.importo_commissione_euro)
+            );
+            await supabase
+              .from('affiliates')
+              .update({ saldo_disponibile_euro: newBalance })
+              .eq('id', commission.affiliate_id);
+          }
+
+          console.log(`⚠️ Commissione ${commission.id} rimborsata`);
         }
         break;
       }
