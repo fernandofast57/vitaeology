@@ -114,7 +114,7 @@ export default function AffiliatePage() {
       <section
         className="relative text-white"
         style={{
-          background: 'linear-gradient(120deg, #0A2540 0%, #0A2540 60%, #D4AF37 75%, #10B981 88%, #8B5CF6 100%)'
+          background: 'linear-gradient(120deg, #0A2540 0%, #0A2540 70%, rgba(212, 175, 55, 0.4) 80%, rgba(16, 185, 129, 0.4) 90%, rgba(139, 92, 246, 0.4) 100%)'
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
