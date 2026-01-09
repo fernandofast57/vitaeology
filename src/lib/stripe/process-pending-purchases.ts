@@ -10,9 +10,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { grantAssessmentAccess, LIBRO_TO_ASSESSMENT } from '@/lib/assessment-access';
 
+type PendingProductType = 'libro' | 'subscription' | 'trilogy' | 'bump_libro_leader';
+
 interface PendingPurchase {
   id: string;
-  product_type: 'libro' | 'subscription' | 'trilogy';
+  product_type: PendingProductType;
   product_slug: string;
   stripe_session_id: string;
   stripe_payment_intent: string | null;
@@ -114,6 +116,48 @@ export async function processPendingPurchases(
           }
 
           console.log(`✅ Trilogia assegnata a ${userId}`);
+        } else if (purchase.product_type === 'bump_libro_leader') {
+          // BUMP: Libro gratuito + Leader subscription
+          // Nota: la subscription è già attivata dal webhook, qui gestiamo solo il libro
+
+          // 1. Salva libro come ottenuto via bump
+          await supabase.from('user_books').upsert({
+            user_id: userId,
+            book_slug: purchase.product_slug,
+            stripe_session_id: purchase.stripe_session_id,
+            stripe_payment_intent: 'bump_included',
+            acquired_via: 'bump_offer',
+          }, {
+            onConflict: 'user_id,book_slug',
+          });
+
+          // 2. Grant accesso assessment del libro
+          const assessmentType = LIBRO_TO_ASSESSMENT[purchase.product_slug];
+          if (assessmentType) {
+            await grantAssessmentAccess(
+              supabase,
+              userId,
+              assessmentType,
+              'book_purchase',
+              purchase.stripe_session_id
+            );
+            result.grants.push(assessmentType);
+          }
+
+          // 3. Grant accesso a tutti gli assessment (Leader tier)
+          const allAssessments = ['lite', 'risolutore', 'microfelicita'] as const;
+          for (const assessment of allAssessments) {
+            await grantAssessmentAccess(
+              supabase,
+              userId,
+              assessment,
+              'subscription',
+              purchase.stripe_session_id
+            );
+            result.grants.push(assessment);
+          }
+
+          console.log(`✅ BUMP (libro ${purchase.product_slug} + Leader) assegnato a ${userId}`);
         }
 
         // Marca come processato
@@ -148,7 +192,7 @@ export async function processPendingPurchases(
 export async function savePendingPurchase(
   supabase: SupabaseClient,
   email: string,
-  productType: 'libro' | 'subscription' | 'trilogy',
+  productType: PendingProductType,
   productSlug: string,
   stripeSessionId: string,
   stripePaymentIntent?: string,

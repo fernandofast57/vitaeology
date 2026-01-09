@@ -213,7 +213,120 @@ export async function POST(request: NextRequest) {
           break;
         }
 
-        // Gestione subscription
+        // ===============================================================
+        // BUMP: Libro GRATIS + Leader subscription
+        // ===============================================================
+        if (tipo === 'bump_libro_leader') {
+          const customerEmail = session.customer_email || session.customer_details?.email;
+          const bumpLibroSlug = session.metadata?.libro_slug;
+          const bumpUserId = session.metadata?.user_id;
+          const affiliateId = session.metadata?.affiliate_id;
+          const clickId = session.metadata?.affiliate_click_id;
+
+          // 1. Attiva subscription Leader
+          if (bumpUserId) {
+            await supabase
+              .from('profiles')
+              .update({
+                subscription_status: 'active',
+                subscription_tier: 'leader',
+                stripe_subscription_id: session.subscription as string,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', bumpUserId);
+
+            // 2. Concedi libro gratuito
+            if (bumpLibroSlug) {
+              await supabase.from('user_books').upsert({
+                user_id: bumpUserId,
+                book_slug: bumpLibroSlug,
+                stripe_session_id: session.id,
+                stripe_payment_intent: 'bump_included',
+                acquired_via: 'bump_offer',
+              }, {
+                onConflict: 'user_id,book_slug',
+              });
+
+              // Concedi accesso assessment del libro
+              const assessmentType = LIBRO_TO_ASSESSMENT[bumpLibroSlug];
+              if (assessmentType) {
+                await grantAssessmentAccess(
+                  supabase,
+                  bumpUserId,
+                  assessmentType,
+                  'book_purchase',
+                  session.id
+                );
+              }
+            }
+
+            // 3. Concedi accesso a tutti gli assessment (Leader tier)
+            const assessments = ['lite', 'risolutore', 'microfelicita'] as const;
+            for (const assessmentType of assessments) {
+              await grantAssessmentAccess(
+                supabase,
+                bumpUserId,
+                assessmentType,
+                'subscription',
+                session.subscription as string
+              );
+            }
+
+            console.log(`✅ BUMP completato: libro ${bumpLibroSlug} + Leader per user ${bumpUserId}`);
+          } else if (customerEmail) {
+            // Utente non autenticato: salva pending
+            if (bumpLibroSlug) {
+              await savePendingPurchase(
+                supabase,
+                customerEmail,
+                'bump_libro_leader',
+                bumpLibroSlug,
+                session.id,
+                'bump_subscription',
+                session.amount_total || undefined
+              );
+              console.log(`📦 Pending BUMP saved for ${customerEmail}`);
+            }
+          }
+
+          // 4. Invia email con libro PDF
+          if (customerEmail && bumpLibroSlug) {
+            const customerName = session.customer_details?.name || undefined;
+            await sendBookEmail(customerEmail, bumpLibroSlug, customerName);
+          }
+
+          // 5. Affiliate tracking (commissione su subscription, non su libro)
+          if (affiliateId && clickId && bumpUserId) {
+            await supabase
+              .from('subscription_affiliate_tracking')
+              .upsert({
+                user_id: bumpUserId,
+                stripe_subscription_id: session.subscription as string,
+                affiliate_id: affiliateId,
+                affiliate_click_id: clickId,
+                is_active: true
+              });
+          }
+
+          // Analytics
+          try {
+            await supabase.from('analytics_events').insert({
+              user_id: bumpUserId || null,
+              event_type: 'bump_offer_completed',
+              event_data: {
+                libro_slug: bumpLibroSlug,
+                tier: 'leader',
+                email: customerEmail,
+              },
+            });
+          } catch {
+            // Ignora errori analytics
+          }
+
+          break;
+        }
+
+        // Gestione subscription standard
         const tierSlug = session.metadata?.tier_slug || 'leader';
 
         if (userId) {

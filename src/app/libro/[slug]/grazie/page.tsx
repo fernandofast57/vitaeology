@@ -5,7 +5,7 @@ import { getLibroBySlug } from '@/data/libri';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string; bump?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -19,8 +19,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function GraziePage({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const { session_id } = await searchParams;
+  const { session_id, bump } = await searchParams;
   const libro = getLibroBySlug(slug);
+  const isBump = bump === 'true';
 
   if (!libro) {
     notFound();
@@ -32,28 +33,38 @@ export default async function GraziePage({ params, searchParams }: PageProps) {
         {/* Icona successo */}
         <div
           className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl"
-          style={{ backgroundColor: libro.coloreAccent }}
+          style={{ backgroundColor: isBump ? '#F4B942' : libro.coloreAccent }}
         >
-          ✓
+          {isBump ? '🎁' : '✓'}
         </div>
 
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Grazie per il tuo acquisto!
+          {isBump ? 'Benvenuto nel programma Leader!' : 'Grazie per il tuo acquisto!'}
         </h1>
 
         <p className="text-gray-600 mb-6">
-          Hai acquistato <strong>{libro.titolo}</strong>.
-          <br />
-          Il PDF è in arrivo nella tua casella email.
+          {isBump ? (
+            <>
+              Hai attivato l&apos;accesso <strong>Leader</strong> con il libro <strong>{libro.titolo}</strong> incluso.
+              <br />
+              Il PDF è in arrivo nella tua casella email.
+            </>
+          ) : (
+            <>
+              Hai acquistato <strong>{libro.titolo}</strong>.
+              <br />
+              Il PDF è in arrivo nella tua casella email.
+            </>
+          )}
         </p>
 
         {/* Box info */}
         <div
           className="rounded-xl p-6 mb-8 text-white"
-          style={{ backgroundColor: libro.coloreAccent }}
+          style={{ backgroundColor: isBump ? '#0A2540' : libro.coloreAccent }}
         >
           <h2 className="text-xl font-bold mb-3">
-            Cosa succede ora?
+            {isBump ? 'Il tuo accesso Leader include:' : 'Cosa succede ora?'}
           </h2>
           <div className="space-y-3 text-left text-sm">
             <div className="flex items-start gap-3">
@@ -65,24 +76,58 @@ export default async function GraziePage({ params, searchParams }: PageProps) {
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <span className="text-xl">📊</span>
-              <div>
-                <strong>Assessment gratuito</strong>
-                <p className="opacity-90">
-                  Accedi all&apos;assessment per mappare il tuo punto di partenza.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-xl">💬</span>
-              <div>
-                <strong>Supporto</strong>
-                <p className="opacity-90">
-                  Problemi? Scrivici a supporto@vitaeology.com
-                </p>
-              </div>
-            </div>
+            {isBump ? (
+              <>
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">🎯</span>
+                  <div>
+                    <strong>52 esercizi settimanali</strong>
+                    <p className="opacity-90">
+                      Un anno intero di esercizi pratici per sviluppare la tua leadership.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">🤖</span>
+                  <div>
+                    <strong>AI Coach illimitato</strong>
+                    <p className="opacity-90">
+                      Fernando, il tuo coach AI personale, disponibile 24/7.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">📊</span>
+                  <div>
+                    <strong>Assessment completo</strong>
+                    <p className="opacity-90">
+                      Mappa le tue 24 caratteristiche di leadership.
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">📊</span>
+                  <div>
+                    <strong>Assessment gratuito</strong>
+                    <p className="opacity-90">
+                      Accedi all&apos;assessment per mappare il tuo punto di partenza.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">💬</span>
+                  <div>
+                    <strong>Supporto</strong>
+                    <p className="opacity-90">
+                      Problemi? Scrivici a supporto@vitaeology.com
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CheckCircle, BookOpen, User, HelpCircle } from 'lucide-react';
 import { getLibroBySlug, getAllLibriSlugs, Libro } from '@/data/libri';
 import AcquistaButton from './AcquistaButton';
+import BumpOfferWrapper from './BumpOfferWrapper';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -116,6 +117,9 @@ export default async function LibroPage({ params }: PageProps) {
           </div>
         </div>
       </footer>
+
+      {/* Bump Offer Modal - Exit Intent */}
+      <BumpOfferWrapper libro={libro} />
     </div>
   );
 }
