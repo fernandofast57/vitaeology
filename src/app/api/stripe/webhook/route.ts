@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
         if (tipo === 'libro_pdf' && libroSlug) {
           const customerEmail = session.customer_email || session.customer_details?.email;
           const customerName = session.customer_details?.name || undefined;
+          const affiliateId = session.metadata?.affiliate_id;
+          const clickId = session.metadata?.affiliate_click_id;
 
           if (customerEmail) {
             // Trova utente per email
@@ -97,6 +99,24 @@ export async function POST(request: NextRequest) {
                 );
                 console.log(`✅ Access granted: ${assessmentType} to user ${profile.id} (libro: ${libroSlug})`);
               }
+
+              // ===============================================================
+              // AFFILIATE TRACKING per acquisto libro (NO commissioni)
+              // I libri non generano commissioni, ma tracciamo la conversione
+              // per analytics e per attribuire future subscription
+              // ===============================================================
+              if (affiliateId && clickId) {
+                await supabase
+                  .from('affiliate_clicks')
+                  .update({
+                    stato_conversione: 'libro_purchased',
+                    converted_at: new Date().toISOString(),
+                    libro_slug: libroSlug
+                  })
+                  .eq('id', clickId);
+
+                console.log(`📊 Affiliate tracking: libro ${libroSlug} acquistato via ${affiliateId}`);
+              }
             } else {
               // Utente NON esistente: salva per elaborazione futura al signup
               await savePendingPurchase(
@@ -109,6 +129,24 @@ export async function POST(request: NextRequest) {
                 session.amount_total || undefined
               );
               console.log(`📦 Pending purchase saved: ${libroSlug} for ${customerEmail}`);
+
+              // Salva tracking affiliato per attribuzione futura (NO commissioni libro)
+              if (affiliateId && clickId) {
+                // Aggiorna click con info libro per tracking analytics
+                try {
+                  await supabase
+                    .from('affiliate_clicks')
+                    .update({
+                      stato_conversione: 'libro_purchased',
+                      libro_slug: libroSlug
+                    })
+                    .eq('id', clickId);
+
+                  console.log(`📊 Affiliate tracking (pending user): libro ${libroSlug} via ${affiliateId}`);
+                } catch {
+                  // Ignora errori, tracking è opzionale
+                }
+              }
             }
 
             // Invia email con libro PDF (in entrambi i casi)
