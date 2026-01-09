@@ -456,7 +456,7 @@ function getD5Content(data: AffiliateEmailData): { subject: string; html: string
 
     ${infoBox(`
       <p style="color: ${COLORS.primary}; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
-        CHALLENGE LEADERSHIP (5 giorni gratuiti)
+        CHALLENGE LEADERSHIP (7 giorni gratuiti)
       </p>
       <p style="color: #525f7f; font-size: 14px; margin: 0 0 4px 0;">
         <a href="${APP_URL}/challenge/leadership?ref=${data.ref_code}" style="color: ${COLORS.primary}; word-break: break-all;">
@@ -470,7 +470,7 @@ function getD5Content(data: AffiliateEmailData): { subject: string; html: string
 
     ${infoBox(`
       <p style="color: ${COLORS.success}; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
-        CHALLENGE OSTACOLI (5 giorni gratuiti)
+        CHALLENGE OSTACOLI (7 giorni gratuiti)
       </p>
       <p style="color: #525f7f; font-size: 14px; margin: 0 0 4px 0;">
         <a href="${APP_URL}/challenge/ostacoli?ref=${data.ref_code}" style="color: ${COLORS.primary}; word-break: break-all;">
@@ -484,7 +484,7 @@ function getD5Content(data: AffiliateEmailData): { subject: string; html: string
 
     ${infoBox(`
       <p style="color: #8B5CF6; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
-        CHALLENGE MICROFELICITÀ (5 giorni gratuiti)
+        CHALLENGE MICROFELICITÀ (7 giorni gratuiti)
       </p>
       <p style="color: #525f7f; font-size: 14px; margin: 0 0 4px 0;">
         <a href="${APP_URL}/challenge/microfelicita?ref=${data.ref_code}" style="color: ${COLORS.primary}; word-break: break-all;">
@@ -508,7 +508,7 @@ function getD5Content(data: AffiliateEmailData): { subject: string; html: string
     </p>
 
     <p style="color: #525f7f; font-size: 16px; line-height: 26px; margin: 0 0 16px 0; font-style: italic;">
-      "C'è una challenge gratuita di 5 giorni che potrebbe interessarti.
+      "C'è una challenge gratuita di 7 giorni che potrebbe interessarti.
       Te la mando via messaggio?"
     </p>
 
@@ -546,7 +546,7 @@ function getD6Content(data: AffiliateEmailData): { subject: string; html: string
         "QUANTO COSTA?"
       </p>
       <p style="color: #525f7f; font-size: 15px; line-height: 24px; margin: 0;">
-        La challenge è gratuita, 5 giorni. Poi ci sono abbonamenti annuali
+        La challenge è gratuita, 7 giorni. Poi ci sono abbonamenti annuali
         a partire da €149. Ma suggerisco di fare prima la challenge
         per capire se è il tipo di percorso che fa per te.
       </p>

@@ -174,7 +174,7 @@ export default function AffiliatePage() {
               <div>
                 <h3 className="font-semibold text-petrol-600 text-lg mb-1">Ricevi un link personale</h3>
                 <p className="text-gray-600">
-                  Porta alla challenge gratuita di 5 giorni.
+                  Porta alla challenge gratuita di 7 giorni.
                   Chi arriva da quel link è collegato a te.
                 </p>
               </div>
@@ -198,7 +198,7 @@ export default function AffiliatePage() {
               <div>
                 <h3 className="font-semibold text-petrol-600 text-lg mb-1">La persona prova il percorso</h3>
                 <p className="text-gray-600">
-                  5 giorni per capire se fa per lei.
+                  7 giorni per capire se fa per lei.
                   Nessun pagamento richiesto.
                 </p>
               </div>
