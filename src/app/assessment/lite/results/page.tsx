@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ResultsRadar from '@/components/assessment/ResultsRadar';
+import ExportAssessmentButton from '@/components/assessment/ExportAssessmentButton';
 import { AssessmentResults, PILLAR_CONFIG } from '@/lib/assessment-scoring';
 
 function ResultsContent() {
@@ -94,13 +95,16 @@ function ResultsContent() {
             Il Tuo Profilo Leadership
           </h1>
           {completedAt && (
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm mb-4">
               Completato il {new Date(completedAt).toLocaleDateString('it-IT', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
               })}
             </p>
+          )}
+          {assessmentId && (
+            <ExportAssessmentButton assessmentId={assessmentId} />
           )}
         </div>
 
