@@ -6,12 +6,23 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useFullChallengeProgress } from '@/hooks/useDiscoveryProgress';
 import type { ChallengeType } from '@/lib/challenge/discovery-data';
+import MiniProfileChart from '@/components/challenge/MiniProfileChart';
 
 // Feedback state type
 interface FeedbackState {
   nextAction: string;
   missingFeedback: string;
   submitted: boolean;
+}
+
+// Mini-profile data type
+interface MiniProfileData {
+  challengeType: 'leadership' | 'ostacoli' | 'microfelicita';
+  totalScore: number;
+  maxScore: number;
+  percentage: number;
+  dimensionScores: Record<string, { score: number; maxScore: number; percentage: number }>;
+  completedDays: number;
 }
 
 const CHALLENGE_CONFIG = {
@@ -73,6 +84,9 @@ export default function ChallengeCompletePage() {
     missingFeedback: '',
     submitted: false
   });
+  const [miniProfile, setMiniProfile] = useState<MiniProfileData | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState(false);
   const supabase = createClient();
 
   const { isComplete, completionPercentage, isLoading } = useFullChallengeProgress(challengeType);
@@ -115,6 +129,30 @@ export default function ChallengeCompletePage() {
     }
     checkAuth();
   }, [supabase, router, challengeType]);
+
+  // Fetch mini-profile
+  useEffect(() => {
+    async function fetchMiniProfile() {
+      try {
+        const res = await fetch(`/api/challenge/mini-profile?type=${challengeType}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.profile) {
+            setMiniProfile(data.profile);
+          }
+        }
+      } catch (error) {
+        console.error('Errore caricamento mini-profilo:', error);
+        setProfileError(true);
+      } finally {
+        setProfileLoading(false);
+      }
+    }
+
+    if (challengeType && isAuthenticated) {
+      fetchMiniProfile();
+    }
+  }, [challengeType, isAuthenticated]);
 
   // Loading state
   if (isAuthenticated === null || isLoading) {
@@ -220,6 +258,30 @@ export default function ChallengeCompletePage() {
               <div className="text-slate-400 text-sm">Completamento</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Mini-Profilo */}
+      <section className="py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          {profileLoading ? (
+            <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
+              <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto mb-4"></div>
+              <div className="space-y-3">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="h-4 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          ) : profileError ? (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
+              <p className="text-yellow-800">
+                Non siamo riusciti a caricare il tuo profilo. Continua pure con i prossimi passi.
+              </p>
+            </div>
+          ) : miniProfile ? (
+            <MiniProfileChart profile={miniProfile} />
+          ) : null}
         </div>
       </section>
 
