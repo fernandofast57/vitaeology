@@ -36,7 +36,7 @@ const CHALLENGE_CONFIG = {
     badgeText: 'amber-400',
     completionMessage: 'Hai scoperto il leader che già opera in te.',
     nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/test', cta: 'Fai il Test' },
+      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/assessment/lite', cta: 'Fai il Test' },
       { icon: '🎯', title: 'Esercizi Pratici', description: 'Continua ad allenare la tua leadership', link: '/exercises', cta: 'Esplora Esercizi' },
       { icon: '🤖', title: 'AI Coach Fernando', description: 'Parla con il tuo coach personale', link: '/dashboard', cta: 'Inizia Chat' }
     ]
@@ -51,7 +51,7 @@ const CHALLENGE_CONFIG = {
     badgeText: 'emerald-400',
     completionMessage: 'Hai risvegliato il risolutore che è in te.',
     nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di problem-solving', link: '/test', cta: 'Fai il Test' },
+      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di problem-solving', link: '/assessment/risolutore', cta: 'Fai il Test' },
       { icon: '🛠️', title: 'Strumenti Avanzati', description: 'Approfondisci i sistemi A.Z.I.O.N.E. e C.R.E.S.C.I.T.A.', link: '/exercises', cta: 'Esplora Strumenti' },
       { icon: '🤖', title: 'AI Coach Fernando', description: 'Applica gli strumenti a sfide reali', link: '/dashboard', cta: 'Inizia Chat' }
     ]
@@ -66,7 +66,7 @@ const CHALLENGE_CONFIG = {
     badgeText: 'violet-400',
     completionMessage: 'Hai imparato a notare il benessere che già ti attraversa.',
     nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di benessere', link: '/test', cta: 'Fai il Test' },
+      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di benessere', link: '/assessment/microfelicita', cta: 'Fai il Test' },
       { icon: '🧘', title: 'Pratiche Quotidiane', description: 'Esercizi per consolidare R.A.D.A.R.', link: '/exercises', cta: 'Esplora Pratiche' },
       { icon: '🤖', title: 'AI Coach Fernando', description: 'Continua il percorso di consapevolezza', link: '/dashboard', cta: 'Inizia Chat' }
     ]
