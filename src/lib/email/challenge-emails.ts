@@ -60,6 +60,13 @@ const CHALLENGE_CONFIG: Record<ChallengeType, ChallengeConfig> = {
   },
 };
 
+// Mappa challenge type → URL path (senza accenti e normalizzato)
+const CHALLENGE_URL_PATH: Record<ChallengeType, string> = {
+  'leadership-autentica': 'leadership',
+  'oltre-ostacoli': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
 // ============================================================
 // TITOLI DEI 7 GIORNI PER CHALLENGE
 // ============================================================
@@ -299,7 +306,7 @@ export async function sendChallengeEmail(
       const dayTitle = getDayTitle(challengeType, dayNumber);
       subject = `🎯 ${dayTitle} - Challenge ${config.name}`;
 
-      const dayUrl = `${appUrl}/challenge/${challengeType.replace('-autentica', '')}/day/${dayNumber}`;
+      const dayUrl = `${appUrl}/challenge/${CHALLENGE_URL_PATH[challengeType]}/day/${dayNumber}`;
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -340,7 +347,7 @@ export async function sendChallengeEmail(
     case 'reminder_48h': {
       subject = `⏰ Ti aspetto! - Challenge ${config.name}`;
 
-      const continueUrl = `${appUrl}/challenge/${challengeType.replace('-autentica', '')}/day/${dayNumber || 1}`;
+      const continueUrl = `${appUrl}/challenge/${CHALLENGE_URL_PATH[challengeType]}/day/${dayNumber || 1}`;
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -393,7 +400,7 @@ export async function sendChallengeEmail(
 
       subject = `🔓 Giorno ${dayNumber} sbloccato - Challenge ${config.name}`;
 
-      const dayUrl = `${appUrl}/challenge/${challengeType.replace('-autentica', '')}/day/${dayNumber}`;
+      const dayUrl = `${appUrl}/challenge/${CHALLENGE_URL_PATH[challengeType]}/day/${dayNumber}`;
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
