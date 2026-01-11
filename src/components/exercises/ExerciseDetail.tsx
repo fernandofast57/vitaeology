@@ -10,6 +10,7 @@ import { startExercise, saveExerciseNotes } from '@/lib/supabase/exercises';
 import { createClient } from '@/lib/supabase/client';
 import ExerciseCompletionCard from './ExerciseCompletionCard';
 import { CelebrationModal, type Achievement } from '@/components/dashboard/AchievementCard';
+import { MilestoneToastContainer, type MilestoneToastData } from '@/components/milestones';
 
 // Tipo per le statistiche di completamento
 interface CompletionStats {
@@ -57,6 +58,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
   const [earnedAchievement, setEarnedAchievement] = useState<Achievement | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [radarUpdateEligibility, setRadarUpdateEligibility] = useState<RadarUpdateEligibility | null>(null);
+  const [earnedMilestones, setEarnedMilestones] = useState<MilestoneToastData[]>([]);
   // const [showRadarPrompt, setShowRadarPrompt] = useState(false); // Commentato per ora
 
   // Fetch completion stats quando l'esercizio è completato
@@ -184,6 +186,28 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
         }
       }
 
+      // Gestisci milestone guadagnate
+      if (result.data?.milestones && result.data.milestones.length > 0) {
+        const milestoneToasts: MilestoneToastData[] = result.data.milestones.map((m: {
+          id: string;
+          type: string;
+          pathType: string;
+          name: string;
+          description?: string;
+          icon?: string;
+          xpReward?: number;
+        }) => ({
+          id: m.id,
+          type: m.type,
+          pathType: m.pathType as 'leadership' | 'ostacoli' | 'microfelicita' | 'global',
+          name: m.name,
+          description: m.description,
+          icon: m.icon,
+          xpReward: m.xpReward,
+        }));
+        setEarnedMilestones(milestoneToasts);
+      }
+
       // Se c'è un achievement, mostra celebrazione
       if (result.data?.cycle?.achievement) {
         const pathTypeMap: Record<string, 'leadership' | 'ostacoli' | 'microfelicita'> = {
@@ -217,6 +241,10 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
   const handleCloseCelebration = () => {
     setShowCelebration(false);
     setSuccessMessage('Conseguimento sbloccato!');
+  };
+
+  const handleDismissMilestone = (id: string) => {
+    setEarnedMilestones(prev => prev.filter(m => m.id !== id));
   };
 
   const updateReflection = (index: number, value: string) => {
@@ -444,6 +472,13 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
         achievement={earnedAchievement}
         isOpen={showCelebration}
         onClose={handleCloseCelebration}
+      />
+
+      {/* Milestone Toast notifications */}
+      <MilestoneToastContainer
+        milestones={earnedMilestones}
+        onDismiss={handleDismissMilestone}
+        position="top-right"
       />
 
       {/*
