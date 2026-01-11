@@ -24,6 +24,14 @@ interface CompletionStats {
   bookSlug: string;
 }
 
+// Tipo per eleggibilità aggiornamento radar
+interface RadarUpdateEligibility {
+  eligible: boolean;
+  reason: string;
+  daysSinceLastSnapshot: number | null;
+  exercisesSinceSnapshot: number;
+}
+
 interface ExerciseDetailProps {
   exercise: Exercise;
   progress: UserExerciseProgress | null;
@@ -48,6 +56,8 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [earnedAchievement, setEarnedAchievement] = useState<Achievement | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [radarUpdateEligibility, setRadarUpdateEligibility] = useState<RadarUpdateEligibility | null>(null);
+  // const [showRadarPrompt, setShowRadarPrompt] = useState(false); // Commentato per ora
 
   // Fetch completion stats quando l'esercizio è completato
   useEffect(() => {
@@ -155,6 +165,24 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
       }
 
       setCurrentStatus('completed');
+
+      // Gestisci radar update eligibility
+      if (result.data?.radarUpdate) {
+        setRadarUpdateEligibility(result.data.radarUpdate);
+
+        // Log per tracking (utile per analytics future)
+        if (result.data.radarUpdate.eligible) {
+          console.log('[Radar Update] Utente eleggibile per aggiornamento radar:', {
+            reason: result.data.radarUpdate.reason,
+            daysSinceLastSnapshot: result.data.radarUpdate.daysSinceLastSnapshot,
+            exercisesSinceSnapshot: result.data.radarUpdate.exercisesSinceSnapshot,
+          });
+
+          // PROMPT UTENTE (commentato per ora)
+          // Quando attivato, mostrerà un dialog chiedendo se vuole aggiornare il profilo
+          // setShowRadarPrompt(true);
+        }
+      }
 
       // Se c'è un achievement, mostra celebrazione
       if (result.data?.cycle?.achievement) {
@@ -417,6 +445,58 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
         isOpen={showCelebration}
         onClose={handleCloseCelebration}
       />
+
+      {/*
+        RADAR UPDATE PROMPT (commentato per ora)
+        Quando attivato, mostrerà un dialog chiedendo all'utente se vuole
+        aggiornare il proprio profilo radar rispondendo a 10 domande rapide.
+
+        Condizioni per mostrare il prompt:
+        - radarUpdateEligibility.eligible === true
+        - Almeno 7 giorni dall'ultimo snapshot
+        - Almeno 3 esercizi completati dall'ultimo snapshot
+
+        Implementazione futura:
+        {showRadarPrompt && radarUpdateEligibility?.eligible && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-xl">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                Aggiorna il Tuo Profilo
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Hai completato {radarUpdateEligibility.exercisesSinceSnapshot} esercizi
+                negli ultimi {radarUpdateEligibility.daysSinceLastSnapshot} giorni.
+                Vuoi aggiornare il tuo profilo rispondendo a 10 domande rapide?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => router.push(`/assessment/mini?type=${exercise.book_slug}`)}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700"
+                >
+                  Sì, aggiorna
+                </button>
+                <button
+                  onClick={() => setShowRadarPrompt(false)}
+                  className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200"
+                >
+                  Non ora
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      */}
+
+      {/* Debug info per tracking (rimuovere in produzione) */}
+      {process.env.NODE_ENV === 'development' && radarUpdateEligibility && (
+        <div className="fixed bottom-4 right-4 bg-gray-900 text-white text-xs p-3 rounded-lg opacity-75">
+          <div className="font-bold mb-1">Radar Update Debug:</div>
+          <div>Eligible: {radarUpdateEligibility.eligible ? 'Yes' : 'No'}</div>
+          <div>Reason: {radarUpdateEligibility.reason}</div>
+          <div>Days: {radarUpdateEligibility.daysSinceLastSnapshot ?? 'N/A'}</div>
+          <div>Exercises: {radarUpdateEligibility.exercisesSinceSnapshot}</div>
+        </div>
+      )}
     </div>
   );
 }

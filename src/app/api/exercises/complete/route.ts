@@ -2,20 +2,117 @@
  * API Exercises Complete - Integrazione cicli START:CHANGE:STOP
  *
  * POST: Completa esercizio con conseguimento
+ * Include logica per determinare quando suggerire aggiornamento radar
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { completeExerciseWithCycle } from '@/lib/action-cycles';
 import { getNextExercise } from '@/lib/ai-coach/adaptive-path';
 
 export const dynamic = 'force-dynamic';
+
+// Configurazione soglie per radar update
+const RADAR_UPDATE_CONFIG = {
+  minDaysSinceLastSnapshot: 7,  // Almeno 1 settimana
+  minExercisesSinceSnapshot: 3, // Almeno 3 esercizi completati
+};
+
+interface RadarUpdateEligibility {
+  eligible: boolean;
+  reason: string;
+  daysSinceLastSnapshot: number | null;
+  exercisesSinceSnapshot: number;
+  lastSnapshotDate: string | null;
+}
 
 function getServiceClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+}
+
+/**
+ * Verifica se l'utente è eleggibile per un aggiornamento radar
+ */
+async function checkRadarUpdateEligibility(
+  supabase: SupabaseClient,
+  userId: string,
+  pathType: 'leadership' | 'ostacoli' | 'microfelicita',
+  bookSlug: string
+): Promise<RadarUpdateEligibility> {
+  // 1. Recupera ultimo snapshot radar per questo pathType
+  const { data: lastSnapshot } = await supabase
+    .from('user_radar_snapshots')
+    .select('id, snapshot_date, created_at')
+    .eq('user_id', userId)
+    .eq('assessment_type', pathType)
+    .order('snapshot_date', { ascending: false })
+    .limit(1)
+    .single();
+
+  // Se non c'è snapshot precedente, l'utente deve prima fare l'assessment
+  if (!lastSnapshot) {
+    return {
+      eligible: false,
+      reason: 'no_previous_snapshot',
+      daysSinceLastSnapshot: null,
+      exercisesSinceSnapshot: 0,
+      lastSnapshotDate: null,
+    };
+  }
+
+  const lastSnapshotDate = new Date(lastSnapshot.snapshot_date);
+  const now = new Date();
+  const daysSinceLastSnapshot = Math.floor(
+    (now.getTime() - lastSnapshotDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  // 2. Conta esercizi completati dopo l'ultimo snapshot
+  // Usa join con tabella exercises per filtrare per book_slug
+  const { data: completedExercises } = await supabase
+    .from('user_exercise_progress')
+    .select('exercise_id, completed_at, exercises!inner(book_slug)')
+    .eq('user_id', userId)
+    .eq('status', 'completed')
+    .eq('exercises.book_slug', bookSlug)
+    .gt('completed_at', lastSnapshot.snapshot_date);
+
+  const actualExerciseCount = completedExercises?.length || 0;
+
+  // 3. Verifica condizioni
+  const meetsTimeCondition = daysSinceLastSnapshot >= RADAR_UPDATE_CONFIG.minDaysSinceLastSnapshot;
+  const meetsExerciseCondition = actualExerciseCount >= RADAR_UPDATE_CONFIG.minExercisesSinceSnapshot;
+
+  if (!meetsTimeCondition) {
+    return {
+      eligible: false,
+      reason: 'too_soon',
+      daysSinceLastSnapshot,
+      exercisesSinceSnapshot: actualExerciseCount,
+      lastSnapshotDate: lastSnapshot.snapshot_date,
+    };
+  }
+
+  if (!meetsExerciseCondition) {
+    return {
+      eligible: false,
+      reason: 'not_enough_exercises',
+      daysSinceLastSnapshot,
+      exercisesSinceSnapshot: actualExerciseCount,
+      lastSnapshotDate: lastSnapshot.snapshot_date,
+    };
+  }
+
+  // Tutte le condizioni soddisfatte
+  return {
+    eligible: true,
+    reason: 'eligible_for_update',
+    daysSinceLastSnapshot,
+    exercisesSinceSnapshot: actualExerciseCount,
+    lastSnapshotDate: lastSnapshot.snapshot_date,
+  };
 }
 
 async function getUserFromRequest(request: NextRequest): Promise<string | null> {
@@ -174,6 +271,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       console.warn('Sistema cicli non disponibile:', cycleError);
     }
 
+    // 3. Verifica eleggibilità per aggiornamento radar
+    let radarUpdateEligibility: RadarUpdateEligibility | null = null;
+    try {
+      radarUpdateEligibility = await checkRadarUpdateEligibility(
+        supabase,
+        userId,
+        pathType,
+        exercise.book_slug
+      );
+
+      // Log per tracking (utile per analytics future)
+      if (radarUpdateEligibility.eligible) {
+        console.log(`[Radar Update] Utente ${userId} eleggibile per aggiornamento ${pathType}:`, {
+          daysSinceLastSnapshot: radarUpdateEligibility.daysSinceLastSnapshot,
+          exercisesSinceSnapshot: radarUpdateEligibility.exercisesSinceSnapshot,
+        });
+      }
+    } catch (radarError) {
+      // Errore non blocca il completamento
+      console.warn('Errore verifica radar eligibility:', radarError);
+    }
+
     return NextResponse.json({
       success: true,
       data: {
@@ -193,6 +312,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
                   }
                 : null,
               nextProposal: cycleResult.nextProposal,
+            }
+          : null,
+        // Informazioni per eventuale prompt radar update
+        radarUpdate: radarUpdateEligibility
+          ? {
+              eligible: radarUpdateEligibility.eligible,
+              reason: radarUpdateEligibility.reason,
+              daysSinceLastSnapshot: radarUpdateEligibility.daysSinceLastSnapshot,
+              exercisesSinceSnapshot: radarUpdateEligibility.exercisesSinceSnapshot,
+              // URL per mini-assessment (commentato per ora)
+              // miniAssessmentUrl: radarUpdateEligibility.eligible
+              //   ? `/assessment/mini?type=${pathType}&questions=10`
+              //   : null,
             }
           : null,
       },
