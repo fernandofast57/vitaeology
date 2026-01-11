@@ -361,6 +361,85 @@ export async function completeExercise(
   return result;
 }
 
+/**
+ * Completa esercizio con ciclo START:CHANGE:STOP
+ * Questa funzione integra il completamento con il sistema di cicli di azione
+ */
+export async function completeExerciseWithCycleIntegration(
+  userId: string,
+  exerciseId: string,
+  inputData: {
+    notes?: string;
+    reflection_answers?: Record<string, string>;
+    rating_difficulty?: number;
+    rating_usefulness?: number;
+    feedback?: string;
+    reflection?: string;
+  },
+  pathType: 'leadership' | 'ostacoli' | 'microfelicita'
+): Promise<{
+  progress: UserExerciseProgress;
+  cycleResult?: {
+    achievementTitle: string;
+    nextProposal: string;
+    isMacroAchievement: boolean;
+  };
+}> {
+  // 1. Completa esercizio nel sistema esistente
+  const progress = await completeExercise(userId, exerciseId, inputData);
+
+  // 2. Recupera info esercizio per il ciclo
+  const supabase = createClient();
+  const { data: exercise } = await supabase
+    .from('exercises')
+    .select('title, characteristic_slug, pillar')
+    .eq('id', exerciseId)
+    .single();
+
+  if (!exercise) {
+    return { progress };
+  }
+
+  // 3. Prova ad integrare con action cycles (se la tabella esiste)
+  try {
+    const { completeExerciseWithCycle } = await import('@/lib/action-cycles');
+    const { getNextExercise } = await import('@/lib/ai-coach/adaptive-path');
+
+    // Recupera prossimo esercizio
+    const nextRec = await getNextExercise(userId, pathType);
+    const nextExercise = nextRec ? {
+      id: nextRec.exerciseId,
+      title: nextRec.exerciseTitle,
+      reasoning: nextRec.reasoning,
+    } : undefined;
+
+    // Completa ciclo
+    const cycleResult = await completeExerciseWithCycle(
+      userId,
+      exerciseId,
+      exercise.title,
+      pathType,
+      exercise.characteristic_slug || exercise.pillar || 'generale',
+      inputData.reflection || inputData.feedback || 'Esercizio completato',
+      undefined, // radarDelta - da calcolare se disponibile
+      nextExercise
+    );
+
+    return {
+      progress,
+      cycleResult: {
+        achievementTitle: cycleResult.achievement.title,
+        nextProposal: cycleResult.nextProposal,
+        isMacroAchievement: !!cycleResult.macroAchievement,
+      },
+    };
+  } catch (error) {
+    // Se il sistema cicli non è disponibile, ritorna solo il progress
+    console.warn('Sistema cicli non disponibile:', error);
+    return { progress };
+  }
+}
+
 // ===========================================
 // STATISTICHE
 // ===========================================
