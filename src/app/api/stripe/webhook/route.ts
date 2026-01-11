@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { LIBRO_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { savePendingPurchase } from '@/lib/stripe/process-pending-purchases';
 import { sendBookEmail, sendTrilogyEmail } from '@/lib/email/send-book-email';
+import { sendUpgradeConfirmationEmail, sendSubscriptionCancelledEmail } from '@/lib/email/subscription-emails';
 
 export const dynamic = 'force-dynamic';
 
@@ -353,6 +354,32 @@ export async function POST(request: NextRequest) {
               );
             }
             console.log(`Full access granted to user ${userId} (subscription: ${tierSlug})`);
+
+            // Invia email conferma upgrade
+            const customerEmail = session.customer_email || session.customer_details?.email;
+            const customerName = session.customer_details?.name;
+            if (customerEmail) {
+              // Calcola data rinnovo (1 anno da oggi)
+              const renewalDate = new Date();
+              renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+              const formattedRenewalDate = renewalDate.toLocaleDateString('it-IT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              });
+
+              const planPrice = tierSlug === 'mentor' ? 490 : 149;
+
+              await sendUpgradeConfirmationEmail({
+                email: customerEmail,
+                firstName: customerName?.split(' ')[0],
+                planName: tierSlug as 'leader' | 'mentor',
+                planPrice,
+                renewalDate: formattedRenewalDate,
+                invoiceUrl: session.invoice ? `https://dashboard.stripe.com/invoices/${session.invoice}` : undefined,
+              });
+              console.log(`✅ Email upgrade inviata a ${customerEmail} (piano: ${tierSlug})`);
+            }
           }
         }
         break;
@@ -400,11 +427,13 @@ export async function POST(request: NextRequest) {
 
         const { data: profile } = await supabase
           .from('profiles')
-          .select('id')
+          .select('id, email, full_name, subscription_tier')
           .eq('stripe_customer_id', customerId)
           .single();
 
         if (profile) {
+          const previousTier = profile.subscription_tier;
+
           await supabase
             .from('profiles')
             .update({
@@ -414,6 +443,31 @@ export async function POST(request: NextRequest) {
               updated_at: new Date().toISOString(),
             })
             .eq('id', profile.id);
+
+          // Invia email cancellazione
+          if (profile.email && (previousTier === 'leader' || previousTier === 'mentor')) {
+            // Calcola fine accesso (fine periodo corrente)
+            const accessEndDate = subscription.current_period_end
+              ? new Date(subscription.current_period_end * 1000).toLocaleDateString('it-IT', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })
+              : new Date().toLocaleDateString('it-IT', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                });
+
+            await sendSubscriptionCancelledEmail({
+              email: profile.email,
+              firstName: profile.full_name?.split(' ')[0],
+              planName: previousTier as 'leader' | 'mentor',
+              accessEndDate,
+              reason: subscription.cancellation_details?.reason || undefined,
+            });
+            console.log(`✅ Email cancellazione inviata a ${profile.email}`);
+          }
         }
         break;
       }
