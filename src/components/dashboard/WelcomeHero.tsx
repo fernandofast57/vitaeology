@@ -6,9 +6,10 @@ import Link from 'next/link';
 interface WelcomeHeroProps {
   userName: string;
   hasCompletedAssessment: boolean;
+  customTitle?: string;
 }
 
-export default function WelcomeHero({ userName, hasCompletedAssessment }: WelcomeHeroProps) {
+export default function WelcomeHero({ userName, hasCompletedAssessment, customTitle }: WelcomeHeroProps) {
   const currentHour = new Date().getHours();
   const greeting = currentHour < 12 ? 'Buongiorno' : currentHour < 18 ? 'Buon pomeriggio' : 'Buonasera';
 

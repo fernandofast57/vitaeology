@@ -12,12 +12,37 @@ interface AssessmentData {
   created_at: string;
 }
 
+type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+
+const PATH_CONFIG = {
+  leadership: {
+    name: 'Leadership Autentica',
+    totalQuestions: 240,
+    testUrl: '/test',
+    resultsUrl: '/results',
+  },
+  ostacoli: {
+    name: 'Oltre gli Ostacoli',
+    totalQuestions: 48,
+    testUrl: '/assessment/risolutore',
+    resultsUrl: '/assessment/risolutore/results',
+  },
+  microfelicita: {
+    name: 'Microfelicita',
+    totalQuestions: 47,
+    testUrl: '/assessment/microfelicita',
+    resultsUrl: '/assessment/microfelicita/results',
+  },
+};
+
 interface AssessmentCardProps {
   assessment: AssessmentData | null;
+  pathType?: PathType;
 }
 
-export default function AssessmentCard({ assessment }: AssessmentCardProps) {
-  const totalQuestions = 240;
+export default function AssessmentCard({ assessment, pathType = 'leadership' }: AssessmentCardProps) {
+  const config = PATH_CONFIG[pathType];
+  const totalQuestions = config.totalQuestions;
   const progress = assessment ? (assessment.questions_answered / totalQuestions) * 100 : 0;
   const isCompleted = assessment?.status === 'completed';
   const isInProgress = assessment?.status === 'in_progress' || (assessment && !isCompleted && assessment.questions_answered > 0);
@@ -31,9 +56,9 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
               <ClipboardCheck className="w-6 h-6 sm:w-8 sm:h-8 text-petrol-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1">Assessment Leadership Autentica</h2>
-              <p className="text-sm sm:text-base text-neutral-600 mb-3 sm:mb-4">Scopri il tuo profilo. 240 domande, circa 30 minuti.</p>
-              <Link href="/test" className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+              <h2 className="text-lg sm:text-xl font-bold text-neutral-900 mb-1">Assessment {config.name}</h2>
+              <p className="text-sm sm:text-base text-neutral-600 mb-3 sm:mb-4">Scopri il tuo profilo. {totalQuestions} domande.</p>
+              <Link href={config.testUrl} className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
                 <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                 Inizia il Test
               </Link>
@@ -63,7 +88,7 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
                   <div className="h-full bg-amber-500 rounded-full" style={{ width: `${progress}%` }} />
                 </div>
               </div>
-              <Link href="/test" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+              <Link href={config.testUrl} className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
                 Riprendi Test
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
@@ -86,7 +111,7 @@ export default function AssessmentCard({ assessment }: AssessmentCardProps) {
             {assessment.total_score !== null && (
               <p className="text-sm sm:text-base text-emerald-700 font-medium mb-3 sm:mb-4">Punteggio: {assessment.total_score}%</p>
             )}
-            <Link href="/results" className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
+            <Link href={config.resultsUrl} className="inline-flex items-center gap-2 bg-petrol-600 hover:bg-petrol-700 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-colors text-sm sm:text-base">
               Vedi Risultati
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>

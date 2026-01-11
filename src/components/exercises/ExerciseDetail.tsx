@@ -1,12 +1,26 @@
 ﻿// src/components/exercises/ExerciseDetail.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Exercise, UserExerciseProgress } from '@/lib/types/exercises';
 import { EXERCISE_TYPE_CONFIG, DIFFICULTY_CONFIG, STATUS_CONFIG } from '@/lib/types/exercises';
 import { startExercise, saveExerciseNotes, completeExercise } from '@/lib/supabase/exercises';
+import ExerciseCompletionCard from './ExerciseCompletionCard';
+
+// Tipo per le statistiche di completamento
+interface CompletionStats {
+  totalCompleted: number;
+  totalExercises: number;
+  nextExercise: {
+    id: string;
+    title: string;
+    week_number: number;
+    month_name?: string;
+  } | null;
+  bookSlug: string;
+}
 
 interface ExerciseDetailProps {
   exercise: Exercise;
@@ -28,6 +42,39 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
   const [ratingUsefulness, setRatingUsefulness] = useState(progress?.rating_usefulness || 0);
   const [feedback, setFeedback] = useState(progress?.feedback || '');
   const [currentStatus, setCurrentStatus] = useState(progress?.status || 'not_started');
+  const [completionStats, setCompletionStats] = useState<CompletionStats | null>(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
+
+  // Fetch completion stats quando l'esercizio è completato
+  useEffect(() => {
+    async function fetchCompletionStats() {
+      if (currentStatus !== 'completed') return;
+
+      setIsLoadingStats(true);
+      try {
+        const res = await fetch(
+          `/api/exercises/completion-stats?currentExerciseId=${exercise.id}&bookSlug=${exercise.book_id}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setCompletionStats({
+              totalCompleted: data.totalCompleted,
+              totalExercises: data.totalExercises,
+              nextExercise: data.nextExercise,
+              bookSlug: data.bookSlug
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Errore fetch completion stats:', err);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    }
+
+    fetchCompletionStats();
+  }, [currentStatus, exercise.id, exercise.book_id]);
 
   const status = currentStatus;
   const statusConfig = STATUS_CONFIG[status];
@@ -267,15 +314,42 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
           )}
 
           {status === 'completed' && progress && (
-            <div className="bg-green-50 rounded-lg border border-green-200 p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">✅</span>
-                <h2 className="text-xl font-semibold text-green-800">Esercizio Completato!</h2>
-              </div>
-              <p className="text-green-700">
-                Completato il {new Date(progress.completed_at!).toLocaleDateString('it-IT')}
-              </p>
-            </div>
+            <>
+              {isLoadingStats ? (
+                <div className="bg-white rounded-2xl shadow-lg p-8 animate-pulse">
+                  <div className="h-32 bg-gray-200 rounded-lg mb-6"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ) : completionStats ? (
+                <ExerciseCompletionCard
+                  exerciseTitle={exercise.title}
+                  completedAt={progress.completed_at!}
+                  totalCompleted={completionStats.totalCompleted}
+                  totalExercises={completionStats.totalExercises}
+                  nextExercise={completionStats.nextExercise}
+                  bookSlug={completionStats.bookSlug}
+                />
+              ) : (
+                <div className="bg-green-50 rounded-lg border border-green-200 p-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-2xl">✅</span>
+                    <h2 className="text-xl font-semibold text-green-800">Esercizio Completato!</h2>
+                  </div>
+                  <p className="text-green-700">
+                    Completato il {new Date(progress.completed_at!).toLocaleDateString('it-IT')}
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-green-200">
+                    <Link
+                      href="/dashboard?openChat=true"
+                      className="text-green-700 hover:text-green-900 font-medium"
+                    >
+                      💬 Rifletti con Fernando →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

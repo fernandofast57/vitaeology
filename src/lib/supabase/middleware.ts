@@ -4,6 +4,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Bypass auth in development
 const isDevelopment = process.env.NODE_ENV === 'development'
 
+// ============================================================================
+// AFFILIATE TRACKING CONFIGURATION
+// ============================================================================
+const AFFILIATE_COOKIE_NAME = 'vitae_ref';
+const AFFILIATE_COOKIE_DURATION_DAYS = 90;
+const AFFILIATE_TRACKED_PATHS = ['/challenge', '/pricing', '/libro', '/'];
+const AFFILIATE_REF_PATTERN = /^AFF-[A-Z0-9]{6}$/;
+
 // Route protection configuration
 const ROUTE_CONFIG = {
   // Public routes - no auth required
@@ -23,6 +31,47 @@ export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
+
+  // =========================================================================
+  // AFFILIATE TRACKING - Prima di tutto, gestisci il cookie affiliato
+  // =========================================================================
+  const { searchParams, pathname } = request.nextUrl;
+  const refCode = searchParams.get('ref');
+
+  if (refCode && AFFILIATE_TRACKED_PATHS.some(path => pathname.startsWith(path) || pathname === '/')) {
+    const existingCookie = request.cookies.get(AFFILIATE_COOKIE_NAME);
+
+    // Solo se non esiste già un cookie e il formato è valido
+    if (!existingCookie && AFFILIATE_REF_PATTERN.test(refCode)) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + AFFILIATE_COOKIE_DURATION_DAYS);
+
+      supabaseResponse.cookies.set(AFFILIATE_COOKIE_NAME, refCode, {
+        expires,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/'
+      });
+
+      // Fire and forget: traccia il click in background
+      const trackUrl = new URL('/api/affiliate/track', request.url);
+      fetch(trackUrl.toString(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_type: 'click',
+          ref_code: refCode,
+          landing_page: pathname,
+          challenge_type: extractChallengeType(pathname),
+          user_agent: request.headers.get('user-agent') || '',
+          referrer: request.headers.get('referer') || ''
+        })
+      }).catch(err => {
+        console.error('Errore tracking affiliato:', err);
+      });
+    }
+  }
 
   // In development, bypassa completamente il controllo auth
   if (isDevelopment) {
@@ -108,4 +157,14 @@ export async function updateSession(request: NextRequest) {
   }
 
   return supabaseResponse
+}
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+// Estrae il tipo di challenge dal pathname
+function extractChallengeType(pathname: string): string | null {
+  const match = pathname.match(/\/challenge\/(leadership|ostacoli|microfelicita)/);
+  return match ? match[1] : null;
 }

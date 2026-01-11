@@ -22,6 +22,11 @@ async function runSQL(filePath) {
     if (result.command) {
       console.log(`   Comando: ${result.command}, Righe: ${result.rowCount || 0}`);
     }
+    // Mostra risultati per SELECT
+    if (result.rows && result.rows.length > 0 && result.command === 'SELECT') {
+      console.log('\nRisultati:');
+      console.table(result.rows.slice(0, 50)); // Max 50 righe
+    }
     return true;
   } catch (error) {
     console.error(`❌ Errore in ${path.basename(filePath)}:`);

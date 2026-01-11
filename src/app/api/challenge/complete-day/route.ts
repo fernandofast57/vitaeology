@@ -179,13 +179,14 @@ export async function POST(request: NextRequest) {
       }
 
       // Aggiorna subscriber con last_activity_at
+      // IMPORTANTE: last_email_type deve essere 'day_content' per coerenza con il cron
       await supabase
         .from('challenge_subscribers')
         .update({
           current_day: nextDay,
           last_activity_at: new Date().toISOString(),
           last_email_sent_at: emailSent ? new Date().toISOString() : subscriber.last_email_sent_at,
-          last_email_type: emailSent ? `day_${nextDay}` : subscriber.last_email_type
+          last_email_type: emailSent ? 'day_content' : subscriber.last_email_type
         })
         .eq('id', subscriber.id);
 

@@ -34,7 +34,28 @@
       "Bash(node scripts/verify-risolutore.js:*)",
       "Bash(node scripts/verify-microfelicita.js:*)",
       "Bash(npx eslint:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(node scripts/update-rag-embeddings.js:*)",
+      "Bash(node:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(src/hooks/useBehavioralTracking.ts )",
+      "Bash(src/components/behavioral/ )",
+      "Bash(src/app/api/analytics/ )",
+      "Bash(src/lib/analytics/ )",
+      "Bash(src/app/challenge/leadership/page.tsx )",
+      "Bash(src/app/challenge/microfelicita/page.tsx )",
+      "Bash(src/app/challenge/ostacoli/page.tsx )",
+      "Bash(sql/behavioral_events.sql )",
+      "Bash(package.json )",
+      "Bash(package-lock.json )",
+      "Bash(scripts/update-rag-embeddings.js)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(npm ls:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(git fetch:*)"
     ]
   }
 }

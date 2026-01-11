@@ -11,6 +11,7 @@ import {
   trackImplicitSignal,
   detectReformulation
 } from '@/lib/ai-coach/implicit-signals';
+import { isClosingMessage } from '@/lib/ai-coach/exercise-suggestions';
 import { v4 as uuidv4 } from 'uuid';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
@@ -214,8 +215,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       }
     }
 
+    // Rileva se è un messaggio di chiusura (grazie, ciao, ecc.)
+    const isClosing = isClosingMessage(lastUserMessage);
+    let closingHint = '';
+    if (isClosing) {
+      console.log('👋 Messaggio di chiusura rilevato - attivando wrap-up');
+      closingHint = '\n\n[SISTEMA: L\'utente sta salutando. Applica le istruzioni di WRAP-UP CONVERSAZIONE: riepiloga brevemente il tema discusso, suggerisci un\'azione concreta per le prossime 24-48 ore, e se pertinente menziona un esercizio dalla lista disponibile.]';
+    }
+
     // Costruisci system prompt con contesto RAG, memoria utente, correzioni, RAG correttivi e raccomandazioni
-    const systemPrompt = buildSystemPrompt(userContext) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext;
+    const systemPrompt = buildSystemPrompt(userContext, currentPath || 'leadership') + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext + closingHint;
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
