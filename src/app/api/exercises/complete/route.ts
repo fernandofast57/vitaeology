@@ -77,7 +77,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Recupera info esercizio
     const { data: exercise, error: exerciseError } = await supabase
       .from('exercises')
-      .select('id, title, book_slug, characteristic_slug, pillar')
+      .select('id, title, book_slug, characteristic_slug, pillar_primary')
       .eq('id', exerciseId)
       .single();
 
@@ -156,7 +156,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         : undefined;
 
       // Completa ciclo con conseguimento
-      const characteristic = exercise.characteristic_slug || exercise.pillar || 'generale';
+      const characteristic = exercise.characteristic_slug || exercise.pillar_primary || 'generale';
       const reflection = feedback || notes || 'Esercizio completato con successo';
 
       cycleResult = await completeExerciseWithCycle(

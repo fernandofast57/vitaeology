@@ -38,7 +38,7 @@ export interface Exercise {
   subtitle: string | null;
   description: string;
   characteristic_slug: string;
-  pillar: string;
+  pillar_primary: string;
   difficulty_level: string;
   estimated_time_minutes: number;
   week_number: number;
@@ -227,7 +227,7 @@ export async function getAvailableExercises(
       subtitle,
       description,
       characteristic_slug,
-      pillar,
+      pillar_primary,
       difficulty_level,
       estimated_time_minutes,
       week_number,
