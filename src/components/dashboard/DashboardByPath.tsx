@@ -192,36 +192,33 @@ export default function DashboardByPath({ pathType }: DashboardByPathProps) {
           setHasAssessment(!!results);
         }
 
-        // Fetch recommended exercise from ai_exercise_recommendations
-        const { data: recommendation } = await supabase
-          .from('ai_exercise_recommendations')
-          .select(`
-            id,
-            reasoning,
-            exercises (
-              id,
-              title,
-              estimated_time_minutes,
-              difficulty_level,
-              pillar
-            )
-          `)
-          .eq('user_id', user.id)
-          .eq('status', 'pending')
-          .eq('based_on_assessment_type', pathType)
-          .order('priority', { ascending: true })
-          .limit(1)
-          .single();
+        // Fetch recommended exercise via API (fallback graceful se tabella non esiste)
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.access_token) {
+            const response = await fetch(`/api/recommendations?user_id=${user.id}`, {
+              headers: { 'Authorization': `Bearer ${session.access_token}` }
+            });
 
-        if (recommendation?.exercises) {
-          setRecommendedExercise({
-            id: (recommendation.exercises as any).id,
-            title: (recommendation.exercises as any).title,
-            reasoning: recommendation.reasoning,
-            estimated_time_minutes: (recommendation.exercises as any).estimated_time_minutes || 15,
-            difficulty_level: (recommendation.exercises as any).difficulty_level || 'base',
-            pillar: (recommendation.exercises as any).pillar || 'Essere',
-          });
+            if (response.ok) {
+              const result = await response.json();
+              // Usa nextRecommended o il primo della lista
+              const rec = result.nextRecommended || result.recommendations?.[0];
+              if (rec && !rec.isCompleted) {
+                setRecommendedExercise({
+                  id: rec.id,
+                  title: rec.title,
+                  reasoning: rec.reason || 'Esercizio consigliato in base al tuo profilo',
+                  estimated_time_minutes: rec.estimated_time_minutes || 15,
+                  difficulty_level: rec.difficulty_level || 'base',
+                  pillar: rec.pillar || 'Essere',
+                });
+              }
+            }
+          }
+        } catch (recError) {
+          // Silently fail - raccomandazioni non critiche
+          console.log('Raccomandazioni non disponibili:', recError);
         }
 
         // Fetch exercise stats for this path
