@@ -13,6 +13,7 @@ import DashboardHeader from '@/components/layout/DashboardHeader';
 import ExercisesCard from '@/components/dashboard/ExercisesCard';
 import RecommendedExercises from '@/components/dashboard/RecommendedExercises';
 import ChatWidget from '@/components/ai-coach/ChatWidget';
+import { AchievementsList, CelebrationModal, type Achievement } from '@/components/dashboard/AchievementCard';
 
 // Configurazione per ogni percorso
 export const PATH_CONFIG = {
@@ -71,6 +72,8 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
   const [pillarScores, setPillarScores] = useState<any[]>([]);
   const [characteristicScores, setCharacteristicScores] = useState<any[]>([]);
   const [exerciseStats, setExerciseStats] = useState({ total: 0, completed: 0, inProgress: 0, completionRate: 0 });
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [celebratingAchievement, setCelebratingAchievement] = useState<Achievement | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -191,6 +194,18 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
         const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
 
         setExerciseStats({ total, completed, inProgress, completionRate });
+
+        // Fetch achievements per questo percorso
+        const { data: achievementsData } = await supabase
+          .from('user_achievements')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('path_type', pathType)
+          .order('created_at', { ascending: false });
+
+        if (achievementsData) {
+          setAchievements(achievementsData as Achievement[]);
+        }
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -212,6 +227,30 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
   }
 
   const hasCompletedAssessment = assessment?.status === 'completed' || assessment?.completed_at;
+
+  // Gestione celebrazione achievement
+  const handleCelebrate = async (achievementId: string) => {
+    const achievement = achievements.find(a => a.id === achievementId);
+    if (!achievement) return;
+
+    // Mostra modal celebrazione
+    setCelebratingAchievement(achievement);
+
+    // Aggiorna DB
+    await supabase
+      .from('user_achievements')
+      .update({ celebrated: true, celebrated_at: new Date().toISOString() })
+      .eq('id', achievementId);
+
+    // Aggiorna stato locale
+    setAchievements(prev =>
+      prev.map(a => (a.id === achievementId ? { ...a, celebrated: true } : a))
+    );
+  };
+
+  const handleCloseCelebration = () => {
+    setCelebratingAchievement(null);
+  };
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${config.bgGradient}`}>
@@ -266,9 +305,27 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
             )}
 
             <RecentActivity />
+
+            {/* Achievements Section */}
+            {achievements.length > 0 && (
+              <AchievementsList
+                achievements={achievements}
+                onCelebrate={handleCelebrate}
+                title="I Tuoi Conseguimenti"
+                maxItems={5}
+                compact={false}
+              />
+            )}
           </div>
         </main>
       </div>
+
+      {/* Celebration Modal */}
+      <CelebrationModal
+        achievement={celebratingAchievement}
+        isOpen={!!celebratingAchievement}
+        onClose={handleCloseCelebration}
+      />
 
       {(userId || process.env.NODE_ENV === 'development') && (
         <ChatWidget
