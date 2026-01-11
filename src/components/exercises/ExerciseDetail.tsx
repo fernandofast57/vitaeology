@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Exercise, UserExerciseProgress } from '@/lib/types/exercises';
 import { EXERCISE_TYPE_CONFIG, DIFFICULTY_CONFIG, STATUS_CONFIG } from '@/lib/types/exercises';
-import { startExercise, saveExerciseNotes, completeExercise } from '@/lib/supabase/exercises';
+import { startExercise, saveExerciseNotes } from '@/lib/supabase/exercises';
+import { createClient } from '@/lib/supabase/client';
 import ExerciseCompletionCard from './ExerciseCompletionCard';
+import { CelebrationModal, type Achievement } from '@/components/dashboard/AchievementCard';
 
 // Tipo per le statistiche di completamento
 interface CompletionStats {
@@ -44,6 +46,8 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
   const [currentStatus, setCurrentStatus] = useState(progress?.status || 'not_started');
   const [completionStats, setCompletionStats] = useState<CompletionStats | null>(null);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [earnedAchievement, setEarnedAchievement] = useState<Achievement | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // Fetch completion stats quando l'esercizio è completato
   useEffect(() => {
@@ -118,20 +122,73 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
     setIsLoading(true);
     setError(null);
     try {
-      await completeExercise(userId, exercise.id, {
-        notes,
-        reflection_answers: reflectionAnswers,
-        rating_difficulty: ratingDifficulty,
-        rating_usefulness: ratingUsefulness,
-        feedback: feedback || undefined
+      // Recupera token per auth
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session?.access_token) {
+        setError('Sessione scaduta. Ricarica la pagina.');
+        return;
+      }
+
+      // Chiama API con integrazione cicli
+      const response = await fetch('/api/exercises/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          exerciseId: exercise.id,
+          notes,
+          reflectionAnswers,
+          ratingDifficulty,
+          ratingUsefulness,
+          feedback: feedback || undefined,
+        }),
       });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Errore nel completamento');
+      }
+
       setCurrentStatus('completed');
-      setSuccessMessage('Esercizio completato!');
+
+      // Se c'è un achievement, mostra celebrazione
+      if (result.data?.cycle?.achievement) {
+        const pathTypeMap: Record<string, 'leadership' | 'ostacoli' | 'microfelicita'> = {
+          'leadership': 'leadership',
+          'risolutore': 'ostacoli',
+          'microfelicita': 'microfelicita',
+        };
+        const pathType = pathTypeMap[exercise.book_id] || 'leadership';
+
+        setEarnedAchievement({
+          id: result.data.cycle.achievement.id,
+          title: result.data.cycle.achievement.title,
+          description: result.data.cycle.nextProposal,
+          achievement_type: result.data.cycle.achievement.type,
+          path_type: pathType,
+          celebrated: false,
+          created_at: new Date().toISOString(),
+        });
+        setShowCelebration(true);
+      } else {
+        setSuccessMessage('Esercizio completato!');
+      }
     } catch (err) {
+      console.error('Errore completamento:', err);
       setError('Errore nel completamento. Riprova.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCloseCelebration = () => {
+    setShowCelebration(false);
+    setSuccessMessage('Conseguimento sbloccato!');
   };
 
   const updateReflection = (index: number, value: string) => {
@@ -353,6 +410,13 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
           )}
         </div>
       )}
+
+      {/* Celebration Modal per achievement */}
+      <CelebrationModal
+        achievement={earnedAchievement}
+        isOpen={showCelebration}
+        onClose={handleCloseCelebration}
+      />
     </div>
   );
 }
