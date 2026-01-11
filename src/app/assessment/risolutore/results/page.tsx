@@ -45,6 +45,42 @@ function RisolutoreResultsContent() {
 
         const data = await res.json();
         setResults(data.results);
+
+        // Salva radar snapshot automaticamente
+        try {
+          const scoresJson: Record<string, number> = {};
+
+          // Aggiungi punteggi filtri
+          data.results.filtri.forEach((f: { dimensionName: string; percentage: number }) => {
+            scoresJson[`filtro_${f.dimensionName}`] = f.percentage;
+          });
+
+          // Aggiungi punteggi traditori
+          data.results.traditori.forEach((t: { dimensionName: string; percentage: number }) => {
+            scoresJson[`traditore_${t.dimensionName}`] = t.percentage;
+          });
+
+          // Aggiungi overall
+          scoresJson['overall'] = data.results.overallPercentage;
+
+          const snapshotRes = await fetch('/api/radar/snapshot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              assessment_type: 'ostacoli',
+              scores_json: scoresJson,
+              triggered_by: 'assessment_complete',
+            }),
+          });
+
+          if (snapshotRes.ok) {
+            const snapshotData = await snapshotRes.json();
+            console.log('Radar snapshot saved:', snapshotData.data?.id);
+          }
+        } catch (snapshotErr) {
+          // Errore silenzioso - non blocca il flusso utente
+          console.warn('Radar snapshot save failed:', snapshotErr);
+        }
       } catch (err) {
         console.error('Errore:', err);
         setError('Impossibile caricare i risultati');

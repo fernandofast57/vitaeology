@@ -42,6 +42,32 @@ function ResultsContent() {
         const data = await res.json();
         setResults(data.results);
         setCompletedAt(data.completedAt);
+
+        // Salva radar snapshot automaticamente
+        try {
+          const scoresJson: Record<string, number> = {};
+          data.results.characteristics.forEach((char: { characteristicName: string; percentage: number }) => {
+            scoresJson[char.characteristicName] = char.percentage;
+          });
+
+          const snapshotRes = await fetch('/api/radar/snapshot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              assessment_type: 'leadership',
+              scores_json: scoresJson,
+              triggered_by: 'assessment_complete',
+            }),
+          });
+
+          if (snapshotRes.ok) {
+            const snapshotData = await snapshotRes.json();
+            console.log('Radar snapshot saved:', snapshotData.data?.id);
+          }
+        } catch (snapshotErr) {
+          // Errore silenzioso - non blocca il flusso utente
+          console.warn('Radar snapshot save failed:', snapshotErr);
+        }
       } catch (err) {
         console.error('Errore:', err);
         setError('Impossibile caricare i risultati');
