@@ -7,6 +7,7 @@ import { ArrowRight, Sparkles, Target, Clock, BarChart3 } from 'lucide-react';
 import LeadershipRadarChart from '@/components/charts/LeadershipRadarChart';
 import RecentActivity from '@/components/dashboard/RecentActivity';
 import ExercisesCard from '@/components/dashboard/ExercisesCard';
+import MilestonesWidget from '@/components/dashboard/MilestonesWidget';
 
 // Configurazione per ogni percorso
 const PATH_CONFIG = {
@@ -400,14 +401,19 @@ export default function DashboardByPath({ pathType }: DashboardByPathProps) {
       </div>
 
       {/* Grid secondaria */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Esercizi Card */}
         <div className="lg:col-span-1">
           <ExercisesCard stats={exerciseStats} />
         </div>
 
+        {/* Milestone Widget */}
+        <div className="lg:col-span-1">
+          <MilestonesWidget pathType={pathType} />
+        </div>
+
         {/* Attività Recente */}
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2 lg:col-span-2">
           <RecentActivity />
         </div>
       </div>
