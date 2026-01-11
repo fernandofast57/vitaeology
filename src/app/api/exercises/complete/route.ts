@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { completeExerciseWithCycle } from '@/lib/action-cycles';
 import { getNextExercise } from '@/lib/ai-coach/adaptive-path';
+import { checkAndAwardMilestones, MilestoneAwardResult } from '@/lib/milestones';
 
 export const dynamic = 'force-dynamic';
 
@@ -293,6 +294,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       console.warn('Errore verifica radar eligibility:', radarError);
     }
 
+    // 4. Verifica e assegna milestone
+    let earnedMilestones: MilestoneAwardResult[] = [];
+    try {
+      earnedMilestones = await checkAndAwardMilestones(userId, {
+        action: 'exercise_complete',
+        pathType,
+        bookSlug: exercise.book_slug,
+      });
+
+      // Log milestone guadagnate
+      const newMilestones = earnedMilestones.filter(m => m.success && !m.alreadyExists);
+      if (newMilestones.length > 0) {
+        console.log(`[Milestone] Utente ${userId} ha guadagnato ${newMilestones.length} milestone:`,
+          newMilestones.map(m => m.milestone?.milestoneType)
+        );
+      }
+    } catch (milestoneError) {
+      // Errore non blocca il completamento
+      console.warn('Errore verifica milestone:', milestoneError);
+    }
+
     return NextResponse.json({
       success: true,
       data: {
@@ -327,6 +349,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               //   : null,
             }
           : null,
+        // Milestone guadagnate
+        milestones: earnedMilestones
+          .filter(m => m.success && !m.alreadyExists && m.milestone)
+          .map(m => ({
+            id: m.milestoneId,
+            type: m.milestone?.milestoneType,
+            pathType: m.milestone?.pathType,
+            name: m.milestone?.definition?.name,
+            description: m.milestone?.definition?.description,
+            icon: m.milestone?.definition?.icon,
+            xpReward: m.milestone?.definition?.xpReward,
+          })),
       },
     });
 
