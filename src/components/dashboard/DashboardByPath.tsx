@@ -229,13 +229,13 @@ export default function DashboardByPath({ pathType }: DashboardByPathProps) {
           .from('exercises')
           .select('*', { count: 'exact', head: true })
           .eq('is_active', true)
-          .eq('book_id', config.bookSlug);
+          .eq('book_slug', config.bookSlug);
 
         const { data: progressData } = await supabase
           .from('user_exercise_progress')
-          .select('status, exercises!inner(book_id)')
+          .select('status, exercises!inner(book_slug)')
           .eq('user_id', user.id)
-          .eq('exercises.book_id', config.bookSlug);
+          .eq('exercises.book_slug', config.bookSlug);
 
         const total = totalExercises || 0;
         const completed = (progressData || []).filter((p: any) => p.status === 'completed').length;

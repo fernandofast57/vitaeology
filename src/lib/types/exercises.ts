@@ -15,7 +15,7 @@ export type ExerciseStatus = 'not_started' | 'in_progress' | 'completed';
 
 export interface Exercise {
   id: string;
-  book_id: string;
+  book_slug: string;
   week_number: number;
   title: string;
   subtitle: string | null;

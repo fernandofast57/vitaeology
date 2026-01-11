@@ -77,7 +77,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Recupera info esercizio
     const { data: exercise, error: exerciseError } = await supabase
       .from('exercises')
-      .select('id, title, book_id, characteristic_slug, pillar')
+      .select('id, title, book_slug, characteristic_slug, pillar')
       .eq('id', exerciseId)
       .single();
 
@@ -88,13 +88,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Mappa book_id a pathType
+    // Mappa book_slug a pathType
     const pathTypeMap: Record<string, PathType> = {
       'leadership': 'leadership',
       'risolutore': 'ostacoli',
       'microfelicita': 'microfelicita',
     };
-    const pathType = pathTypeMap[exercise.book_id] || 'leadership';
+    const pathType = pathTypeMap[exercise.book_slug] || 'leadership';
 
     // 1. Aggiorna progresso esercizio nel sistema esistente
     const { data: existingProgress } = await supabase

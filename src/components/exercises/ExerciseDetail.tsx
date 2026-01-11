@@ -57,7 +57,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
       setIsLoadingStats(true);
       try {
         const res = await fetch(
-          `/api/exercises/completion-stats?currentExerciseId=${exercise.id}&bookSlug=${exercise.book_id}`
+          `/api/exercises/completion-stats?currentExerciseId=${exercise.id}&bookSlug=${exercise.book_slug}`
         );
         if (res.ok) {
           const data = await res.json();
@@ -78,7 +78,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
     }
 
     fetchCompletionStats();
-  }, [currentStatus, exercise.id, exercise.book_id]);
+  }, [currentStatus, exercise.id, exercise.book_slug]);
 
   const status = currentStatus;
   const statusConfig = STATUS_CONFIG[status];
@@ -163,7 +163,7 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
           'risolutore': 'ostacoli',
           'microfelicita': 'microfelicita',
         };
-        const pathType = pathTypeMap[exercise.book_id] || 'leadership';
+        const pathType = pathTypeMap[exercise.book_slug] || 'leadership';
 
         setEarnedAchievement({
           id: result.data.cycle.achievement.id,
