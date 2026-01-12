@@ -34,12 +34,6 @@ const ArrowRightIcon = () => (
   </svg>
 );
 
-const MessageIcon = () => (
-  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-  </svg>
-);
-
 const TrendingUpIcon = () => (
   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -159,24 +153,6 @@ export default function ExerciseCompletionCard({
             </Link>
           </div>
         )}
-
-        {/* CTA Fernando */}
-        <div className="border border-gray-200 rounded-xl p-4 bg-slate-50">
-          <p className="text-sm text-gray-600 mb-2 flex items-center gap-1.5">
-            <span>💬</span>
-            Vuoi riflettere su questo esercizio?
-          </p>
-          <p className="text-sm text-gray-500 mb-3">
-            Discuti la tua esperienza con l&apos;AI Coach Fernando per approfondire gli insight.
-          </p>
-          <Link
-            href="/dashboard?openChat=true"
-            className="inline-flex items-center gap-2 bg-[#0A2540] text-white px-4 py-2.5 rounded-lg font-medium hover:bg-[#0A2540]/90 transition-colors"
-          >
-            <MessageIcon />
-            Parla con Fernando
-          </Link>
-        </div>
 
         {/* Link torna indietro */}
         <div className="text-center pt-2 border-t border-gray-100">

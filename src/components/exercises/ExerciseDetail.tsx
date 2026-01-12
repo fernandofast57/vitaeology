@@ -452,14 +452,6 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
                   <p className="text-green-700">
                     Completato il {new Date(progress.completed_at!).toLocaleDateString('it-IT')}
                   </p>
-                  <div className="mt-4 pt-4 border-t border-green-200">
-                    <Link
-                      href="/dashboard?openChat=true"
-                      className="text-green-700 hover:text-green-900 font-medium"
-                    >
-                      💬 Rifletti con Fernando →
-                    </Link>
-                  </div>
                 </div>
               )}
             </>
