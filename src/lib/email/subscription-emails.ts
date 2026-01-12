@@ -286,11 +286,6 @@ export async function sendUpgradeConfirmationEmail(
           ${ctaButton('📚 Esplora gli Esercizi', `${appUrl}/exercises`, config.color, true)}
         </td>
       </tr>
-      <tr>
-        <td align="center" style="padding: 10px 0;">
-          ${ctaButton('💬 Parla con Fernando', `${appUrl}/dashboard?openChat=true`, config.color, true)}
-        </td>
-      </tr>
     </table>
 
     <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">

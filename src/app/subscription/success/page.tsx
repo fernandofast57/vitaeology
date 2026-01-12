@@ -202,24 +202,14 @@ function SuccessContent() {
             <ArrowRight className="w-5 h-5" />
           </Link>
 
-          {/* Secondary CTAs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Link
-              href="/exercises"
-              className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-gray-50 transition"
-            >
-              <BookOpen className="w-5 h-5" />
-              Esplora Esercizi
-            </Link>
-
-            <Link
-              href="/dashboard?openChat=true"
-              className="flex items-center justify-center gap-2 bg-[#0A2540] text-white py-3 px-4 rounded-xl font-medium hover:bg-[#0A2540]/90 transition"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Parla con Fernando
-            </Link>
-          </div>
+          {/* Secondary CTA */}
+          <Link
+            href="/exercises"
+            className="flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-gray-50 transition"
+          >
+            <BookOpen className="w-5 h-5" />
+            Esplora Esercizi
+          </Link>
 
           {/* Mentor Extra: Book 1:1 */}
           {planType === 'mentor' && (
@@ -244,10 +234,6 @@ function SuccessContent() {
             Hai domande?{' '}
             <Link href="/contact" className={`${config.textColor} hover:underline`}>
               Contattaci
-            </Link>
-            {' '}o{' '}
-            <Link href="/dashboard?openChat=true" className={`${config.textColor} hover:underline`}>
-              parla con Fernando
             </Link>
           </p>
         </div>
