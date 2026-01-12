@@ -1,6 +1,6 @@
 ﻿# Vitaeology - Struttura Applicazione
 
-> Generato automaticamente il 07/01/2026
+> Ultimo aggiornamento: 12/01/2026
 
 ## Indice
 
@@ -28,7 +28,7 @@
 | `/admin/feedback-patterns` | Client | 🔒 | Pattern feedback utenti |
 | `/admin/funnel` | Client | 🔒 |  |
 | `/admin/performance` | Client | 🔒 | Metriche performance sistema |
-| `/admin/quality-audit` | Client | 🔒 | Audit qualità risposte AI |
+| `/admin/quality-audit` | Client | 🔒 | Audit qualità risposte AI (7 score: 4 principi + 3 comprensione) |
 | `/admin/users` | Client | 🔒 | Gestione utenti e ruoli |
 | `/assessment/lite` | Client | 🌐 | Assessment Leadership 72 domande |
 | `/assessment/lite/results` | Client | 🌐 | Risultati assessment Leadership |
@@ -85,7 +85,7 @@
 | `/api/admin/feedback-patterns` | GET, PATCH | Pattern feedback utenti |
 | `/api/admin/funnel-analysis` | GET |  |
 | `/api/admin/performance` | GET | Metriche performance |
-| `/api/admin/quality-audit` | GET, POST | Audit qualità risposte |
+| `/api/admin/quality-audit` | GET, POST | Audit qualità risposte (7 score + analisi automatica) |
 | `/api/admin/users` | GET | Lista utenti |
 | `/api/admin/users/[userId]/role` | PUT, DELETE | Modifica ruolo utente |
 
@@ -328,8 +328,11 @@
 
 ### services
 
+- `concretezza-check` - Analisi CONCRETEZZA (esempi, metafore, scenari)
 - `correction-suggestion`
 - `exercise-recommendation`
+- `graduality-check` - Analisi GRADUALITÀ (sequenza logica)
+- `parole-check` - Analisi PAROLE (termini tecnici, acronimi, anglicismi)
 - `pattern-detection`
 
 ### stripe
@@ -392,7 +395,28 @@
 ```
 /dashboard                    → Widget chat AI Coach
     ↓ POST /api/ai-coach      → Claude API + RAG
+    ↓ Analisi COMPRENSIONE automatica (3 check)
     ↓ Memoria conversazione salvata
+```
+
+### 3.1 Principio Comprensione - 3 Difficoltà
+
+L'AI Coach analizza automaticamente ogni risposta per 3 aspetti:
+
+| Difficoltà | Check | Score | Cosa Misura |
+|------------|-------|-------|-------------|
+| **PAROLE** | `parole-check.ts` | 0-100 | Termini tecnici spiegati, acronimi espansi, anglicismi evitati |
+| **CONCRETEZZA** | `concretezza-check.ts` | 0-100 | Esempi concreti, metafore, scenari dalla vita reale |
+| **GRADUALITÀ** | `graduality-check.ts` | 0-100 | Sequenza logica, concetti introdotti prima di usarli |
+
+```
+Risposta AI Coach
+    ↓ checkParole()       → parole_score
+    ↓ checkConcretezza()  → concretezza_score
+    ↓ checkGraduality()   → graduality_score
+    ↓ Salvataggio in ai_coach_conversations
+    ↓
+/admin/quality-audit          → Revisione manuale con 7 rating stars
 ```
 
 ### 4. Acquisto Libri
@@ -412,7 +436,7 @@
 - **Pagine totali:** 43
 - **API endpoints:** 59
 - **Componenti:** 32
-- **Librerie:** 38
+- **Librerie:** 41 (inclusi 3 check comprensione)
 
 ---
 
