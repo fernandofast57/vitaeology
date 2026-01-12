@@ -499,21 +499,6 @@ charScores.forEach(score => {
           </div>
         </div>
 
-        {/* CTA Fernando AI Coach */}
-        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-8 text-white">
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl sm:text-3xl">F</span>
-            </div>
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-bold mb-1">Crea il tuo Programma Personalizzato</h3>
-              <p className="text-indigo-100 text-sm sm:text-base">
-                Clicca sul pulsante chat in basso a destra e chiedi a Fernando di creare un programma di miglioramento basato sui tuoi risultati.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Azioni */}
         <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
           <button
