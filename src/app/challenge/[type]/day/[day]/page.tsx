@@ -8,6 +8,8 @@ import DiscoveryConfirmation from '@/components/challenge/DiscoveryConfirmation'
 import { getDiscoveryData, type ChallengeType, type DayNumber } from '@/lib/challenge/discovery-data';
 import { getDayContent, type DayContent } from '@/lib/challenge/day-content';
 import { useDiscoveryProgress } from '@/hooks/useDiscoveryProgress';
+import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
+import { CHALLENGE_VIDEOS } from '@/config/videos';
 
 // Challenge colors
 const CHALLENGE_COLORS = {
@@ -269,6 +271,15 @@ export default function ChallengeDayPage() {
             </p>
           )}
         </div>
+      </div>
+
+      {/* Video del Giorno */}
+      <div className="px-4 pb-8">
+        <VideoPlaceholder
+          challengeType={challengeType as 'leadership' | 'ostacoli' | 'microfelicita'}
+          videoUrl={CHALLENGE_VIDEOS[challengeType as keyof typeof CHALLENGE_VIDEOS]?.days[dayNumber - 1]}
+          dayNumber={dayNumber}
+        />
       </div>
 
       {/* Main Content */}

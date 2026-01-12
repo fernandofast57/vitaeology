@@ -9,6 +9,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
+import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
+import { CHALLENGE_VIDEOS } from '@/config/videos';
 
 // Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_1_LEADERSHIP.md
 const VARIANTS = {
@@ -205,6 +207,12 @@ function LeadershipLandingContent() {
           <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-2xl mx-auto">
             {content.subheadline}
           </p>
+
+          {/* Video Hero */}
+          <VideoPlaceholder
+            challengeType="leadership"
+            videoUrl={CHALLENGE_VIDEOS.leadership.hero}
+          />
 
           {/* Hook */}
           <p className="text-amber-400 font-medium mb-12">

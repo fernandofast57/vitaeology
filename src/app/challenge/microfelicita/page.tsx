@@ -9,6 +9,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
+import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
+import { CHALLENGE_VIDEOS } from '@/config/videos';
 
 // Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_3_MICROFELICITA.md
 const VARIANTS = {
@@ -202,6 +204,12 @@ function MicrofelicitaLandingContent() {
           <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-2xl mx-auto">
             {content.subheadline}
           </p>
+
+          {/* Video Hero */}
+          <VideoPlaceholder
+            challengeType="microfelicita"
+            videoUrl={CHALLENGE_VIDEOS.microfelicita.hero}
+          />
 
           {/* Hook */}
           <p className="text-violet-400 font-medium mb-12">
