@@ -4,7 +4,57 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 
-// Tipi per analisi gradualità
+// =====================================================
+// Tipi per analisi COMPRENSIONE (3 Difficoltà)
+// =====================================================
+
+// 1. PAROLE - Termini tecnici non spiegati
+interface ParoleIssue {
+  term: string;
+  type: 'technical_term' | 'acronym' | 'anglicism';
+  severity: 'low' | 'medium' | 'high';
+  alternative?: string;
+  context: string;
+}
+
+interface ParoleAnalysis {
+  score: number;
+  passed: boolean;
+  issues: ParoleIssue[];
+  metrics: {
+    total_technical_terms: number;
+    unexplained_count: number;
+    acronyms_count: number;
+    anglicisms_count: number;
+  };
+  suggestions: string[];
+}
+
+// 2. CONCRETEZZA - Esempi concreti
+interface ConcretezzaIssue {
+  concept: string;
+  type: 'abstract_concept' | 'missing_example' | 'vague_statement';
+  severity: 'low' | 'medium' | 'high';
+  examplePrompt?: string;
+  context: string;
+}
+
+interface ConcretezzaAnalysis {
+  score: number;
+  passed: boolean;
+  exampleQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'none';
+  issues: ConcretezzaIssue[];
+  metrics: {
+    examples_count: number;
+    metaphors_count: number;
+    scenarios_count: number;
+    abstract_concepts: number;
+    example_quality_score: number;
+  };
+  suggestions: string[];
+}
+
+// 3. GRADUALITÀ - Sequenza logica
 interface GradualityIssue {
   type: 'unexplained_term' | 'missing_example' | 'sequence_gap' | 'assumed_knowledge';
   severity: 'low' | 'medium' | 'high';
@@ -40,6 +90,9 @@ interface ConversationSample {
   session_id?: string;
   user_id?: string;
   tokens_used?: number | null;
+  // Analisi COMPRENSIONE (3 difficoltà)
+  parole_analysis?: ParoleAnalysis;
+  concretezza_analysis?: ConcretezzaAnalysis;
   graduality_analysis?: GradualityAnalysis;
 }
 
@@ -50,6 +103,10 @@ interface AuditRecord {
   score_user_agency?: number;
   score_comprensione?: number;
   score_conoscenza_operativa?: number;
+  // 3 score Comprensione dettagliati
+  score_parole?: number;
+  score_concretezza?: number;
+  score_gradualita?: number;
   score_medio: number;
   issues: string[];
   notes?: string | null;
@@ -170,22 +227,25 @@ export default function QualityAuditPage() {
     needs_improvement_count: 0,
   });
 
-  // Form state - nomi allineati con API
+  // Form state - nomi allineati con API (7 score totali)
   const [ratings, setRatings] = useState({
     score_validante: 0,
     score_user_agency: 0,
     score_comprensione: 0,
     score_conoscenza_operativa: 0,
+    // 3 score Comprensione dettagliati
+    score_parole: 0,
+    score_concretezza: 0,
     score_gradualita: 0,
   });
   const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Calcolo score medio (5 criteri)
+  // Calcolo score medio (7 criteri)
   const avgScore =
-    Object.values(ratings).filter((r) => r > 0).length === 5
-      ? Object.values(ratings).reduce((a, b) => a + b, 0) / 5
+    Object.values(ratings).filter((r) => r > 0).length === 7
+      ? Object.values(ratings).reduce((a, b) => a + b, 0) / 7
       : 0;
 
   // Tutti i rating compilati?
@@ -242,6 +302,8 @@ export default function QualityAuditPage() {
       score_user_agency: 0,
       score_comprensione: 0,
       score_conoscenza_operativa: 0,
+      score_parole: 0,
+      score_concretezza: 0,
       score_gradualita: 0,
     });
     setSelectedIssues([]);
@@ -300,6 +362,10 @@ export default function QualityAuditPage() {
           score_user_agency: data.audit.score_user_agency,
           score_comprensione: data.audit.score_comprensione,
           score_conoscenza_operativa: data.audit.score_conoscenza_operativa,
+          // 3 score Comprensione dettagliati
+          score_parole: data.audit.score_parole,
+          score_concretezza: data.audit.score_concretezza,
+          score_gradualita: data.audit.score_gradualita,
           score_medio: data.audit.score_medio,
           issues: data.audit.issues || [],
           notes: data.audit.notes,
@@ -665,7 +731,202 @@ export default function QualityAuditPage() {
                   </div>
                 )}
 
-                {/* Analisi Gradualità Automatica */}
+                {/* ===================================== */}
+                {/* ANALISI COMPRENSIONE (3 Difficoltà) */}
+                {/* ===================================== */}
+
+                {/* 1. Analisi PAROLE Automatica */}
+                {currentSample?.parole_analysis && (
+                  <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                        <span className="text-lg">📖</span>
+                        Analisi PAROLE Automatica
+                      </h3>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        currentSample.parole_analysis.passed
+                          ? 'bg-green-500/20 text-green-400'
+                          : 'bg-amber-500/20 text-amber-400'
+                      }`}>
+                        {currentSample.parole_analysis.score}/100
+                      </span>
+                    </div>
+
+                    {/* Metriche PAROLE */}
+                    <div className="grid grid-cols-4 gap-2 text-xs">
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className="font-bold text-slate-300">
+                          {currentSample.parole_analysis.metrics.total_technical_terms}
+                        </div>
+                        <div className="text-slate-500">Tecnici</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.parole_analysis.metrics.unexplained_count > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                          {currentSample.parole_analysis.metrics.unexplained_count}
+                        </div>
+                        <div className="text-slate-500">Non spiegati</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.parole_analysis.metrics.acronyms_count > 0 ? 'text-amber-400' : 'text-green-400'}`}>
+                          {currentSample.parole_analysis.metrics.acronyms_count}
+                        </div>
+                        <div className="text-slate-500">Acronimi</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.parole_analysis.metrics.anglicisms_count > 0 ? 'text-amber-400' : 'text-green-400'}`}>
+                          {currentSample.parole_analysis.metrics.anglicisms_count}
+                        </div>
+                        <div className="text-slate-500">Anglicismi</div>
+                      </div>
+                    </div>
+
+                    {/* Issues PAROLE */}
+                    {currentSample.parole_analysis.issues.length > 0 && (
+                      <div className="space-y-1">
+                        {currentSample.parole_analysis.issues.slice(0, 3).map((issue, idx) => (
+                          <div key={idx} className={`text-xs p-2 rounded ${
+                            issue.severity === 'high' ? 'bg-red-500/10 text-red-300' :
+                            issue.severity === 'medium' ? 'bg-amber-500/10 text-amber-300' :
+                            'bg-blue-500/10 text-blue-300'
+                          }`}>
+                            <span className="font-medium">{issue.term}: </span>
+                            {issue.alternative ? `Usa "${issue.alternative}" invece` : `Termine ${issue.type} non spiegato`}
+                          </div>
+                        ))}
+                        {currentSample.parole_analysis.issues.length > 3 && (
+                          <div className="text-xs text-slate-500 text-center">
+                            + {currentSample.parole_analysis.issues.length - 3} altri termini
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Suggerimento rating PAROLE */}
+                    <div className="text-xs text-slate-400 flex items-center gap-2">
+                      <span>💡</span>
+                      <span>
+                        Suggerimento rating Parole: <strong className="text-white">
+                          {Math.max(1, Math.round(currentSample.parole_analysis.score / 20))}
+                        </strong>/5
+                      </span>
+                      <button
+                        onClick={() => setRatings(r => ({
+                          ...r,
+                          score_parole: Math.max(1, Math.round(currentSample.parole_analysis!.score / 20))
+                        }))}
+                        className="text-amber-400 hover:text-amber-300 underline"
+                      >
+                        Applica
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. Analisi CONCRETEZZA Automatica */}
+                {currentSample?.concretezza_analysis && (
+                  <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                        <span className="text-lg">🎯</span>
+                        Analisi CONCRETEZZA Automatica
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 text-[10px] font-medium rounded-full ${
+                          currentSample.concretezza_analysis.exampleQuality === 'excellent' ? 'bg-green-500/20 text-green-400' :
+                          currentSample.concretezza_analysis.exampleQuality === 'good' ? 'bg-emerald-500/20 text-emerald-400' :
+                          currentSample.concretezza_analysis.exampleQuality === 'fair' ? 'bg-amber-500/20 text-amber-400' :
+                          currentSample.concretezza_analysis.exampleQuality === 'poor' ? 'bg-orange-500/20 text-orange-400' :
+                          'bg-red-500/20 text-red-400'
+                        }`}>
+                          {currentSample.concretezza_analysis.exampleQuality}
+                        </span>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          currentSample.concretezza_analysis.passed
+                            ? 'bg-green-500/20 text-green-400'
+                            : 'bg-amber-500/20 text-amber-400'
+                        }`}>
+                          {currentSample.concretezza_analysis.score}/100
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Metriche CONCRETEZZA */}
+                    <div className="grid grid-cols-5 gap-2 text-xs">
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.concretezza_analysis.metrics.examples_count > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {currentSample.concretezza_analysis.metrics.examples_count}
+                        </div>
+                        <div className="text-slate-500">Esempi</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.concretezza_analysis.metrics.metaphors_count > 0 ? 'text-green-400' : 'text-slate-400'}`}>
+                          {currentSample.concretezza_analysis.metrics.metaphors_count}
+                        </div>
+                        <div className="text-slate-500">Metafore</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.concretezza_analysis.metrics.scenarios_count > 0 ? 'text-green-400' : 'text-slate-400'}`}>
+                          {currentSample.concretezza_analysis.metrics.scenarios_count}
+                        </div>
+                        <div className="text-slate-500">Scenari</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.concretezza_analysis.metrics.abstract_concepts > 2 ? 'text-amber-400' : 'text-green-400'}`}>
+                          {currentSample.concretezza_analysis.metrics.abstract_concepts}
+                        </div>
+                        <div className="text-slate-500">Astratti</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.concretezza_analysis.metrics.example_quality_score >= 0.7 ? 'text-green-400' : 'text-amber-400'}`}>
+                          {Math.round(currentSample.concretezza_analysis.metrics.example_quality_score * 100)}%
+                        </div>
+                        <div className="text-slate-500">Qualità</div>
+                      </div>
+                    </div>
+
+                    {/* Issues CONCRETEZZA */}
+                    {currentSample.concretezza_analysis.issues.length > 0 && (
+                      <div className="space-y-1">
+                        {currentSample.concretezza_analysis.issues.slice(0, 3).map((issue, idx) => (
+                          <div key={idx} className={`text-xs p-2 rounded ${
+                            issue.severity === 'high' ? 'bg-red-500/10 text-red-300' :
+                            issue.severity === 'medium' ? 'bg-amber-500/10 text-amber-300' :
+                            'bg-blue-500/10 text-blue-300'
+                          }`}>
+                            <span className="font-medium">{issue.concept}: </span>
+                            {issue.examplePrompt || 'Aggiungi un esempio concreto'}
+                          </div>
+                        ))}
+                        {currentSample.concretezza_analysis.issues.length > 3 && (
+                          <div className="text-xs text-slate-500 text-center">
+                            + {currentSample.concretezza_analysis.issues.length - 3} altri concetti
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Suggerimento rating CONCRETEZZA */}
+                    <div className="text-xs text-slate-400 flex items-center gap-2">
+                      <span>💡</span>
+                      <span>
+                        Suggerimento rating Concretezza: <strong className="text-white">
+                          {Math.max(1, Math.round(currentSample.concretezza_analysis.score / 20))}
+                        </strong>/5
+                      </span>
+                      <button
+                        onClick={() => setRatings(r => ({
+                          ...r,
+                          score_concretezza: Math.max(1, Math.round(currentSample.concretezza_analysis!.score / 20))
+                        }))}
+                        className="text-amber-400 hover:text-amber-300 underline"
+                      >
+                        Applica
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. Analisi GRADUALITÀ Automatica */}
                 {currentSample?.graduality_analysis && (
                   <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
@@ -761,6 +1022,7 @@ export default function QualityAuditPage() {
 
                     {/* Rating stars per ogni principio */}
                     <div className="space-y-4">
+                      {/* 4 Principi base */}
                       <RatingStars
                         label="Principio Validante"
                         description="Riconosce risorse esistenti? Evita diagnosi deficit?"
@@ -778,8 +1040,8 @@ export default function QualityAuditPage() {
                         }
                       />
                       <RatingStars
-                        label="Comprensione"
-                        description="Linguaggio semplice? Esempi concreti? Non accademico?"
+                        label="Comprensione (generale)"
+                        description="Linguaggio semplice? Accessibile? Non accademico?"
                         value={ratings.score_comprensione}
                         onChange={(v) =>
                           setRatings((r) => ({ ...r, score_comprensione: v }))
@@ -793,8 +1055,32 @@ export default function QualityAuditPage() {
                           setRatings((r) => ({ ...r, score_conoscenza_operativa: v }))
                         }
                       />
+
+                      {/* Separatore 3 Difficoltà Comprensione */}
+                      <div className="border-t border-slate-700/50 pt-4">
+                        <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">
+                          3 Difficoltà Comprensione
+                        </p>
+                      </div>
+
                       <RatingStars
-                        label="Gradualità"
+                        label="📖 Parole"
+                        description="Termini tecnici spiegati? Acronimi espansi? No anglicismi inutili?"
+                        value={ratings.score_parole}
+                        onChange={(v) =>
+                          setRatings((r) => ({ ...r, score_parole: v }))
+                        }
+                      />
+                      <RatingStars
+                        label="🎯 Concretezza"
+                        description="Esempi concreti? Metafore? Scenari dalla vita reale?"
+                        value={ratings.score_concretezza}
+                        onChange={(v) =>
+                          setRatings((r) => ({ ...r, score_concretezza: v }))
+                        }
+                      />
+                      <RatingStars
+                        label="📊 Gradualità"
                         description="Sequenza logica? Spiega prima di usare? Costruisce passo dopo passo?"
                         value={ratings.score_gradualita}
                         onChange={(v) =>
@@ -894,18 +1180,28 @@ export default function QualityAuditPage() {
                             {audit.user_message_preview}...
                           </p>
                         )}
-                        <div className="flex items-center gap-2 text-xs text-slate-500">
-                          <span title="Validante">
+                        <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-500">
+                          <span title="Validante" className="px-1 bg-slate-900/50 rounded">
                             V:{audit.score_validante || '-'}
                           </span>
-                          <span title="Agency">
+                          <span title="Agency" className="px-1 bg-slate-900/50 rounded">
                             A:{audit.score_user_agency || '-'}
                           </span>
-                          <span title="Comprensione">
+                          <span title="Comprensione" className="px-1 bg-slate-900/50 rounded">
                             C:{audit.score_comprensione || '-'}
                           </span>
-                          <span title="Operativa">
+                          <span title="Operativa" className="px-1 bg-slate-900/50 rounded">
                             O:{audit.score_conoscenza_operativa || '-'}
+                          </span>
+                          {/* 3 Comprensione */}
+                          <span title="Parole" className="px-1 bg-blue-900/30 rounded text-blue-400">
+                            P:{audit.score_parole || '-'}
+                          </span>
+                          <span title="Concretezza" className="px-1 bg-emerald-900/30 rounded text-emerald-400">
+                            Co:{audit.score_concretezza || '-'}
+                          </span>
+                          <span title="Gradualità" className="px-1 bg-violet-900/30 rounded text-violet-400">
+                            G:{audit.score_gradualita || '-'}
                           </span>
                         </div>
                         {audit.issues && audit.issues.length > 0 && (
@@ -930,9 +1226,10 @@ export default function QualityAuditPage() {
             {/* Guida valutazione */}
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
               <h3 className="font-semibold text-white mb-3">
-                Guida Valutazione
+                Guida Valutazione (7 Score)
               </h3>
               <div className="space-y-3 text-sm">
+                {/* 4 Principi Base */}
                 <div>
                   <p className="text-amber-400 font-medium">
                     Principio Validante
@@ -950,10 +1247,9 @@ export default function QualityAuditPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-amber-400 font-medium">Comprensione</p>
+                  <p className="text-amber-400 font-medium">Comprensione (gen.)</p>
                   <p className="text-slate-400 text-xs">
-                    Linguaggio accessibile? Esempi dalla vita reale? Niente
-                    gergo accademico?
+                    Linguaggio accessibile? Niente gergo accademico?
                   </p>
                 </div>
                 <div>
@@ -963,6 +1259,32 @@ export default function QualityAuditPage() {
                   <p className="text-slate-400 text-xs">
                     Applica la conoscenza senza citare fonti o teorie? Integra
                     naturalmente?
+                  </p>
+                </div>
+
+                {/* 3 Difficoltà Comprensione */}
+                <div className="border-t border-slate-700/50 pt-3">
+                  <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">
+                    3 Difficoltà Comprensione
+                  </p>
+                </div>
+                <div>
+                  <p className="text-blue-400 font-medium">📖 Parole</p>
+                  <p className="text-slate-400 text-xs">
+                    Termini tecnici spiegati prima dell&apos;uso? Acronimi espansi?
+                    Evita anglicismi inutili?
+                  </p>
+                </div>
+                <div>
+                  <p className="text-emerald-400 font-medium">🎯 Concretezza</p>
+                  <p className="text-slate-400 text-xs">
+                    Esempi dalla vita reale? Metafore? Scenari concreti?
+                  </p>
+                </div>
+                <div>
+                  <p className="text-violet-400 font-medium">📊 Gradualità</p>
+                  <p className="text-slate-400 text-xs">
+                    Sequenza logica? Spiega prima, usa dopo? Costruisce passo passo?
                   </p>
                 </div>
               </div>

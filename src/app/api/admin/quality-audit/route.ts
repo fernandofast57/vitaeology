@@ -43,6 +43,14 @@ interface ConversationSample {
 interface RecentAudit {
   id: string;
   conversation_id: string;
+  score_validante?: number;
+  score_user_agency?: number;
+  score_comprensione?: number;
+  score_conoscenza_operativa?: number;
+  // 3 score Comprensione dettagliati
+  score_parole?: number;
+  score_concretezza?: number;
+  score_gradualita?: number;
   score_medio: number;
   issues: string[];
   created_at: string;
@@ -120,6 +128,8 @@ export async function GET(): Promise<NextResponse> {
         score_user_agency,
         score_comprensione,
         score_conoscenza_operativa,
+        score_parole,
+        score_concretezza,
         score_gradualita,
         score_medio,
         issues,
@@ -139,6 +149,13 @@ export async function GET(): Promise<NextResponse> {
         recentAuditsData.push({
           id: audit.id,
           conversation_id: audit.conversation_id,
+          score_validante: audit.score_validante ? Number(audit.score_validante) : undefined,
+          score_user_agency: audit.score_user_agency ? Number(audit.score_user_agency) : undefined,
+          score_comprensione: audit.score_comprensione ? Number(audit.score_comprensione) : undefined,
+          score_conoscenza_operativa: audit.score_conoscenza_operativa ? Number(audit.score_conoscenza_operativa) : undefined,
+          score_parole: audit.score_parole ? Number(audit.score_parole) : undefined,
+          score_concretezza: audit.score_concretezza ? Number(audit.score_concretezza) : undefined,
+          score_gradualita: audit.score_gradualita ? Number(audit.score_gradualita) : undefined,
           score_medio: Number(audit.score_medio) || 0,
           issues: audit.issues || [],
           created_at: audit.created_at,
@@ -199,6 +216,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       score_user_agency,
       score_comprensione,
       score_conoscenza_operativa,
+      // 3 score Comprensione dettagliati
+      score_parole,
+      score_concretezza,
       score_gradualita,
       issues,
       notes,
@@ -212,8 +232,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Verifica che i punteggi siano validi (1-5)
-    const scores = [score_validante, score_user_agency, score_comprensione, score_conoscenza_operativa, score_gradualita];
+    // Verifica che i punteggi siano validi (1-5) - ora 7 score
+    const scores = [
+      score_validante, score_user_agency, score_comprensione, score_conoscenza_operativa,
+      score_parole, score_concretezza, score_gradualita
+    ];
     for (const score of scores) {
       if (score !== undefined && score !== null) {
         if (typeof score !== 'number' || score < 1 || score > 5) {
@@ -253,7 +276,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Inserisci audit
+    // Inserisci audit (7 score totali)
     const { data: newAudit, error: insertError } = await supabase
       .from('ai_coach_quality_audits')
       .insert({
@@ -263,6 +286,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         score_user_agency: score_user_agency || null,
         score_comprensione: score_comprensione || null,
         score_conoscenza_operativa: score_conoscenza_operativa || null,
+        // 3 score Comprensione dettagliati
+        score_parole: score_parole || null,
+        score_concretezza: score_concretezza || null,
         score_gradualita: score_gradualita || null,
         issues: issues || [],
         notes: notes || null,
