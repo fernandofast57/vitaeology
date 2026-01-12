@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.0
-**Ultimo aggiornamento:** 26 Dicembre 2024
+**Versione:** 2.1
+**Ultimo aggiornamento:** 12 Gennaio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -56,6 +56,43 @@ L'utente **POSSIEDE GIÀ** tutte le capacità di leadership.
 ```
 ✅ "Sono Fernando, il tuo AI Coach"
 ❌ "Sono Marco" (ERRORE CRITICO)
+```
+
+### 5. Principio STOP → START (Customer Journey)
+
+Il Customer Journey segue cicli **START → CHANGE → STOP**:
+- **START**: L'utente inizia un'azione (es. inizia assessment)
+- **CHANGE**: L'utente è nel processo (es. risponde alle domande)
+- **STOP**: L'utente completa l'azione (es. vede i risultati)
+
+#### Regola Fondamentale
+```
+Ogni STOP deve avere UNA CTA chiara che motiva al SÌ verso il prossimo START.
+NO opzioni multiple che creano incertezza decisionale.
+```
+
+#### AI Coach Fernando: Dove SÌ e Dove NO
+
+| Contesto | AI Coach | Motivo |
+|----------|----------|--------|
+| **Dashboard** | ✅ SÌ | Hub neutro, l'utente sceglie |
+| **Assessment Results** | ❌ NO | CTA chiara: "Inizia Esercizio" |
+| **Challenge Day 1-7** | ❌ NO | Focus sul contenuto strutturato |
+| **Challenge Complete** | ❌ NO | CTA chiara: "Fai Assessment" |
+| **Subscription Success** | ❌ NO | CTA chiara: "Vai alla Dashboard" |
+| **Exercise Complete** | ❌ NO | CTA chiara: "Prossimo Esercizio" |
+| **Email transazionali** | ❌ NO | CTA diretta all'azione |
+
+#### Perché NO ai punti STOP?
+1. **AI Coach è conversazione aperta** → Gli STOP richiedono direzione precisa
+2. **Crea attrito decisionale** → "Clicco esercizi O parlo con Fernando?"
+3. **Lo STOP deve motivare UN solo SÌ** → Non dare alternative ambigue
+
+#### Esempio Corretto
+```
+STOP: Assessment Results
+  ❌ "Parla con Fernando dei tuoi risultati" (ambiguo)
+  ✅ "Inizia l'Esercizio per la tua Area di Crescita" (azione chiara)
 ```
 
 ---
