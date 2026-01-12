@@ -127,10 +127,10 @@ export default function ChallengesAdminPage() {
     setCronResult(null);
 
     try {
-      const response = await fetch('/api/cron/challenge-emails', {
+      // Usa endpoint admin sicuro (il secret viene gestito server-side)
+      const response = await fetch('/api/admin/trigger-cron', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'manual-test'}`,
           'Content-Type': 'application/json'
         }
       });
