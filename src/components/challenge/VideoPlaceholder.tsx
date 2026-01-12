@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 /**
  * VideoPlaceholder - Componente per video challenge o placeholder
  *
@@ -47,7 +49,27 @@ export function VideoPlaceholder({
   dayNumber,
   posterUrl,
 }: VideoPlaceholderProps) {
+  const [mounted, setMounted] = useState(false);
   const styles = CHALLENGE_STYLES[challengeType];
+
+  // Evita hydration mismatch renderizzando solo sul client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Placeholder statico per SSR con stessa struttura del client
+    return (
+      <div className="w-full max-w-2xl mx-auto my-8 rounded-xl border-2 border-dashed p-12 bg-slate-100 border-slate-300">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-white" />
+          </div>
+          <p className="text-lg font-medium text-slate-400">Caricamento...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Se videoUrl esiste, mostra il video player
   if (videoUrl) {
