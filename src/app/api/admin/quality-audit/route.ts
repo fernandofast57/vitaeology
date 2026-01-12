@@ -3,11 +3,17 @@
  *
  * GET: Carica conversazioni da valutare + audit recenti + summary settimanale
  * POST: Salva una valutazione audit
+ *
+ * Include analisi automatica di gradualità basata sulle 3 difficoltà:
+ * 1. PAROLE - Termini tecnici non spiegati
+ * 2. CONCRETEZZA - Mancanza di esempi
+ * 3. GRADUALITÀ - Sequenza logica
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
+import { checkGraduality, GradualityCheckResult } from '@/lib/services/graduality-check';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +33,7 @@ interface ConversationSample {
   ai_response: string;
   created_at: string;
   tokens_used: number | null;
+  graduality_analysis?: GradualityCheckResult;
 }
 
 interface RecentAudit {
@@ -88,6 +95,13 @@ export async function GET(): Promise<NextResponse> {
       }
     }
 
+    // Esegui analisi gradualità automatica su ogni sample
+    for (const sample of samples) {
+      if (sample.ai_response) {
+        sample.graduality_analysis = checkGraduality(sample.ai_response);
+      }
+    }
+
     // 2. Carica audit recenti (query diretta, RPC non esiste)
     let recentAuditsData: RecentAudit[] = [];
 
@@ -100,6 +114,7 @@ export async function GET(): Promise<NextResponse> {
         score_user_agency,
         score_comprensione,
         score_conoscenza_operativa,
+        score_gradualita,
         score_medio,
         issues,
         created_at
@@ -178,6 +193,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       score_user_agency,
       score_comprensione,
       score_conoscenza_operativa,
+      score_gradualita,
       issues,
       notes,
     } = body;
@@ -191,7 +207,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Verifica che i punteggi siano validi (1-5)
-    const scores = [score_validante, score_user_agency, score_comprensione, score_conoscenza_operativa];
+    const scores = [score_validante, score_user_agency, score_comprensione, score_conoscenza_operativa, score_gradualita];
     for (const score of scores) {
       if (score !== undefined && score !== null) {
         if (typeof score !== 'number' || score < 1 || score > 5) {
@@ -241,6 +257,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         score_user_agency: score_user_agency || null,
         score_comprensione: score_comprensione || null,
         score_conoscenza_operativa: score_conoscenza_operativa || null,
+        score_gradualita: score_gradualita || null,
         issues: issues || [],
         notes: notes || null,
       })

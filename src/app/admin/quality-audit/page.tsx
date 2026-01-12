@@ -4,6 +4,28 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 
+// Tipi per analisi gradualità
+interface GradualityIssue {
+  type: 'unexplained_term' | 'missing_example' | 'sequence_gap' | 'assumed_knowledge';
+  severity: 'low' | 'medium' | 'high';
+  term?: string;
+  context: string;
+  suggestion: string;
+}
+
+interface GradualityAnalysis {
+  score: number;
+  passed: boolean;
+  issues: GradualityIssue[];
+  metrics: {
+    unexplained_terms: number;
+    missing_examples: number;
+    sequence_gaps: number;
+    assumed_knowledge: number;
+  };
+  suggestions: string[];
+}
+
 // Tipi allineati con API
 interface ConversationSample {
   id: string;
@@ -18,6 +40,7 @@ interface ConversationSample {
   session_id?: string;
   user_id?: string;
   tokens_used?: number | null;
+  graduality_analysis?: GradualityAnalysis;
 }
 
 interface AuditRecord {
@@ -153,15 +176,16 @@ export default function QualityAuditPage() {
     score_user_agency: 0,
     score_comprensione: 0,
     score_conoscenza_operativa: 0,
+    score_gradualita: 0,
   });
   const [selectedIssues, setSelectedIssues] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Calcolo score medio
+  // Calcolo score medio (5 criteri)
   const avgScore =
-    Object.values(ratings).filter((r) => r > 0).length === 4
-      ? Object.values(ratings).reduce((a, b) => a + b, 0) / 4
+    Object.values(ratings).filter((r) => r > 0).length === 5
+      ? Object.values(ratings).reduce((a, b) => a + b, 0) / 5
       : 0;
 
   // Tutti i rating compilati?
@@ -218,6 +242,7 @@ export default function QualityAuditPage() {
       score_user_agency: 0,
       score_comprensione: 0,
       score_conoscenza_operativa: 0,
+      score_gradualita: 0,
     });
     setSelectedIssues([]);
     setNotes('');
@@ -640,6 +665,93 @@ export default function QualityAuditPage() {
                   </div>
                 )}
 
+                {/* Analisi Gradualità Automatica */}
+                {currentSample?.graduality_analysis && (
+                  <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                        <span className="text-lg">📊</span>
+                        Analisi Gradualità Automatica
+                      </h3>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        currentSample.graduality_analysis.passed
+                          ? 'bg-green-500/20 text-green-400'
+                          : 'bg-amber-500/20 text-amber-400'
+                      }`}>
+                        {currentSample.graduality_analysis.score}/100
+                      </span>
+                    </div>
+
+                    {/* Metriche */}
+                    <div className="grid grid-cols-4 gap-2 text-xs">
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.graduality_analysis.metrics.unexplained_terms > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                          {currentSample.graduality_analysis.metrics.unexplained_terms}
+                        </div>
+                        <div className="text-slate-500">Termini</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.graduality_analysis.metrics.missing_examples > 0 ? 'text-amber-400' : 'text-green-400'}`}>
+                          {currentSample.graduality_analysis.metrics.missing_examples}
+                        </div>
+                        <div className="text-slate-500">Esempi</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.graduality_analysis.metrics.sequence_gaps > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                          {currentSample.graduality_analysis.metrics.sequence_gaps}
+                        </div>
+                        <div className="text-slate-500">Sequenza</div>
+                      </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={`font-bold ${currentSample.graduality_analysis.metrics.assumed_knowledge > 0 ? 'text-amber-400' : 'text-green-400'}`}>
+                          {currentSample.graduality_analysis.metrics.assumed_knowledge}
+                        </div>
+                        <div className="text-slate-500">Assunti</div>
+                      </div>
+                    </div>
+
+                    {/* Issues */}
+                    {currentSample.graduality_analysis.issues.length > 0 && (
+                      <div className="space-y-1">
+                        {currentSample.graduality_analysis.issues.slice(0, 3).map((issue, idx) => (
+                          <div key={idx} className={`text-xs p-2 rounded ${
+                            issue.severity === 'high' ? 'bg-red-500/10 text-red-300' :
+                            issue.severity === 'medium' ? 'bg-amber-500/10 text-amber-300' :
+                            'bg-blue-500/10 text-blue-300'
+                          }`}>
+                            <span className="font-medium">{issue.term || issue.type}: </span>
+                            {issue.suggestion}
+                          </div>
+                        ))}
+                        {currentSample.graduality_analysis.issues.length > 3 && (
+                          <div className="text-xs text-slate-500 text-center">
+                            + {currentSample.graduality_analysis.issues.length - 3} altri problemi
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Suggerimento auto per rating */}
+                    <div className="text-xs text-slate-400 flex items-center gap-2">
+                      <span>💡</span>
+                      <span>
+                        Suggerimento rating Gradualità: <strong className="text-white">
+                          {Math.max(1, Math.round(currentSample.graduality_analysis.score / 20))}
+                        </strong>/5
+                      </span>
+                      <button
+                        onClick={() => setRatings(r => ({
+                          ...r,
+                          score_gradualita: Math.max(1, Math.round(currentSample.graduality_analysis!.score / 20))
+                        }))}
+                        className="text-amber-400 hover:text-amber-300 underline"
+                      >
+                        Applica
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Form valutazione */}
                 {currentSample && (
                   <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6 space-y-6">
@@ -679,6 +791,14 @@ export default function QualityAuditPage() {
                         value={ratings.score_conoscenza_operativa}
                         onChange={(v) =>
                           setRatings((r) => ({ ...r, score_conoscenza_operativa: v }))
+                        }
+                      />
+                      <RatingStars
+                        label="Gradualità"
+                        description="Sequenza logica? Spiega prima di usare? Costruisce passo dopo passo?"
+                        value={ratings.score_gradualita}
+                        onChange={(v) =>
+                          setRatings((r) => ({ ...r, score_gradualita: v }))
                         }
                       />
                     </div>

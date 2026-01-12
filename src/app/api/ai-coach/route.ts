@@ -12,6 +12,7 @@ import {
   detectReformulation
 } from '@/lib/ai-coach/implicit-signals';
 import { isClosingMessage } from '@/lib/ai-coach/exercise-suggestions';
+import { checkGraduality } from '@/lib/services/graduality-check';
 import { v4 as uuidv4 } from 'uuid';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
@@ -243,6 +244,23 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     // Calcola tempo di risposta
     const responseTimeMs = Date.now() - startTime;
 
+    // === CHECK GRADUALITÀ RISPOSTA ===
+    const gradualityResult = checkGraduality(assistantMessage, {
+      previousMessages: messages,
+      topicsIntroduced: [],
+    });
+
+    // Log gradualità per monitoring
+    if (gradualityResult.score < 70) {
+      console.log('\n⚠️ [GRADUALITY WARNING] ===========================');
+      console.log('📊 Score:', gradualityResult.score + '/100');
+      console.log('🔍 Issues:', gradualityResult.metrics);
+      if (gradualityResult.issues.length > 0) {
+        console.log('📝 Dettagli:', gradualityResult.issues.slice(0, 3).map(i => `${i.type}: ${i.term || i.suggestion}`).join(', '));
+      }
+      console.log('⚠️ [GRADUALITY WARNING] ===========================\n');
+    }
+
     // Rileva se e un alert di sicurezza
     const safetyKeywords = [
       'Telefono Amico',
@@ -284,6 +302,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
             response_time_ms: responseTimeMs,
             model_used: modelUsed,
             api_cost_usd: apiCostUsd,
+            graduality_score: gradualityResult.score,
           })
           .select('id')
           .single();
