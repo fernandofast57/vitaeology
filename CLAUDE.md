@@ -1,7 +1,7 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.1
+**Versione:** 2.2
 **Ultimo aggiornamento:** 12 Gennaio 2026
 **Owner:** Fernando Marongiu
 
@@ -34,6 +34,50 @@ Vitaeology è una **piattaforma SaaS completa** per lo sviluppo della leadership
 ---
 
 ## PRINCIPI FONDAMENTALI (OBBLIGATORI)
+
+### 0. Framework dei 4 Prodotti (Fondamento)
+
+Ogni sistema di produzione genera **4 prodotti fondamentali**, ciascuno governato da **3 fattori**:
+
+#### I 4 Prodotti
+
+| # | Prodotto | Definizione | In Vitaeology |
+|---|----------|-------------|---------------|
+| **P1** | L'istituzione di ciò che produce | Il sistema/macchina che genera | Piattaforma (Challenge, Assessment, Esercizi) |
+| **P2** | Il prodotto generato | L'output creato | Trasformazione utente (risultati, completamenti, consapevolezza) |
+| **P3** | La riparazione di ciò che produce | Manutenzione del sistema | Bug fix, UX improvements, ottimizzazioni |
+| **P4** | La correzione del prodotto generato | Correzione dell'output | **AI Coach Fernando** (supporto on-demand) |
+
+#### I 3 Fattori (per ogni prodotto)
+
+| Fattore | Significato | Domanda Guida |
+|---------|-------------|---------------|
+| **Quantità** | Ammontare | "Quanto ne produciamo?" |
+| **Qualità** | Grado di perfezione | "Quanto è ben fatto?" |
+| **Viability** | Longevità, utilità, desiderabilità | "Quanto dura e serve?" |
+
+**Totale: 4 Prodotti × 3 Fattori = 12 Fattori di Produzione**
+
+#### Regola Critica
+```
+NON confondere i 4 prodotti tra loro.
+Ogni prodotto ha il suo contesto e momento.
+```
+
+#### Applicazione a Vitaeology
+
+```
+P1 (Sistema)     → Costruisce i funnel e le funzionalità
+P2 (Output)      → Consegnato all'utente ai punti STOP
+P3 (Manutenzione)→ Migliora il sistema nel tempo
+P4 (Correzione)  → Disponibile ON-DEMAND, non imposto
+```
+
+**Errore tipico:** Trattare P4 (AI Coach) come P2 (output da consumare), proponendolo ai punti STOP dove l'utente deve ricevere il suo output, non una correzione.
+
+**Soluzione:** AI Coach (P4) vive sulla Dashboard, disponibile quando l'utente SCEGLIE di correggere/migliorare il suo percorso.
+
+---
 
 ### 1. Principio Validante
 ```
