@@ -106,10 +106,10 @@ export default function BumpOfferModal({
   };
 
   // Gestisci rifiuto
-  const handleDecline = () => {
+  const handleDecline = useCallback(() => {
     setIsVisible(false);
     onDecline?.();
-  };
+  }, [onDecline]);
 
   // Chiudi con ESC
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function BumpOfferModal({
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = 'unset';
     };
-  }, [isVisible]);
+  }, [isVisible, handleDecline]);
 
   if (!isVisible) return null;
 

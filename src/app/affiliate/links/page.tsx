@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -39,11 +39,7 @@ export default function AffiliateLinksPage() {
     utm_campaign: '',
   });
 
-  useEffect(() => {
-    fetchLinks();
-  }, []);
-
-  const fetchLinks = async () => {
+  const fetchLinks = useCallback(async () => {
     try {
       const res = await fetch('/api/affiliate/links');
       if (res.status === 401) {
@@ -69,7 +65,11 @@ export default function AffiliateLinksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchLinks();
+  }, [fetchLinks]);
 
   const createLink = async () => {
     setCreating(true);

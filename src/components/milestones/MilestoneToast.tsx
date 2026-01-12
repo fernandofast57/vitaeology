@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Trophy,
   Star,
@@ -79,6 +79,13 @@ export default function MilestoneToast({
   const pathColors = PATH_COLORS[milestone.pathType] || PATH_COLORS.global;
   const IconComponent = ICON_MAP[milestone.icon || 'default'] || ICON_MAP.default;
 
+  const handleClose = useCallback(() => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }, [onClose]);
+
   useEffect(() => {
     // Trigger animazione di entrata
     const showTimer = setTimeout(() => setIsVisible(true), 50);
@@ -92,14 +99,7 @@ export default function MilestoneToast({
       clearTimeout(showTimer);
       clearTimeout(closeTimer);
     };
-  }, [duration]);
-
-  const handleClose = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  };
+  }, [duration, handleClose]);
 
   const positionClasses = {
     'top-right': 'top-4 right-4',

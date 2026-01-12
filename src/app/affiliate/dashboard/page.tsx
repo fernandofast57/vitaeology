@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -79,11 +79,7 @@ export default function AffiliateDashboard() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const res = await fetch('/api/affiliate/stats');
       if (res.status === 401) {
@@ -103,7 +99,11 @@ export default function AffiliateDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const copyLink = () => {
     if (!data) return;
