@@ -14,6 +14,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 import { checkGraduality, GradualityCheckResult } from '@/lib/services/graduality-check';
+import { checkParole, ParoleCheckResult } from '@/lib/services/parole-check';
+import { checkConcretezza, ConcretezzaCheckResult } from '@/lib/services/concretezza-check';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,6 +35,8 @@ interface ConversationSample {
   ai_response: string;
   created_at: string;
   tokens_used: number | null;
+  parole_analysis?: ParoleCheckResult;
+  concretezza_analysis?: ConcretezzaCheckResult;
   graduality_analysis?: GradualityCheckResult;
 }
 
@@ -95,9 +99,11 @@ export async function GET(): Promise<NextResponse> {
       }
     }
 
-    // Esegui analisi gradualità automatica su ogni sample
+    // Esegui analisi COMPRENSIONE (3 difficoltà) su ogni sample
     for (const sample of samples) {
       if (sample.ai_response) {
+        sample.parole_analysis = checkParole(sample.ai_response);
+        sample.concretezza_analysis = checkConcretezza(sample.ai_response);
         sample.graduality_analysis = checkGraduality(sample.ai_response);
       }
     }

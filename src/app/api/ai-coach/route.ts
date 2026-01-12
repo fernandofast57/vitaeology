@@ -13,6 +13,8 @@ import {
 } from '@/lib/ai-coach/implicit-signals';
 import { isClosingMessage } from '@/lib/ai-coach/exercise-suggestions';
 import { checkGraduality } from '@/lib/services/graduality-check';
+import { checkParole } from '@/lib/services/parole-check';
+import { checkConcretezza } from '@/lib/services/concretezza-check';
 import { v4 as uuidv4 } from 'uuid';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
@@ -244,21 +246,45 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     // Calcola tempo di risposta
     const responseTimeMs = Date.now() - startTime;
 
-    // === CHECK GRADUALITÀ RISPOSTA ===
+    // === CHECK COMPRENSIONE (3 DIFFICOLTÀ) ===
+    // Costruisci contesto dai messaggi precedenti
+    const previousContent = messages
+      .filter(m => m.role === 'assistant')
+      .map(m => m.content)
+      .join(' ');
+
+    // 1. PAROLE - Termini tecnici non spiegati
+    const paroleResult = checkParole(assistantMessage, previousContent);
+
+    // 2. CONCRETEZZA - Esempi concreti
+    const concretezzaResult = checkConcretezza(assistantMessage, previousContent);
+
+    // 3. GRADUALITÀ - Sequenza logica
     const gradualityResult = checkGraduality(assistantMessage, {
       previousMessages: messages,
       topicsIntroduced: [],
     });
 
-    // Log gradualità per monitoring
-    if (gradualityResult.score < 70) {
-      console.log('\n⚠️ [GRADUALITY WARNING] ===========================');
-      console.log('📊 Score:', gradualityResult.score + '/100');
-      console.log('🔍 Issues:', gradualityResult.metrics);
-      if (gradualityResult.issues.length > 0) {
-        console.log('📝 Dettagli:', gradualityResult.issues.slice(0, 3).map(i => `${i.type}: ${i.term || i.suggestion}`).join(', '));
+    // Log warning per monitoring (solo se score < 70)
+    if (paroleResult.score < 70 || concretezzaResult.score < 70 || gradualityResult.score < 70) {
+      console.log('\n⚠️ [COMPRENSIONE WARNING] ===========================');
+
+      if (paroleResult.score < 70) {
+        console.log('📖 PAROLE Score:', paroleResult.score + '/100');
+        console.log('   Issues:', paroleResult.issues.slice(0, 2).map(i => i.term).join(', '));
       }
-      console.log('⚠️ [GRADUALITY WARNING] ===========================\n');
+
+      if (concretezzaResult.score < 70) {
+        console.log('🎯 CONCRETEZZA Score:', concretezzaResult.score + '/100');
+        console.log('   Quality:', concretezzaResult.exampleQuality);
+      }
+
+      if (gradualityResult.score < 70) {
+        console.log('📊 GRADUALITÀ Score:', gradualityResult.score + '/100');
+        console.log('   Issues:', gradualityResult.metrics);
+      }
+
+      console.log('⚠️ [COMPRENSIONE WARNING] ===========================\n');
     }
 
     // Rileva se e un alert di sicurezza
@@ -302,6 +328,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
             response_time_ms: responseTimeMs,
             model_used: modelUsed,
             api_cost_usd: apiCostUsd,
+            parole_score: paroleResult.score,
+            concretezza_score: concretezzaResult.score,
             graduality_score: gradualityResult.score,
           })
           .select('id')
