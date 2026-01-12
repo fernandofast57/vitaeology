@@ -1058,9 +1058,25 @@ export default function QualityAuditPage() {
 
                       {/* Separatore 3 Difficoltà Comprensione */}
                       <div className="border-t border-slate-700/50 pt-4">
-                        <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">
-                          3 Difficoltà Comprensione
-                        </p>
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-xs text-slate-500 uppercase tracking-wide">
+                            3 Difficoltà Comprensione
+                          </p>
+                          {/* Applica tutti button */}
+                          {currentSample?.parole_analysis && currentSample?.concretezza_analysis && currentSample?.graduality_analysis && (
+                            <button
+                              onClick={() => setRatings(r => ({
+                                ...r,
+                                score_parole: Math.max(1, Math.round(currentSample.parole_analysis!.score / 20)),
+                                score_concretezza: Math.max(1, Math.round(currentSample.concretezza_analysis!.score / 20)),
+                                score_gradualita: Math.max(1, Math.round(currentSample.graduality_analysis!.score / 20)),
+                              }))}
+                              className="text-xs px-2 py-1 bg-amber-400/20 text-amber-400 hover:bg-amber-400/30 rounded transition-colors"
+                            >
+                              Applica tutti i suggerimenti
+                            </button>
+                          )}
+                        </div>
                       </div>
 
                       <RatingStars
