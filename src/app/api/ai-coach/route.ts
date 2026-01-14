@@ -16,6 +16,7 @@ import { checkGraduality } from '@/lib/services/graduality-check';
 import { checkParole } from '@/lib/services/parole-check';
 import { checkConcretezza } from '@/lib/services/concretezza-check';
 import { v4 as uuidv4 } from 'uuid';
+import { alertAICoachError } from '@/lib/error-alerts';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 
 export const dynamic = 'force-dynamic';
@@ -365,6 +366,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
 
   } catch (error) {
     console.error('Errore AI Coach:', error);
+
+    // Invia alert per errori AI Coach
+    await alertAICoachError(
+      error instanceof Error ? error : new Error('Unknown AI Coach error'),
+      { endpoint: '/api/ai-coach' }
+    );
 
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(

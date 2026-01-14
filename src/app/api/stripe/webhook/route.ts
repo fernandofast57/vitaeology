@@ -5,6 +5,7 @@ import { LIBRO_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-acc
 import { savePendingPurchase } from '@/lib/stripe/process-pending-purchases';
 import { sendBookEmail, sendTrilogyEmail } from '@/lib/email/send-book-email';
 import { sendUpgradeConfirmationEmail, sendSubscriptionCancelledEmail } from '@/lib/email/subscription-emails';
+import { alertPaymentError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 
@@ -670,6 +671,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (error) {
     console.error('Webhook handler error:', error);
+
+    // Invia alert per errori critici di pagamento
+    await alertPaymentError(
+      error instanceof Error ? error : new Error('Unknown payment error'),
+      {
+        endpoint: '/api/stripe/webhook',
+        requestBody: { eventType: event?.type || 'unknown' }
+      }
+    );
+
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }
