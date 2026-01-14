@@ -55,7 +55,16 @@
       "Bash(powershell -Command:*)",
       "Bash(ls:*)",
       "Bash(find:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: resolve ESLint useEffect dependency warnings\n\n- Wrap fetchStats in useCallback (affiliate/dashboard)\n- Wrap fetchLinks in useCallback (affiliate/links)\n- Wrap handleDecline in useCallback (BumpOfferModal)\n- Wrap handleClose in useCallback (MilestoneToast)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(npx tsx test-graduality.ts)",
+      "Bash(npx tsx:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: implement PAROLE and CONCRETEZZA checks (Comprensione principle)\n\nComplete implementation of the 3 difficulties of Comprensione:\n\n1. PAROLE (parole-check.ts):\n   - Detects unexplained technical terms\n   - Flags acronyms without expansion\n   - Identifies excessive anglicisms\n   - 100+ terms in dictionary with alternatives\n\n2. CONCRETEZZA (concretezza-check.ts):\n   - Detects abstract concepts needing examples\n   - Counts examples, metaphors, scenarios\n   - Calculates example quality score\n   - 25+ abstract concepts with example prompts\n\n3. GRADUALITÀ (existing):\n   - Sequence gaps detection\n   - Assumed knowledge warnings\n\nIntegration:\n- AI Coach logs all 3 scores to database\n- Quality audit shows automatic analysis\n- SQL migration adds columns + view\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat(admin): add PAROLE and CONCRETEZZA to Quality Audit UI\n\nComplete Quality Audit UI for all 3 Comprensione difficulties:\n\n1. PAROLE analysis panel:\n   - Technical terms count and unexplained detection\n   - Acronyms and anglicisms tracking\n   - Automatic score 0-100 with \"Applica\" button\n\n2. CONCRETEZZA analysis panel:\n   - Examples, metaphors, scenarios counts\n   - Abstract concepts and quality score\n   - Example quality rating (excellent/good/fair/poor/none)\n\n3. Rating system expanded to 7 scores:\n   - 4 base principles (Validante, Agency, Comprensione, Operativa)\n   - 3 Comprensione details (Parole, Concretezza, Gradualità)\n\n4. API updates:\n   - POST accepts score_parole and score_concretezza\n   - GET returns all 7 scores for recent audits\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "WebFetch(domain:www.vitaeology.com)",
+      "Bash(npm run test:critical:*)",
+      "Bash(npm run changelog:*)"
     ]
   }
 }

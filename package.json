@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test:critical": "npx tsx scripts/test-critical.ts",
-    "predeploy": "npm run test:critical && npm run build"
+    "predeploy": "npm run test:critical && npm run build",
+    "changelog": "npx tsx scripts/update-changelog.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
