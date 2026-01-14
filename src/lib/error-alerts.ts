@@ -26,6 +26,10 @@ interface ErrorContext {
   requestBody?: unknown;
   headers?: Record<string, string>;
   stack?: string;
+  // Monitoring context
+  metric?: string;
+  value?: number | null;
+  threshold?: number;
 }
 
 interface ErrorAlert {

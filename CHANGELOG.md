@@ -1,7 +1,7 @@
 # Changelog Vitaeology
 
 > Registro automatico delle modifiche al progetto.
-> Ultimo aggiornamento: 14/01/2026, 16:48:45
+> Ultimo aggiornamento: 14/01/2026, 17:12:58
 
 ---
 
@@ -9,6 +9,8 @@
 
 ### ✨ Nuova Funzionalità
 
+- implement 4P×3F adaptive monitoring system (`b807379`)
+- add automatic changelog generation script (`0f8ac52`)
 - add automatic error alerts via email (`e67ef41`)
 - add automated pre-deploy critical tests (`819b000`)
 - **admin**: add Health Check Dashboard (`00fdc20`)
@@ -223,8 +225,6 @@
 ### 🐛 Correzione Bug
 
 - italiano corretto batch 4 - sezione 1.8 (`3999c0e`)
-- italiano corretto batch 3 (`32fdd5b`)
-- italiano corretto batch 2 (`9303a7b`)
 
 ---
 
@@ -232,8 +232,8 @@
 ## 📊 Statistiche
 
 - **Totale commit**: 100
-- **Nuove funzionalità**: 34
-- **Bug fix**: 35
+- **Nuove funzionalità**: 36
+- **Bug fix**: 33
 - **Refactoring**: 4
 
 ---

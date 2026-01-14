@@ -170,7 +170,7 @@ export async function calculateP2Metrics(
   if (activeUsers7d && activeUsers7d.length > 0) {
     const uniqueUsers7d = new Set(activeUsers7d.map(u => u.user_id));
     const uniqueUsersToday = new Set(returningUsers?.map(u => u.user_id) || []);
-    const returningCount = [...uniqueUsersToday].filter(u => uniqueUsers7d.has(u)).length;
+    const returningCount = Array.from(uniqueUsersToday).filter(u => uniqueUsers7d.has(u)).length;
     retention = uniqueUsers7d.size > 0 ? (returningCount / uniqueUsers7d.size) * 100 : 0;
   }
 
