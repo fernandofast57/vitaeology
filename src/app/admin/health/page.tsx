@@ -222,7 +222,14 @@ export default function HealthDashboardPage() {
         {/* Quick Actions */}
         <div className="mt-8 bg-slate-100 rounded-xl p-6">
           <h2 className="font-bold text-slate-900 mb-4">Azioni Rapide</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <Link
+              href="/admin/monitoring"
+              className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg text-center hover:shadow-md transition"
+            >
+              <div className="text-2xl mb-2">📡</div>
+              <div className="text-sm text-blue-700 font-medium">4P×3F</div>
+            </Link>
             <Link
               href="/admin/users"
               className="p-4 bg-white rounded-lg text-center hover:shadow-md transition"

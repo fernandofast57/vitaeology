@@ -1,6 +1,10 @@
 {
   "crons": [
     {
+      "path": "/api/cron/monitoring",
+      "schedule": "*/2 * * * *"
+    },
+    {
       "path": "/api/ai-coach/cron/combined",
       "schedule": "0 23 * * *"
     },
