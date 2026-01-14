@@ -15,8 +15,8 @@ import { CHALLENGE_VIDEOS } from '@/config/videos';
 // Varianti per A/B Testing - Aggiornate da LANDING_CHALLENGE_3_MICROFELICITA.md
 const VARIANTS = {
   A: {
-    headline: "Il Benessere che Cerchi Ti Sta Già Attraversando",
-    subheadline: "In 7 giorni impari a notare le piccole cose positive che succedono ogni giorno — e che il tuo cervello ignora.",
+    headline: "Oggi Ti Sono Successe 50 Cose Piacevoli. Ne Hai Notate 3.",
+    subheadline: "In 7 giorni impari a vedere quello che già c'è — con il metodo R.A.D.A.R.",
     cta: "Inizia la Challenge Gratuita",
     hook: "Gratis. 7 email in 7 giorni. Nessun impegno."
   },
