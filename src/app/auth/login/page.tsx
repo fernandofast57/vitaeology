@@ -11,6 +11,9 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false)
+  const [resendLoading, setResendLoading] = useState(false)
+  const [resendSuccess, setResendSuccess] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
@@ -24,6 +27,8 @@ function LoginForm() {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setEmailNotConfirmed(false)
+    setResendSuccess(false)
 
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
@@ -35,7 +40,8 @@ function LoginForm() {
         if (signInError.message.includes('Invalid login credentials')) {
           setError('Email o password non corretti')
         } else if (signInError.message.includes('Email not confirmed')) {
-          setError('Per favore conferma la tua email prima di accedere')
+          setEmailNotConfirmed(true)
+          setError('Email non ancora confermata. Controlla la tua casella di posta (anche spam).')
         } else {
           setError(signInError.message)
         }
@@ -50,6 +56,37 @@ function LoginForm() {
       setError('Si è verificato un errore. Riprova.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleResendConfirmation = async () => {
+    if (!email) {
+      setError('Inserisci la tua email per ricevere il link di conferma')
+      return
+    }
+
+    setResendLoading(true)
+    setError('')
+
+    try {
+      const { error: resendError } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        }
+      })
+
+      if (resendError) {
+        setError('Errore durante l\'invio. Riprova tra qualche minuto.')
+      } else {
+        setResendSuccess(true)
+        setEmailNotConfirmed(false)
+      }
+    } catch (err) {
+      setError('Si è verificato un errore. Riprova.')
+    } finally {
+      setResendLoading(false)
     }
   }
 
@@ -71,9 +108,29 @@ function LoginForm() {
         </div>
 
         <form onSubmit={handleLogin} className="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-lg">
+          {/* Success message for resend */}
+          {resendSuccess && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+              <p className="font-medium">Email di conferma inviata!</p>
+              <p className="mt-1">Controlla la tua casella di posta (anche la cartella spam).</p>
+            </div>
+          )}
+
+          {/* Error message */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
+              {/* Resend confirmation button */}
+              {emailNotConfirmed && (
+                <button
+                  type="button"
+                  onClick={handleResendConfirmation}
+                  disabled={resendLoading}
+                  className="mt-3 w-full py-2 px-4 bg-red-100 hover:bg-red-200 text-red-800 font-medium rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {resendLoading ? 'Invio in corso...' : 'Reinvia email di conferma'}
+                </button>
+              )}
             </div>
           )}
 
