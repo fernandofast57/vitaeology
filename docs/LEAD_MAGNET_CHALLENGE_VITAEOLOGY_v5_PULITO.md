@@ -706,7 +706,7 @@ Questa settimana impari ad attivarla quando serve — non solo quando capita per
 
 **DOMANI**
 
-Vedremo il primo strumento che hai già usato senza saperlo: la capacità di vedere schemi che si ripetono.
+Vedremo il primo modo per attivare la tua capacità risolutiva: vedere schemi che si ripetono.
 
 ---
 
