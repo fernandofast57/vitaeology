@@ -605,6 +605,59 @@ Leggi il testo ad alta voce e chiediti:
 
 ---
 
+# PARTE 9: SANDWICH DI MISTERO
+
+## 9.1 PRINCIPIO FONDAMENTALE
+
+Il "Sandwich di Mistero" è la struttura comunicativa che tiene l'utente incollato e lo porta all'azione.
+
+**Metafora:** Due fette di pane (landing e utente), il ripieno è il mistero — qualcosa che l'utente sente appartenergli ma non riesce a nominare.
+
+## 9.2 STRUTTURA
+
+| Elemento | Funzione | Caratteristica |
+|----------|----------|----------------|
+| **Pane sopra** | Frase che evoca sensazione riconoscibile | Non nomina, solo evoca |
+| **Ripieno** | Il mistero — qualcosa di TUO sepolto | Spazio vuoto, silenzio, domande |
+| **Pane sotto** | L'utente stesso | Si riconosce, vuole dissotterrare |
+
+## 9.3 ORIGINE FILOSOFICA
+
+Basato sul principio di **recupero vs acquisizione** (Trilogia Hubbard): l'utente non ha perso nulla, ha solo dimenticato di saper già fare. L'auto-determinismo è sepolto sotto l'amnesia, non assente.
+
+Il mistero non è "cosa devi imparare" ma **"cosa hai dimenticato di saper già fare"**.
+
+## 9.4 REGOLE
+
+1. **Mai nominare esplicitamente** cosa manca
+2. **Tono quotidiano**, non epico né aulico
+3. L'utente deve pensare **"sì, è vero"** senza sapere perché
+4. **L'unica via per chiudere il loop** è l'azione (click)
+
+## 9.5 ESEMPI
+
+### ❌ SBAGLIATO (nomina, epico, aulico):
+- "La Verità Che Nessuno Ti Dice"
+- "Scopri il segreto nascosto dentro di te"
+- "C'è un tesoro sepolto nella tua anima"
+
+### ✅ CORRETTO (evoca, quotidiano):
+- "L'hai già fatto. Non te lo ricordi."
+- "Sai già come si fa. Solo che non ci pensi."
+- "Lo senti. È lì. Non riesci a toccarlo."
+
+## 9.6 APPLICAZIONE
+
+Usare il Sandwich di Mistero in:
+- Titoli sezioni homepage e landing
+- Hook video
+- Oggetti email
+- Aperture Challenge
+
+**Test:** Se l'utente può rispondere "sì, è vero" senza sapere a cosa sta dicendo sì → funziona.
+
+---
+
 # APPENDICE: RIFERIMENTI RAPIDI
 
 ## A. Pattern CTRL+F per Errori
