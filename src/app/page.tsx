@@ -145,14 +145,10 @@ export default function HomePage() {
       {/* ================================================================== */}
       <section id="percorsi" className="py-20 lg:py-28 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-4">
-              Tre Sentieri, Un Viaggio
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600">
+              Qual è la tua sfida oggi?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Ogni sentiero inizia con 7 giorni di esplorazione gratuita.
-              Scegli quello che risuona con dove ti trovi ora.
-            </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
