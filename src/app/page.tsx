@@ -27,7 +27,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo-horizontal.svg"
+                src="/logo-horizontal.png"
                 alt="Vitaeology"
                 width={180}
                 height={28}
