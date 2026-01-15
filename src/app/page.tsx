@@ -78,10 +78,10 @@ export default function HomePage() {
                   Sai già come si fa.
                 </p>
                 <p className="text-white/80">
-                  Solo che adesso non funziona più come prima.
+                  Solo che adesso è come dimenticato.
                 </p>
                 <p className="text-white font-medium">
-                  È ancora lì. Lo senti.
+                  È ancora lì. Lo senti?
                 </p>
               </div>
 
