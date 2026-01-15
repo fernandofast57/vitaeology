@@ -295,7 +295,7 @@ function OstacoliLandingContent() {
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
               Avevo un&apos;idea che mi sembrava geniale:
               una tessera che dava accesso a sconti esclusivi
-              nei ristoranti di Torino.
+              nei ristoranti di Milano.
             </p>
 
             <p className="text-slate-300 text-lg leading-relaxed mb-6">

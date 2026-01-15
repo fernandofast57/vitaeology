@@ -202,7 +202,7 @@ function LeadershipLandingContent() {
             Controlla la tua email. Il Giorno 1 sta arrivando.
           </p>
           <p className="text-amber-400 text-sm mb-6">
-            Ti racconterò di quella cabina telefonica a Torino — e di cosa ho capito 40 anni dopo.
+            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 40 anni dopo.
           </p>
           <Link
             href="/test"
@@ -249,7 +249,7 @@ function LeadershipLandingContent() {
           {/* Sottotitolo - Hook Storia */}
           <div className="max-w-2xl mx-auto mb-8">
             <p className="text-xl md:text-2xl text-slate-300 mb-4">
-              Febbraio 1985. Una cabina telefonica a Torino.<br />
+              Febbraio 1985. Una cabina telefonica a Milano.<br />
               L&apos;ultimo gettone. E la scoperta che ha cambiato tutto.
             </p>
             <p className="text-lg text-slate-400">
@@ -298,7 +298,7 @@ function LeadershipLandingContent() {
             </p>
 
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Quel giorno ero in una cabina telefonica a Torino,
+              Quel giorno ero in una cabina telefonica a Milano,
               con l&apos;ultimo gettone in mano.
             </p>
 
@@ -425,7 +425,7 @@ function LeadershipLandingContent() {
             <p className="text-slate-300 text-lg leading-relaxed">
               Questa non è debolezza.
               È la stessa cosa che mi ha portato
-              dalla cabina telefonica di Torino
+              dalla cabina telefonica di Milano
               a fondare aziende per 50 anni.
             </p>
             <p className="text-amber-400 text-xl font-medium text-center py-4">
