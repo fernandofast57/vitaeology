@@ -62,8 +62,8 @@ const PATH_TO_ASSESSMENT_TABLE: Record<PathType, string> = {
 // Reasoning templates per caratteristica
 const REASONING_TEMPLATES: Record<string, string> = {
   default: 'Questo esercizio ti aiuta a sviluppare {characteristic} perché ti guida in una pratica mirata che rafforza questa capacità.',
-  low_score: 'Questo esercizio è stato selezionato perché {characteristic} è un\'area dove puoi crescere molto. La pratica costante ti permetterà di espandere questa capacità.',
-  medium_score: 'Hai già buone basi in {characteristic}. Questo esercizio ti aiuterà a consolidare e approfondire ulteriormente.',
+  low_score: 'Questo esercizio è stato selezionato perché {characteristic} è un\'area dove puoi crescere molto. Con la pratica costante puoi espandere questa capacità.',
+  medium_score: 'Hai già buone basi in {characteristic}. Con questo esercizio puoi consolidare e approfondire ulteriormente.',
   high_score: 'Eccelli già in {characteristic}! Questo esercizio ti sfiderà a portare questa capacità al livello successivo.',
 };
 

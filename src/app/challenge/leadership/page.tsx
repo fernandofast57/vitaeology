@@ -451,7 +451,7 @@ function LeadershipLandingContent() {
                 <div className="text-3xl mb-4">1</div>
                 <h4 className="text-amber-400 font-bold mb-2">&quot;FUNZIONA MA NON SO PERCHÉ&quot;</h4>
                 <p className="text-slate-400 text-sm">
-                  Hai avuto successi, ma non riesci a replicarli.
+                  Hai avuto successi, ma non sai ancora come replicarli.
                   Ogni volta sembra dipendere dalla fortuna.
                 </p>
               </div>
@@ -548,7 +548,7 @@ function LeadershipLandingContent() {
           <div className="space-y-4">
             {[
               'Guidi un\'azienda, un team, o anche solo te stesso — e senti che qualcosa potrebbe funzionare meglio',
-              'Hai avuto successi ma non riesci a capire cosa li ha causati (e come ripeterli)',
+              'Hai avuto successi ma non hai ancora riconosciuto cosa li ha causati (e come ripeterli)',
               'Ti ritrovi a "fare tutto tu" anche quando vorresti delegare',
               'Senti che le persone ti capiscono ma poi non ti seguono',
               'Preferisci capire PERCHÉ qualcosa funziona invece di copiare formule'

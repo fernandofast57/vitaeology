@@ -53,7 +53,7 @@ export const LIBRI: Record<string, Libro> = {
     cosaImparerai: [
       'Come passare da manager a leader autentico',
       'Riconoscere e sviluppare le tue caratteristiche dominanti',
-      'Trasformare i punti deboli in opportunità di crescita',
+      'Riconoscere risorse nascoste nelle tue sfide',
       'Costruire un team che segue con autodeterminazione, non per obbligo',
       'Applicare la leadership nel contesto imprenditoriale italiano',
     ],

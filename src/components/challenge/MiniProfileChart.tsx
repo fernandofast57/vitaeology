@@ -65,7 +65,7 @@ function getInterpretiveText(dimension: string, percentage: number): string {
   } else if (percentage >= 40) {
     return `La tua capacità di ${label} è presente — la usi in alcune situazioni, specialmente quando ti fermi a riflettere.`;
   } else {
-    return `La tua capacità di ${label} è presente — la usi in modo occasionale. Il percorso ti aiuterà a renderla più intenzionale.`;
+    return `La tua capacità di ${label} è presente — la usi in modo occasionale. Con il percorso puoi renderla più intenzionale.`;
   }
 }
 
@@ -74,7 +74,7 @@ function getMainMessage(strongestDimension: string, challengeType: string): stri
   const label = DIMENSION_LABELS[strongestDimension] || strongestDimension;
   const challengeName = CHALLENGE_NAMES[challengeType] || challengeType;
 
-  return `Le tue risposte mostrano che la capacità di ${label} è particolarmente attiva in te. Questo è un punto di forza naturale che ${challengeName} ti aiuterà a usare in modo ancora più intenzionale.`;
+  return `Le tue risposte mostrano che la capacità di ${label} è particolarmente attiva in te. Questo è un punto di forza naturale che puoi usare in modo ancora più intenzionale con ${challengeName}.`;
 }
 
 export default function MiniProfileChart({ profile }: MiniProfileChartProps) {
@@ -178,7 +178,7 @@ export default function MiniProfileChart({ profile }: MiniProfileChartProps) {
       {/* Footer motivazionale */}
       <div className="text-center pt-2">
         <p className="text-sm text-gray-600">
-          Queste capacità sono già tue — il percorso completo ti aiuterà a usarle in modo più intenzionale.
+          Queste capacità sono già tue — con il percorso completo puoi usarle in modo più intenzionale.
         </p>
       </div>
     </div>
