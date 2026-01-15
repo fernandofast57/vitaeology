@@ -10,7 +10,7 @@
 // ============================================================================
 
 export type ChallengeType = 'leadership' | 'ostacoli' | 'microfelicita';
-export type Variant = 'A' | 'B' | 'C';
+export type Variant = 'A' | 'B' | 'C' | 'epiphany';
 export type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
 export type EventType =

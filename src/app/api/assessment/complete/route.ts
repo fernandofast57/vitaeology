@@ -5,6 +5,7 @@ import {
   getInProgressAssessment,
   completeAssessment,
 } from '@/lib/supabase/assessment';
+import { onAssessmentCompleted } from '@/lib/awareness';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +33,11 @@ export async function POST() {
 
     // Completa e calcola risultati
     const results = await completeAssessment(supabase, session.id);
+
+    // Aggiorna awareness level
+    onAssessmentCompleted(user.id).catch(err =>
+      console.error('[Awareness] Assessment completion update error:', err)
+    );
 
     return NextResponse.json({
       success: true,

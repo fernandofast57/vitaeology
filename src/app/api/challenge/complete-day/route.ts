@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
+import { onChallengeDayCompleted } from '@/lib/awareness';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -114,6 +115,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Errore nel salvataggio del completamento' },
         { status: 500 }
+      );
+    }
+
+    // Aggiorna awareness level per giorno completato (non giorno 7 che ha hook separato)
+    if (dayNumber < 7) {
+      onChallengeDayCompleted(email, dayNumber).catch(err =>
+        console.error('[Awareness] Day completion update error:', err)
       );
     }
 
@@ -235,6 +243,11 @@ export async function POST(request: NextRequest) {
         },
         created_at: new Date().toISOString()
       });
+
+      // Aggiorna awareness level (challenge completata)
+      onChallengeDayCompleted(email, 7).catch(err =>
+        console.error('[Awareness] Challenge completion update error:', err)
+      );
 
       // Concedi accesso all'assessment corrispondente
       const { data: profile } = await supabase

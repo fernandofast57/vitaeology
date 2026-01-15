@@ -16,7 +16,7 @@ export const runtime = 'nodejs';
 // ============================================================================
 
 const VALID_CHALLENGE_TYPES = ['leadership', 'ostacoli', 'microfelicita'] as const;
-const VALID_VARIANTS = ['A', 'B', 'C'] as const;
+const VALID_VARIANTS = ['A', 'B', 'C', 'epiphany'] as const;
 const VALID_DEVICE_TYPES = ['mobile', 'tablet', 'desktop'] as const;
 const VALID_EVENT_TYPES = [
   'page_view',

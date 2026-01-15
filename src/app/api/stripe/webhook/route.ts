@@ -6,6 +6,7 @@ import { savePendingPurchase } from '@/lib/stripe/process-pending-purchases';
 import { sendBookEmail, sendTrilogyEmail } from '@/lib/email/send-book-email';
 import { sendUpgradeConfirmationEmail, sendSubscriptionCancelledEmail } from '@/lib/email/subscription-emails';
 import { alertPaymentError } from '@/lib/error-alerts';
+import { onSubscriptionChanged } from '@/lib/awareness';
 
 export const dynamic = 'force-dynamic';
 
@@ -381,6 +382,11 @@ export async function POST(request: NextRequest) {
               });
               console.log(`✅ Email upgrade inviata a ${customerEmail} (piano: ${tierSlug})`);
             }
+
+            // Aggiorna awareness level
+            onSubscriptionChanged(userId).catch(err =>
+              console.error('[Awareness] Subscription change update error:', err)
+            );
           }
         }
         break;
@@ -418,6 +424,13 @@ export async function POST(request: NextRequest) {
             .from('profiles')
             .update(updateData)
             .eq('id', profile.id);
+
+          // Aggiorna awareness level se tier è cambiato
+          if (tierSlug && tierSlug !== profile.subscription_tier) {
+            onSubscriptionChanged(profile.id).catch(err =>
+              console.error('[Awareness] Subscription update error:', err)
+            );
+          }
         }
         break;
       }
@@ -469,6 +482,11 @@ export async function POST(request: NextRequest) {
             });
             console.log(`✅ Email cancellazione inviata a ${profile.email}`);
           }
+
+          // Aggiorna awareness level
+          onSubscriptionChanged(profile.id).catch(err =>
+            console.error('[Awareness] Subscription cancel update error:', err)
+          );
         }
         break;
       }

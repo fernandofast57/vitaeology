@@ -1,7 +1,99 @@
 import { UserContext } from './types';
 import { getExerciseListForPrompt } from './exercise-suggestions';
+import { getZoneForLevel, AWARENESS_ZONES } from '@/lib/awareness/types';
 
 export type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+
+/**
+ * Genera istruzioni specifiche per Fernando basate sul livello di consapevolezza.
+ * Questo adatta l'approccio di Fernando alla fase del percorso dell'utente.
+ */
+export function getAwarenessInstructions(level: number): string {
+  const zone = getZoneForLevel(level);
+  const zoneInfo = AWARENESS_ZONES[zone];
+
+  const instructions: Record<typeof zone, string> = {
+    sotto_necessita: `
+---
+FASE UTENTE: ENTRY POINT (Livello ${level}: Rovina)
+---
+
+L'utente percepisce una "rovina" nella sua efficacia - qualcosa che compromette
+la sua viability, quality o quantity come leader/risolutore/nella microfelicità.
+È arrivato perché sente risonanza con la Challenge gratuita.
+
+APPROCCIO CONSIGLIATO:
+- Linguaggio MOLTO rassicurante e validante
+- Valida la sua percezione di difficoltà (non minimizzare)
+- Non usare termini come "problema" o "deficit"
+- Focus su piccoli passi concreti
+- Mostra che la Challenge può aiutare
+- Domanda chiave: "Cosa senti che sta 'rovinando' la tua efficacia?"`,
+
+    transizione: `
+---
+FASE UTENTE: TRANSIZIONE (Livello ${level}: ${zoneInfo.name})
+---
+
+L'utente sta attraversando la Challenge.
+Sta passando da "rovina" (-7) verso "aiuto" (-1).
+Sta iniziando a vedere possibilità di soluzione.
+
+APPROCCIO CONSIGLIATO:
+- Rafforza i progressi già fatti nella Challenge
+- Mostra che il percorso sta funzionando
+- Costruisci fiducia nel processo
+- Se vicino al completamento, guida verso l'Assessment
+- Domanda chiave: "Cosa hai scoperto di te in questi giorni?"`,
+
+    riconoscimento: `
+---
+FASE UTENTE: RICONOSCIMENTO (Livello ${level}: ${zoneInfo.name})
+---
+
+L'utente ha completato l'Assessment o sta esplorando.
+È nella fase di auto-riconoscimento delle proprie capacità.
+
+APPROCCIO CONSIGLIATO:
+- Usa i risultati dell'Assessment per valorizzare i punti di forza
+- Guida verso esercizi specifici per le sue aree
+- Incoraggia il dialogo regolare
+- Celebra i primi riconoscimenti
+- Domanda chiave: "Dove hai già visto questa capacità in azione?"`,
+
+    trasformazione: `
+---
+FASE UTENTE: TRASFORMAZIONE (Livello ${level}: ${zoneInfo.name})
+---
+
+L'utente sta praticando attivamente gli esercizi.
+È in una fase di trasformazione concreta.
+
+APPROCCIO CONSIGLIATO:
+- Sfidalo con domande più profonde
+- Collega esercizi diversi tra loro
+- Cerca pattern di crescita
+- Puoi essere più diretto nelle osservazioni
+- Domanda chiave: "Come sta cambiando il tuo modo di vedere questa situazione?"`,
+
+    padronanza: `
+---
+FASE UTENTE: PADRONANZA (Livello ${level}: ${zoneInfo.name})
+---
+
+L'utente ha completato molti esercizi ed è avanzato nel percorso.
+Potrebbe essere Mentor o Mastermind.
+
+APPROCCIO CONSIGLIATO:
+- Trattalo come un pari in esplorazione
+- Esplora insieme nuove applicazioni
+- Puoi usare terminologia più avanzata
+- Incoraggia a condividere con altri
+- Domanda chiave: "Cosa stai scoprendo che potrebbe aiutare altri?"`,
+  };
+
+  return instructions[zone];
+}
 
 /**
  * Restituisce il contesto specifico per ogni percorso.
@@ -106,7 +198,7 @@ FOCUS CONVERSAZIONE:
   return contexts[pathType] || contexts.leadership;
 }
 
-export function buildSystemPrompt(context?: UserContext, userPath?: string): string {
+export function buildSystemPrompt(context?: UserContext, userPath?: string, awarenessLevel?: number): string {
   let prompt = `IMPORTANTE: Quando l'utente chiede ESPLICITAMENTE di spiegare un framework, metodo o concetto (R.A.D.A.R., 3 Filtri, microfelicità, Bersaglio/Sorgente, ecc.), PRIMA spiega il concetto usando le informazioni dal contesto RAG, POI fai domande di coaching. Non invertire mai questo ordine.
 
 Sei Fernando Marongiu, autore della trilogia "Rivoluzione Aurea" e fondatore di Vitaeology.
@@ -330,6 +422,11 @@ Poi aspetti. Non cambi argomento. Non torni al coaching.`;
   // Aggiungi contesto specifico per percorso
   const currentPath = (userPath || 'leadership') as PathType;
   prompt += getPathSpecificContext(currentPath);
+
+  // Aggiungi istruzioni basate sul livello di consapevolezza
+  if (awarenessLevel !== undefined) {
+    prompt += getAwarenessInstructions(awarenessLevel);
+  }
 
   // Contesto utente
   if (context) {

@@ -18,6 +18,7 @@ import { checkConcretezza } from '@/lib/services/concretezza-check';
 import { v4 as uuidv4 } from 'uuid';
 import { alertAICoachError } from '@/lib/error-alerts';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
+import { getCurrentAwarenessLevel, onAIConversation } from '@/lib/awareness';
 
 export const dynamic = 'force-dynamic';
 
@@ -167,6 +168,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
 
     // Carica memoria utente per personalizzazione
     let memoryContext = '';
+    let awarenessLevel: number | undefined;
     if (userContext?.userId) {
       let userMemory = await getUserMemory(userContext.userId);
       if (!userMemory) {
@@ -176,6 +178,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       memoryContext = generateMemoryContext(userMemory);
       if (memoryContext) {
         console.log('🧠 Memoria utente caricata');
+      }
+
+      // Carica livello awareness per adattamento Fernando
+      const awarenessData = await getCurrentAwarenessLevel(userContext.userId);
+      if (awarenessData) {
+        awarenessLevel = awarenessData.level;
+        console.log(`🎯 Awareness Level: ${awarenessLevel}`);
       }
     }
 
@@ -227,8 +236,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       closingHint = '\n\n[SISTEMA: L\'utente sta salutando. Applica le istruzioni di WRAP-UP CONVERSAZIONE: riepiloga brevemente il tema discusso, suggerisci un\'azione concreta per le prossime 24-48 ore, e se pertinente menziona un esercizio dalla lista disponibile.]';
     }
 
-    // Costruisci system prompt con contesto RAG, memoria utente, correzioni, RAG correttivi e raccomandazioni
-    const systemPrompt = buildSystemPrompt(userContext, currentPath || 'leadership') + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext + closingHint;
+    // Costruisci system prompt con contesto RAG, memoria utente, correzioni, RAG correttivi, raccomandazioni e awareness
+    const systemPrompt = buildSystemPrompt(userContext, currentPath || 'leadership', awarenessLevel) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext + closingHint;
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
@@ -341,6 +350,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         } else {
           conversationId = convData?.id;
           console.log('✅ Conversazione salvata:', conversationId);
+
+          // Aggiorna awareness level in background (prima conversazione o rating)
+          const isFirstConversation = messages.filter((m: Message) => m.role === 'assistant').length === 0;
+          onAIConversation(userContext.userId, isFirstConversation).catch(err =>
+            console.error('[Awareness] Update error:', err)
+          );
         }
 
         // Incrementa contatore utilizzo giornaliero AI Coach

@@ -10,6 +10,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { completeExerciseWithCycle } from '@/lib/action-cycles';
 import { getNextExercise } from '@/lib/ai-coach/adaptive-path';
 import { checkAndAwardMilestones, MilestoneAwardResult } from '@/lib/milestones';
+import { onExerciseCompleted } from '@/lib/awareness';
 
 export const dynamic = 'force-dynamic';
 
@@ -314,6 +315,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       // Errore non blocca il completamento
       console.warn('Errore verifica milestone:', milestoneError);
     }
+
+    // 5. Aggiorna awareness level
+    onExerciseCompleted(userId).catch(err =>
+      console.error('[Awareness] Exercise completion update error:', err)
+    );
 
     return NextResponse.json({
       success: true,
