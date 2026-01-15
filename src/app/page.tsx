@@ -66,22 +66,22 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Colonna Sinistra - Testo */}
             <div className="text-center lg:text-left">
-              {/* Headline */}
+              {/* Headline - Sandwich di Mistero */}
               <h1 className="text-4xl sm:text-5xl lg:text-5xl font-display font-bold leading-tight mb-8">
-                Dare Forma all&apos;Azione
+                L&apos;hai già fatto.<br/>
+                <span className="text-gold-400">Non te lo ricordi.</span>
               </h1>
 
-              {/* Copy */}
+              {/* Copy - Evoca, non nomina */}
               <div className="space-y-4 text-lg sm:text-xl text-gray-200 leading-relaxed mb-10">
                 <p>
-                  Il mondo può sembrare ostile. Le sfide, schiaccianti.
+                  Sai già come si fa.
+                </p>
+                <p className="text-white/80">
+                  Solo che adesso non funziona più come prima.
                 </p>
                 <p className="text-white font-medium">
-                  Ma il pericolo non è una barriera al successo.<br/>
-                  <span className="text-gold-400">È un catalizzatore per la crescita.</span>
-                </p>
-                <p>
-                  Hai il potere di definire il tuo futuro.
+                  È ancora lì. Lo senti.
                 </p>
               </div>
 
@@ -160,11 +160,9 @@ export default function HomePage() {
                 <h3 className="text-2xl font-bold text-petrol-600 mb-2">
                   Leadership Autentica
                 </h3>
-                <p className="text-[#D4AF37] font-medium text-sm mb-4">
-                  IL SENTIERO DEL RICONOSCIMENTO
-                </p>
                 <p className="text-gray-600 mb-6 min-h-[72px]">
-                  Il tuo team non ti segue davvero? Fai tutto tu e quando deleghi le cose non funzionano?
+                  Sai guidare. L&apos;hai già fatto.<br/>
+                  Solo che adesso non funziona.
                 </p>
                 <Link
                   href="/challenge/leadership"
@@ -183,11 +181,9 @@ export default function HomePage() {
                 <h3 className="text-2xl font-bold text-petrol-600 mb-2">
                   Oltre gli Ostacoli
                 </h3>
-                <p className="text-[#22C55E] font-medium text-sm mb-4">
-                  IL SENTIERO DELLA RESILIENZA
-                </p>
                 <p className="text-gray-600 mb-6 min-h-[72px]">
-                  I problemi ti bloccano? Passi più tempo a preoccuparti che a risolverli?
+                  Hai già risolto problemi peggiori.<br/>
+                  Non te lo ricordi.
                 </p>
                 <Link
                   href="/challenge/ostacoli"
@@ -206,11 +202,9 @@ export default function HomePage() {
                 <h3 className="text-2xl font-bold text-petrol-600 mb-2">
                   Microfelicità
                 </h3>
-                <p className="text-[#8B5CF6] font-medium text-sm mb-4">
-                  IL SENTIERO DEL BENESSERE
-                </p>
                 <p className="text-gray-600 mb-6 min-h-[72px]">
-                  Corri sempre ma non sai più verso cosa? Ottieni risultati ma non ti senti soddisfatto?
+                  C&apos;era un momento in cui sapevi essere felice.<br/>
+                  È ancora lì.
                 </p>
                 <Link
                   href="/challenge/microfelicita"
