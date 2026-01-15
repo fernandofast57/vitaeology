@@ -62,22 +62,20 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* SEZIONE 1: HERO - IL MANIFESTO */}
       {/* ================================================================== */}
-      <section className="relative bg-gradient-to-b from-petrol-600 via-petrol-700 to-petrol-800 text-white overflow-hidden">
+      <section
+        className="relative bg-gradient-to-b from-petrol-600 via-petrol-700 to-petrol-800 text-white overflow-hidden"
+        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0 100%)' }}
+      >
         {/* Background texture */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-500 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold-400 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 pb-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Colonna Sinistra - Testo */}
             <div className="text-center lg:text-left">
-              {/* Pre-headline */}
-              <p className="text-gold-400 text-lg font-medium mb-6 tracking-wide">
-                VITAEOLOGY
-              </p>
-
               {/* Headline - Il Manifesto */}
               <h1 className="text-4xl sm:text-5xl lg:text-5xl font-display font-bold leading-tight mb-8">
                 Dare Forma all&apos;Azione
@@ -152,7 +150,7 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* SEZIONE 2: LA VERITÀ - IL RIBALTAMENTO */}
       {/* ================================================================== */}
-      <section className="py-20 lg:py-28 bg-gray-50">
+      <section className="pt-8 pb-20 lg:pt-12 lg:pb-28 bg-gray-50 -mt-16 lg:-mt-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
