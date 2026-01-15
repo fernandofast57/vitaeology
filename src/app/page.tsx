@@ -244,9 +244,8 @@ export default function HomePage() {
                 alt="Vitaeology"
                 width={150}
                 height={22}
-                className="h-6 w-auto mb-2"
+                className="h-6 w-auto"
               />
-              <p className="text-sm">Dare Forma all&apos;Azione</p>
             </div>
 
             <div className="flex gap-8 text-sm">
