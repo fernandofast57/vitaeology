@@ -496,7 +496,7 @@ function LeadershipLandingContent() {
             <br /><br />
             Ti mostrerò come già <strong className="text-white">SEI</strong> —
             quando funzioni al meglio.
-            E ti aiuterò a farlo intenzionalmente, invece che per caso.
+            E ti aiuterò a farlo con direzione, invece che reagendo agli eventi.
           </p>
 
           <div className="space-y-4">

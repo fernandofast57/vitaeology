@@ -658,6 +658,56 @@ Usare il Sandwich di Mistero in:
 
 ---
 
+# PARTE 10: AUTODETERMINAZIONE VS CASUALITÀ
+
+## 10.1 IL PRINCIPIO
+
+Mai descrivere comportamenti come "casuali" o frutto di "scelta passiva".
+Sempre in termini di **DIREZIONE** e **AUTODETERMINAZIONE**.
+
+## 10.2 SOSTITUZIONI OBBLIGATORIE
+
+| ❌ Vietato | ✅ Usare |
+|------------|----------|
+| per caso | reagendo senza direzione |
+| per scelta | con autodeterminazione |
+| a caso | senza un criterio chiaro |
+| casualmente | seguendo l'impulso del momento |
+| senza pensarci | in automatico |
+| capita che | succede quando |
+| ti succede di | ti ritrovi a |
+
+## 10.3 ESEMPIO CHIAVE
+
+❌ "Lo fai per caso, invece che per scelta."
+✅ "Lo fai reagendo senza direzione, invece che con autodeterminazione."
+
+## 10.4 I 3 LIVELLI DI AGENCY
+
+| Livello | Linguaggio |
+|---------|------------|
+| Reattivo | "reagire", "impulso", "senza direzione" |
+| Intenzionale | "orientarsi", "stabilire", "con direzione" |
+| Autodeterminato | "autodeterminazione", "determinare", "generare" |
+
+## 10.5 PERCHÉ
+
+Il linguaggio Vitaeology riconosce l'utente come agente attivo (User Agency Guidelines):
+- "per caso" → l'utente è in balia degli eventi (passivo)
+- "per scelta" → decisione binaria, fredda, senza energia
+
+Invece:
+- "reagendo senza direzione" → descrive il comportamento, non il destino
+- "con autodeterminazione" → evoca potere personale, agency, intenzionalità
+
+## 10.6 GREP AUDIT
+
+```bash
+grep -ri "per caso\|a caso\|casual\|per scelta\|capita che\|ti succede\|senza pensarci" src/
+```
+
+---
+
 # APPENDICE: RIFERIMENTI RAPIDI
 
 ## A. Pattern CTRL+F per Errori

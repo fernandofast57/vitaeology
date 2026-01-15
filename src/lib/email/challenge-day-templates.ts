@@ -134,7 +134,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Non hai bisogno di un titolo o di un corso: sei semplicemente <strong>quello che sa la strada</strong>.</p>
 
-    <p>La stessa cosa succede in molte situazioni della tua vita, senza che tu ci faccia caso:</p>
+    <p>La stessa cosa succede in molte situazioni della tua vita, senza che tu lo noti consapevolmente:</p>
     <ul>
       <li>Quando un collega ti chiede "Tu cosa faresti?"</li>
       <li>Quando in famiglia aspettano che tu dica la tua prima di decidere</li>
@@ -563,7 +563,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>La maggior parte delle buone intenzioni fallisce per un motivo semplice: dipendono dalla memoria. "Mi ricorderò di farlo" — ma poi non te lo ricordi.</p>
 
-    <p>Molte persone tengono le <strong>vitamine vicino al caffè</strong>. Perché? Perché il caffè lo bevono già ogni mattina senza pensarci. Vedere le vitamine mentre fanno il caffè glielo ricorda.</p>
+    <p>Molte persone tengono le <strong>vitamine vicino al caffè</strong>. Perché? Perché il caffè lo bevono già ogni mattina in automatico. Vedere le vitamine mentre fanno il caffè glielo ricorda.</p>
 
     <p><strong>La Formula:</strong><br>
     Invece di "mi ricorderò di fare R.A.D.A.R." dici:<br>
@@ -588,7 +588,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
     <ul>
       <li><strong>Base (Giorni 1-7)</strong>: Capisci il concetto, fai le prime prove ← SEI QUI</li>
       <li><strong>Abitudine (Giorni 8-28)</strong>: Lo fai regolarmente, a volte dimentichi</li>
-      <li><strong>Automatismo (Mesi 2-3)</strong>: Lo fai senza pensarci</li>
+      <li><strong>Automatismo (Mesi 2-3)</strong>: Lo fai in automatico</li>
       <li><strong>Trasformazione (Mesi 4-12)</strong>: Fa parte di come sei</li>
     </ul>
 

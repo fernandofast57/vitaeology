@@ -549,7 +549,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
       title: "Il Primo Inventario",
       subtitle: "Non è colpa tua se non li noti",
       emailSubject: "Quanti momenti positivi hai avuto ieri? (La risposta ti sorprenderà)",
-      principle: "Non è vero che non ti succede niente di buono. È che il cervello è programmato per non notarlo.",
+      principle: "Non è vero che non ti accade niente di positivo. È che il cervello è programmato per non notarlo.",
       sections: [
         {
           icon: "📖",
@@ -573,7 +573,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         ],
         duration: "3 minuti"
       },
-      keyTakeaway: "Non è vero che non ti succede niente di buono. È che il cervello è programmato per non notarlo.",
+      keyTakeaway: "Non è vero che non ti accade niente di positivo. È che il cervello è programmato per non notarlo.",
       openLoop: "Perché 50 momenti piccoli battono 4 momenti grandi — e come questo cambia tutto."
     },
     2: {

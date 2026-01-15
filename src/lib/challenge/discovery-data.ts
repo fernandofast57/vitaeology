@@ -339,7 +339,7 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
           options: [
             { value: 'A', text: "Sì, vedo un pattern che non avevo notato prima" },
             { value: 'B', text: "Ho un'idea, ma non è ancora nitida" },
-            { value: 'C', text: "Non riesco a vedere uno schema, sembra tutto casuale" }
+            { value: 'C', text: "Non riesco a vedere uno schema, non trovo un criterio" }
           ],
           scoring: { dimension: 'pattern', scores: STANDARD_SCORES }
         },

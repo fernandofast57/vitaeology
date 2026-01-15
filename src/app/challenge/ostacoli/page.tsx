@@ -486,8 +486,8 @@ function OstacoliLandingContent() {
             </p>
             <p className="text-emerald-400 text-xl font-medium text-center py-4">
               Il problema non è che non sai risolvere problemi.<br />
-              Il problema è che lo fai per caso,<br />
-              invece che per scelta.
+              Il problema è che lo fai reagendo senza direzione,<br />
+              invece che con autodeterminazione.
             </p>
           </div>
         </div>
@@ -604,7 +604,7 @@ function OstacoliLandingContent() {
             <br /><br />
             Ti mostrerò come già <strong className="text-white">PENSI</strong> —
             quando risolvi problemi sul serio.
-            E ti aiuterò a farlo intenzionalmente, invece che per caso.
+            E ti aiuterò a farlo con direzione, invece che reagendo agli eventi.
           </p>
 
           <div className="space-y-4">
