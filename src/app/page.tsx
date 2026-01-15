@@ -1,22 +1,15 @@
 'use client';
 
 /**
- * Homepage Vitaeology - Manifesto Version
+ * Homepage Vitaeology - Minimal Version
  *
- * Versione: 3.0
+ * Versione: 4.0
  * Data: 15 Gennaio 2026
  *
- * Basata su: Vitaeology.txt (Manifesto)
- * Tono: Filosofico, Empowering, Engagement attraverso tensione emotiva
- *
- * Struttura:
- * 1. Hero - "Dare Forma all'Azione"
- * 2. La Verità - Il ribaltamento
- * 3. Il Viaggio - Metafora resilienza
- * 4. I 3 Percorsi - Sentieri del viaggio
- * 5. La Guida - Fernando
- * 6. CTA Finale
- * 7. Footer
+ * Struttura semplificata:
+ * 1. Hero (Dare Forma all'Azione + Video)
+ * 2. I 3 Sentieri
+ * 3. Footer
  */
 
 import Link from 'next/link';
@@ -60,28 +53,25 @@ export default function HomePage() {
       </header>
 
       {/* ================================================================== */}
-      {/* SEZIONE 1: HERO - IL MANIFESTO */}
+      {/* HERO */}
       {/* ================================================================== */}
-      <section
-        className="relative bg-gradient-to-b from-petrol-600 via-petrol-700 to-petrol-800 text-white overflow-hidden"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 92%, 0 100%)' }}
-      >
+      <section className="relative bg-gradient-to-b from-petrol-600 via-petrol-700 to-petrol-800 text-white overflow-visible">
         {/* Background texture */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-500 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold-400 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 pb-32">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Colonna Sinistra - Testo */}
             <div className="text-center lg:text-left">
-              {/* Headline - Il Manifesto */}
+              {/* Headline */}
               <h1 className="text-4xl sm:text-5xl lg:text-5xl font-display font-bold leading-tight mb-8">
                 Dare Forma all&apos;Azione
               </h1>
 
-              {/* Il cuore del manifesto */}
+              {/* Copy */}
               <div className="space-y-4 text-lg sm:text-xl text-gray-200 leading-relaxed mb-10">
                 <p>
                   Il mondo può sembrare ostile. Le sfide, schiaccianti.
@@ -124,17 +114,6 @@ export default function HomePage() {
                     <p className="text-white/80 text-sm font-medium">Guarda il video</p>
                     <p className="text-gold-400 text-xs mt-1">2 minuti</p>
                   </div>
-
-                  {/*
-                    TODO: Sostituire il placeholder con:
-                    <video
-                      className="w-full h-full object-cover"
-                      poster="/images/fernando-poster.jpg"
-                      controls
-                    >
-                      <source src="/videos/fernando-intro.mp4" type="video/mp4" />
-                    </video>
-                  */}
                 </div>
 
                 {/* Badge */}
@@ -145,97 +124,24 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ================================================================== */}
-      {/* SEZIONE 2: LA VERITÀ - IL RIBALTAMENTO */}
-      {/* ================================================================== */}
-      <section className="pt-16 pb-20 lg:pt-20 lg:pb-28 bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
-              La Verità Che Nessuno Ti Dice
-            </h2>
-
-            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-              <p>
-                Hai già superato centinaia di sfide nella tua vita.
-              </p>
-              <p>
-                Hai già dimostrato resilienza, leadership, capacità di risolvere problemi.
-              </p>
-              <p className="text-xl font-medium text-petrol-600">
-                Non devi imparare qualcosa di nuovo.
-              </p>
-              <p className="text-xl">
-                Devi <span className="text-gold-600 font-bold">riconoscere</span> quello che già sei —<br/>
-                e imparare a usarlo <span className="italic">intenzionalmente</span>.
-              </p>
-            </div>
-
-            <div className="mt-12 p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
-              <p className="text-gray-600 italic text-lg">
-                &ldquo;La resilienza non è un dono casuale o un talento innato.
-                È il risultato del tuo viaggio personale, dei tuoi sforzi,
-                della tua volontà di superare le difficoltà.&rdquo;
-              </p>
-            </div>
-          </div>
+        {/* Diagonale SVG */}
+        <div className="absolute bottom-0 left-0 right-0 overflow-hidden leading-none">
+          <svg
+            className="relative block w-full h-16 lg:h-24"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,120 L1200,0 L1200,120 Z"
+              fill="#F9FAFB"
+            />
+          </svg>
         </div>
       </section>
 
       {/* ================================================================== */}
-      {/* SEZIONE 3: IL VIAGGIO - METAFORA RESILIENZA */}
-      {/* ================================================================== */}
-      <section className="py-20 lg:py-28 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Testo */}
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-6">
-                L&apos;Albero e la Tempesta
-              </h2>
-
-              <div className="space-y-4 text-lg text-gray-700 leading-relaxed">
-                <p>
-                  Immagina un albero che, nonostante una tempesta violenta,
-                  riesce a flettersi senza spezzarsi.
-                </p>
-                <p>
-                  Rimane radicato. Continua a crescere una volta passata la tempesta.
-                </p>
-                <p className="font-medium text-petrol-600">
-                  Questa è la resilienza.
-                </p>
-                <p>
-                  Non è resistere immobili. È adattarsi, piegarsi quando serve,
-                  e tornare più forti di prima.
-                </p>
-                <p className="text-gold-600 font-medium">
-                  La resilienza è come un muscolo: più la usi, più diventa forte.
-                </p>
-              </div>
-            </div>
-
-            {/* Visual */}
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-petrol-50 to-petrol-100 rounded-3xl flex items-center justify-center p-12">
-                <div className="text-center">
-                  <div className="text-8xl mb-4">🌳</div>
-                  <p className="text-petrol-600 font-medium">
-                    Radici profonde.<br/>
-                    Rami flessibili.<br/>
-                    Crescita continua.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* SEZIONE 4: I 3 PERCORSI - SENTIERI DEL VIAGGIO */}
+      {/* I 3 SENTIERI */}
       {/* ================================================================== */}
       <section id="percorsi" className="py-20 lg:py-28 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -261,13 +167,8 @@ export default function HomePage() {
                 <p className="text-[#D4AF37] font-medium text-sm mb-4">
                   IL SENTIERO DEL RICONOSCIMENTO
                 </p>
-                <p className="text-gray-600 mb-6">
-                  Le persone non seguono chi cerca di essere leader.
-                  Seguono chi riconosce la propria leadership — e la usa al livello giusto.
-                </p>
-                <p className="text-gray-500 text-sm mb-8 italic">
-                  &ldquo;Ho provato passione, autorità, tecniche. Niente funzionava.
-                  Poi ho capito che non dovevo imparare — dovevo riconoscere.&rdquo;
+                <p className="text-gray-600 mb-6 min-h-[72px]">
+                  Il tuo team non ti segue davvero? Fai tutto tu e quando deleghi le cose non funzionano?
                 </p>
                 <Link
                   href="/challenge/leadership"
@@ -289,13 +190,8 @@ export default function HomePage() {
                 <p className="text-[#22C55E] font-medium text-sm mb-4">
                   IL SENTIERO DELLA RESILIENZA
                 </p>
-                <p className="text-gray-600 mb-6">
-                  Ogni sfida superata è una prova della tua resilienza.
-                  Non devi imparare a risolvere problemi. Devi ricordare che sai già farlo.
-                </p>
-                <p className="text-gray-500 text-sm mb-8 italic">
-                  &ldquo;I problemi non sono barriere. Sono catalizzatori.
-                  Ogni ostacolo è un&apos;opportunità per dimostrare chi sei.&rdquo;
+                <p className="text-gray-600 mb-6 min-h-[72px]">
+                  I problemi ti bloccano? Passi più tempo a preoccuparti che a risolverli?
                 </p>
                 <Link
                   href="/challenge/ostacoli"
@@ -317,13 +213,8 @@ export default function HomePage() {
                 <p className="text-[#8B5CF6] font-medium text-sm mb-4">
                   IL SENTIERO DEL BENESSERE
                 </p>
-                <p className="text-gray-600 mb-6">
-                  La felicità non è una destinazione. È un viaggio.
-                  Ogni giorno ti attraversano momenti positivi. Devi solo imparare a vederli.
-                </p>
-                <p className="text-gray-500 text-sm mb-8 italic">
-                  &ldquo;Coltivare la felicità non è solo un obiettivo.
-                  È un potente strumento che influenza tutto quello che fai.&rdquo;
+                <p className="text-gray-600 mb-6 min-h-[72px]">
+                  Corri sempre ma non sai più verso cosa? Ottieni risultati ma non ti senti soddisfatto?
                 </p>
                 <Link
                   href="/challenge/microfelicita"
@@ -338,73 +229,6 @@ export default function HomePage() {
           <p className="text-center text-gray-500 mt-8">
             Nessuna carta di credito richiesta. Solo la tua email.
           </p>
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* SEZIONE 5: LA GUIDA - FERNANDO */}
-      {/* ================================================================== */}
-      <section className="py-20 lg:py-28 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-24 h-24 bg-gradient-to-br from-petrol-600 to-petrol-700 rounded-full flex items-center justify-center mx-auto mb-8">
-            <span className="text-3xl font-display font-bold text-gold-500">FM</span>
-          </div>
-
-          <h2 className="text-3xl font-display font-bold text-petrol-600 mb-6">
-            Fernando Marongiu
-          </h2>
-
-          <div className="space-y-4 text-lg text-gray-700">
-            <p>
-              50 anni di esperienza imprenditoriale.
-              Tutti gli errori possibili, già fatti.
-            </p>
-            <p>
-              Ho condensato quello che ho imparato in 3 libri —
-              la <strong>Trilogia Rivoluzione Aurea</strong> —
-              e in questa piattaforma.
-            </p>
-            <p className="text-petrol-600 font-medium">
-              Non sono qui per insegnarti qualcosa di nuovo.<br/>
-              Sono qui per aiutarti a riconoscere quello che già sei.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ================================================================== */}
-      {/* SEZIONE 6: CTA FINALE */}
-      {/* ================================================================== */}
-      <section className="py-20 bg-gradient-to-br from-petrol-600 to-petrol-700">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white mb-6">
-            Il Viaggio Inizia Con Un Passo
-          </h2>
-          <p className="text-xl text-gray-300 mb-10">
-            7 giorni. 10 minuti al giorno.<br/>
-            Abbastanza per capire se questo percorso fa per te.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/challenge/leadership"
-              className="bg-[#D4AF37] hover:bg-[#b8962f] text-white font-bold py-4 px-8 rounded-lg transition"
-            >
-              Leadership
-            </Link>
-            <Link
-              href="/challenge/ostacoli"
-              className="bg-[#22C55E] hover:bg-[#1ea34d] text-white font-bold py-4 px-8 rounded-lg transition"
-            >
-              Ostacoli
-            </Link>
-            <Link
-              href="/challenge/microfelicita"
-              className="bg-[#8B5CF6] hover:bg-[#7c4fe6] text-white font-bold py-4 px-8 rounded-lg transition"
-            >
-              Microfelicità
-            </Link>
-          </div>
         </div>
       </section>
 
