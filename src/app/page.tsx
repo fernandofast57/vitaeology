@@ -64,7 +64,7 @@ export default function HomePage() {
       {/* ================================================================== */}
       <section
         className="relative bg-gradient-to-b from-petrol-600 via-petrol-700 to-petrol-800 text-white overflow-hidden"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0 100%)' }}
+        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 92%, 0 100%)' }}
       >
         {/* Background texture */}
         <div className="absolute inset-0 opacity-10">
@@ -150,7 +150,7 @@ export default function HomePage() {
       {/* ================================================================== */}
       {/* SEZIONE 2: LA VERITÀ - IL RIBALTAMENTO */}
       {/* ================================================================== */}
-      <section className="pt-8 pb-20 lg:pt-12 lg:pb-28 bg-gray-50 -mt-16 lg:-mt-24">
+      <section className="pt-16 pb-20 lg:pt-20 lg:pb-28 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl sm:text-4xl font-display font-bold text-petrol-600 mb-8">
