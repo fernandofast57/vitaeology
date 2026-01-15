@@ -92,10 +92,10 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         instruction: "Vedi il Doppio Standard: riprendi i momenti di ieri e immagina che li avesse fatti qualcuno che stimi.",
         steps: [
           "Riprendi i momenti che hai scritto ieri",
-          "Per ogni momento, immagina che un collega che stimi — chiamiamolo Marco — abbia fatto esattamente la stessa cosa",
-          "Scrivi: \"Se Marco avesse dato quel consiglio, direi che...\"",
-          "Confronta: come giudichi l'azione quando la fa Marco? E quando la fai tu?",
-          "Nota la differenza: se riconosci valore quando lo fa Marco, quel valore c'è anche quando lo fai tu"
+          "Per ogni momento, immagina che un collega che stimi molto abbia fatto esattamente la stessa cosa",
+          "Scrivi: \"Se quella persona avesse dato quel consiglio, direi che...\"",
+          "Confronta: come giudichi l'azione quando la fa quella persona? E quando la fai tu?",
+          "Nota la differenza: se riconosci valore quando lo fa un altro, quel valore c'è anche quando lo fai tu"
         ],
         duration: "5 minuti"
       },

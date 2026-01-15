@@ -100,7 +100,7 @@ const DAY_TITLES: Record<ChallengeKey, Record<DayNumber, { title: string; subjec
     },
     2: {
       title: "La Matematica dei Momenti",
-      subject: "Giorno 2: Perchépiccolo batte grande"
+      subject: "Giorno 2: Perché piccolo batte grande"
     },
     3: {
       title: "I 5 Passi per Notare",
@@ -153,7 +153,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Hai mai fatto un buon lavoro e subito dopo pensato "Beh, chiunque l'avrebbe fatto"?</p>
 
-    <p>Quella è la<strong>voce che sminuisce</strong>. La chiamiamo "Impostore" perchéti fa sentire un impostore — come se i tuoi successi non fossero davvero tuoi.</p>
+    <p>Quella è la <strong>voce che sminuisce</strong>. La chiamiamo "Impostore" perché ti fa sentire un impostore — come se i tuoi successi non fossero davvero tuoi.</p>
 
     <p>Immagina di avere un <strong>salvadanaio</strong> dove metti una moneta ogni volta che fai qualcosa di buono. Ma c'è un buco sul fondo: ogni moneta che metti cade fuori senza che tu la veda.</p>
 
@@ -161,7 +161,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (5 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Riprendi i momenti di ieri. Per ogni momento, immagina che un collega che stimi — chiamiamolo Marco — abbia fatto esattamente la stessa cosa. Come giudichi l'azione quando la fa Marco? E quando la fai tu?</p>
+      <p style="margin: 10px 0 0 0;">Riprendi i momenti di ieri. Per ogni momento, immagina che un collega che stimi molto abbia fatto esattamente la stessa cosa. Come giudichi l'azione quando la fa quella persona? E quando la fai tu?</p>
     </div>
 
     <p><em>Il valore di un'azione non cambia in base a chi la compie.</em></p>
@@ -195,7 +195,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Ma hai guidato lo stesso. Quella è stata un'azione coraggiosa.</p>
 
-    <p>Il <strong>coraggio</strong> non è assenza di paura. È scegliere di agire anche se la paura c'e.</p>
+    <p>Il <strong>coraggio</strong> non è assenza di paura. È scegliere di agire anche se la paura c'è.</p>
 
     <p>Come funziona:</p>
     <ul>
@@ -206,7 +206,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (3 minuti + 1 azione):</strong></p>
-      <p style="margin: 10px 0 0 0;">Riprendi la situazione di ieri — quella che stavi evitando. Qual è il passo PIU PICCOLO che richiede un po' di coraggio? Non la soluzione completa. Solo il passo più piccolo possibile. Fallo oggi.</p>
+      <p style="margin: 10px 0 0 0;">Riprendi la situazione di ieri — quella che stavi evitando. Qual è il passo PIÙ PICCOLO che richiede un po' di coraggio? Non la soluzione completa. Solo il passo più piccolo possibile. Fallo oggi.</p>
     </div>
 
     <p><em>La paura non passa aspettando. Passa agendo.</em></p>
@@ -222,7 +222,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <li>Altre la <strong>ricaricano</strong>: una pausa, una conversazione piacevole, un compito completato</li>
     </ul>
 
-    <p>L'<strong>equilibrio</strong> significa sapere quando spingere è quando fermarti.</p>
+    <p>L'<strong>equilibrio</strong> significa sapere quando spingere e quando fermarti.</p>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (7 minuti):</strong></p>
@@ -257,7 +257,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
   7: (nome) => `
     <p>Ciao ${nome},</p>
 
-    <p>Imparare qualcosa di nuovo è come<strong>imparare a guidare</strong>. La prima settimana di scuola guida non ti rende un pilota esperto — ti da le basi. Poi, guidando tutti i giorni per mesi, quelle basi diventano automatiche.</p>
+    <p>Imparare qualcosa di nuovo è come <strong>imparare a guidare</strong>. La prima settimana di scuola guida non ti rende un pilota esperto — ti dà le basi. Poi, guidando tutti i giorni per mesi, quelle basi diventano automatiche.</p>
 
     <p>Ecco cosa hai imparato questa settimana:</p>
     <ul>
@@ -278,7 +278,7 @@ const LEADERSHIP_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio finale (10 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Scrivi 3 obiettivi su come vuoi essere quando sei punto di riferimento. Per ogni obiettivo, identifica quale capacità richiede. Scrivi: "Il mio primo passo concreto questa settimana e: ___"</p>
+      <p style="margin: 10px 0 0 0;">Scrivi 3 obiettivi su come vuoi essere quando sei punto di riferimento. Per ogni obiettivo, identifica quale capacità richiede. Scrivi: "Il mio primo passo concreto questa settimana è: ___"</p>
     </div>
 
     <p><em>Hai le basi. Ora serve pratica costante. Il leader che cerchi è già dentro di te.</em></p>
@@ -308,7 +308,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Immagina di avere un <strong>rubinetto che perde</strong>. Ogni giorno metti uno straccio sotto per asciugare l'acqua. Potresti andare avanti anni così.</p>
 
-    <p>Oppure puoi chiederti: "Perchéperde?" Scopri che la guarnizione è usurata. Cambi la guarnizione. Il rubinetto smette di perdere.</p>
+    <p>Oppure puoi chiederti: "Perché perde?" Scopri che la guarnizione è usurata. Cambi la guarnizione. Il rubinetto smette di perdere.</p>
 
     <p>Lo straccio risolveva il <strong>sintomo</strong> (acqua per terra). La guarnizione risolve la <strong>causa</strong>.</p>
 
@@ -385,7 +385,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
       MINUTO 1-2: "Quale schema si ripete?"<br>
       MINUTO 2-3: "Cosa non viene detto?"<br>
       MINUTO 3-4: "Cosa ho già che posso usare?"<br>
-      MINUTO 4-5: "Qual e UNA cosa concreta che faccio entro domani?"</p>
+      MINUTO 4-5: "Qual è UNA cosa concreta che faccio entro domani?"</p>
     </div>
 
     <p><em>Hai già le idee. Ora hai anche un sistema per trasformarle in risultati.</em></p>
@@ -402,7 +402,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
       <li><strong>Il Procrastinatore</strong>: "Devo aspettare il momento perfetto" (si traveste da "timing intelligente")</li>
     </ul>
 
-    <p>Sembrano ragionevoli, ma sono sabotatrici. Le chiamiamo Traditori perché <strong>tradiscono il tuo potenziale</strong> mentre sembrano proteggerti.</p>
+    <p>Sembrano ragionevoli, ma sono sabotatori. Li chiamiamo Traditori perché <strong>tradiscono il tuo potenziale</strong> mentre sembrano proteggerti.</p>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #10B981; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (5 minuti):</strong></p>
@@ -430,7 +430,7 @@ const OSTACOLI_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #10B981; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio finale (10 minuti):</strong></p>
-      <p style="margin: 10px 0 0 0;">Scrivi: "Il prossimo problema che affrontero con il metodo e: ___"<br>
+      <p style="margin: 10px 0 0 0;">Scrivi: "Il prossimo problema che affronterò con il metodo è: ___"<br>
       Decidi quando userai il metodo (minimo: ogni settimana su un problema).<br>
       Imposta un promemoria nel calendario.</p>
     </div>
@@ -446,7 +446,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>Immagina di camminare per strada <strong>guardando il telefono</strong>. Intorno a te ci sono persone, vetrine, alberi, un cielo interessante. Ma tu non vedi niente di tutto questo perché stai fissando lo schermo.</p>
 
-    <p>Questo è quello che succede con le piccole cose piacevoli della giornata. Ci sono — ma il tuo cervello è "occupato" con altro.</p>
+    <p>Questo è quello che succede con le piccole cose piacevoli della giornata. Ci sono — ma il tuo cervello è "occupato" con altro. Daniel Kahneman, premio Nobel, ha scoperto che il cervello è come il <strong>velcro per il negativo</strong> e come il <strong>teflon per il positivo</strong>.</p>
 
     <p>Il cervello umano è fatto per notare i problemi:</p>
     <ul>
@@ -487,14 +487,14 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
   3: (nome) => `
     <p>Ciao ${nome},</p>
 
-    <p>I momenti piacevoli piccoli durano pochissimo. Se non li "catturi" nei primi 2 secondi, svaniscono. È comevedere una <strong>stella cadente</strong>. Se non guardi subito, l'hai persa.</p>
+    <p>I momenti piacevoli piccoli durano pochissimo. Se non li "catturi" nei primi 2 secondi, svaniscono. È come vedere una <strong>stella cadente</strong>. Se non guardi subito, l'hai persa.</p>
 
     <p><strong>R.A.D.A.R.</strong> — i 5 passi per catturare il benessere:</p>
     <ul>
       <li><strong>R</strong> = Rileva: Noti che sta succedendo qualcosa di piacevole (1-2 sec)</li>
       <li><strong>A</strong> = Accogli: Lasci che la sensazione arrivi senza giudicarla (1-2 sec)</li>
       <li><strong>D</strong> = Distingui: "Questo mi nutre o mi sabota?" (1-2 sec)</li>
-      <li><strong>A</strong> = Amplifica: Mantieni l'attenzione per qualche secondo in più(3-5 sec)</li>
+      <li><strong>A</strong> = Amplifica: Mantieni l'attenzione per qualche secondo in più (3-5 sec)</li>
       <li><strong>R</strong> = Resta: Lasci che il focus si ritiri naturalmente (2 sec)</li>
     </ul>
 
@@ -547,7 +547,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
 
     <p>R.A.D.A.R. serve a <strong>completare il quadro</strong>. A vedere tutto, non solo il negativo.</p>
 
-    <p>È comefare un bilancio economico: se scrivi solo le spese, pensi "Sono in rosso!" Ma non hai scritto le entrate. Il bilancio vero include entrambe.</p>
+    <p>È come fare un bilancio economico: se scrivi solo le spese, pensi "Sono in rosso!" Ma non hai scritto le entrate. Il bilancio vero include entrambe.</p>
 
     <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #8B5CF6; margin: 20px 0;">
       <p style="margin: 0;"><strong>Esercizio di oggi (5 minuti):</strong></p>
@@ -579,7 +579,7 @@ const MICROFELICITA_EMAILS: Record<DayNumber, (nome: string) => string> = {
       Fallo oggi almeno una volta.</p>
     </div>
 
-    <p><em>Collegare a un'abitudine esistente è ilsegreto per non dimenticare.</em></p>
+    <p><em>Collegare a un'abitudine esistente è il segreto per non dimenticare.</em></p>
   `,
   7: (nome) => `
     <p>Ciao ${nome},</p>

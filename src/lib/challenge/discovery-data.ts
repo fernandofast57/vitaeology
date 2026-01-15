@@ -99,7 +99,7 @@ export const DISCOVERY_DATA: Record<ChallengeType, Record<DayNumber, DiscoveryDa
           scoring: { dimension: 'adattamento', scores: STANDARD_SCORES }
         },
         {
-          text: "L'esercizio del \"doppio standard\" (come giudichi Marco vs te stesso) ti ha dato chiarezza?",
+          text: "L'esercizio del \"doppio standard\" (come giudichi gli altri vs te stesso) ti ha dato chiarezza?",
           options: [
             { value: 'A', text: "Sì, vedo chiaramente che uso due pesi e due misure" },
             { value: 'B', text: "In parte, ma non è ancora cristallino" },
