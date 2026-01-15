@@ -148,7 +148,7 @@ async function evaluateAndAlert(
   const triggeredAlerts = results.filter(r => r.triggered);
 
   for (const alert of triggeredAlerts) {
-    // Log nel database
+    // Log nel database (sempre)
     await supabase.from('monitoring_alerts_log').insert({
       alert_type: `${checkType.toLowerCase()}_${alert.metricName}`,
       severity: alert.severity,
@@ -158,8 +158,9 @@ async function evaluateAndAlert(
       message: `${alert.description}: ${alert.value} (soglia: ${alert.threshold})`
     });
 
-    // Invia email per critical
-    if (alert.severity === 'critical') {
+    // Invia email SOLO per P1 critical (problemi di sistema reali)
+    // P2 e P4 potrebbero non avere dati sufficienti in un sistema nuovo
+    if (alert.severity === 'critical' && checkType === 'P1') {
       await sendErrorAlert({
         type: `monitoring_${checkType.toLowerCase()}`,
         severity: 'critical',

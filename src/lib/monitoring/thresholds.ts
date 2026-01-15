@@ -164,11 +164,18 @@ export function evaluateThreshold(
   value: number | null,
   config: ThresholdConfig
 ): { severity: AlertSeverity; triggered: boolean } {
+  // Non alertare per valori nulli o undefined
   if (value === null || value === undefined) {
     return { severity: 'info', triggered: false };
   }
 
   const { warningThreshold, criticalThreshold, comparison } = config;
+
+  // IMPORTANTE: Per confronti "less than", un valore 0 spesso indica
+  // assenza di dati, non un problema reale. Non alertare in questi casi.
+  if (comparison === 'lt' && value === 0) {
+    return { severity: 'info', triggered: false };
+  }
 
   let isCritical = false;
   let isWarning = false;
