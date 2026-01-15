@@ -485,7 +485,7 @@ function OstacoliLandingContent() {
               Ma li hai usati.
             </p>
             <p className="text-emerald-400 text-xl font-medium text-center py-4">
-              Il problema non è che non sai risolvere problemi.<br />
+              Il problema non è che non sai risolvere le situazioni.<br />
               Il problema è che lo fai reagendo senza direzione,<br />
               invece che con autodeterminazione.
             </p>
