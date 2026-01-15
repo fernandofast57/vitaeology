@@ -41,11 +41,11 @@ const libreBaskerville = Libre_Baskerville({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.vitaeology.com'),
   title: {
-    default: 'Vitaeology - Leadership Autentica',
+    default: "Vitaeology - L'hai già fatto. Non te lo ricordi.",
     template: '%s | Vitaeology',
   },
-  description: 'Sviluppa la tua leadership autentica con il test diagnostico a 240 domande, radar chart personalizzato e 52 esercizi settimanali.',
-  keywords: ['leadership', 'assessment', 'sviluppo personale', 'imprenditore', 'manager', 'coaching'],
+  description: "Sai già come si fa. Solo che adesso è come dimenticato. È ancora lì. Lo senti?",
+  keywords: ['leadership', 'resilienza', 'benessere', 'sviluppo personale', 'imprenditore', 'coaching'],
   authors: [{ name: 'Fernando Marongiu' }],
   creator: 'Vitaeology',
   icons: {
@@ -57,21 +57,21 @@ export const metadata: Metadata = {
     locale: 'it_IT',
     url: 'https://vitaeology.com',
     siteName: 'Vitaeology',
-    title: 'Vitaeology - Leadership Autentica',
-    description: 'Sviluppa la tua leadership autentica con il test diagnostico a 240 domande.',
+    title: "Vitaeology - L'hai già fatto. Non te lo ricordi.",
+    description: "Sai già come si fa. Solo che adesso è come dimenticato. È ancora lì. Lo senti?",
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Vitaeology - Leadership Autentica',
+        alt: "Vitaeology - L'hai già fatto. Non te lo ricordi.",
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vitaeology - Leadership Autentica',
-    description: 'Sviluppa la tua leadership autentica con il test diagnostico a 240 domande.',
+    title: "Vitaeology - L'hai già fatto. Non te lo ricordi.",
+    description: "Sai già come si fa. Solo che adesso è come dimenticato. È ancora lì. Lo senti?",
     images: ['/og-image.png'],
   },
   robots: {

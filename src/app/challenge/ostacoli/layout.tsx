@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sfida 7 Giorni Oltre gli Ostacoli | Vitaeology',
-  description: 'Impara a riconoscere e superare i blocchi che ti frenano. 7 giorni di esercizi pratici per trasformare gli ostacoli in opportunità.',
+  title: 'Vitaeology - Oltre gli Ostacoli',
+  description: "L'hai già risolto. Più volte di quante pensi.",
   openGraph: {
-    title: 'Sfida 7 Giorni Oltre gli Ostacoli',
-    description: 'Trasforma i blocchi in trampolini. 7 giorni di esercizi pratici gratuiti.',
+    title: 'Vitaeology - Oltre gli Ostacoli',
+    description: "L'hai già risolto. Più volte di quante pensi.",
     url: 'https://www.vitaeology.com/challenge/ostacoli',
     siteName: 'Vitaeology',
     locale: 'it_IT',
@@ -15,14 +15,14 @@ export const metadata: Metadata = {
         url: 'https://www.vitaeology.com/og/challenge/ostacoli',
         width: 1200,
         height: 630,
-        alt: 'Sfida Oltre gli Ostacoli - Vitaeology',
+        alt: 'Vitaeology - Oltre gli Ostacoli',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sfida 7 Giorni Oltre gli Ostacoli',
-    description: 'Trasforma i blocchi in trampolini. 7 giorni di esercizi pratici gratuiti.',
+    title: 'Vitaeology - Oltre gli Ostacoli',
+    description: "L'hai già risolto. Più volte di quante pensi.",
     images: ['https://www.vitaeology.com/og/challenge/ostacoli'],
   },
 };
