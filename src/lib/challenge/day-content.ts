@@ -217,7 +217,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🎵",
           title: "Freddie Mercury e Lucio Battisti",
-          content: "Freddie Mercury e Lucio Battisti erano entrambi grandi. Ma cantavano in modi completamente diversi.\n\nSe Battisti avesse cercato di cantare come Mercury, sarebbe stato ridicolo.\n\nE viceversa."
+          content: "Erano entrambi grandi. Ma cantavano in modi completamente diversi.\n\nSe Battisti avesse cercato di cantare come Mercury, sarebbe stato ridicolo.\n\nE viceversa."
         },
         {
           icon: "🪞",
@@ -227,7 +227,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🎯",
           title: "Non Esiste Un Modo Giusto",
-          content: "Non esiste UN modo giusto di essere leader.\n\nEsistono leader introversi e estroversi.\nLeader analitici e intuitivi.\nLeader che parlano molto e leader che ascoltano.\n\nL'errore non è avere un certo stile. È cercare di averne un altro."
+          content: "Esistono leader introversi e estroversi.\nLeader analitici e intuitivi.\nLeader che parlano molto e leader che ascoltano.\n\nL'errore non è avere un certo stile. È cercare di averne un altro."
         }
       ],
       exercise: {
@@ -295,12 +295,12 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🤔",
           title: "Prima Di Leggere Oltre",
-          content: "Ti chiedo di fare una cosa prima di leggere oltre.\n\nPensa a un problema che hai risolto nella tua vita.\n\nUno vero. Uno difficile. Uno che sembrava impossibile finché non l'hai risolto.\n\nCe l'hai?\n\nBene.\n\nQuel problema è la PROVA che sai risolvere problemi."
+          content: "Pensa a un problema che hai risolto nella tua vita.\n\nUno vero. Uno difficile. Uno che sembrava impossibile finché non l'hai risolto.\n\nCe l'hai?\n\nBene.\n\nQuel problema è la PROVA che sai risolvere problemi."
         },
         {
           icon: "💡",
           title: "Sembra Ovvio, Ma Non Lo È",
-          content: "Sembra ovvio, ma non lo è.\n\nQuando siamo bloccati su qualcosa, dimentichiamo tutto quello che abbiamo già fatto.\n\nCi sembra di non essere capaci.\nCi sembra di non avere gli strumenti.\nCi sembra che QUESTA volta sia diverso.\n\nMa la verità è un'altra:\n\nHai già risolto problemi difficili. Lo rifarai.\n\nIl punto è: come?"
+          content: "Quando siamo bloccati su qualcosa, dimentichiamo tutto quello che abbiamo già fatto.\n\nCi sembra di non essere capaci.\nCi sembra di non avere gli strumenti.\nCi sembra che QUESTA volta sia diverso.\n\nMa la verità è un'altra:\n\nHai già risolto problemi difficili. Lo rifarai.\n\nIl punto è: come?"
         },
         {
           icon: "📖",
@@ -331,12 +331,12 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🚰",
           title: "Il Rubinetto Che Perde",
-          content: "Immagina un rubinetto che perde.\n\nOgni giorno metti uno straccio sotto.\nOgni sera lo strizzi.\nOgni mattina ricomincia.\n\nDopo un mese, sei stanco.\nPensi: \"Questo rubinetto mi sta facendo impazzire.\"\n\nMa il rubinetto non è il problema. È il SINTOMO.\n\nIl problema è la guarnizione consumata.\nFinché non la vedi, continuerai a strizzare stracci."
+          content: "Ogni giorno metti uno straccio sotto.\nOgni sera lo strizzi.\nOgni mattina ricomincia.\n\nDopo un mese, sei stanco.\nPensi: \"Questo rubinetto mi sta facendo impazzire.\"\n\nMa il rubinetto non è il problema. È il SINTOMO.\n\nIl problema è la guarnizione consumata.\nFinché non la vedi, continuerai a strizzare stracci."
         },
         {
           icon: "🔍",
           title: "Il PRIMO FILTRO: Vedere SCHEMI",
-          content: "Questo è il PRIMO FILTRO: vedere SCHEMI.\n\nLa maggior parte delle persone rincorre sintomi invece di vedere pattern.\n\n\"Il team non rispetta le scadenze\" → sintomo\n\"Le scadenze slittano sempre quando aspettiamo approvazioni esterne\" → schema\n\n\"I clienti si lamentano\" → sintomo\n\"I clienti si lamentano sempre dopo la stessa fase del progetto\" → schema\n\n\"Non ho tempo\" → sintomo\n\"Perdo tempo sempre sulle stesse cose\" → schema"
+          content: "La maggior parte delle persone rincorre sintomi invece di vedere pattern.\n\n\"Il team non rispetta le scadenze\" → sintomo\n\"Le scadenze slittano sempre quando aspettiamo approvazioni esterne\" → schema\n\n\"I clienti si lamentano\" → sintomo\n\"I clienti si lamentano sempre dopo la stessa fase del progetto\" → schema\n\n\"Non ho tempo\" → sintomo\n\"Perdo tempo sempre sulle stesse cose\" → schema"
         },
         {
           icon: "📋",
@@ -372,7 +372,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📡",
           title: "Alcuni Segnali Comuni",
-          content: "Ecco alcuni segnali comuni:\n\n\"Interessante\" = Non mi interessa\n\"Ne parliamo\" = Non ne parleremo\n\"Devo pensarci\" = Ho già deciso (no)\n\"Fammi sapere\" = Non ti richiamerò\nRisposta dopo 3 giorni = Non sei una priorità\n\nNon sono regole assolute. Ma se impari a leggerli, risparmi tempo e frustrazioni."
+          content: "\"Interessante\" = Non mi interessa\n\"Ne parliamo\" = Non ne parleremo\n\"Devo pensarci\" = Ho già deciso (no)\n\"Fammi sapere\" = Non ti richiamerò\nRisposta dopo 3 giorni = Non sei una priorità\n\nNon sono regole assolute. Ma se impari a leggerli, risparmi tempo e frustrazioni."
         },
         {
           icon: "📋",
@@ -409,7 +409,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🔍",
           title: "Il TERZO FILTRO: Trovare RISORSE",
-          content: "Questo è il TERZO FILTRO: trovare RISORSE.\n\nLe risorse sono quello che HAI GIÀ ma non vedi.\n\nNon parlo solo di soldi o strumenti. Parlo di:\n\n• Persone che conosci e potrebbero aiutarti\n• Cose già fatte che potresti riutilizzare\n• Competenze che hai e sottovaluti\n• Tempo che sprechi senza accorgertene\n• Informazioni che hai già raccolto"
+          content: "Le risorse sono quello che HAI GIÀ ma non vedi.\n\nNon parlo solo di soldi o strumenti. Parlo di:\n\n• Persone che conosci e potrebbero aiutarti\n• Cose già fatte che potresti riutilizzare\n• Competenze che hai e sottovaluti\n• Tempo che sprechi senza accorgertene\n• Informazioni che hai già raccolto"
         },
         {
           icon: "📋",
@@ -446,7 +446,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "⏱️",
           title: "Il METODO 5 MINUTI",
-          content: "Il METODO 5 MINUTI funziona così:\n\nQuando hai un problema, imposta un timer a 5 minuti.\n\nMINUTO 1-2: SCHEMA\nDomanda: \"Quale schema si ripete?\"\nScrivi: \"Lo schema è: ____________\"\n\nMINUTO 2-3: SEGNALI\nDomanda: \"Cosa non viene detto?\"\nScrivi: \"I segnali indicano che: ____________\"\n\nMINUTO 3-4: RISORSE\nDomanda: \"Cosa ho già che posso usare?\"\nScrivi: \"Le risorse sono: ____________\"\n\nMINUTO 4-5: AZIONE\nDomanda: \"Qual è UNA cosa che faccio entro domani?\"\nScrivi: \"La mia prossima azione è: ____________\"\n\nQuando il timer suona, FERMATI. Hai quello che ti serve."
+          content: "Quando hai un problema, imposta un timer a 5 minuti.\n\nMINUTO 1-2: SCHEMA\nDomanda: \"Quale schema si ripete?\"\nScrivi: \"Lo schema è: ____________\"\n\nMINUTO 2-3: SEGNALI\nDomanda: \"Cosa non viene detto?\"\nScrivi: \"I segnali indicano che: ____________\"\n\nMINUTO 3-4: RISORSE\nDomanda: \"Cosa ho già che posso usare?\"\nScrivi: \"Le risorse sono: ____________\"\n\nMINUTO 4-5: AZIONE\nDomanda: \"Qual è UNA cosa che faccio entro domani?\"\nScrivi: \"La mia prossima azione è: ____________\"\n\nQuando il timer suona, FERMATI. Hai quello che ti serve."
         },
         {
           icon: "📋",
@@ -481,12 +481,12 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🎭",
           title: "I 3 Traditori",
-          content: "I 3 TRADITORI:\n\nIL PARALIZZANTE\nCosa dice: \"Devo avere tutte le informazioni prima di agire\"\nCome si traveste: Prudenza, analisi accurata\n\nIL TIMOROSO\nCosa dice: \"È meglio non agire che agire e sbagliare\"\nCome si traveste: Pensiero strategico\n\nIL PROCRASTINATORE\nCosa dice: \"Devo aspettare il momento perfetto\"\nCome si traveste: Timing intelligente"
+          content: "IL PARALIZZANTE\nCosa dice: \"Devo avere tutte le informazioni prima di agire\"\nCome si traveste: Prudenza, analisi accurata\n\nIL TIMOROSO\nCosa dice: \"È meglio non agire che agire e sbagliare\"\nCome si traveste: Pensiero strategico\n\nIL PROCRASTINATORE\nCosa dice: \"Devo aspettare il momento perfetto\"\nCome si traveste: Timing intelligente"
         },
         {
           icon: "💡",
           title: "Il Problema È Che Sembrano Ragionevoli",
-          content: "Il problema è che sembrano ragionevoli.\n\nChi non vorrebbe avere tutte le informazioni?\nChi non vorrebbe evitare errori?\nChi non vorrebbe il momento perfetto?\n\nMa guarda meglio:\n\nIl momento perfetto non arriva mai.\nLe informazioni non sono mai \"tutte\".\nE non agire È GIÀ un errore.\n\nCOME NEUTRALIZZARLI:\n\nIl potere dei traditori sta nel fatto che non li riconosci.\n\nSe li smascheri — se dici \"Ah, sei tu che mi blocchi\" — perdono metà della forza.\n\nA quel punto puoi SCEGLIERE se crederci o no."
+          content: "Chi non vorrebbe avere tutte le informazioni?\nChi non vorrebbe evitare errori?\nChi non vorrebbe il momento perfetto?\n\nMa guarda meglio:\n\nIl momento perfetto non arriva mai.\nLe informazioni non sono mai \"tutte\".\nE non agire È GIÀ un errore.\n\nCOME NEUTRALIZZARLI:\n\nIl potere dei traditori sta nel fatto che non li riconosci.\n\nSe li smascheri — se dici \"Ah, sei tu che mi blocchi\" — perdono metà della forza.\n\nA quel punto puoi SCEGLIERE se crederci o no."
         }
       ],
       exercise: {
@@ -517,7 +517,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📋",
           title: "Cosa Hai Costruito Questa Settimana",
-          content: "COSA HAI COSTRUITO QUESTA SETTIMANA:\n\n| Giorno | Strumento |\n|--------|-----------||\n| 1 | Le PROVE che sai già risolvere |\n| 2 | Il Filtro PATTERN (vedere schemi) |\n| 3 | Il Filtro SEGNALI (leggere il non detto) |\n| 4 | Il Filtro RISORSE (trovare quello che hai) |\n| 5 | Il METODO 5 MINUTI (tutto insieme) |\n| 6 | I 3 TRADITORI (e come smascherarli) |\n\nQuesti strumenti non scadono. Puoi usarli su qualsiasi problema, per sempre."
+          content: "| Giorno | Strumento |\n|--------|-----------||\n| 1 | Le PROVE che sai già risolvere |\n| 2 | Il Filtro PATTERN (vedere schemi) |\n| 3 | Il Filtro SEGNALI (leggere il non detto) |\n| 4 | Il Filtro RISORSE (trovare quello che hai) |\n| 5 | Il METODO 5 MINUTI (tutto insieme) |\n| 6 | I 3 TRADITORI (e come smascherarli) |\n\nQuesti strumenti non scadono. Puoi usarli su qualsiasi problema, per sempre."
         },
         {
           icon: "🎯",
@@ -621,7 +621,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "⭐",
           title: "Come Vedere Una Stella Cadente",
-          content: "È come vedere una stella cadente.\n\nSe guardi il cielo e la noti mentre passa: wow, momento magico.\n\nSe qualcuno ti dice \"mezz'ora fa c'è stata una stella cadente\": ok, interessante, ma non è la stessa cosa.\n\nI momenti positivi funzionano così. Devi coglierli mentre accadono."
+          content: "Se guardi il cielo e la noti mentre passa: wow, momento magico.\n\nSe qualcuno ti dice \"mezz'ora fa c'è stata una stella cadente\": ok, interessante, ma non è la stessa cosa.\n\nI momenti positivi funzionano così. Devi coglierli mentre accadono."
         }
       ],
       exercise: {
@@ -658,7 +658,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "💡",
           title: "Sembra Semplice — E Lo È",
-          content: "Sembra semplice — e lo è. Ma la semplicità è il punto: deve essere così facile che lo fai davvero.\n\n1. RILEVA: Il tuo radar interno si accorge che qualcosa di piacevole sta succedendo.\n\n2. ACCOGLI: Non pensare \"che stupidaggine\". Lascia che la sensazione arrivi.\n\n3. DISTINGUI: \"Questo mi avvicina al benessere?\"\n\n4. AMPLIFICA: Invece di passare al prossimo pensiero, resta con la sensazione per 5 secondi.\n\n5. RESTA: Non fare nulla per 2 secondi. Questo stabilizza l'esperienza nella memoria."
+          content: "La semplicità è il punto: deve essere così facile che lo fai davvero.\n\n1. RILEVA: Il tuo radar interno si accorge che qualcosa di piacevole sta succedendo.\n\n2. ACCOGLI: Non pensare \"che stupidaggine\". Lascia che la sensazione arrivi.\n\n3. DISTINGUI: \"Questo mi avvicina al benessere?\"\n\n4. AMPLIFICA: Invece di passare al prossimo pensiero, resta con la sensazione per 5 secondi.\n\n5. RESTA: Non fare nulla per 2 secondi. Questo stabilizza l'esperienza nella memoria."
         }
       ],
       exercise: {

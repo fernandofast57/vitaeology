@@ -711,7 +711,7 @@ function generateEmailWrapper(
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai ricevuto questa email perchéti sei iscritto alla Sfida ${challengeName}.<br>
+    Hai ricevuto questa email perché ti sei iscritto alla Sfida ${challengeName}.<br>
     <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
   </p>
 
@@ -785,7 +785,7 @@ export function getReminderEmail(
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai ricevuto questa email perchéti sei iscritto alla Sfida ${challengeName}.<br>
+    Hai ricevuto questa email perché ti sei iscritto alla Sfida ${challengeName}.<br>
     <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
   </p>
 
@@ -842,7 +842,7 @@ export function getForceAdvanceEmail(
     </ul>
   </div>
 
-  <p>L'importante è checontinui, anche se a modo tuo.</p>
+  <p>L'importante è che continui, anche se a modo tuo.</p>
 
   <div style="text-align: center; margin: 40px 0;">
     <a href="${dayUrl}" style="display: inline-block; background: ${color}; color: white; font-weight: bold; padding: 14px 28px; text-decoration: none; border-radius: 8px;">
@@ -858,7 +858,7 @@ export function getForceAdvanceEmail(
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai ricevuto questa email perchéti sei iscritto alla Sfida ${challengeName}.<br>
+    Hai ricevuto questa email perché ti sei iscritto alla Sfida ${challengeName}.<br>
     <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
   </p>
 
@@ -934,7 +934,7 @@ export function getConversionEmail(
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai ricevuto questa email perchéhai completato la Sfida ${challengeName}.<br>
+    Hai ricevuto questa email perché hai completato la Sfida ${challengeName}.<br>
     <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
   </p>
 
@@ -979,7 +979,7 @@ export function getRecoveryEmail(
   <p>Volevo ricordarti che c'è un passo successivo che potrebbe interessarti: l'<strong>Assessment Vitaeology</strong>.</p>
 
   <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 25px 0;">
-    <p style="margin: 0 0 15px 0;"><strong>Perchéfare l'Assessment?</strong></p>
+    <p style="margin: 0 0 15px 0;"><strong>Perché fare l'Assessment?</strong></p>
     <ul style="margin: 0; padding-left: 20px;">
       <li>Scopri le tue <strong>5 dimensioni di leadership</strong></li>
       <li>Ricevi un <strong>report personalizzato</strong></li>
@@ -1006,7 +1006,7 @@ export function getRecoveryEmail(
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
   <p style="font-size: 12px; color: #999; text-align: center;">
-    Hai ricevuto questa email perchéhai partecipato alla Sfida ${challengeName}.<br>
+    Hai ricevuto questa email perché hai partecipato alla Sfida ${challengeName}.<br>
     <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color: #999;">Cancella iscrizione</a>
   </p>
 
