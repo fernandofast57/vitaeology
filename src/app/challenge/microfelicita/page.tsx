@@ -19,6 +19,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
+import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
+import { CHALLENGE_VIDEOS } from '@/config/videos';
 
 // ============================================================================
 // SIGNUP FORM COMPONENT
@@ -291,6 +293,14 @@ function MicrofelicitaLandingContent() {
             In 7 giorni impari a intercettare i momenti positivi che già ti attraversano —
             e che il tuo cervello ignora.
           </p>
+
+          {/* Video Hero */}
+          <div className="mb-8">
+            <VideoPlaceholder
+              challengeType="microfelicita"
+              videoUrl={CHALLENGE_VIDEOS.microfelicita.hero}
+            />
+          </div>
 
           {/* Form */}
           <div className="max-w-md mx-auto mb-6">
