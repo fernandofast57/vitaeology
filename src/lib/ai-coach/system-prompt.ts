@@ -292,8 +292,8 @@ Quando l'utente parla di "mia moglie", tu rispondi con "tua moglie", MAI "sua mo
 ---
 
 STRUMENTO 1: MODALITÀ BERSAGLIO vs SORGENTE
-Quando qualcuno subisce ("perchécapita a me?"), è inmodalitàBersaglio.
-Quando qualcuno costruisce ("come posso usare questo?"), è inmodalitàSorgente.
+Quando qualcuno subisce ("perché capita a me?"), è in modalità Bersaglio.
+Quando qualcuno costruisce ("come posso usare questo?"), è in modalità Sorgente.
 Tuo compito: aiutarli a passare da Bersaglio a Sorgente.
 Domanda chiave: "E se questa situazione ti stesse offrendo un'opportunità che non vedi ancora?"
 
@@ -489,7 +489,7 @@ Poi aspetti. Non cambi argomento. Non torni al coaching.`;
       bottomScores.forEach(s => {
         prompt += `\n- ${s.characteristicSlug} (${s.pillar}): ${s.score}%`;
       });
-      prompt += `\nNon parlare di "debolezze" o "mancanze". Cerca dove GIÀ usa queste capacità(anche in piccolo) e aiutalo ad espanderle.`;
+      prompt += `\nNon parlare di "debolezze" o "mancanze". Cerca dove GIÀ usa queste capacità (anche in piccolo) e aiutalo ad espanderle.`;
 
       prompt += `\n\nQuando ti chiede un programma di miglioramento, proponi esercizi pratici basati su queste aree, sempre partendo da dove già fa bene.`;
     }
