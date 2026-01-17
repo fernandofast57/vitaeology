@@ -1,6 +1,6 @@
 ﻿# Vitaeology - Struttura Applicazione
 
-> Ultimo aggiornamento: 12/01/2026
+> Ultimo aggiornamento: 17/01/2026
 
 ## Indice
 
@@ -46,7 +46,13 @@
 | `/challenge/microfelicita` | Client | 🌐 | Landing challenge Microfelicità 7 giorni |
 | `/challenge/ostacoli` | Client | 🌐 | Landing challenge Ostacoli 7 giorni |
 | `/contact` | Client | 🌐 | Pagina contatti |
-| `/dashboard` | Client | 🔒 | Dashboard utente principale |
+| `/dashboard` | Client | 🔒 | Dashboard utente (redirect a percorso) |
+| `/dashboard/leadership` | Client | 🔒 | Dashboard percorso Leadership |
+| `/dashboard/ostacoli` | Client | 🔒 | Dashboard percorso Ostacoli |
+| `/dashboard/microfelicita` | Client | 🔒 | Dashboard percorso Microfelicità |
+| `/affiliate` | Client | 🌐 | Landing page affiliati |
+| `/affiliate/dashboard` | Client | 🔒 | Dashboard affiliato |
+| `/affiliate/links` | Client | 🔒 | Gestione link affiliato |
 | `/exercises` | Server | 🔒 | Lista esercizi disponibili |
 | `/exercises/[exerciseId]` | Server | 🔒 | Dettaglio singolo esercizio |
 | `/libro/[slug]` | Server | 🌐 | Landing page acquisto libro |
@@ -130,6 +136,17 @@
 | `/api/assessment/risolutore/results/[id]` | GET | Risultati Risolutore |
 | `/api/assessment/risolutore/session` | POST | Sessione Risolutore |
 | `/api/assessment/session` | GET, DELETE | Gestione sessione assessment |
+
+### /api/affiliate
+
+| Endpoint | Metodi | Descrizione |
+|----------|--------|-------------|
+| `/api/affiliate/apply` | POST | Richiesta affiliazione |
+| `/api/affiliate/dashboard` | GET | Dati dashboard affiliato |
+| `/api/affiliate/links` | GET, POST | Gestione link affiliato |
+| `/api/affiliate/stats` | GET | Statistiche affiliato |
+| `/api/affiliate/payout` | POST | Richiesta pagamento |
+| `/api/affiliate/track` | POST | Tracking click |
 
 ### /api/callback
 
@@ -433,11 +450,23 @@ Risposta AI Coach
 
 ## Statistiche
 
-- **Pagine totali:** 43
-- **API endpoints:** 59
-- **Componenti:** 32
-- **Librerie:** 41 (inclusi 3 check comprensione)
+- **Pagine totali:** 50+
+- **API endpoints:** 67+
+- **Componenti:** 35+
+- **Librerie:** 45+ (inclusi 3 check comprensione)
+- **RAG chunks:** 966 (da 3 libri LaTeX)
 
 ---
 
-*Documentazione generata automaticamente da `scripts/generate-app-structure.js`*
+## Scripts Utili
+
+| Script | Comando | Descrizione |
+|--------|---------|-------------|
+| Dev server | `npm run dev` | Avvia server sviluppo |
+| Build | `npm run build` | Build produzione |
+| Update RAG | `npm run update-rag` | Aggiorna chunks da LaTeX |
+| Test critical | `npm run test:critical` | Test critici pre-deploy |
+
+---
+
+*Documentazione generata automaticamente - Ultimo update: 17/01/2026*
