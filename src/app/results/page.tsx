@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
 import {
   RadarChart,
@@ -14,6 +15,7 @@ import {
 } from 'recharts'
 import ChatWidget from '@/components/ai-coach/ChatWidget'
 import Breadcrumb from '@/components/ui/Breadcrumb'
+import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES, type PathwaySlug } from '@/lib/pathways'
 
 // Tipi
 interface Characteristic {
@@ -91,6 +93,12 @@ function getLevelColor(percentage: number): string {
   return '#10B981'
 }
 
+// Mappa assessment → percorso
+const ASSESSMENT_PATHS: Record<string, { name: string; slug: string; resultsPath: string }> = {
+  'risolutore': { name: 'Oltre gli Ostacoli', slug: 'risolutore', resultsPath: '/assessment/risolutore/results' },
+  'microfelicita': { name: 'Microfelicità Digitale', slug: 'microfelicita', resultsPath: '/assessment/microfelicita/results' },
+}
+
 export default function ResultsPage() {
   const router = useRouter()
 
@@ -103,6 +111,8 @@ export default function ResultsPage() {
   const [pillarScores, setPillarScores] = useState<PillarScore[]>([])
   const [radarData, setRadarData] = useState<any[]>([])
   const [completedAt, setCompletedAt] = useState<string>('')
+  const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([])
+  const [otherAssessments, setOtherAssessments] = useState<{ slug: string; name: string; completedAt: string }[]>([])
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -121,6 +131,57 @@ export default function ResultsPage() {
 
         setUserId(user.id)
         setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '')
+
+        // Carica percorsi utente
+        const pathways = await getUserPathways(supabase, user.id)
+        setUserPathways(pathways)
+
+        // Verifica altri assessment completati (per utenti multi-pathway)
+        if (pathways.length > 1) {
+          const otherResults: { slug: string; name: string; completedAt: string }[] = []
+
+          // Check risolutore assessment
+          if (pathways.some(p => p.pathway.slug === 'risolutore')) {
+            const { data: risolutoreResult } = await supabase
+              .from('risolutore_results')
+              .select('completed_at')
+              .eq('user_id', user.id)
+              .not('completed_at', 'is', null)
+              .order('completed_at', { ascending: false })
+              .limit(1)
+              .maybeSingle()
+
+            if (risolutoreResult?.completed_at) {
+              otherResults.push({
+                slug: 'risolutore',
+                name: 'Oltre gli Ostacoli',
+                completedAt: risolutoreResult.completed_at
+              })
+            }
+          }
+
+          // Check microfelicita assessment
+          if (pathways.some(p => p.pathway.slug === 'microfelicita')) {
+            const { data: microResult } = await supabase
+              .from('microfelicita_results')
+              .select('completed_at')
+              .eq('user_id', user.id)
+              .not('completed_at', 'is', null)
+              .order('completed_at', { ascending: false })
+              .limit(1)
+              .maybeSingle()
+
+            if (microResult?.completed_at) {
+              otherResults.push({
+                slug: 'microfelicita',
+                name: 'Microfelicità Digitale',
+                completedAt: microResult.completed_at
+              })
+            }
+          }
+
+          setOtherAssessments(otherResults)
+        }
 
         // Carica assessment completato
         const { data: assessment, error: assessmentError } = await supabase
@@ -342,6 +403,49 @@ charScores.forEach(score => {
           </div>
         </div>
 
+        {/* Altri Assessment (multi-pathway) */}
+        {otherAssessments.length > 0 && (
+          <div className="bg-gradient-to-r from-petrol-50 to-petrol-100 rounded-xl p-4 sm:p-6 mb-4 sm:mb-8 border border-petrol-200">
+            <h3 className="text-sm sm:text-base font-semibold text-petrol-800 mb-3 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              I Tuoi Altri Assessment
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {otherAssessments.map((assessment) => {
+                const pathInfo = ASSESSMENT_PATHS[assessment.slug]
+                const color = PATHWAY_COLORS[assessment.slug as PathwaySlug] || '#6B7280'
+                return (
+                  <Link
+                    key={assessment.slug}
+                    href={pathInfo?.resultsPath || '#'}
+                    className="flex items-center gap-3 px-4 py-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all group"
+                  >
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: `${color}20` }}
+                    >
+                      <svg className="w-5 h-5" style={{ color }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-gray-900">{assessment.name}</p>
+                      <p className="text-xs text-gray-500">
+                        Completato il {new Date(assessment.completedAt).toLocaleDateString('it-IT')}
+                      </p>
+                    </div>
+                    <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Radar Chart */}
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 mb-4 sm:mb-8">
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6 text-center">
@@ -532,7 +636,15 @@ charScores.forEach(score => {
               : undefined,
             completedExercisesCount: 0,
             currentWeek: 1,
+            // Multi-pathway context
+            activePathways: userPathways.length > 1 ? userPathways.map(p => ({
+              slug: p.pathway.slug,
+              name: PATHWAY_NAMES[p.pathway.slug as PathwaySlug] || p.pathway.name,
+              progressPercentage: p.progress_percentage || 0,
+              hasAssessment: !!p.last_assessment_at,
+            })) : undefined,
           }}
+          currentPath="leadership"
         />
       )}
     </div>

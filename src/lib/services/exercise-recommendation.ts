@@ -2,8 +2,13 @@
  * Exercise Recommendation Service
  *
  * Genera raccomandazioni personalizzate di esercizi basate sui risultati
- * dell'assessment dell'utente. Prioritizza le caratteristiche con punteggi
- * più bassi e crea un percorso sequenziale di sviluppo.
+ * dell'assessment dell'utente. Supporta tutti e 3 i percorsi:
+ * - Leadership (LITE): 24 caratteristiche, 52 esercizi
+ * - Risolutore (Ostacoli): 7 dimensioni, 24 esercizi
+ * - Microfelicità: 13 dimensioni, 24 esercizi
+ *
+ * Prioritizza le aree con punteggi più bassi (GAP maggiori) e crea
+ * un percorso sequenziale personalizzato di sviluppo.
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -12,11 +17,20 @@ import { SupabaseClient } from '@supabase/supabase-js';
 // TYPES
 // ============================================================
 
-export interface CharacteristicScore {
+export type PathType = 'leadership' | 'risolutore' | 'microfelicita';
+
+export interface DimensionScore {
+  dimensionCode: string;
+  dimensionName: string;
+  score: number; // 0-100 percentuale
+  pillar: string; // Mappato al pillar per matching esercizi
+  category?: string; // Per Risolutore/Microfelicità: filtro, traditore, radar, sabotatore, etc.
+}
+
+// Manteniamo compatibilità con vecchio nome
+export interface CharacteristicScore extends DimensionScore {
   characteristicSlug: string;
   characteristicName: string;
-  score: number;
-  pillar: string;
 }
 
 export interface ExerciseInfo {
@@ -24,7 +38,9 @@ export interface ExerciseInfo {
   title: string;
   subtitle: string | null;
   week_number: number;
-  characteristic_slug: string;
+  characteristic_slug: string | null;
+  pillar_primary: string | null;
+  book_slug: string | null;
   exercise_type: string;
   difficulty_level: string;
   estimated_time_minutes: number;
@@ -34,15 +50,19 @@ export interface ExerciseInfo {
 export interface RecommendedExercise extends ExerciseInfo {
   priority: number;           // 1 = highest priority
   reason: string;             // Why this exercise is recommended
-  characteristicScore: number; // User's current score for this characteristic
-  characteristicName: string;
+  dimensionScore: number;     // User's current score for this dimension
+  dimensionName: string;
   pillar: string;
   isCompleted: boolean;
   isInProgress: boolean;
+  // Manteniamo compatibilità
+  characteristicScore: number;
+  characteristicName: string;
 }
 
 export interface ExerciseRecommendation {
   userId: string;
+  path: PathType;
   generatedAt: string;
   totalExercises: number;
   completedCount: number;
@@ -54,6 +74,38 @@ export interface ExerciseRecommendation {
   }[];
   nextRecommended: RecommendedExercise | null;
 }
+
+// ============================================================
+// MAPPING DIMENSIONI → PILLAR PER ESERCIZI
+// ============================================================
+
+// Risolutore: dimensione assessment → pillar esercizio
+const RISOLUTORE_DIMENSION_TO_PILLAR: Record<string, string> = {
+  FP: 'PENSARE',  // Filtro Pattern → Detective dei Pattern
+  FS: 'SENTIRE',  // Filtro Segnali → Antenna dei Segnali
+  FR: 'AGIRE',    // Filtro Risorse → Radar delle Risorse
+  TP: 'PENSARE',  // Traditore Paralizzante
+  TT: 'SENTIRE',  // Traditore Timoroso
+  TC: 'AGIRE',    // Traditore Procrastinatore
+  SR: 'ESSERE',   // Scala Risolutore → Integrazione
+};
+
+// Microfelicità: dimensione assessment → pillar esercizio
+const MICROFELICITA_DIMENSION_TO_PILLAR: Record<string, string> = {
+  RR: 'SENTIRE',  // Rileva
+  RA: 'ESSERE',   // Accogli
+  RD: 'PENSARE',  // Distingui
+  RM: 'SENTIRE',  // Amplifica
+  RS: 'AGIRE',    // Resta
+  SM: 'SENTIRE',  // Sabotatore Minimizzazione
+  SA: 'PENSARE',  // Sabotatore Anticipo
+  SI: 'SENTIRE',  // Sabotatore Auto-Interruzione
+  SC: 'PENSARE',  // Sabotatore Cambio Fuoco
+  SE: 'AGIRE',    // Sabotatore Correzione
+  L1: 'ESSERE',   // Livello 1: Campo Interno
+  L2: 'SENTIRE',  // Livello 2: Spazio Relazionale
+  L3: 'PENSARE',  // Livello 3: Campo Contesti
+};
 
 // ============================================================
 // SERVICE CLASS
@@ -69,37 +121,47 @@ export class ExerciseRecommendationService {
   }
 
   /**
-   * Genera raccomandazioni personalizzate per un utente
+   * Genera raccomandazioni personalizzate per un utente per un percorso specifico
+   * @param userId ID utente
+   * @param path Percorso: 'leadership' | 'risolutore' | 'microfelicita'
    */
-  async generateRecommendations(userId: string): Promise<ExerciseRecommendation> {
+  async generateRecommendations(
+    userId: string,
+    path?: PathType
+  ): Promise<ExerciseRecommendation> {
+    // Se non specificato, determina il percorso dall'ultimo assessment completato
+    const detectedPath = path || await this.detectUserPath(userId);
+    const cacheKey = `${userId}-${detectedPath}`;
+
     // Check cache
-    const cached = this.cache.get(userId);
+    const cached = this.cache.get(cacheKey);
     if (cached && cached.expiry > Date.now()) {
       return cached.data;
     }
 
-    // 1. Carica risultati assessment
-    const scores = await this.getUserAssessmentScores(userId);
+    // 1. Carica risultati assessment per il percorso
+    const scores = await this.getUserAssessmentScores(userId, detectedPath);
 
     if (scores.length === 0) {
-      return this.createEmptyRecommendation(userId);
+      return this.createEmptyRecommendation(userId, detectedPath);
     }
 
-    // 2. Carica tutti gli esercizi
-    const exercises = await this.getAllExercises();
+    // 2. Carica esercizi per il percorso
+    const exercises = await this.getExercisesForPath(detectedPath);
 
     // 3. Carica progressi utente
     const progress = await this.getUserProgress(userId);
 
     // 4. Genera raccomandazioni ordinate
-    const recommendations = this.calculateRecommendations(scores, exercises, progress);
+    const recommendations = this.calculateRecommendations(scores, exercises, progress, detectedPath);
 
     // 5. Calcola aree prioritarie per pillar
-    const priorityAreas = this.calculatePriorityAreas(scores, exercises);
+    const priorityAreas = this.calculatePriorityAreas(scores, exercises, detectedPath);
 
     // 6. Costruisci risultato
     const result: ExerciseRecommendation = {
       userId,
+      path: detectedPath,
       generatedAt: new Date().toISOString(),
       totalExercises: exercises.length,
       completedCount: progress.filter(p => p.status === 'completed').length,
@@ -109,15 +171,80 @@ export class ExerciseRecommendationService {
     };
 
     // Cache result
-    this.cache.set(userId, { data: result, expiry: Date.now() + this.CACHE_TTL });
+    this.cache.set(cacheKey, { data: result, expiry: Date.now() + this.CACHE_TTL });
 
     return result;
   }
 
   /**
-   * Recupera i punteggi dell'assessment più recente
+   * Determina il percorso dell'utente dall'ultimo assessment completato
    */
-  private async getUserAssessmentScores(userId: string): Promise<CharacteristicScore[]> {
+  private async detectUserPath(userId: string): Promise<PathType> {
+    // Controlla assessment Risolutore
+    const { data: risolutore } = await this.supabase
+      .from('risolutore_assessments')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Controlla assessment Microfelicità
+    const { data: microfelicita } = await this.supabase
+      .from('microfelicita_assessments')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Controlla assessment Leadership (LITE)
+    const { data: leadership } = await this.supabase
+      .from('user_assessments')
+      .select('id, completed_at')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // Ritorna l'ultimo completato (più recente vince)
+    // Default a leadership se nessun assessment
+    if (!risolutore && !microfelicita && !leadership) {
+      return 'leadership';
+    }
+
+    // Logica semplificata: ritorna in base a quale esiste
+    // In futuro si può aggiungere comparazione date
+    if (risolutore) return 'risolutore';
+    if (microfelicita) return 'microfelicita';
+    return 'leadership';
+  }
+
+  /**
+   * Recupera i punteggi dell'assessment più recente per il percorso specificato
+   */
+  private async getUserAssessmentScores(
+    userId: string,
+    path: PathType
+  ): Promise<DimensionScore[]> {
+    switch (path) {
+      case 'risolutore':
+        return this.getRisolutoreScores(userId);
+      case 'microfelicita':
+        return this.getMicrofelicitaScores(userId);
+      case 'leadership':
+      default:
+        return this.getLeadershipScores(userId);
+    }
+  }
+
+  /**
+   * Punteggi assessment Leadership (LITE) - 24 caratteristiche
+   */
+  private async getLeadershipScores(userId: string): Promise<DimensionScore[]> {
     // Trova l'assessment completato più recente
     const { data: assessment } = await this.supabase
       .from('user_assessments')
@@ -179,18 +306,181 @@ export class ExerciseRecommendationService {
       const percentage = maxScore > 0 ? Math.round((scores.points / maxScore) * 100) : 0;
 
       return {
+        dimensionCode: char.slug,
+        dimensionName: char.name_familiar || char.name_barrios,
+        score: percentage,
+        pillar: this.normalizePillar(char.pillar),
+        // Compatibilità
         characteristicSlug: char.slug,
         characteristicName: char.name_familiar || char.name_barrios,
-        score: percentage,
-        pillar: this.normalizePillar(char.pillar)
-      };
+      } as DimensionScore;
     });
   }
 
   /**
-   * Carica tutti gli esercizi attivi
+   * Punteggi assessment Risolutore - 7 dimensioni (Filtri + Traditori + Scala)
    */
-  private async getAllExercises(): Promise<ExerciseInfo[]> {
+  private async getRisolutoreScores(userId: string): Promise<DimensionScore[]> {
+    // Trova l'assessment completato più recente
+    const { data: assessment } = await this.supabase
+      .from('risolutore_assessments')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (!assessment) {
+      return [];
+    }
+
+    // Carica dimensioni
+    const { data: dimensions } = await this.supabase
+      .from('risolutore_dimensions')
+      .select('id, code, name, category')
+      .order('sort_order');
+
+    if (!dimensions) {
+      return [];
+    }
+
+    // Carica risposte con domande
+    const { data: answers } = await this.supabase
+      .from('risolutore_answers')
+      .select(`
+        question_id,
+        raw_score,
+        normalized_score,
+        risolutore_questions (
+          dimension_code
+        )
+      `)
+      .eq('assessment_id', assessment.id);
+
+    if (!answers) {
+      return [];
+    }
+
+    // Calcola punteggi per dimensione
+    const scoresByDim: Record<string, { total: number; count: number }> = {};
+
+    answers.forEach((answer: any) => {
+      const dimCode = answer.risolutore_questions?.dimension_code;
+      if (dimCode && dimCode !== 'SR') { // Escludi scala
+        if (!scoresByDim[dimCode]) {
+          scoresByDim[dimCode] = { total: 0, count: 0 };
+        }
+        scoresByDim[dimCode].total += answer.normalized_score || 0;
+        scoresByDim[dimCode].count += 1;
+      }
+    });
+
+    // Costruisci array punteggi
+    return dimensions
+      .filter(d => d.code !== 'SR') // Escludi scala dal matching esercizi
+      .map((dim: any) => {
+        const scores = scoresByDim[dim.code] || { total: 0, count: 0 };
+        const maxScore = scores.count * 2; // Max 2 per domanda
+        const percentage = maxScore > 0 ? Math.round((scores.total / maxScore) * 100) : 0;
+
+        return {
+          dimensionCode: dim.code,
+          dimensionName: dim.name,
+          score: percentage,
+          pillar: RISOLUTORE_DIMENSION_TO_PILLAR[dim.code] || 'ESSERE',
+          category: dim.category,
+          // Compatibilità
+          characteristicSlug: dim.code,
+          characteristicName: dim.name,
+        } as DimensionScore;
+      });
+  }
+
+  /**
+   * Punteggi assessment Microfelicità - 13 dimensioni (RADAR + Sabotatori + Livelli)
+   */
+  private async getMicrofelicitaScores(userId: string): Promise<DimensionScore[]> {
+    // Trova l'assessment completato più recente
+    const { data: assessment } = await this.supabase
+      .from('microfelicita_assessments')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (!assessment) {
+      return [];
+    }
+
+    // Carica dimensioni
+    const { data: dimensions } = await this.supabase
+      .from('microfelicita_dimensions')
+      .select('id, code, name, category')
+      .order('sort_order');
+
+    if (!dimensions) {
+      return [];
+    }
+
+    // Carica risposte con domande
+    const { data: answers } = await this.supabase
+      .from('microfelicita_answers')
+      .select(`
+        question_id,
+        raw_score,
+        normalized_score,
+        microfelicita_questions (
+          dimension_code
+        )
+      `)
+      .eq('assessment_id', assessment.id);
+
+    if (!answers) {
+      return [];
+    }
+
+    // Calcola punteggi per dimensione
+    const scoresByDim: Record<string, { total: number; count: number }> = {};
+
+    answers.forEach((answer: any) => {
+      const dimCode = answer.microfelicita_questions?.dimension_code;
+      if (dimCode) {
+        if (!scoresByDim[dimCode]) {
+          scoresByDim[dimCode] = { total: 0, count: 0 };
+        }
+        scoresByDim[dimCode].total += answer.normalized_score || 0;
+        scoresByDim[dimCode].count += 1;
+      }
+    });
+
+    // Costruisci array punteggi
+    return dimensions.map((dim: any) => {
+      const scores = scoresByDim[dim.code] || { total: 0, count: 0 };
+      const maxScore = scores.count * 2; // Max 2 per domanda
+      const percentage = maxScore > 0 ? Math.round((scores.total / maxScore) * 100) : 0;
+
+      return {
+        dimensionCode: dim.code,
+        dimensionName: dim.name,
+        score: percentage,
+        pillar: MICROFELICITA_DIMENSION_TO_PILLAR[dim.code] || 'SENTIRE',
+        category: dim.category,
+        // Compatibilità
+        characteristicSlug: dim.code,
+        characteristicName: dim.name,
+      } as DimensionScore;
+    });
+  }
+
+  /**
+   * Carica esercizi per un percorso specifico
+   */
+  private async getExercisesForPath(path: PathType): Promise<ExerciseInfo[]> {
+    const bookSlug = this.pathToBookSlug(path);
+
     const { data } = await this.supabase
       .from('exercises')
       .select(`
@@ -199,15 +489,30 @@ export class ExerciseRecommendationService {
         subtitle,
         week_number,
         characteristic_slug,
+        pillar_primary,
+        book_slug,
         exercise_type,
         difficulty_level,
         estimated_time_minutes,
         description
       `)
       .eq('is_active', true)
+      .eq('book_slug', bookSlug)
       .order('week_number', { ascending: true });
 
     return data || [];
+  }
+
+  /**
+   * Mappa percorso → book_slug
+   */
+  private pathToBookSlug(path: PathType): string {
+    switch (path) {
+      case 'risolutore': return 'risolutore';
+      case 'microfelicita': return 'microfelicita';
+      case 'leadership':
+      default: return 'leadership';
+    }
   }
 
   /**
@@ -224,56 +529,115 @@ export class ExerciseRecommendationService {
 
   /**
    * Calcola raccomandazioni ordinate per priorità
+   *
+   * Per Leadership: match by characteristic_slug
+   * Per Risolutore/Microfelicità: match by pillar_primary (mappato da dimensione)
    */
   private calculateRecommendations(
-    scores: CharacteristicScore[],
+    scores: DimensionScore[],
     exercises: ExerciseInfo[],
-    progress: { exercise_id: string; status: string }[]
+    progress: { exercise_id: string; status: string }[],
+    path: PathType
   ): RecommendedExercise[] {
     const progressMap = new Map(progress.map(p => [p.exercise_id, p.status]));
 
-    // Crea mappa caratteristiche -> punteggi
-    const scoreMap = new Map(scores.map(s => [s.characteristicSlug, s]));
-
-    // Ordina caratteristiche per punteggio (dal più basso)
+    // Ordina dimensioni per punteggio (dal più basso = GAP maggiore)
     const sortedScores = [...scores].sort((a, b) => a.score - b.score);
+
+    // Per Leadership: mappa caratteristica → score
+    // Per Risolutore/Microfelicità: mappa pillar → scores (può esserci più di una dimensione per pillar)
+    const isLeadership = path === 'leadership';
+
+    // Crea mappa per matching
+    let scoreMap: Map<string, DimensionScore>;
+    let pillarToLowestScore: Map<string, DimensionScore>;
+
+    if (isLeadership) {
+      // Leadership: match diretto per characteristic_slug
+      scoreMap = new Map(scores.map(s => [s.dimensionCode, s]));
+      pillarToLowestScore = new Map();
+    } else {
+      // Risolutore/Microfelicità: raggruppa per pillar, usa il punteggio più basso
+      scoreMap = new Map();
+      pillarToLowestScore = new Map();
+
+      sortedScores.forEach(s => {
+        const pillar = s.pillar;
+        if (!pillarToLowestScore.has(pillar)) {
+          pillarToLowestScore.set(pillar, s); // Il primo (punteggio più basso) vince
+        }
+      });
+    }
 
     // Assegna priorità agli esercizi
     const recommendations: RecommendedExercise[] = [];
 
     exercises.forEach(exercise => {
-      const charScore = scoreMap.get(exercise.characteristic_slug);
+      let matchedScore: DimensionScore | undefined;
+      let pillarForExercise: string;
 
-      if (!charScore) {
-        // Esercizio senza match caratteristica
+      if (isLeadership && exercise.characteristic_slug) {
+        // Leadership: match per characteristic_slug
+        matchedScore = scoreMap.get(exercise.characteristic_slug);
+        pillarForExercise = matchedScore?.pillar || 'Vision';
+      } else if (exercise.pillar_primary) {
+        // Risolutore/Microfelicità: match per pillar_primary
+        pillarForExercise = exercise.pillar_primary.toUpperCase();
+        matchedScore = pillarToLowestScore.get(pillarForExercise);
+      } else {
+        // Nessun match possibile
+        return;
+      }
+
+      if (!matchedScore) {
+        // Esercizio senza match - assegna priorità bassa
+        const status = progressMap.get(exercise.id);
+        recommendations.push({
+          ...exercise,
+          priority: 999,
+          reason: 'Esercizio di base per il percorso',
+          dimensionScore: 50,
+          dimensionName: 'Generale',
+          characteristicScore: 50,
+          characteristicName: 'Generale',
+          pillar: pillarForExercise || 'ESSERE',
+          isCompleted: status === 'completed',
+          isInProgress: status === 'in_progress',
+        });
         return;
       }
 
       // Calcola priorità basata su:
-      // 1. Punteggio caratteristica (più basso = più prioritario)
+      // 1. Punteggio dimensione (più basso = più prioritario)
       // 2. Difficoltà esercizio (base prima)
       // 3. Settimana (progressione naturale)
 
-      const scoreRank = sortedScores.findIndex(s => s.characteristicSlug === exercise.characteristic_slug);
+      const scoreRank = sortedScores.findIndex(s =>
+        isLeadership
+          ? s.dimensionCode === exercise.characteristic_slug
+          : s.pillar === pillarForExercise
+      );
       const difficultyWeight = this.getDifficultyWeight(exercise.difficulty_level);
 
       // Priority formula: lower = better
-      const priority = (scoreRank * 10) + difficultyWeight + (exercise.week_number * 0.1);
+      const priority = (scoreRank >= 0 ? scoreRank * 10 : 50) + difficultyWeight + (exercise.week_number * 0.1);
 
       const status = progressMap.get(exercise.id);
       const isCompleted = status === 'completed';
       const isInProgress = status === 'in_progress';
 
       // Genera reason basato sul punteggio
-      const reason = this.generateReason(charScore.score, charScore.characteristicName);
+      const reason = this.generateReason(matchedScore.score, matchedScore.dimensionName);
 
       recommendations.push({
         ...exercise,
         priority: Math.round(priority),
         reason,
-        characteristicScore: charScore.score,
-        characteristicName: charScore.characteristicName,
-        pillar: charScore.pillar,
+        dimensionScore: matchedScore.score,
+        dimensionName: matchedScore.dimensionName,
+        characteristicScore: matchedScore.score, // Compatibilità
+        characteristicName: matchedScore.dimensionName, // Compatibilità
+        pillar: matchedScore.pillar,
         isCompleted,
         isInProgress
       });
@@ -298,32 +662,59 @@ export class ExerciseRecommendationService {
    * Calcola aree prioritarie per pillar
    */
   private calculatePriorityAreas(
-    scores: CharacteristicScore[],
-    exercises: ExerciseInfo[]
+    scores: DimensionScore[],
+    exercises: ExerciseInfo[],
+    path: PathType
   ): { pillar: string; avgScore: number; exerciseCount: number }[] {
-    const pillarData: Record<string, { scores: number[]; exercises: Set<string> }> = {
-      'Vision': { scores: [], exercises: new Set() },
-      'Action': { scores: [], exercises: new Set() },
-      'Relations': { scores: [], exercises: new Set() },
-      'Adaptation': { scores: [], exercises: new Set() }
-    };
+    // I pillar per Risolutore/Microfelicità sono in italiano (PENSARE, SENTIRE, AGIRE, ESSERE)
+    // Per Leadership sono in inglese (Vision, Action, Relations, Adaptation)
+    const isLeadership = path === 'leadership';
+
+    const pillarData: Record<string, { scores: number[]; exercises: Set<string> }> = isLeadership
+      ? {
+          'Vision': { scores: [], exercises: new Set() },
+          'Action': { scores: [], exercises: new Set() },
+          'Relations': { scores: [], exercises: new Set() },
+          'Adaptation': { scores: [], exercises: new Set() }
+        }
+      : {
+          'ESSERE': { scores: [], exercises: new Set() },
+          'PENSARE': { scores: [], exercises: new Set() },
+          'SENTIRE': { scores: [], exercises: new Set() },
+          'AGIRE': { scores: [], exercises: new Set() }
+        };
 
     // Raggruppa punteggi per pillar
     scores.forEach(score => {
-      const pillar = this.normalizePillar(score.pillar);
+      const pillar = isLeadership ? this.normalizePillar(score.pillar) : score.pillar;
       if (pillarData[pillar]) {
         pillarData[pillar].scores.push(score.score);
       }
     });
 
-    // Conta esercizi per pillar (tramite caratteristica)
-    const charToPillar = new Map(scores.map(s => [s.characteristicSlug, s.pillar]));
-    exercises.forEach(ex => {
-      const pillar = charToPillar.get(ex.characteristic_slug);
-      if (pillar && pillarData[pillar]) {
-        pillarData[pillar].exercises.add(ex.id);
-      }
-    });
+    // Conta esercizi per pillar
+    if (isLeadership) {
+      // Leadership: tramite characteristic_slug → pillar
+      const charToPillar = new Map(scores.map(s => [s.dimensionCode, s.pillar]));
+      exercises.forEach(ex => {
+        if (ex.characteristic_slug) {
+          const pillar = charToPillar.get(ex.characteristic_slug);
+          if (pillar && pillarData[pillar]) {
+            pillarData[pillar].exercises.add(ex.id);
+          }
+        }
+      });
+    } else {
+      // Risolutore/Microfelicità: direttamente da pillar_primary
+      exercises.forEach(ex => {
+        if (ex.pillar_primary) {
+          const pillar = ex.pillar_primary.toUpperCase();
+          if (pillarData[pillar]) {
+            pillarData[pillar].exercises.add(ex.id);
+          }
+        }
+      });
+    }
 
     // Costruisci risultato ordinato per media punteggio (più basso prima)
     return Object.entries(pillarData)
@@ -386,9 +777,10 @@ export class ExerciseRecommendationService {
   /**
    * Crea raccomandazione vuota (no assessment)
    */
-  private createEmptyRecommendation(userId: string): ExerciseRecommendation {
+  private createEmptyRecommendation(userId: string, path: PathType): ExerciseRecommendation {
     return {
       userId,
+      path,
       generatedAt: new Date().toISOString(),
       totalExercises: 0,
       completedCount: 0,
@@ -399,16 +791,18 @@ export class ExerciseRecommendationService {
   }
 
   /**
-   * Genera contesto per l'AI Coach
+   * Genera contesto per l'AI Coach per un percorso specifico
    */
-  async generateAICoachContext(userId: string): Promise<string> {
-    const recommendation = await this.generateRecommendations(userId);
+  async generateAICoachContext(userId: string, path?: PathType): Promise<string> {
+    const recommendation = await this.generateRecommendations(userId, path);
 
     if (recommendation.recommendations.length === 0) {
-      return '\n\n## ESERCIZI\nL\'utente non ha ancora completato l\'assessment. Suggerisci di completare prima il test per ottenere raccomandazioni personalizzate.';
+      const pathName = this.getPathDisplayName(recommendation.path);
+      return `\n\n## ESERCIZI\nL'utente non ha ancora completato l'assessment ${pathName}. Suggerisci di completare prima il test per ottenere raccomandazioni personalizzate.`;
     }
 
-    let context = '\n\n---\n## ESERCIZI RACCOMANDATI\n';
+    const pathName = this.getPathDisplayName(recommendation.path);
+    let context = `\n\n---\n## ESERCIZI RACCOMANDATI - ${pathName}\n`;
     context += `Progresso: ${recommendation.completedCount}/${recommendation.totalExercises} esercizi completati.\n\n`;
 
     // Aree prioritarie
@@ -427,9 +821,9 @@ export class ExerciseRecommendationService {
       topRecommendations.forEach((rec, idx) => {
         const status = rec.isInProgress ? ' [IN CORSO]' : '';
         context += `\n${idx + 1}. **${rec.title}**${status}\n`;
-        context += `   - Caratteristica: ${rec.characteristicName} (${rec.characteristicScore}%)\n`;
+        context += `   - Area: ${rec.dimensionName} (${rec.dimensionScore}%)\n`;
         context += `   - Pillar: ${rec.pillar}\n`;
-        context += `   - Tipo: ${rec.exercise_type}, Difficoltà: ${rec.difficulty_level}\n`;
+        context += `   - Tipo: ${rec.exercise_type || 'pratico'}, Difficoltà: ${rec.difficulty_level}\n`;
         context += `   - Tempo stimato: ${rec.estimated_time_minutes} minuti\n`;
         context += `   - Motivo: ${rec.reason}\n`;
       });
@@ -438,7 +832,7 @@ export class ExerciseRecommendationService {
     // Prossimo esercizio consigliato
     if (recommendation.nextRecommended) {
       context += '\n### Prossimo Esercizio Consigliato:\n';
-      context += `Suggerisci "${recommendation.nextRecommended.title}" per lavorare su ${recommendation.nextRecommended.characteristicName}.\n`;
+      context += `Suggerisci "${recommendation.nextRecommended.title}" per lavorare su ${recommendation.nextRecommended.dimensionName}.\n`;
     }
 
     context += '\n---\n';
@@ -450,10 +844,72 @@ export class ExerciseRecommendationService {
   }
 
   /**
-   * Invalida cache per un utente
+   * Genera contesto AI Coach per TUTTI i percorsi (per utenti Mentor)
+   */
+  async generateAICoachContextAllPaths(userId: string): Promise<string> {
+    const paths: PathType[] = ['leadership', 'risolutore', 'microfelicita'];
+    const contexts: string[] = [];
+
+    for (const path of paths) {
+      const recommendation = await this.generateRecommendations(userId, path);
+      if (recommendation.recommendations.length > 0) {
+        const pathName = this.getPathDisplayName(path);
+        let context = `\n### ${pathName}\n`;
+        context += `Progresso: ${recommendation.completedCount}/${recommendation.totalExercises}\n`;
+
+        // Top 3 per questo percorso
+        const top3 = recommendation.recommendations
+          .filter(r => !r.isCompleted)
+          .slice(0, 3);
+
+        if (top3.length > 0) {
+          top3.forEach((rec, idx) => {
+            context += `${idx + 1}. ${rec.title} (${rec.dimensionName}: ${rec.dimensionScore}%)\n`;
+          });
+        }
+        contexts.push(context);
+      }
+    }
+
+    if (contexts.length === 0) {
+      return '\n\n## ESERCIZI\nNessun assessment completato. Suggerisci di iniziare con uno dei 3 percorsi.';
+    }
+
+    let fullContext = '\n\n---\n## ESERCIZI RACCOMANDATI (Tutti i Percorsi)\n';
+    fullContext += contexts.join('\n');
+    fullContext += '\n---\n';
+
+    return fullContext;
+  }
+
+  /**
+   * Nome leggibile del percorso
+   */
+  private getPathDisplayName(path: PathType): string {
+    switch (path) {
+      case 'risolutore': return 'Oltre gli Ostacoli';
+      case 'microfelicita': return 'Microfelicità';
+      case 'leadership':
+      default: return 'Leadership Autentica';
+    }
+  }
+
+  /**
+   * Invalida cache per un utente (tutti i percorsi)
    */
   invalidateCache(userId: string): void {
-    this.cache.delete(userId);
+    // Invalida tutte le chiavi cache per questo utente
+    const paths: PathType[] = ['leadership', 'risolutore', 'microfelicita'];
+    paths.forEach(path => {
+      this.cache.delete(`${userId}-${path}`);
+    });
+  }
+
+  /**
+   * Invalida cache per un utente e percorso specifico
+   */
+  invalidateCacheForPath(userId: string, path: PathType): void {
+    this.cache.delete(`${userId}-${path}`);
   }
 }
 

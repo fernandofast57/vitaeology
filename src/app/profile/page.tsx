@@ -1,11 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES, type PathwaySlug } from '@/lib/pathways';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
-import { User, Mail, Calendar, Shield, Save } from 'lucide-react';
+import { User, Mail, Shield, Save, Compass, Crown, Target, Heart, ChevronRight } from 'lucide-react';
 import Breadcrumb from '@/components/ui/Breadcrumb';
+
+// Mappa pathway slug → dashboard path
+const PATHWAY_TO_DASHBOARD: Record<string, string> = {
+  'leadership': 'leadership',
+  'risolutore': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+// Icone per percorso
+const PATHWAY_ICONS: Record<string, React.ElementType> = {
+  'leadership': Crown,
+  'risolutore': Target,
+  'microfelicita': Heart,
+};
 
 export default function ProfilePage() {
   const [userName, setUserName] = useState('');
@@ -16,6 +32,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([]);
   const [formData, setFormData] = useState({
     fullName: '',
     company: '',
@@ -49,6 +66,10 @@ export default function ProfilePage() {
             role: profile.role || ''
           });
         }
+
+        // Fetch user pathways
+        const pathways = await getUserPathways(supabase, user.id);
+        setUserPathways(pathways);
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -239,6 +260,79 @@ export default function ProfilePage() {
                   <span className="text-green-600 font-medium">Attivo</span>
                 </div>
               </div>
+            </div>
+
+            {/* I Tuoi Percorsi */}
+            <div className="bg-white rounded-xl border border-neutral-200 p-6">
+              <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+                <Compass className="w-5 h-5 text-petrol-600" />
+                I Tuoi Percorsi
+              </h3>
+
+              {userPathways.length === 0 ? (
+                <div className="text-center py-6">
+                  <p className="text-neutral-500 mb-3">Non hai ancora attivato nessun percorso.</p>
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center gap-2 text-petrol-600 hover:text-petrol-700 font-medium"
+                  >
+                    Esplora i percorsi disponibili
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {userPathways.map((pathway) => {
+                    const slug = pathway.pathway.slug;
+                    const Icon = PATHWAY_ICONS[slug] || Compass;
+                    const color = PATHWAY_COLORS[slug as PathwaySlug] || '#6B7280';
+                    const name = PATHWAY_NAMES[slug as PathwaySlug] || pathway.pathway.name;
+                    const dashboardPath = PATHWAY_TO_DASHBOARD[slug] || 'leadership';
+                    const progress = pathway.progress_percentage || 0;
+
+                    return (
+                      <Link
+                        key={pathway.id}
+                        href={`/dashboard/${dashboardPath}`}
+                        className="flex items-center gap-4 p-4 rounded-lg border border-neutral-200 hover:border-neutral-300 hover:shadow-sm transition-all group"
+                      >
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: `${color}20` }}
+                        >
+                          <Icon className="w-6 h-6" style={{ color }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-neutral-900">{name}</p>
+                          <div className="flex items-center gap-3 mt-1">
+                            <div className="flex-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full rounded-full transition-all"
+                                style={{ width: `${progress}%`, backgroundColor: color }}
+                              />
+                            </div>
+                            <span className="text-xs text-neutral-500 font-medium">{progress}%</span>
+                          </div>
+                          <p className="text-xs text-neutral-400 mt-1">
+                            Attivato il {formatDate(pathway.created_at)}
+                          </p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-neutral-400 group-hover:text-neutral-600 transition-colors" />
+                      </Link>
+                    );
+                  })}
+
+                  {/* Riepilogo percorsi */}
+                  {userPathways.length > 1 && (
+                    <div className="mt-4 pt-4 border-t border-neutral-100">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-neutral-500">Percorsi attivi</span>
+                        <span className="font-medium text-neutral-900">{userPathways.length}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </main>

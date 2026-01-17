@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
 import WelcomeHero from '@/components/dashboard/WelcomeHero';
 import AssessmentCard from '@/components/dashboard/AssessmentCard';
 import QuickStats from '@/components/dashboard/QuickStats';
@@ -62,6 +64,20 @@ interface PathDashboardProps {
   autoOpenChat?: boolean;
 }
 
+// Mappa pathway slug → dashboard path
+const PATHWAY_TO_DASHBOARD: Record<string, string> = {
+  'leadership': 'leadership',
+  'risolutore': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+// Mappa dashboard path → pathway slug
+const DASHBOARD_TO_PATHWAY: Record<string, string> = {
+  'leadership': 'leadership',
+  'ostacoli': 'risolutore',
+  'microfelicita': 'microfelicita',
+};
+
 export default function PathDashboard({ pathType, autoOpenChat = false }: PathDashboardProps) {
   const config = PATH_CONFIG[pathType];
 
@@ -76,6 +92,7 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
   const [celebratingAchievement, setCelebratingAchievement] = useState<Achievement | null>(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([]);
 
   const supabase = createClient();
 
@@ -88,6 +105,10 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
         setUserId(user.id);
         setUserEmail(user.email || '');
         setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '');
+
+        // Ottieni percorsi attivi dell'utente
+        const pathways = await getUserPathways(supabase, user.id);
+        setUserPathways(pathways);
 
         // Aggiorna current_path nel profilo
         await supabase
@@ -259,11 +280,54 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
       <div className="lg:pl-64">
         <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} />
 
-        {/* Path indicator */}
+        {/* Path indicator / Pathway Switcher */}
         <div className={`${config.accentBg} text-white py-2 px-4`}>
-          <div className="max-w-7xl mx-auto flex items-center gap-2">
-            <span className="text-sm font-medium">Percorso attivo:</span>
-            <span className="text-sm font-bold">{config.name}</span>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Percorso attivo:</span>
+              <span className="text-sm font-bold">{config.name}</span>
+            </div>
+
+            {/* Pathway switcher per utenti multi-path */}
+            {userPathways.length > 1 && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs opacity-80 hidden sm:inline">Cambia percorso:</span>
+                <div className="flex gap-1">
+                  {userPathways.map((pathway) => {
+                    const slug = pathway.pathway.slug;
+                    const dashboardPath = PATHWAY_TO_DASHBOARD[slug];
+                    const isActive = DASHBOARD_TO_PATHWAY[pathType] === slug;
+                    const pathwayColor = PATHWAY_COLORS[slug as keyof typeof PATHWAY_COLORS];
+
+                    if (isActive) return null; // Non mostrare il percorso attivo
+
+                    return (
+                      <Link
+                        key={pathway.id}
+                        href={`/dashboard/${dashboardPath}`}
+                        className="px-3 py-1 rounded-full text-xs font-medium transition-all hover:scale-105"
+                        style={{
+                          backgroundColor: pathwayColor,
+                          color: 'white',
+                        }}
+                        title={PATHWAY_NAMES[slug as keyof typeof PATHWAY_NAMES]}
+                      >
+                        {slug === 'leadership' ? 'Leadership' :
+                         slug === 'risolutore' ? 'Ostacoli' : 'Microfelicità'}
+                      </Link>
+                    );
+                  })}
+                  {/* Link all'overview */}
+                  <Link
+                    href="/dashboard"
+                    className="px-3 py-1 rounded-full text-xs font-medium bg-white/20 hover:bg-white/30 transition-colors"
+                    title="Panoramica tutti i percorsi"
+                  >
+                    Tutti
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -335,6 +399,13 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
             assessmentResults: characteristicScores.length > 0 ? characteristicScores : undefined,
             completedExercisesCount: exerciseStats.completed,
             currentWeek: Math.ceil((exerciseStats.completed + 1) / 1),
+            // Multi-pathway context
+            activePathways: userPathways.length > 1 ? userPathways.map(p => ({
+              slug: p.pathway.slug,
+              name: PATHWAY_NAMES[p.pathway.slug as keyof typeof PATHWAY_NAMES] || p.pathway.name,
+              progressPercentage: p.progress_percentage || 0,
+              hasAssessment: !!p.last_assessment_at,
+            })) : undefined,
           }}
           currentPath={pathType}
           autoOpen={autoOpenChat}

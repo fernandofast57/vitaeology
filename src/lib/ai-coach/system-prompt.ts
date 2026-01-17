@@ -1,8 +1,15 @@
-import { UserContext } from './types';
+import { UserContext, ActivePathway } from './types';
 import { getExerciseListForPrompt } from './exercise-suggestions';
 import { getZoneForLevel, AWARENESS_ZONES } from '@/lib/awareness/types';
 
 export type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+
+// Nomi dei percorsi per il prompt
+const PATHWAY_DISPLAY_NAMES: Record<string, string> = {
+  'leadership': 'Leadership Autentica',
+  'risolutore': 'Oltre gli Ostacoli',
+  'microfelicita': 'Microfelicità Digitale',
+};
 
 /**
  * Genera istruzioni specifiche per Fernando basate sul livello di consapevolezza.
@@ -196,6 +203,61 @@ FOCUS CONVERSAZIONE:
   };
 
   return contexts[pathType] || contexts.leadership;
+}
+
+/**
+ * Genera contesto per utenti con percorsi multipli.
+ * Questo aiuta Fernando a capire il quadro completo dell'utente.
+ */
+export function getMultiPathwayContext(pathways: ActivePathway[], currentPath: PathType): string {
+  if (!pathways || pathways.length <= 1) {
+    return '';
+  }
+
+  // Mappa pathway slug → PathType per confronto
+  // Il DB usa 'risolutore', l'app usa 'ostacoli'
+  const slugToPathType: Record<string, PathType> = {
+    'leadership': 'leadership',
+    'risolutore': 'ostacoli',
+    'microfelicita': 'microfelicita',
+  };
+
+  let context = `\n\n---
+UTENTE MULTI-PERCORSO
+---
+
+Questo utente sta seguendo ${pathways.length} percorsi contemporaneamente:
+
+`;
+
+  pathways.forEach((pathway, index) => {
+    const displayName = PATHWAY_DISPLAY_NAMES[pathway.slug] || pathway.name;
+    const mappedSlug = slugToPathType[pathway.slug] || pathway.slug;
+    const isCurrent = mappedSlug === currentPath;
+
+    context += `${index + 1}. ${displayName}${isCurrent ? ' (ATTIVO ORA)' : ''}
+   - Progresso: ${pathway.progressPercentage}%
+   - Assessment: ${pathway.hasAssessment ? 'Completato' : 'Non ancora fatto'}
+`;
+  });
+
+  context += `
+COME COMPORTARTI CON UTENTI MULTI-PERCORSO:
+- Il focus principale è sul percorso attivo indicato sopra
+- Puoi fare collegamenti tra i percorsi quando NATURALE e UTILE
+- NON saltare tra percorsi senza motivo
+- Se l'utente menziona temi di un altro percorso, puoi collegare i concetti
+- Ricorda che questi utenti hanno una visione più ampia del sistema Vitaeology
+
+ESEMPI DI COLLEGAMENTI NATURALI:
+- Se nel percorso Leadership parla di stress → puoi accennare che R.A.D.A.R. (dal percorso Microfelicità) può aiutare
+- Se nel percorso Ostacoli parla di guidare il team → puoi collegare alle caratteristiche di leadership
+- Se nel percorso Microfelicità parla di decisioni difficili → puoi usare la modalità Sorgente (da Ostacoli)
+
+Ma sempre: USA i concetti senza nominarli esplicitamente (regola del Mistero).
+`;
+
+  return context;
 }
 
 export function buildSystemPrompt(context?: UserContext, userPath?: string, awarenessLevel?: number): string {
@@ -446,6 +508,11 @@ Poi aspetti. Non cambi argomento. Non torni al coaching.`;
   // Aggiungi contesto specifico per percorso
   const currentPath = (userPath || 'leadership') as PathType;
   prompt += getPathSpecificContext(currentPath);
+
+  // Aggiungi contesto multi-pathway se l'utente ha più percorsi
+  if (context?.activePathways && context.activePathways.length > 1) {
+    prompt += getMultiPathwayContext(context.activePathways, currentPath);
+  }
 
   // Aggiungi istruzioni basate sul livello di consapevolezza
   if (awarenessLevel !== undefined) {

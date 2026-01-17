@@ -3,6 +3,14 @@ export interface Message {
   content: string;
 }
 
+// Info percorso attivo per multi-pathway
+export interface ActivePathway {
+  slug: string;
+  name: string;
+  progressPercentage: number;
+  hasAssessment: boolean;
+}
+
 export interface UserContext {
   userId: string;
   userName?: string;
@@ -19,13 +27,15 @@ export interface UserContext {
   };
   completedExercisesCount: number;
   currentWeek: number;
+  // Multi-pathway support
+  activePathways?: ActivePathway[];
 }
 
 export interface ChatRequest {
   messages: Message[];
   userContext: UserContext;
   sessionId?: string;  // Per tracciare sessione conversazione
-  currentPath?: 'leadership' | 'problemi' | 'benessere';
+  currentPath?: 'leadership' | 'problemi' | 'benessere';  // Valori compatibili con RAG PathType
 }
 
 export interface ChatResponse {

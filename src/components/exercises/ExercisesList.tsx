@@ -1,15 +1,27 @@
 // src/components/exercises/ExercisesList.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { ExerciseWithAccess } from '@/lib/types/exercises';
 import { EXERCISE_TYPE_CONFIG, DIFFICULTY_CONFIG, STATUS_CONFIG } from '@/lib/types/exercises';
 import { SubscriptionTier } from '@/lib/types/roles';
+import { PATHWAY_COLORS, PATHWAY_NAMES, type PathwaySlug } from '@/lib/pathways';
+
+interface PathwayInfo {
+  slug: string;
+  name: string;
+  stats: {
+    total: number;
+    completed: number;
+  };
+}
 
 interface ExercisesListProps {
   exercises: ExerciseWithAccess[];
   userTier: SubscriptionTier;
+  pathways?: PathwayInfo[];
+  hasMultiplePaths?: boolean;
 }
 
 function groupByMonth(exercises: ExerciseWithAccess[]): Record<string, ExerciseWithAccess[]> {
@@ -26,22 +38,57 @@ function groupByMonth(exercises: ExerciseWithAccess[]): Record<string, ExerciseW
 
 type FilterType = 'all' | 'not_started' | 'in_progress' | 'completed' | 'locked';
 
-export default function ExercisesList({ exercises, userTier }: ExercisesListProps) {
+// Funzione per raggruppare per percorso (per multi-pathway)
+function groupByPathway(exercises: ExerciseWithAccess[]): Record<string, ExerciseWithAccess[]> {
+  return exercises.reduce((acc, exercise) => {
+    const pathway = exercise.book_slug || 'other';
+    if (!acc[pathway]) {
+      acc[pathway] = [];
+    }
+    acc[pathway].push(exercise);
+    return acc;
+  }, {} as Record<string, ExerciseWithAccess[]>);
+}
+
+export default function ExercisesList({
+  exercises,
+  userTier,
+  pathways = [],
+  hasMultiplePaths = false
+}: ExercisesListProps) {
   const [filter, setFilter] = useState<FilterType>('all');
+  const [selectedPathway, setSelectedPathway] = useState<string>('all');
+
+  // Ascolta eventi di cambio percorso dall'header
+  useEffect(() => {
+    const handlePathwayChange = (e: CustomEvent<{ slug: string }>) => {
+      setSelectedPathway(e.detail.slug);
+    };
+
+    window.addEventListener('pathwayChange', handlePathwayChange as EventListener);
+    return () => {
+      window.removeEventListener('pathwayChange', handlePathwayChange as EventListener);
+    };
+  }, []);
+
+  // Filtra prima per percorso (se multi-pathway e percorso selezionato)
+  const pathwayFilteredExercises = hasMultiplePaths && selectedPathway !== 'all'
+    ? exercises.filter(ex => ex.book_slug === selectedPathway)
+    : exercises;
 
   // Calcola conteggi per ogni stato
-  const accessibleExercises = exercises.filter(ex => !ex.isLocked);
-  const lockedExercises = exercises.filter(ex => ex.isLocked);
+  const accessibleExercises = pathwayFilteredExercises.filter(ex => !ex.isLocked);
+  const lockedExercises = pathwayFilteredExercises.filter(ex => ex.isLocked);
 
   const counts = {
-    all: exercises.length,
+    all: pathwayFilteredExercises.length,
     not_started: accessibleExercises.filter(ex => !ex.progress || ex.progress.status === 'not_started').length,
     in_progress: accessibleExercises.filter(ex => ex.progress?.status === 'in_progress').length,
     completed: accessibleExercises.filter(ex => ex.progress?.status === 'completed').length,
     locked: lockedExercises.length
   };
 
-  const filteredExercises = exercises.filter(ex => {
+  const filteredExercises = pathwayFilteredExercises.filter(ex => {
     if (filter === 'all') return true;
     if (filter === 'locked') return ex.isLocked;
     if (ex.isLocked) return false;
@@ -49,8 +96,13 @@ export default function ExercisesList({ exercises, userTier }: ExercisesListProp
     return status === filter;
   });
 
-  const groupedExercises = groupByMonth(filteredExercises);
-  const months = Object.keys(groupedExercises);
+  // Se multi-pathway e "tutti" selezionato, raggruppa per percorso
+  const shouldGroupByPathway = hasMultiplePaths && selectedPathway === 'all';
+
+  const groupedExercises = shouldGroupByPathway
+    ? groupByPathway(filteredExercises)
+    : groupByMonth(filteredExercises);
+  const groups = Object.keys(groupedExercises);
 
   return (
     <div>
@@ -89,35 +141,56 @@ export default function ExercisesList({ exercises, userTier }: ExercisesListProp
         )}
       </div>
 
-      {months.length === 0 ? (
+      {groups.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
           <p className="text-gray-500">Nessun esercizio trovato con questo filtro.</p>
         </div>
       ) : (
         <div className="space-y-8">
-          {months.map(month => (
-            <div key={month}>
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">{month}</h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                {groupedExercises[month].map(exercise => (
-                  exercise.isLocked
-                    ? <LockedExerciseCard key={exercise.id} exercise={exercise} />
-                    : <ExerciseCard key={exercise.id} exercise={exercise} />
-                ))}
+          {groups.map(group => {
+            // Se raggruppiamo per percorso, mostra nome percorso con colore
+            const isPathwayGroup = shouldGroupByPathway && ['leadership', 'risolutore', 'microfelicita'].includes(group);
+            const pathwayColor = isPathwayGroup ? PATHWAY_COLORS[group as PathwaySlug] : undefined;
+            const groupTitle = isPathwayGroup
+              ? PATHWAY_NAMES[group as PathwaySlug]
+              : group;
+
+            return (
+              <div key={group}>
+                <h2
+                  className="text-xl font-semibold text-gray-800 mb-4"
+                  style={pathwayColor ? { color: pathwayColor } : undefined}
+                >
+                  {groupTitle}
+                  {isPathwayGroup && (
+                    <span className="ml-2 text-sm font-normal text-gray-500">
+                      ({groupedExercises[group].length} esercizi)
+                    </span>
+                  )}
+                </h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {groupedExercises[group].map(exercise => (
+                    exercise.isLocked
+                      ? <LockedExerciseCard key={exercise.id} exercise={exercise} showPathway={hasMultiplePaths && !shouldGroupByPathway} />
+                      : <ExerciseCard key={exercise.id} exercise={exercise} showPathway={hasMultiplePaths && !shouldGroupByPathway} />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
   );
 }
 
-function ExerciseCard({ exercise }: { exercise: ExerciseWithAccess }) {
+function ExerciseCard({ exercise, showPathway = false }: { exercise: ExerciseWithAccess; showPathway?: boolean }) {
   const status = exercise.progress?.status || 'not_started';
   const statusConfig = STATUS_CONFIG[status];
   const typeConfig = EXERCISE_TYPE_CONFIG[exercise.exercise_type];
   const difficultyConfig = DIFFICULTY_CONFIG[exercise.difficulty_level];
+  const pathwayColor = exercise.book_slug ? PATHWAY_COLORS[exercise.book_slug as PathwaySlug] : undefined;
+  const pathwayName = exercise.book_slug ? PATHWAY_NAMES[exercise.book_slug as PathwaySlug] : undefined;
 
   return (
     <Link href={`/exercises/${exercise.id}`}>
@@ -130,6 +203,14 @@ function ExerciseCard({ exercise }: { exercise: ExerciseWithAccess }) {
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyConfig.color}`}>
               {difficultyConfig.label}
             </span>
+            {showPathway && pathwayColor && (
+              <span
+                className="px-2 py-1 rounded-full text-xs font-medium text-white"
+                style={{ backgroundColor: pathwayColor }}
+              >
+                {pathwayName}
+              </span>
+            )}
           </div>
           <span className="text-sm text-gray-500 font-medium whitespace-nowrap ml-2">Sett. {exercise.week_number}</span>
         </div>
@@ -152,9 +233,11 @@ function ExerciseCard({ exercise }: { exercise: ExerciseWithAccess }) {
   );
 }
 
-function LockedExerciseCard({ exercise }: { exercise: ExerciseWithAccess }) {
+function LockedExerciseCard({ exercise, showPathway = false }: { exercise: ExerciseWithAccess; showPathway?: boolean }) {
   const typeConfig = EXERCISE_TYPE_CONFIG[exercise.exercise_type];
   const difficultyConfig = DIFFICULTY_CONFIG[exercise.difficulty_level];
+  const pathwayColor = exercise.book_slug ? PATHWAY_COLORS[exercise.book_slug as PathwaySlug] : undefined;
+  const pathwayName = exercise.book_slug ? PATHWAY_NAMES[exercise.book_slug as PathwaySlug] : undefined;
 
   return (
     <div className="relative bg-gradient-to-br from-gray-50 to-amber-50/30 rounded-lg shadow-sm border border-amber-200 p-5 h-full">
@@ -173,6 +256,14 @@ function LockedExerciseCard({ exercise }: { exercise: ExerciseWithAccess }) {
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyConfig.color}`}>
             {difficultyConfig.label}
           </span>
+          {showPathway && pathwayColor && (
+            <span
+              className="px-2 py-1 rounded-full text-xs font-medium text-white opacity-70"
+              style={{ backgroundColor: pathwayColor }}
+            >
+              {pathwayName}
+            </span>
+          )}
         </div>
         <span className="text-sm text-gray-400 font-medium whitespace-nowrap ml-2">Sett. {exercise.week_number}</span>
       </div>
