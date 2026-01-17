@@ -54,3 +54,6 @@ nul
 
 # Large embedding files (regenerate with scripts)
 scripts/book_chunks_with_embeddings.json
+
+# LaTeX source books
+books/
