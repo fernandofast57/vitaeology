@@ -15,6 +15,12 @@ npm run build
 
 # Esegui SQL
 node scripts/run-sql.js sql/nomefile.sql
+
+# Aggiorna RAG da LaTeX
+npm run update-rag
+
+# Oppure con opzioni
+npx tsx scripts/update-rag-from-latex.ts --zip=./books/libri.zip --clear --dry-run
 ```
 
 ---
@@ -95,7 +101,7 @@ Gold (Accent):     #F4B942
 | `exercises` | 52 | Esercizi settimanali |
 | `ai_coach_conversations` | N | Storico chat AI |
 | `challenge_subscribers` | N | Iscritti challenge |
-| `book_chunks` | N | Chunks RAG libri |
+| `book_knowledge` | 966 | Chunks RAG libri (3 libri LaTeX) |
 
 ---
 
@@ -145,4 +151,4 @@ NEXT_PUBLIC_APP_URL
 
 ---
 
-*Ultimo aggiornamento: 26 Dicembre 2024*
+*Ultimo aggiornamento: 17 Gennaio 2026*
