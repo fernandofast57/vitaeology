@@ -10,7 +10,8 @@
     "lint": "next lint",
     "test:critical": "npx tsx scripts/test-critical.ts",
     "predeploy": "npm run test:critical && npm run build",
-    "changelog": "npx tsx scripts/update-changelog.ts"
+    "changelog": "npx tsx scripts/update-changelog.ts",
+    "update-rag": "npx tsx scripts/update-rag-from-latex.ts --zip=./books/libri.zip --clear"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
@@ -39,10 +40,12 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
     "@types/node": "^22.9.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/uuid": "^10.0.0",
+    "adm-zip": "^0.5.16",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
