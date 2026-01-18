@@ -202,7 +202,7 @@ function LeadershipLandingContent() {
             Controlla la tua email. Il Giorno 1 sta arrivando.
           </p>
           <p className="text-amber-400 text-sm mb-6">
-            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 40 anni dopo.
+            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 41 anni dopo.
           </p>
           <Link
             href="/test"
@@ -694,7 +694,7 @@ function LeadershipLandingContent() {
       {/* Footer Legal */}
       <footer className="py-8 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>&copy; 2025 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
+          <p>&copy; 2026 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
         </div>
       </footer>
 
