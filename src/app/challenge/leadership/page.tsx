@@ -11,14 +11,6 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
-import JsonLd from '@/components/seo/JsonLd';
-import {
-  organizationSchema,
-  personSchema,
-  leadershipCourseSchema,
-  leadershipFaqSchema,
-  leadershipBreadcrumbSchema
-} from '@/lib/schema-org';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando
 // Conformità: MEGA_PROMPT v4.3, CONTROL_TOWER v1.2, COPY_REALIGNMENT_ANALYSIS
@@ -734,18 +726,8 @@ function LoadingFallback() {
 
 export default function LeadershipLanding() {
   return (
-    <>
-      {/* Schema.org JSON-LD - Fuori da Suspense per SSR */}
-      <JsonLd data={[
-        organizationSchema,
-        personSchema,
-        leadershipCourseSchema,
-        leadershipFaqSchema,
-        leadershipBreadcrumbSchema
-      ]} />
-      <Suspense fallback={<LoadingFallback />}>
-        <LeadershipLandingContent />
-      </Suspense>
-    </>
+    <Suspense fallback={<LoadingFallback />}>
+      <LeadershipLandingContent />
+    </Suspense>
   );
 }

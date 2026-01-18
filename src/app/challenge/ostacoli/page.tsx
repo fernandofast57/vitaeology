@@ -11,14 +11,6 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
-import JsonLd from '@/components/seo/JsonLd';
-import {
-  organizationSchema,
-  personSchema,
-  ostacoliCourseSchema,
-  ostacoliFaqSchema,
-  ostacoliBreadcrumbSchema
-} from '@/lib/schema-org';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando (TheFork 1993)
 // Conformità: MEGA_PROMPT v4.3, CONTROL_TOWER v1.2, COPY_REALIGNMENT_ANALYSIS
@@ -852,18 +844,8 @@ function LoadingFallback() {
 
 export default function OstacoliLanding() {
   return (
-    <>
-      {/* Schema.org JSON-LD - Fuori da Suspense per SSR */}
-      <JsonLd data={[
-        organizationSchema,
-        personSchema,
-        ostacoliCourseSchema,
-        ostacoliFaqSchema,
-        ostacoliBreadcrumbSchema
-      ]} />
-      <Suspense fallback={<LoadingFallback />}>
-        <OstacoliLandingContent />
-      </Suspense>
-    </>
+    <Suspense fallback={<LoadingFallback />}>
+      <OstacoliLandingContent />
+    </Suspense>
   );
 }

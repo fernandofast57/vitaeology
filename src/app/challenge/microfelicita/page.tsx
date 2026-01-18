@@ -21,14 +21,6 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
-import JsonLd from '@/components/seo/JsonLd';
-import {
-  organizationSchema,
-  personSchema,
-  microfelicitaCourseSchema,
-  microfelicitaFaqSchema,
-  microfelicitaBreadcrumbSchema
-} from '@/lib/schema-org';
 
 // ============================================================================
 // SIGNUP FORM COMPONENT
@@ -859,18 +851,8 @@ function LoadingFallback() {
 
 export default function MicrofelicitaLanding() {
   return (
-    <>
-      {/* Schema.org JSON-LD - Fuori da Suspense per SSR */}
-      <JsonLd data={[
-        organizationSchema,
-        personSchema,
-        microfelicitaCourseSchema,
-        microfelicitaFaqSchema,
-        microfelicitaBreadcrumbSchema
-      ]} />
-      <Suspense fallback={<LoadingFallback />}>
-        <MicrofelicitaLandingContent />
-      </Suspense>
-    </>
+    <Suspense fallback={<LoadingFallback />}>
+      <MicrofelicitaLandingContent />
+    </Suspense>
   );
 }
