@@ -183,7 +183,7 @@ function extractZip(zipPath: string): Map<string, BookFiles> {
 
   console.log(`   Trovate ${rootFolders.size} cartelle: ${Array.from(rootFolders).join(', ')}`);
 
-  for (const [slug, book] of books) {
+  for (const [slug, book] of Array.from(books.entries())) {
     console.log(`   📚 ${book.title} (${slug}): ${book.files.size} file .tex`);
   }
 
@@ -224,7 +224,7 @@ function parseLatex(book: BookFiles): Section[] {
   if (!mainFile) {
     console.warn(`   ⚠️  Nessun main.tex trovato per ${book.title}, processo tutti i file`);
     // Fallback: processa tutti i file
-    for (const [fileName, content] of book.files) {
+    for (const [fileName, content] of Array.from(book.files.entries())) {
       const fileSections = parseTexFile(content, book, fileName);
       sections.push(...fileSections);
     }
@@ -242,22 +242,24 @@ function parseLatex(book: BookFiles): Section[] {
 }
 
 function findMainFile(files: Map<string, string>): string | null {
+  const entries = Array.from(files.entries());
+
   // Priorità 1: main.tex
-  for (const [fileName] of files) {
+  for (const [fileName] of entries) {
     if (fileName.toLowerCase() === 'main.tex' || fileName.toLowerCase().endsWith('/main.tex')) {
       return fileName;
     }
   }
 
   // Priorità 2: file con \begin{document}
-  for (const [fileName, content] of files) {
+  for (const [fileName, content] of entries) {
     if (content.includes('\\begin{document}')) {
       return fileName;
     }
   }
 
   // Priorità 3: libro.tex o simili
-  for (const [fileName] of files) {
+  for (const [fileName] of entries) {
     if (fileName.toLowerCase().includes('libro') && fileName.endsWith('.tex')) {
       return fileName;
     }
@@ -326,7 +328,7 @@ function resolveIncludes(
 
         // Prova anche cercando per nome file
         const baseName = path.basename(normalizedPath);
-        for (const [key] of files) {
+        for (const key of Array.from(files.keys())) {
           if (key.endsWith('/' + baseName) || key === baseName) {
             foundPath = key;
             break;
@@ -740,16 +742,16 @@ async function uploadToSupabase(chunks: Chunk[], clearFirst: boolean): Promise<v
   // Clear esistenti se richiesto
   if (clearFirst) {
     console.log('   🗑️  Cancellazione chunks esistenti...');
-    const { error: deleteError, count } = await supabase
+    const { error: deleteError, data: deletedData } = await supabase
       .from('book_knowledge')
       .delete()
       .neq('id', 0)
-      .select('id', { count: 'exact' });
+      .select('id');
 
     if (deleteError) {
       console.error(`   ❌ Errore cancellazione: ${deleteError.message}`);
     } else {
-      console.log(`   🗑️  Cancellati ${count || 0} chunks esistenti`);
+      console.log(`   🗑️  Cancellati ${deletedData?.length || 0} chunks esistenti`);
     }
   }
 
@@ -878,7 +880,7 @@ async function main(): Promise<void> {
   const allChunks: Chunk[] = [];
   const stats: Record<string, { files: number; chapters: number; sections: number; chunks: number }> = {};
 
-  for (const [slug, book] of booksToProcess) {
+  for (const [slug, book] of Array.from(booksToProcess.entries())) {
     console.log(`\n📚 ${book.title} → ${slug}`);
     console.log(`   ${book.files.size} file .tex`);
 

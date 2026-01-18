@@ -1,4 +1,11 @@
 import type { Metadata } from 'next';
+import {
+  organizationSchema,
+  personSchema,
+  ostacoliCourseSchema,
+  ostacoliFaqSchema,
+  ostacoliBreadcrumbSchema
+} from '@/lib/schema-org';
 
 export const metadata: Metadata = {
   title: 'Vitaeology - Oltre gli Ostacoli',
@@ -27,10 +34,31 @@ export const metadata: Metadata = {
   },
 };
 
+// Schema.org JSON-LD per SEO e AI Discovery
+const schemas = [
+  organizationSchema,
+  personSchema,
+  ostacoliCourseSchema,
+  ostacoliFaqSchema,
+  ostacoliBreadcrumbSchema
+];
+
 export default function OstacoliChallengeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      {/* Schema.org JSON-LD - Server Side Rendered */}
+      {schemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+      {children}
+    </>
+  );
 }

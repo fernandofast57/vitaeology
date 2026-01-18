@@ -64,7 +64,11 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nfeat(admin): add PAROLE and CONCRETEZZA to Quality Audit UI\n\nComplete Quality Audit UI for all 3 Comprensione difficulties:\n\n1. PAROLE analysis panel:\n   - Technical terms count and unexplained detection\n   - Acronyms and anglicisms tracking\n   - Automatic score 0-100 with \"Applica\" button\n\n2. CONCRETEZZA analysis panel:\n   - Examples, metaphors, scenarios counts\n   - Abstract concepts and quality score\n   - Example quality rating (excellent/good/fair/poor/none)\n\n3. Rating system expanded to 7 scores:\n   - 4 base principles (Validante, Agency, Comprensione, Operativa)\n   - 3 Comprensione details (Parole, Concretezza, Gradualità)\n\n4. API updates:\n   - POST accepts score_parole and score_concretezza\n   - GET returns all 7 scores for recent audits\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
       "WebFetch(domain:www.vitaeology.com)",
       "Bash(npm run test:critical:*)",
-      "Bash(npm run changelog:*)"
+      "Bash(npm run changelog:*)",
+      "Bash(xargs:*)",
+      "Bash(supabase projects:*)",
+      "Bash(npx vercel:*)",
+      "Bash(python3:*)"
     ]
   }
 }
