@@ -81,7 +81,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📋",
           title: "Il Catalogo Moda - 1984",
-          content: "Ti racconto cosa mi successe nel 1984.\n\nAvevo un'idea brillante: un catalogo moda innovativo. Ero INNAMORATO di quell'idea.\n\nCosì innamorato che non feci le domande elementari:\n- Chi lo comprerà?\n- Come lo distribuirò?\n- Ho le competenze per farlo?\n\nL'idea fallì miseramente.\n\nMa la cosa peggiore non fu il fallimento. Fu la voce nella mia testa DOPO.\n\n\"Vedi? Non sei capace.\"\n\"Chi ti credi di essere?\"\n\"Meglio se ti accontenti.\"\n\nQuella voce mi ha bloccato per anni."
+          content: "Ti racconto cosa mi successe nel 1984.\n\nMi trasferii a Milano per partecipare a un progetto ambizioso: un catalogo moda innovativo. Ero INNAMORATO di quel progetto.\n\nCosì innamorato che non feci le domande elementari:\n- Chi lo comprerà?\n- Come lo distribuiremo?\n- Abbiamo le competenze per farlo?\n\nIl progetto fallì miseramente.\n\nMa la cosa peggiore non fu il fallimento. Fu la voce nella mia testa DOPO.\n\n\"Vedi? Non sei capace.\"\n\"Chi ti credi di essere?\"\n\"Meglio se ti accontenti.\"\n\nQuella voce mi ha bloccato per anni."
         },
         {
           icon: "👁️",

@@ -47,43 +47,54 @@ export function useDiscoveryProgress(
     setIsLoading(true);
     setError(null);
 
+    // Mappa challenge type frontend → database (come in lib/challenges.ts)
+    const CHALLENGE_TYPE_MAP: Record<string, string> = {
+      'leadership': 'leadership-autentica',
+      'ostacoli': 'oltre-ostacoli',
+      'microfelicita': 'microfelicita'
+    };
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
+      if (!user || !user.email) {
         setError('Utente non autenticato');
         setIsLoading(false);
         return;
       }
 
-      // Check completamento giorno corrente
-      const { count: currentCount, error: currentError } = await supabase
-        .from('challenge_discovery_responses')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
-        .eq('challenge_type', challengeType)
-        .eq('day_number', dayNumber);
+      const dbChallengeType = CHALLENGE_TYPE_MAP[challengeType] || challengeType;
 
-      if (currentError) throw currentError;
+      // Trova subscriber in challenge_subscribers (fonte unica di verità, come dashboard)
+      const { data: subscriber, error: subscriberError } = await supabase
+        .from('challenge_subscribers')
+        .select('id, current_day, status')
+        .eq('email', user.email.toLowerCase())
+        .eq('challenge', dbChallengeType)
+        .single();
 
-      setIsCompleted(currentCount === 3);
-
-      // Check sblocco (giorno precedente completato)
-      if (dayNumber > 1) {
-        const { count: prevCount, error: prevError } = await supabase
-          .from('challenge_discovery_responses')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('challenge_type', challengeType)
-          .eq('day_number', dayNumber - 1);
-
-        if (prevError) throw prevError;
-
-        setIsUnlocked(prevCount === 3);
-      } else {
-        // Day 1 is always unlocked
-        setIsUnlocked(true);
+      if (subscriberError || !subscriber) {
+        // Utente non iscritto a questa challenge - giorno 1 sbloccato, nessun completamento
+        setIsUnlocked(dayNumber === 1);
+        setIsCompleted(false);
+        setIsLoading(false);
+        return;
       }
+
+      // Logica allineata alla dashboard (vedi ChallengeCard in dashboard/challenges/page.tsx):
+      // - current_day indica l'ultimo giorno completato
+      // - Il prossimo giorno da fare è current_day + 1
+      // - Day N è sbloccato se: N <= current_day + 1 (o N === 1)
+      // - Day N è completato se: N <= current_day
+
+      const currentDay = subscriber.current_day || 0;
+
+      // Giorno 1 sempre sbloccato, altri sbloccati se <= current_day + 1
+      setIsUnlocked(dayNumber === 1 || dayNumber <= currentDay + 1);
+
+      // Completato se abbiamo già superato questo giorno
+      setIsCompleted(dayNumber <= currentDay);
+
     } catch (err) {
       console.error('Error checking discovery progress:', err);
       setError('Errore nel caricamento del progresso');

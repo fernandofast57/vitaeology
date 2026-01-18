@@ -143,15 +143,15 @@ Scommetto una di queste:
 
 Ti racconto cosa mi successe nel 1984.
 
-Avevo un'idea brillante: un catalogo moda innovativo.
-Ero INNAMORATO di quell'idea.
+Mi trasferii a Milano per partecipare a un progetto ambizioso: un catalogo moda innovativo.
+Ero INNAMORATO di quel progetto.
 
 Così innamorato che non feci le domande elementari:
 - Chi lo comprerà?
-- Come lo distribuirò?
-- Ho le competenze per farlo?
+- Come lo distribuiremo?
+- Abbiamo le competenze per farlo?
 
-L'idea fallì miseramente.
+Il progetto fallì miseramente.
 
 Ma la cosa peggiore non fu il fallimento.
 Fu la voce nella mia testa DOPO.

@@ -279,19 +279,22 @@ function MicrofelicitaLandingContent() {
             </span>
           </div>
 
-          {/* Headline */}
+          {/* Headline - Principio Validante */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            A Fine Giornata Pensi<br />
-            <span className="text-violet-400">&quot;Non È Successo Niente di Buono&quot;</span>?
+            Tra le 50 cose piacevoli di oggi,<br />
+            <span className="text-violet-400">quante ne hai notate?</span>
           </h1>
 
-          {/* Sottotitolo */}
+          {/* Subheadline - Keyword ottimizzata */}
           <p className="text-xl md:text-2xl text-slate-300 mb-4 max-w-2xl mx-auto">
-            Non è vero. È successo. Solo che non l&apos;hai notato.
+            In 7 giorni imparerai a spegnere il pilota automatico,<br />
+            notare le cose belle e ritrovare equilibrio vita-lavoro
           </p>
-          <p className="text-lg text-slate-400 mb-8 max-w-2xl mx-auto">
-            In 7 giorni impari a intercettare i momenti positivi che già ti attraversano —
-            e che il tuo cervello ignora.
+
+          {/* Statistica */}
+          <p className="text-lg text-violet-400 mb-8 max-w-2xl mx-auto font-medium">
+            Il 72% degli imprenditori soffre di stress quotidiano.<br />
+            Ma la soluzione non è lavorare meno — è vedere di più.
           </p>
 
           {/* Video Hero */}
@@ -672,11 +675,11 @@ function MicrofelicitaLandingContent() {
 
           <div className="space-y-4 mb-8">
             {[
-              'A fine giornata senti che "non è successo niente"',
-              'Vuoi stare meglio senza stravolgere la tua vita',
-              'Sei scettico verso la "positività forzata" e il pensiero magico',
-              'Preferisci metodi pratici basati su come funziona il cervello',
-              'Hai 5 minuti al giorno per un esercizio semplice',
+              'Uscire dal pilota automatico che ti fa arrivare sfinito a sera',
+              'Trovare la felicità nelle piccole cose che già ci sono nella tua giornata',
+              'Creare una ritualità che ti ricarica invece di svuotarti',
+              'Goderti i successi invece di passare subito al problema successivo',
+              'Solo 5 minuti al giorno — il tempo di un caffè',
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-4 bg-slate-900/50 rounded-lg">
                 <span className="text-violet-500 text-xl">✓</span>
@@ -713,29 +716,13 @@ function MicrofelicitaLandingContent() {
 
           <div className="text-left max-w-2xl mx-auto space-y-4 text-slate-300">
             <p>
-              Mi chiamo Fernando Marongiu. Ho 50 anni di esperienza come imprenditore.
+              Ho 50 anni di esperienza imprenditoriale. Ho studiato i metodi di chi sa vivere pienamente anche nei momenti di pressione.
             </p>
             <p>
-              Per decenni ho cercato la felicità nei risultati grandi: aziende da fondare,
-              obiettivi da raggiungere, traguardi da superare. Ho ottenuto molto.
+              Quello che insegno non viene solo dai libri — viene da migliaia di ore di osservazione, testing e pratica personale.
             </p>
-            <p>
-              Ma per 9 anni — dal 1973 al 1982 — ho cercato nei posti sbagliati.
-              Ho cercato il piacere intenso, le esperienze straordinarie, le persone &quot;giuste&quot;.
-            </p>
-            <p className="text-white font-semibold">
-              Ho imparato sulla mia pelle che non funziona così.
-            </p>
-            <p>
-              Il benessere che cercavo mi attraversava ogni giorno. Non lo vedevo perché
-              nessuno mi aveva insegnato a notarlo.
-            </p>
-            <p className="text-violet-400">
-              Oggi, a quasi 69 anni, ho capito che i momenti più preziosi sono quelli piccoli —
-              se sai riconoscerli.
-            </p>
-            <p className="text-white font-semibold">
-              E questo è esattamente quello che ti insegno in 7 giorni.
+            <p className="text-violet-400 font-semibold">
+              Il benessere non è qualcosa che &quot;devi trovare&quot;. Ti attraversa ogni giorno in migliaia di piccoli momenti. Solo che nessuno ti ha insegnato a notarli.
             </p>
           </div>
         </div>

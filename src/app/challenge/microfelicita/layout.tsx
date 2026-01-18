@@ -8,11 +8,12 @@ import {
 } from '@/lib/schema-org';
 
 export const metadata: Metadata = {
-  title: 'Vitaeology - Microfelicità',
-  description: "C'era un momento in cui sapevi essere felice. È ancora lì.",
+  title: 'Benessere Imprenditore: Challenge Microfelicità 7 Giorni | Vitaeology',
+  description: "Tra le 50 cose piacevoli di oggi, quante ne hai notate? Challenge gratuita per ridurre lo stress in 5 minuti al giorno. Il 72% degli imprenditori soffre di stress — tu puoi uscirne.",
+  keywords: 'benessere imprenditore, ridurre stress imprenditore, microfelicità, equilibrio vita lavoro imprenditore, prevenire burnout imprenditore',
   openGraph: {
-    title: 'Vitaeology - Microfelicità',
-    description: "C'era un momento in cui sapevi essere felice. È ancora lì.",
+    title: 'Tra le 50 cose piacevoli di oggi, quante ne hai notate?',
+    description: 'Challenge gratuita 7 giorni per vedere quello che già c\'è',
     url: 'https://www.vitaeology.com/challenge/microfelicita',
     siteName: 'Vitaeology',
     locale: 'it_IT',
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
         url: 'https://www.vitaeology.com/og/challenge/microfelicita',
         width: 1200,
         height: 630,
-        alt: 'Vitaeology - Microfelicità',
+        alt: 'Microfelicità - Challenge Gratuita Vitaeology',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vitaeology - Microfelicità',
-    description: "C'era un momento in cui sapevi essere felice. È ancora lì.",
+    title: 'Tra le 50 cose piacevoli di oggi, quante ne hai notate?',
+    description: 'Challenge gratuita 7 giorni per vedere quello che già c\'è',
     images: ['https://www.vitaeology.com/og/challenge/microfelicita'],
   },
 };

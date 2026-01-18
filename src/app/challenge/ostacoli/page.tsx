@@ -240,21 +240,17 @@ function OstacoliLandingContent() {
             </span>
           </div>
 
-          {/* Headline - Risonanza con Rovina (-7) */}
+          {/* Headline - Principio Validante */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-            Sai già risolvere problemi.<br />
-            <span className="text-emerald-400">L&apos;hai dimenticato.</span>
+            Sai già risolvere.<br />
+            <span className="text-emerald-400">L&apos;hai solo dimenticato.</span>
           </h1>
 
-          {/* Sottotitolo - Hook Storia */}
+          {/* Subheadline - Keyword ottimizzata */}
           <div className="max-w-2xl mx-auto mb-8">
-            <p className="text-xl md:text-2xl text-slate-300 mb-4">
-              Ottobre 1993. Una cabina telefonica.<br />
-              Un&apos;idea che sembrava geniale — e non lo era.
-            </p>
-            <p className="text-lg text-slate-400">
-              In 7 giorni ti racconto cosa ho capito sui problemi —<br />
-              e perché probabilmente lo sai già anche tu.
+            <p className="text-xl md:text-2xl text-slate-300">
+              In 7 giorni imparerai a sbloccare le decisioni difficili,<br />
+              uscire dalla paralisi e tornare in azione con chiarezza
             </p>
           </div>
 
@@ -276,219 +272,26 @@ function OstacoliLandingContent() {
         </div>
       </section>
 
-      {/* ===== SEZIONE 2: STORIA FERNANDO (Epiphany Bridge) ===== */}
+      {/* ===== SEZIONE 2: COSA RICEVI ===== */}
       <section className="py-20 px-4 bg-slate-800/30">
         <div className="max-w-3xl mx-auto">
-          {/* Titolo Sezione */}
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-            Lascia che ti racconti<br />
-            <span className="text-emerald-400">del giorno in cui ho inventato TheFork.</span><br />
-            <span className="text-slate-400 text-2xl">Vent&apos;anni prima di TheFork.</span>
+            Cosa imparerai in 7 giorni
           </h2>
 
-          {/* La Storia */}
-          <div className="prose prose-lg prose-invert mx-auto">
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Era l&apos;ottobre del 1993.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Avevo un&apos;idea che mi sembrava geniale:
-              una tessera che dava accesso a sconti esclusivi
-              nei ristoranti di Milano.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Il concetto era semplice:
-              i ristoranti avrebbero offerto sconti ai possessori della tessera,
-              io avrei venduto le tessere,
-              tutti avremmo guadagnato.
-            </p>
-
-            <div className="bg-emerald-500/10 border-l-4 border-emerald-500 p-6 my-8 rounded-r-lg">
-              <p className="text-emerald-400 text-lg font-medium mb-4">
-                Oggi lo chiameresti &quot;TheFork&quot; o &quot;The Fork&quot;.
-              </p>
-              <p className="text-slate-300 text-lg">
-                Nel 1993 non esisteva niente del genere.
-              </p>
-            </div>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Mi sono lanciato.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Ho passato settimane a chiamare ristoranti
-              da una cabina telefonica.
-              Ho stampato tessere.
-              Ho costruito un sistema.
-            </p>
-
-            <p className="text-slate-400 text-xl font-medium text-center py-4">
-              Poi è arrivata la realtà.
-            </p>
-          </div>
-
-          {/* La Caduta */}
-          <div className="mt-12 p-8 bg-red-900/10 border border-red-800/20 rounded-xl">
-            <ul className="space-y-4 text-slate-300 text-lg mb-6">
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                I ristoranti non capivano il valore.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                I clienti non capivano come usarla.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                Io non capivo perché non funzionasse.
-              </li>
-            </ul>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              Il problema non era l&apos;idea — era buona.
-              Il problema era che non avevo visto i <strong className="text-white">SEGNALI</strong>.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              Non avevo notato che i ristoratori
-              non rispondevano con entusiasmo, ma con cortesia.
-              Non avevo visto che i clienti
-              chiedevano &quot;come funziona?&quot; invece di &quot;dove la compro?&quot;.
-            </p>
-
-            <p className="text-slate-400 text-lg italic">
-              Ero così innamorato della soluzione
-              che non vedevo il problema vero:
-              nessuno aveva chiesto quella tessera.
-            </p>
-
-            <p className="text-red-400 text-lg mt-6">
-              Ho perso mesi. Ho perso soldi.
-              Ma soprattutto ho perso fiducia
-              nella mia capacità di risolvere problemi.
-            </p>
-          </div>
-
-          {/* L'Epifania */}
-          <div className="mt-12 p-8 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-            <h3 className="text-xl font-bold text-emerald-400 mb-4">
-              Ci sono voluti anni per capire cosa era successo.
-            </h3>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              Non mi mancava la capacità di risolvere problemi.
-              Mi mancava la capacità di <strong className="text-white">VEDERE</strong> i problemi per quello che erano.
-            </p>
-
-            <div className="space-y-4 my-6">
-              <div className="flex items-start gap-4">
-                <span className="text-red-400 text-sm mt-1">✗</span>
-                <p className="text-slate-400">Vedevo i <strong className="text-slate-300">SINTOMI</strong> (i ristoranti non aderivano)</p>
+          <div className="space-y-4">
+            {[
+              'Superare il blocco decisionale che ti tiene fermo',
+              'Uscire dalla "paralisi da analisi" che consuma energia',
+              'Trasformare la paura di sbagliare in chiarezza d\'azione',
+              'Riconoscere che hai già superato ostacoli peggiori di questo',
+              'Solo 5 minuti al giorno — un problema reale risolto entro il Day 5'
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700/50">
+                <span className="text-emerald-400 text-xl flex-shrink-0">✓</span>
+                <p className="text-slate-300 text-lg">{item}</p>
               </div>
-              <div className="flex items-start gap-4">
-                <span className="text-emerald-400 text-sm mt-1">✓</span>
-                <p className="text-slate-300">Non vedevo lo <strong className="text-white">SCHEMA</strong> (non c&apos;era domanda reale)</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-6">
-              <div className="flex items-start gap-4">
-                <span className="text-red-400 text-sm mt-1">✗</span>
-                <p className="text-slate-400">Vedevo quello che mi <strong className="text-slate-300">DICEVANO</strong> (&quot;Interessante, ci penso&quot;)</p>
-              </div>
-              <div className="flex items-start gap-4">
-                <span className="text-emerald-400 text-sm mt-1">✓</span>
-                <p className="text-slate-300">Non vedevo i <strong className="text-white">SEGNALI</strong> (nessuno mi richiamava)</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-6">
-              <div className="flex items-start gap-4">
-                <span className="text-red-400 text-sm mt-1">✗</span>
-                <p className="text-slate-400">Vedevo quello che mi <strong className="text-slate-300">MANCAVA</strong> (budget marketing)</p>
-              </div>
-              <div className="flex items-start gap-4">
-                <span className="text-emerald-400 text-sm mt-1">✓</span>
-                <p className="text-slate-300">Non vedevo le <strong className="text-white">RISORSE</strong> che avevo già (contatti, competenze, tempo)</p>
-              </div>
-            </div>
-
-            <div className="bg-slate-900/50 p-6 rounded-lg mt-6">
-              <p className="text-emerald-400 text-lg font-medium mb-4">
-                Quando ho iniziato a guardare in questo modo —
-                schemi, segnali, risorse —
-                tutto è cambiato.
-              </p>
-              <p className="text-white text-xl leading-relaxed">
-                Non sono diventato più intelligente.<br />
-                Ho iniziato a USARE l&apos;intelligenza che avevo già.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SEZIONE 3: IL REFRAMING (Principio Validante) ===== */}
-      <section className="py-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            La buona notizia?<br />
-            <span className="text-emerald-400">Sai già risolvere problemi.</span>
-          </h2>
-
-          <div className="text-left space-y-6">
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Pensa a un problema che hai risolto nella tua vita.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Uno vero. Uno difficile.
-              Uno che sembrava impossibile finché non l&apos;hai risolto.
-            </p>
-            <p className="text-white text-xl font-medium text-center py-4">
-              Ce l&apos;hai?
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Bene. Quel giorno hai usato tre strumenti
-              senza sapere di usarli:
-            </p>
-
-            <div className="space-y-4 my-8">
-              <div className="flex items-start gap-4 p-4 bg-slate-800/30 rounded-lg">
-                <span className="text-emerald-400 text-xl font-bold">1</span>
-                <p className="text-slate-300">
-                  Hai visto uno <strong className="text-white">SCHEMA</strong><br />
-                  <span className="text-slate-500">(&quot;Ah, questo è come quella volta che...&quot;)</span>
-                </p>
-              </div>
-              <div className="flex items-start gap-4 p-4 bg-slate-800/30 rounded-lg">
-                <span className="text-emerald-400 text-xl font-bold">2</span>
-                <p className="text-slate-300">
-                  Hai letto dei <strong className="text-white">SEGNALI</strong><br />
-                  <span className="text-slate-500">(&quot;Aspetta, qui c&apos;è qualcosa che non mi dicono...&quot;)</span>
-                </p>
-              </div>
-              <div className="flex items-start gap-4 p-4 bg-slate-800/30 rounded-lg">
-                <span className="text-emerald-400 text-xl font-bold">3</span>
-                <p className="text-slate-300">
-                  Hai trovato delle <strong className="text-white">RISORSE</strong><br />
-                  <span className="text-slate-500">(&quot;Potrei usare questo che ho già...&quot;)</span>
-                </p>
-              </div>
-            </div>
-
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Non li hai chiamati così.
-              Probabilmente non ci hai nemmeno pensato.
-              Ma li hai usati.
-            </p>
-            <p className="text-emerald-400 text-xl font-medium text-center py-4">
-              Il problema non è che non sai risolvere le situazioni.<br />
-              Il problema è che lo fai reagendo senza direzione,<br />
-              invece che con autodeterminazione.
-            </p>
+            ))}
           </div>
         </div>
       </section>
@@ -704,26 +507,18 @@ function OstacoliLandingContent() {
 
           <div className="text-left space-y-4 text-slate-300">
             <p>
-              Ho 50 anni di esperienza come imprenditore.
+              Fernando Marongiu è imprenditore da oltre 50 anni.
             </p>
             <p>
-              In mezzo secolo di lavoro ho affrontato
-              crisi finanziarie, conflitti con soci,
-              clienti che sparivano, dipendenti che tradivano.
+              In questo tempo ha affrontato crisi economiche, fallimenti e ripartenze.
+              Ogni ostacolo gli ha insegnato qualcosa.
+            </p>
+            <p>
+              Ma la lezione più importante è stata questa:
+              la capacità di risolvere problemi non si impara — si risveglia.
             </p>
             <p className="text-emerald-400 font-medium">
-              Ho imparato che la capacità di risolvere problemi
-              non si compra a un corso — si risveglia.
-            </p>
-            <p>
-              Nel 2008 ho scritto un manuale di 50 pagine
-              per &quot;controllare&quot; i miei collaboratori.
-              Non ha funzionato.
-            </p>
-            <p>
-              Nel 2007 ho capito che il controllo vero
-              non viene dal controllare gli altri —
-              viene dal vedere le situazioni per quello che sono.
+              Ce l&apos;hai già dentro. Questo percorso ti aiuta a ritrovarla.
             </p>
             <p className="text-slate-500">
               Questa Challenge nasce dal mio libro &quot;Oltre gli Ostacoli&quot; —

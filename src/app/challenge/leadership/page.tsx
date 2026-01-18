@@ -202,7 +202,7 @@ function LeadershipLandingContent() {
             Controlla la tua email. Il Giorno 1 sta arrivando.
           </p>
           <p className="text-amber-400 text-sm mb-6">
-            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 37 anni dopo.
+            Il primo passo verso la leadership che già possiedi inizia ora.
           </p>
           <Link
             href="/test"
@@ -240,21 +240,17 @@ function LeadershipLandingContent() {
             </span>
           </div>
 
-          {/* Headline - Risonanza con Rovina (-7) */}
+          {/* Headline - Principio Validante */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-            Senti che qualcosa non funziona<br />
-            <span className="text-amber-400">nella tua leadership?</span>
+            Il leader che cerchi<br />
+            <span className="text-amber-400">è già dentro di te</span>
           </h1>
 
-          {/* Sottotitolo - Hook Storia */}
+          {/* Subheadline - Keyword ottimizzata */}
           <div className="max-w-2xl mx-auto mb-8">
-            <p className="text-xl md:text-2xl text-slate-300 mb-4">
-              Febbraio 1989. Una cabina telefonica a Milano.<br />
-              L&apos;ultimo gettone. E la scoperta che ha cambiato tutto.
-            </p>
-            <p className="text-lg text-slate-400">
-              In 7 giorni ti racconto cosa ho capito —<br />
-              e perché probabilmente vale anche per te.
+            <p className="text-xl md:text-2xl text-slate-300">
+              In 7 giorni imparerai a guidare con autorevolezza,<br />
+              motivare i collaboratori e delegare senza perdere il controllo
             </p>
           </div>
 
@@ -276,207 +272,26 @@ function LeadershipLandingContent() {
         </div>
       </section>
 
-      {/* ===== SEZIONE 2: STORIA FERNANDO (Epiphany Bridge) ===== */}
+      {/* ===== SEZIONE 2: COSA RICEVI ===== */}
       <section className="py-20 px-4 bg-slate-800/30">
         <div className="max-w-3xl mx-auto">
-          {/* Titolo Sezione */}
           <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-            Lascia che ti racconti quando<br />
-            <span className="text-amber-400">ho capito di aver sbagliato tutto.</span>
+            Cosa imparerai in 7 giorni
           </h2>
 
-          {/* La Storia */}
-          <div className="prose prose-lg prose-invert mx-auto">
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Era il febbraio del 1989.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Avevo 32 anni e una certezza granitica: la passione bastava.
-              Se credevo abbastanza forte in quello che facevo,
-              le persone mi avrebbero seguito.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Quel giorno ero in una cabina telefonica a Milano,
-              con l&apos;ultimo gettone in mano.
-            </p>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Dovevo chiamare un cliente importante — uno che poteva
-              cambiare le sorti della mia attività.
-              Mi ero preparato un discorso appassionato,
-              pieno di entusiasmo, di promesse, di visione.
-            </p>
-
-            <div className="bg-slate-900/50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
-              <p className="text-slate-200 text-lg italic mb-4">
-                Inserisco il gettone. Squilla. Risponde.
-              </p>
-              <p className="text-slate-200 text-lg mb-4">
-                Parlo per tre minuti di fila. Gli racconto tutto.
-                Il progetto, il potenziale, il futuro che vedo.
-              </p>
-              <p className="text-slate-200 text-lg mb-4">
-                Silenzio.
-              </p>
-              <p className="text-amber-400 text-lg font-medium">
-                Poi: &quot;Senta, mi fa piacere il suo entusiasmo.
-                Ma lei cosa sa fare CONCRETAMENTE?&quot;
-              </p>
-              <p className="text-slate-400 text-lg mt-4">
-                Il gettone finisce. La linea cade.
-              </p>
-            </div>
-
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Resto lì, con la cornetta in mano, a fissare il nulla.
-            </p>
-          </div>
-
-          {/* La Caduta */}
-          <div className="mt-12 p-8 bg-red-900/10 border border-red-800/20 rounded-xl">
-            <h3 className="text-xl font-bold text-red-400 mb-4">
-              Quella domanda mi ha perseguitato per anni.
-            </h3>
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              Non perché non sapessi rispondere —
-              ma perché mi aveva mostrato qualcosa che non volevo vedere:
-            </p>
-            <ul className="space-y-2 text-slate-300 text-lg">
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                La passione non basta.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                L&apos;entusiasmo non convince.
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">•</span>
-                Credere forte in qualcosa non significa che gli altri ti seguiranno.
-              </li>
-            </ul>
-            <p className="text-slate-400 text-lg mt-4 italic">
-              Avevo costruito tutta la mia idea di leadership su una fondamenta sbagliata.
-            </p>
-          </div>
-
-          {/* L'Epifania */}
-          <div className="mt-12 p-8 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-            <h3 className="text-xl font-bold text-amber-400 mb-4">
-              Ho impiegato altri 15 anni per capire cosa mancava.
-            </h3>
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              Non era la passione che non funzionava —
-              era che la usavo nel modo sbagliato.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              La passione funziona <strong className="text-white">DOPO</strong> che hai conquistato credibilità.
-              Non prima.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed mb-4">
-              E la credibilità non si conquista parlando di sé —
-              si conquista mostrando che <strong className="text-white">CAPISCI</strong> l&apos;altra persona.
-            </p>
-
-            <div className="bg-slate-900/50 p-6 rounded-lg mt-6">
-              <p className="text-amber-400 text-lg font-medium mb-4">
-                L&apos;epifania vera arrivò quando capii questo:
-              </p>
-              <p className="text-white text-xl leading-relaxed">
-                Non devi convincere le persone a seguirti.<br />
-                Devi incontrarle AL LIVELLO in cui si trovano.<br />
-                E da lì, camminare insieme.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SEZIONE 3: IL REFRAMING (Principio Validante) ===== */}
-      <section className="py-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            La buona notizia?<br />
-            <span className="text-amber-400">Probabilmente lo sai già fare.</span>
-          </h2>
-
-          <div className="text-left space-y-6">
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Se senti che qualcosa non funziona nella tua leadership,
-              non significa che ti manca qualcosa.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Significa che stai già vedendo qualcosa
-              che molti preferiscono ignorare.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Il fatto che tu stia leggendo questa pagina
-              mi dice una cosa importante su di te:
-            </p>
-            <p className="text-white text-xl font-medium text-center py-4">
-              Non ti accontenti.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Non ti basta &quot;andare avanti&quot; —
-              vuoi capire <strong className="text-white">COSA</strong> non funziona e <strong className="text-white">PERCHÉ</strong>.
-            </p>
-            <p className="text-slate-300 text-lg leading-relaxed">
-              Questa non è debolezza.
-              È la stessa cosa che mi ha portato
-              dalla cabina telefonica di Milano
-              a fondare aziende per 50 anni.
-            </p>
-            <p className="text-amber-400 text-xl font-medium text-center py-4">
-              La capacità di vedere che qualcosa non va<br />
-              È la capacità di leadership.<br />
-              Solo che probabilmente non la chiami così.
-            </p>
-          </div>
-
-          {/* I 3 Pattern */}
-          <div className="mt-16">
-            <h3 className="text-2xl font-bold text-white mb-8">
-              I 3 Pattern che Riconoscerai
-            </h3>
-            <p className="text-slate-400 mb-8">
-              In 50 anni di imprenditoria ho incontrato
-              centinaia di leader che sentivano &quot;qualcosa non funziona&quot;.
-              Quasi tutti avevano uno di questi tre pattern:
-            </p>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 bg-slate-800/50 border border-slate-700 rounded-xl text-left">
-                <div className="text-3xl mb-4">1</div>
-                <h4 className="text-amber-400 font-bold mb-2">&quot;FUNZIONA MA NON SO PERCHÉ&quot;</h4>
-                <p className="text-slate-400 text-sm">
-                  Hai avuto successi, ma non sai ancora come replicarli.
-                  Ogni volta sembra dipendere dalla fortuna.
-                </p>
+          <div className="space-y-4">
+            {[
+              'Tirare fuori il meglio dai collaboratori senza dover ripetere le cose',
+              'Creare spirito di gruppo anche con persone difficili',
+              'Gestire i conflitti senza perdere autorevolezza',
+              'Far crescere le persone che poi faranno crescere l\'azienda',
+              'Solo 10 minuti al giorno — mentre sei in macchina o sotto la doccia'
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700/50">
+                <span className="text-amber-400 text-xl flex-shrink-0">✓</span>
+                <p className="text-slate-300 text-lg">{item}</p>
               </div>
-              <div className="p-6 bg-slate-800/50 border border-slate-700 rounded-xl text-left">
-                <div className="text-3xl mb-4">2</div>
-                <h4 className="text-amber-400 font-bold mb-2">&quot;CAPISCONO MA NON SEGUONO&quot;</h4>
-                <p className="text-slate-400 text-sm">
-                  Le persone annuiscono, dicono sì —
-                  poi fanno altro.
-                </p>
-              </div>
-              <div className="p-6 bg-slate-800/50 border border-slate-700 rounded-xl text-left">
-                <div className="text-3xl mb-4">3</div>
-                <h4 className="text-amber-400 font-bold mb-2">&quot;DO TUTTO IO&quot;</h4>
-                <p className="text-slate-400 text-sm">
-                  Sai delegare in teoria.
-                  Ma poi ti ritrovi a controllare ogni dettaglio.
-                </p>
-              </div>
-            </div>
-
-            <p className="text-slate-300 text-lg mt-8">
-              Ti riconosci in uno di questi?<br />
-              <span className="text-amber-400">La Challenge parte proprio da qui.</span>
-            </p>
+            ))}
           </div>
         </div>
       </section>
@@ -582,29 +397,23 @@ function LeadershipLandingContent() {
 
           <div className="text-left space-y-4 text-slate-300">
             <p>
-              Ho 50 anni di esperienza come imprenditore.
+              Fernando Marongiu è imprenditore da oltre 50 anni.
             </p>
             <p>
-              Ho fondato aziende in settori diversi —
-              dalla formazione all&apos;oro, dal web alla ristorazione.
+              Non insegna teoria da manuale, ma condivide ciò che ha scoperto sul campo:
+              la leadership autentica non si costruisce imitando altri,
+              ma riconoscendo ciò che già si possiede.
             </p>
             <p>
-              Ho fatto errori che mi sono costati anni.
-              E ho avuto successi che non capivo.
-            </p>
-            <p>
-              Nel 2007, quasi per scommessa,
-              sono entrato nel settore dell&apos;oro e della gioielleria.
-              In quel momento ho incontrato il mio punto di svolta —
-              e più nulla è mai stato come prima.
+              Ha guidato team in Italia attraverso crisi economiche,
+              cambiamenti generazionali e trasformazioni digitali.
             </p>
             <p className="text-amber-400 font-medium">
-              Ho capito che la leadership non si impara.
-              Si riconosce.
+              La leadership non si impara. Si riconosce.
             </p>
             <p className="text-slate-500">
-              Questa Challenge nasce dal mio libro &quot;Leadership Autentica&quot; —
-              ma non devi comprare il libro per partecipare.
+              Questa Challenge nasce dal libro &quot;Leadership Autentica&quot; —
+              ma non devi comprarlo per partecipare.
               La Challenge è gratuita e completa in sé.
             </p>
           </div>
