@@ -33,6 +33,39 @@ Vitaeology è una **piattaforma SaaS completa** per lo sviluppo della leadership
 
 ---
 
+## DATI BIOGRAFICI FERNANDO MARONGIU (OBBLIGATORIO)
+
+**⚠️ SEMPRE verificare le età quando si scrive contenuto su Fernando!**
+
+### Riferimento Rapido
+| Dato | Valore |
+|------|--------|
+| **Anno di nascita** | 1957 |
+| **Età attuale (2026)** | 68-69 anni |
+
+### Calcolo Età per Anno
+```
+Età = Anno evento - 1957
+```
+
+### Eventi Chiave nelle Storie
+| Anno | Età Fernando | Evento/Storia |
+|------|--------------|---------------|
+| 1973 | **16 anni** | Inizio "anni perduti" (Microfelicità) |
+| 1982 | **25 anni** | Fine "anni perduti" |
+| 1985 | **28 anni** | Cabina telefonica Milano (Leadership) |
+| 2007 | **50 anni** | Ingresso settore oro/gioielleria |
+| 2024 | **67 anni** | Fondazione Vitaeology |
+| 2026 | **68-69 anni** | Oggi |
+
+### Regola
+```
+❌ MAI inventare età senza calcolare: Anno - 1957
+✅ SEMPRE verificare: "Nel [ANNO] avevo [ANNO - 1957] anni"
+```
+
+---
+
 ## PRINCIPI FONDAMENTALI (OBBLIGATORI)
 
 ### 0. Framework dei 4 Prodotti (Fondamento)
