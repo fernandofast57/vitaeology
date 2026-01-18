@@ -23,7 +23,8 @@ import {
   Filter,
   Crown,
   Heart,
-  Compass
+  Compass,
+  Zap
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
@@ -58,6 +59,7 @@ const PATHWAY_ICONS: Record<string, any> = {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Challenge', href: '/dashboard/challenges', icon: Zap },
   { name: 'Esercizi', href: '/exercises', icon: BookOpen },
   { name: 'Progressi', href: '/progress', icon: TrendingUp },
 ];

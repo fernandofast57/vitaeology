@@ -3,12 +3,17 @@
  *
  * Genera raccomandazioni personalizzate di esercizi basate sui risultati
  * dell'assessment dell'utente. Supporta tutti e 3 i percorsi:
- * - Leadership (LITE): 24 caratteristiche, 52 esercizi
- * - Risolutore (Ostacoli): 7 dimensioni, 24 esercizi
- * - Microfelicità: 13 dimensioni, 24 esercizi
+ * - Leadership (LITE): 24 caratteristiche, 52 esercizi → match by characteristic_slug
+ * - Risolutore (Ostacoli): 7 dimensioni, 14 esercizi → match by dimension_code (FP, FS, FR, TP, TT, TC, SR)
+ * - Microfelicità: 13 dimensioni, 26 esercizi → match by dimension_code (RR, RA, RD, RM, RS, SM, SA, SI, SC, SE, L1, L2, L3)
  *
  * Prioritizza le aree con punteggi più bassi (GAP maggiori) e crea
  * un percorso sequenziale personalizzato di sviluppo.
+ *
+ * Il matching avviene in ordine di precisione:
+ * 1. dimension_code: match diretto alla dimensione specifica (Risolutore/Microfelicità)
+ * 2. characteristic_slug: match per caratteristica (Leadership)
+ * 3. pillar_primary: fallback a livello di pillar (tutti i percorsi)
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -45,6 +50,7 @@ export interface ExerciseInfo {
   difficulty_level: string;
   estimated_time_minutes: number;
   description: string;
+  dimension_code: string | null; // Codice dimensione per matching diretto (es: FP, RR, SM)
 }
 
 export interface RecommendedExercise extends ExerciseInfo {
@@ -92,19 +98,22 @@ const RISOLUTORE_DIMENSION_TO_PILLAR: Record<string, string> = {
 
 // Microfelicità: dimensione assessment → pillar esercizio
 const MICROFELICITA_DIMENSION_TO_PILLAR: Record<string, string> = {
+  // R.A.D.A.R.
   RR: 'SENTIRE',  // Rileva
   RA: 'ESSERE',   // Accogli
   RD: 'PENSARE',  // Distingui
   RM: 'SENTIRE',  // Amplifica
-  RS: 'AGIRE',    // Resta
-  SM: 'SENTIRE',  // Sabotatore Minimizzazione
-  SA: 'PENSARE',  // Sabotatore Anticipo
-  SI: 'SENTIRE',  // Sabotatore Auto-Interruzione
-  SC: 'PENSARE',  // Sabotatore Cambio Fuoco
-  SE: 'AGIRE',    // Sabotatore Correzione
+  RS: 'ESSERE',   // Resta
+  // Sabotatori
+  SM: 'PENSARE',  // Sabotatore Minimizzazione
+  SA: 'SENTIRE',  // Sabotatore Anticipo
+  SI: 'PENSARE',  // Sabotatore Auto-Interruzione
+  SC: 'SENTIRE',  // Sabotatore Cambio Fuoco
+  SE: 'ESSERE',   // Sabotatore Correzione Emotiva
+  // Livelli
   L1: 'ESSERE',   // Livello 1: Campo Interno
   L2: 'SENTIRE',  // Livello 2: Spazio Relazionale
-  L3: 'PENSARE',  // Livello 3: Campo Contesti
+  L3: 'AGIRE',    // Livello 3: Campo Contesti
 };
 
 // ============================================================
@@ -494,7 +503,8 @@ export class ExerciseRecommendationService {
         exercise_type,
         difficulty_level,
         estimated_time_minutes,
-        description
+        description,
+        dimension_code
       `)
       .eq('is_active', true)
       .eq('book_slug', bookSlug)
@@ -531,7 +541,7 @@ export class ExerciseRecommendationService {
    * Calcola raccomandazioni ordinate per priorità
    *
    * Per Leadership: match by characteristic_slug
-   * Per Risolutore/Microfelicità: match by pillar_primary (mappato da dimensione)
+   * Per Risolutore/Microfelicità: match by dimension_code (diretto) o pillar_primary (fallback)
    */
   private calculateRecommendations(
     scores: DimensionScore[],
@@ -544,30 +554,35 @@ export class ExerciseRecommendationService {
     // Ordina dimensioni per punteggio (dal più basso = GAP maggiore)
     const sortedScores = [...scores].sort((a, b) => a.score - b.score);
 
-    // Per Leadership: mappa caratteristica → score
-    // Per Risolutore/Microfelicità: mappa pillar → scores (può esserci più di una dimensione per pillar)
     const isLeadership = path === 'leadership';
 
-    // Crea mappa per matching
-    let scoreMap: Map<string, DimensionScore>;
-    let pillarToLowestScore: Map<string, DimensionScore>;
+    // Crea mappe per matching
+    // dimensionCodeToScore: match diretto per dimension_code (Risolutore/Microfelicità)
+    // characteristicToScore: match per characteristic_slug (Leadership)
+    // pillarToLowestScore: fallback per pillar (tutti i percorsi)
+    const dimensionCodeToScore = new Map<string, DimensionScore>();
+    const characteristicToScore = new Map<string, DimensionScore>();
+    const pillarToLowestScore = new Map<string, DimensionScore>();
+
+    scores.forEach(s => {
+      // Mappa dimension_code → score
+      dimensionCodeToScore.set(s.dimensionCode, s);
+    });
 
     if (isLeadership) {
-      // Leadership: match diretto per characteristic_slug
-      scoreMap = new Map(scores.map(s => [s.dimensionCode, s]));
-      pillarToLowestScore = new Map();
-    } else {
-      // Risolutore/Microfelicità: raggruppa per pillar, usa il punteggio più basso
-      scoreMap = new Map();
-      pillarToLowestScore = new Map();
-
-      sortedScores.forEach(s => {
-        const pillar = s.pillar;
-        if (!pillarToLowestScore.has(pillar)) {
-          pillarToLowestScore.set(pillar, s); // Il primo (punteggio più basso) vince
-        }
+      // Leadership: mappa anche per characteristic slug
+      scores.forEach(s => {
+        characteristicToScore.set(s.dimensionCode, s);
       });
     }
+
+    // Mappa pillar → score più basso (fallback)
+    sortedScores.forEach(s => {
+      const pillar = s.pillar;
+      if (!pillarToLowestScore.has(pillar)) {
+        pillarToLowestScore.set(pillar, s); // Il primo (punteggio più basso) vince
+      }
+    });
 
     // Assegna priorità agli esercizi
     const recommendations: RecommendedExercise[] = [];
@@ -575,18 +590,33 @@ export class ExerciseRecommendationService {
     exercises.forEach(exercise => {
       let matchedScore: DimensionScore | undefined;
       let pillarForExercise: string;
+      let matchType: 'dimension' | 'characteristic' | 'pillar' | 'none' = 'none';
 
-      if (isLeadership && exercise.characteristic_slug) {
+      if (!isLeadership && exercise.dimension_code) {
+        // Risolutore/Microfelicità: PRIMA prova match diretto per dimension_code
+        matchedScore = dimensionCodeToScore.get(exercise.dimension_code);
+        if (matchedScore) {
+          matchType = 'dimension';
+          pillarForExercise = matchedScore.pillar;
+        }
+      }
+
+      if (!matchedScore && isLeadership && exercise.characteristic_slug) {
         // Leadership: match per characteristic_slug
-        matchedScore = scoreMap.get(exercise.characteristic_slug);
-        pillarForExercise = matchedScore?.pillar || 'Vision';
-      } else if (exercise.pillar_primary) {
-        // Risolutore/Microfelicità: match per pillar_primary
+        matchedScore = characteristicToScore.get(exercise.characteristic_slug);
+        if (matchedScore) {
+          matchType = 'characteristic';
+          pillarForExercise = matchedScore.pillar || 'Vision';
+        }
+      }
+
+      if (!matchedScore && exercise.pillar_primary) {
+        // Fallback: match per pillar_primary
         pillarForExercise = exercise.pillar_primary.toUpperCase();
         matchedScore = pillarToLowestScore.get(pillarForExercise);
-      } else {
-        // Nessun match possibile
-        return;
+        if (matchedScore) {
+          matchType = 'pillar';
+        }
       }
 
       if (!matchedScore) {
@@ -600,7 +630,7 @@ export class ExerciseRecommendationService {
           dimensionName: 'Generale',
           characteristicScore: 50,
           characteristicName: 'Generale',
-          pillar: pillarForExercise || 'ESSERE',
+          pillar: pillarForExercise! || 'ESSERE',
           isCompleted: status === 'completed',
           isInProgress: status === 'in_progress',
         });
@@ -609,18 +639,20 @@ export class ExerciseRecommendationService {
 
       // Calcola priorità basata su:
       // 1. Punteggio dimensione (più basso = più prioritario)
-      // 2. Difficoltà esercizio (base prima)
-      // 3. Settimana (progressione naturale)
+      // 2. Tipo di match (dimension > characteristic > pillar)
+      // 3. Difficoltà esercizio (base prima)
+      // 4. Settimana (progressione naturale)
 
-      const scoreRank = sortedScores.findIndex(s =>
-        isLeadership
-          ? s.dimensionCode === exercise.characteristic_slug
-          : s.pillar === pillarForExercise
-      );
+      // Score rank: più basso il punteggio, più alta la priorità
+      const scoreRank = sortedScores.findIndex(s => s.dimensionCode === matchedScore!.dimensionCode);
+
+      // Match type bonus: match diretto è più preciso
+      const matchBonus = matchType === 'dimension' ? 0 : matchType === 'characteristic' ? 0 : 2;
+
       const difficultyWeight = this.getDifficultyWeight(exercise.difficulty_level);
 
       // Priority formula: lower = better
-      const priority = (scoreRank >= 0 ? scoreRank * 10 : 50) + difficultyWeight + (exercise.week_number * 0.1);
+      const priority = (scoreRank >= 0 ? scoreRank * 10 : 50) + matchBonus + difficultyWeight + (exercise.week_number * 0.1);
 
       const status = progressMap.get(exercise.id);
       const isCompleted = status === 'completed';
