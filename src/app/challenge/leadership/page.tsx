@@ -225,15 +225,6 @@ function LeadershipLandingContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
-      {/* Schema.org JSON-LD */}
-      <JsonLd data={[
-        organizationSchema,
-        personSchema,
-        leadershipCourseSchema,
-        leadershipFaqSchema,
-        leadershipBreadcrumbSchema
-      ]} />
-
       {/* Return Visitor Banner */}
       {behavior.isReturnVisitor && !bannerDismissed && !success && (
         <ReturnVisitorBanner
@@ -743,8 +734,18 @@ function LoadingFallback() {
 
 export default function LeadershipLanding() {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <LeadershipLandingContent />
-    </Suspense>
+    <>
+      {/* Schema.org JSON-LD - Fuori da Suspense per SSR */}
+      <JsonLd data={[
+        organizationSchema,
+        personSchema,
+        leadershipCourseSchema,
+        leadershipFaqSchema,
+        leadershipBreadcrumbSchema
+      ]} />
+      <Suspense fallback={<LoadingFallback />}>
+        <LeadershipLandingContent />
+      </Suspense>
+    </>
   );
 }

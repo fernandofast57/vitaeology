@@ -262,15 +262,6 @@ function MicrofelicitaLandingContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-900 to-slate-900">
-      {/* Schema.org JSON-LD */}
-      <JsonLd data={[
-        organizationSchema,
-        personSchema,
-        microfelicitaCourseSchema,
-        microfelicitaFaqSchema,
-        microfelicitaBreadcrumbSchema
-      ]} />
-
       {/* Return Visitor Banner */}
       {behavior.isReturnVisitor && !bannerDismissed && !success && (
         <ReturnVisitorBanner
@@ -868,8 +859,18 @@ function LoadingFallback() {
 
 export default function MicrofelicitaLanding() {
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <MicrofelicitaLandingContent />
-    </Suspense>
+    <>
+      {/* Schema.org JSON-LD - Fuori da Suspense per SSR */}
+      <JsonLd data={[
+        organizationSchema,
+        personSchema,
+        microfelicitaCourseSchema,
+        microfelicitaFaqSchema,
+        microfelicitaBreadcrumbSchema
+      ]} />
+      <Suspense fallback={<LoadingFallback />}>
+        <MicrofelicitaLandingContent />
+      </Suspense>
+    </>
   );
 }
