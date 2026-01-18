@@ -50,13 +50,15 @@ export default function LeadershipChallengeLayout({
 }) {
   return (
     <>
-      {jsonLdSchemas.map((schema, i) => (
-        <script
-          key={`jsonld-${i}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <head>
+        {jsonLdSchemas.map((schema, i) => (
+          <script
+            key={`jsonld-${i}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+      </head>
       {children}
     </>
   );
