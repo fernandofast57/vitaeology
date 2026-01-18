@@ -159,31 +159,23 @@ function LeadershipLandingContent() {
     </form>
   );
 
-  // FAQ Data
+  // FAQ Data (da OCEANO_BLU_VITAEOLOGY)
   const faqItems = [
     {
-      q: "Quanto costa?",
-      a: "Niente. La Challenge è completamente gratuita."
-    },
-    {
       q: "Quanto tempo richiede ogni giorno?",
-      a: "5-7 minuti per leggere l'email + 3-5 minuti per l'esercizio. Totale: circa 10 minuti al giorno."
+      a: "Circa 10 minuti. Ogni esercizio è progettato per essere completato anche in una pausa caffè."
     },
     {
-      q: "Devo comprare il libro?",
-      a: "No. La Challenge è completa in sé. Il libro \"Leadership Autentica\" è un approfondimento opzionale."
+      q: "È davvero gratuito?",
+      a: "Sì, la challenge di 7 giorni è completamente gratuita. Nessun pagamento, nessun obbligo."
     },
     {
-      q: "È un corso di \"motivazione\"?",
-      a: "No. Non ti dirò di \"credere in te stesso\" o \"pensare positivo\". Ti mostrerò come già funzioni quando sei al tuo meglio — e come farlo di più."
+      q: "Devo avere esperienza di leadership?",
+      a: "No. Il percorso è pensato per chi già guida (anche informalmente) e vuole farlo in modo più autentico."
     },
     {
-      q: "Funziona anche se sono scettico?",
-      a: "Soprattutto se sei scettico. Gli scettici sono quelli che vogliono capire invece di credere. È esattamente l'approccio giusto."
-    },
-    {
-      q: "E dopo i 7 giorni?",
-      a: "Avrai strumenti che puoi usare per sempre. Se vorrai approfondire, ti mostrerò le opzioni disponibili — senza alcun obbligo."
+      q: "Cosa succede dopo i 7 giorni?",
+      a: "Riceverai informazioni su come continuare il percorso, ma senza alcun obbligo."
     }
   ];
 
@@ -403,18 +395,6 @@ function LeadershipLandingContent() {
               Non insegna teoria da manuale, ma condivide ciò che ha scoperto sul campo:
               la leadership autentica non si costruisce imitando altri,
               ma riconoscendo ciò che già si possiede.
-            </p>
-            <p>
-              Ha guidato team in Italia attraverso crisi economiche,
-              cambiamenti generazionali e trasformazioni digitali.
-            </p>
-            <p className="text-amber-400 font-medium">
-              La leadership non si impara. Si riconosce.
-            </p>
-            <p className="text-slate-500">
-              Questa Challenge nasce dal libro &quot;Leadership Autentica&quot; —
-              ma non devi comprarlo per partecipare.
-              La Challenge è gratuita e completa in sé.
             </p>
           </div>
         </div>

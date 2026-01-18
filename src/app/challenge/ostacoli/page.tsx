@@ -159,31 +159,23 @@ function OstacoliLandingContent() {
     </form>
   );
 
-  // FAQ Data
+  // FAQ Data (da OCEANO_BLU_VITAEOLOGY)
   const faqItems = [
     {
-      q: "Quanto costa?",
-      a: "Niente. La Challenge è completamente gratuita."
+      q: "Funziona per problemi di lavoro o anche personali?",
+      a: "Il Metodo dei 3 Filtri funziona per qualsiasi tipo di ostacolo. La logica è la stessa."
     },
     {
       q: "Quanto tempo richiede ogni giorno?",
-      a: "5-7 minuti per leggere l'email + 5 minuti per l'esercizio. Totale: circa 10-12 minuti al giorno."
+      a: "5-10 minuti. Alcuni esercizi sono più riflessivi, altri più pratici."
     },
     {
-      q: "Devo comprare il libro?",
-      a: "No. La Challenge è completa in sé. Il libro \"Oltre gli Ostacoli\" è un approfondimento opzionale."
+      q: "E se il mio problema è troppo grande?",
+      a: "I problemi grandi si affrontano un pezzo alla volta. Il metodo ti insegna proprio questo."
     },
     {
-      q: "Funziona anche per problemi personali, non solo di lavoro?",
-      a: "Sì. I 3 Filtri funzionano su qualsiasi tipo di problema — professionale, familiare, personale."
-    },
-    {
-      q: "E se non ho problemi urgenti in questo momento?",
-      a: "Meglio. Impari gli strumenti quando non sei sotto pressione, così sono pronti quando servono."
-    },
-    {
-      q: "E dopo i 7 giorni?",
-      a: "Avrai strumenti che puoi usare per sempre. Se vorrai approfondire, ti mostrerò le opzioni disponibili — senza alcun obbligo."
+      q: "È davvero gratuito?",
+      a: "Sì. 7 giorni completi, nessun pagamento."
     }
   ];
 
@@ -514,16 +506,7 @@ function OstacoliLandingContent() {
               Ogni ostacolo gli ha insegnato qualcosa.
             </p>
             <p>
-              Ma la lezione più importante è stata questa:
-              la capacità di risolvere problemi non si impara — si risveglia.
-            </p>
-            <p className="text-emerald-400 font-medium">
-              Ce l&apos;hai già dentro. Questo percorso ti aiuta a ritrovarla.
-            </p>
-            <p className="text-slate-500">
-              Questa Challenge nasce dal mio libro &quot;Oltre gli Ostacoli&quot; —
-              ma non devi comprare il libro per partecipare.
-              La Challenge è gratuita e completa in sé.
+              Questo percorso condensa quelle lezioni in un metodo pratico.
             </p>
           </div>
         </div>

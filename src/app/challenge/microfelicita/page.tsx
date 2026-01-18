@@ -200,27 +200,23 @@ function MicrofelicitaLandingContent() {
     }
   };
 
-  // FAQ data
+  // FAQ data (da OCEANO_BLU_VITAEOLOGY)
   const faqs = [
     {
-      q: 'Devo credere nel "pensiero positivo"?',
-      a: 'No. Questo non è pensiero positivo. Non ti chiedo di immaginare cose belle o di forzare la gratitudine. Ti chiedo di notare cose che succedono davvero — e che il tuo cervello ignora.'
+      q: 'È una forma di meditazione o mindfulness?',
+      a: "No. Non richiede di fermarsi, chiudere gli occhi o 'svuotare la mente'. È un sistema pratico per notare ciò che già accade."
     },
     {
-      q: 'Quanto tempo serve al giorno?',
-      a: '5-7 minuti per leggere l\'email, 3-5 minuti per l\'esercizio. Totale: massimo 15 minuti al giorno.'
+      q: 'Quanto tempo richiede?',
+      a: '2 minuti per l\'esercizio base. Il bello è che poi diventa automatico.'
     },
     {
-      q: 'Funziona se sono scettico?',
-      a: 'Sì. In effetti, gli scettici spesso ottengono i risultati migliori perché seguono le istruzioni invece di aggiungere interpretazioni.'
+      q: 'Funziona anche se sono molto stressato?',
+      a: 'Soprattutto in quel caso. Più siamo sotto pressione, più il cervello ignora il positivo.'
     },
     {
-      q: 'È diverso dalla mindfulness?',
-      a: 'Sì. La mindfulness ti chiede di svuotare la mente. R.A.D.A.R. ti chiede di riempirla — con attenzione selettiva ai segnali positivi.'
-    },
-    {
-      q: 'Cosa succede dopo i 7 giorni?',
-      a: 'Avrai gli strumenti per continuare in autonomia. Molti partecipanti scoprono poi il percorso completo di Vitaeology per approfondire.'
+      q: 'È davvero gratuito?',
+      a: 'Sì. 7 giorni completi, nessun pagamento.'
     }
   ];
 
@@ -679,7 +675,7 @@ function MicrofelicitaLandingContent() {
               'Trovare la felicità nelle piccole cose che già ci sono nella tua giornata',
               'Creare una ritualità che ti ricarica invece di svuotarti',
               'Goderti i successi invece di passare subito al problema successivo',
-              'Solo 5 minuti al giorno — il tempo di un caffè',
+              'Solo 2 minuti al giorno — il tempo di un caffè',
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-4 bg-slate-900/50 rounded-lg">
                 <span className="text-violet-500 text-xl">✓</span>
@@ -716,13 +712,13 @@ function MicrofelicitaLandingContent() {
 
           <div className="text-left max-w-2xl mx-auto space-y-4 text-slate-300">
             <p>
-              Ho 50 anni di esperienza imprenditoriale. Ho studiato i metodi di chi sa vivere pienamente anche nei momenti di pressione.
+              Fernando Marongiu è imprenditore da oltre 50 anni.
             </p>
             <p>
-              Quello che insegno non viene solo dai libri — viene da migliaia di ore di osservazione, testing e pratica personale.
+              Ha scoperto che la felicità non è un traguardo ma una pratica quotidiana.
             </p>
-            <p className="text-violet-400 font-semibold">
-              Il benessere non è qualcosa che &quot;devi trovare&quot;. Ti attraversa ogni giorno in migliaia di piccoli momenti. Solo che nessuno ti ha insegnato a notarli.
+            <p>
+              Il Metodo R.A.D.A.R. nasce dalla sua esperienza: notare ciò che già c&apos;è, invece di inseguire ciò che manca.
             </p>
           </div>
         </div>
