@@ -53,10 +53,17 @@ Età = Anno evento - 1957
 |------|--------------|---------------|
 | 1973 | **16 anni** | Inizio "anni perduti" (Microfelicità) |
 | 1982 | **25 anni** | Fine "anni perduti" |
-| 1985 | **28 anni** | Cabina telefonica Milano (Leadership) |
+| 1989 | **32 anni** | Cabina telefonica #1: chiedere permesso a manager (Leadership) |
+| 1992 | **35 anni** | Covey "7 Habits" pubblicato in italiano |
+| 1993 | **36 anni** | Cabina telefonica #2: tessera ristoranti "TheFork" (Ostacoli) |
+| Primi 2000 | ~45 anni | Fallimento energie rinnovabili |
 | 2007 | **50 anni** | Ingresso settore oro/gioielleria |
 | 2024 | **67 anni** | Fondazione Vitaeology |
 | 2026 | **68-69 anni** | Oggi |
+
+### Due Episodi Cabina Telefonica (NON confondere!)
+1. **1989 (Leadership)**: Parlava con un manager, chiedeva "il permesso" di essere riconosciuto come persona lungimirante. Sensazione di essere relegato a comprimario.
+2. **1993 (Ostacoli)**: Progetto tessera ristoranti (precursore TheFork). Settimane a chiamare ristoranti da cabina telefonica.
 
 ### Regola
 ```

@@ -731,7 +731,7 @@ function MicrofelicitaLandingContent() {
               nessuno mi aveva insegnato a notarlo.
             </p>
             <p className="text-violet-400">
-              Oggi, a 70 anni, ho capito che i momenti più preziosi sono quelli piccoli —
+              Oggi, a quasi 69 anni, ho capito che i momenti più preziosi sono quelli piccoli —
               se sai riconoscerli.
             </p>
             <p className="text-white font-semibold">
@@ -811,7 +811,7 @@ function MicrofelicitaLandingContent() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>&copy; 2025 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
+          <p>&copy; 2026 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
         </div>
       </footer>
 

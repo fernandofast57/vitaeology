@@ -812,7 +812,7 @@ function OstacoliLandingContent() {
       {/* Footer Legal */}
       <footer className="py-8 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>&copy; 2025 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
+          <p>&copy; 2026 Vitaeology - <Link href="/privacy" className="hover:text-slate-300">Privacy</Link></p>
         </div>
       </footer>
 

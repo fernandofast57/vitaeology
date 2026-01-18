@@ -551,7 +551,7 @@ export default function ChallengeDayPage() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>© 2025 Vitaeology - {challengeName}</p>
+          <p>© 2026 Vitaeology - {challengeName}</p>
         </div>
       </footer>
     </div>

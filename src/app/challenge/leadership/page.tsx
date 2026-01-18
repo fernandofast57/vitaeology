@@ -202,7 +202,7 @@ function LeadershipLandingContent() {
             Controlla la tua email. Il Giorno 1 sta arrivando.
           </p>
           <p className="text-amber-400 text-sm mb-6">
-            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 41 anni dopo.
+            Ti racconterò di quella cabina telefonica a Milano — e di cosa ho capito 37 anni dopo.
           </p>
           <Link
             href="/test"
@@ -249,7 +249,7 @@ function LeadershipLandingContent() {
           {/* Sottotitolo - Hook Storia */}
           <div className="max-w-2xl mx-auto mb-8">
             <p className="text-xl md:text-2xl text-slate-300 mb-4">
-              Febbraio 1985. Una cabina telefonica a Milano.<br />
+              Febbraio 1989. Una cabina telefonica a Milano.<br />
               L&apos;ultimo gettone. E la scoperta che ha cambiato tutto.
             </p>
             <p className="text-lg text-slate-400">
@@ -288,11 +288,11 @@ function LeadershipLandingContent() {
           {/* La Storia */}
           <div className="prose prose-lg prose-invert mx-auto">
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Era il febbraio del 1985.
+              Era il febbraio del 1989.
             </p>
 
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Avevo 28 anni e una certezza granitica: la passione bastava.
+              Avevo 32 anni e una certezza granitica: la passione bastava.
               Se credevo abbastanza forte in quello che facevo,
               le persone mi avrebbero seguito.
             </p>
