@@ -1,12 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
-import {
-  organizationSchema,
-  personSchema,
-  microfelicitaCourseSchema,
-  microfelicitaFaqSchema,
-  microfelicitaBreadcrumbSchema
-} from '@/lib/schema-org';
 
 export const metadata: Metadata = {
   title: 'Vitaeology - Microfelicità',
@@ -35,31 +27,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Schema.org JSON-LD combinato per SEO e AI Discovery
-const jsonLd = [
-  organizationSchema,
-  personSchema,
-  microfelicitaCourseSchema,
-  microfelicitaFaqSchema,
-  microfelicitaBreadcrumbSchema
-];
-
 export default function MicrofelicitaChallengeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Script
-        id="microfelicita-jsonld"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd)
-        }}
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

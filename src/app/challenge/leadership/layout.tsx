@@ -1,12 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
-import {
-  organizationSchema,
-  personSchema,
-  leadershipCourseSchema,
-  leadershipFaqSchema,
-  leadershipBreadcrumbSchema
-} from '@/lib/schema-org';
 
 export const metadata: Metadata = {
   title: 'Vitaeology - Leadership Autentica',
@@ -35,31 +27,10 @@ export const metadata: Metadata = {
   },
 };
 
-// Schema.org JSON-LD combinato per SEO e AI Discovery
-const jsonLd = [
-  organizationSchema,
-  personSchema,
-  leadershipCourseSchema,
-  leadershipFaqSchema,
-  leadershipBreadcrumbSchema
-];
-
 export default function LeadershipChallengeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Script
-        id="leadership-jsonld"
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd)
-        }}
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

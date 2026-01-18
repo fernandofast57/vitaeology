@@ -11,6 +11,14 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  organizationSchema,
+  personSchema,
+  leadershipCourseSchema,
+  leadershipFaqSchema,
+  leadershipBreadcrumbSchema
+} from '@/lib/schema-org';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando
 // Conformità: MEGA_PROMPT v4.3, CONTROL_TOWER v1.2, COPY_REALIGNMENT_ANALYSIS
@@ -217,6 +225,15 @@ function LeadershipLandingContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800">
+      {/* Schema.org JSON-LD */}
+      <JsonLd data={[
+        organizationSchema,
+        personSchema,
+        leadershipCourseSchema,
+        leadershipFaqSchema,
+        leadershipBreadcrumbSchema
+      ]} />
+
       {/* Return Visitor Banner */}
       {behavior.isReturnVisitor && !bannerDismissed && !success && (
         <ReturnVisitorBanner

@@ -21,6 +21,14 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  organizationSchema,
+  personSchema,
+  microfelicitaCourseSchema,
+  microfelicitaFaqSchema,
+  microfelicitaBreadcrumbSchema
+} from '@/lib/schema-org';
 
 // ============================================================================
 // SIGNUP FORM COMPONENT
@@ -254,6 +262,15 @@ function MicrofelicitaLandingContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-900 to-slate-900">
+      {/* Schema.org JSON-LD */}
+      <JsonLd data={[
+        organizationSchema,
+        personSchema,
+        microfelicitaCourseSchema,
+        microfelicitaFaqSchema,
+        microfelicitaBreadcrumbSchema
+      ]} />
+
       {/* Return Visitor Banner */}
       {behavior.isReturnVisitor && !bannerDismissed && !success && (
         <ReturnVisitorBanner
