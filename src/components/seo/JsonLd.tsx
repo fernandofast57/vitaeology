@@ -1,0 +1,24 @@
+/**
+ * JSON-LD Schema.org Component
+ * Inietta structured data per SEO e AI Discovery
+ */
+
+interface JsonLdProps {
+  data: object | object[];
+}
+
+export default function JsonLd({ data }: JsonLdProps) {
+  const schemas = Array.isArray(data) ? data : [data];
+
+  return (
+    <>
+      {schemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+    </>
+  );
+}

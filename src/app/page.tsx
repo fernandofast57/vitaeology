@@ -15,10 +15,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import JsonLd from '@/components/seo/JsonLd';
+import { organizationSchema, personSchema, websiteSchema } from '@/lib/schema-org';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Schema.org JSON-LD */}
+      <JsonLd data={[organizationSchema, personSchema, websiteSchema]} />
+
       {/* ================================================================== */}
       {/* NAVBAR */}
       {/* ================================================================== */}
