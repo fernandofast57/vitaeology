@@ -7,7 +7,7 @@
  * Conformità: MEGA_PROMPT v4.3, CONTROL_TOWER v1.2, COPY_REALIGNMENT_ANALYSIS
  *
  * Entry point emotivo: -7 (Rovina) → Iscrizione Challenge
- * Storia: Fernando 1973-1982 "gli anni perduti" - cerca piacere nei posti sbagliati
+ * Storia: Fernando 1973-1982 "gli anni perduti" (16-25 anni) - cerca piacere nei posti sbagliati
  */
 
 import { useState, Suspense } from 'react';
@@ -336,7 +336,7 @@ function MicrofelicitaLandingContent() {
 
           <div className="prose prose-lg prose-invert mx-auto">
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Era il <strong className="text-white">1973</strong>. Avevo vent&apos;anni.
+              Era il <strong className="text-white">1973</strong>. Avevo sedici anni.
             </p>
 
             <p className="text-slate-300 text-lg leading-relaxed mb-6">

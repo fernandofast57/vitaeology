@@ -292,7 +292,7 @@ function LeadershipLandingContent() {
             </p>
 
             <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              Avevo 27 anni e una certezza granitica: la passione bastava.
+              Avevo 28 anni e una certezza granitica: la passione bastava.
               Se credevo abbastanza forte in quello che facevo,
               le persone mi avrebbero seguito.
             </p>
