@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import {
   organizationSchema,
   personSchema,
@@ -34,8 +35,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Schema.org JSON-LD per SEO e AI Discovery
-const schemas = [
+// Schema.org JSON-LD combinato per SEO e AI Discovery
+const jsonLd = [
   organizationSchema,
   personSchema,
   leadershipCourseSchema,
@@ -50,14 +51,14 @@ export default function LeadershipChallengeLayout({
 }) {
   return (
     <>
-      {/* Schema.org JSON-LD - Server Side Rendered */}
-      {schemas.map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <Script
+        id="leadership-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd)
+        }}
+      />
       {children}
     </>
   );

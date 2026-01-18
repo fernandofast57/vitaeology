@@ -68,7 +68,8 @@
       "Bash(xargs:*)",
       "Bash(supabase projects:*)",
       "Bash(npx vercel:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "WebFetch(domain:vitaeology.com)"
     ]
   }
 }
