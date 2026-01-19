@@ -123,37 +123,47 @@ P4 (Correzione)  → Disponibile ON-DEMAND, non imposto
 
 **ESSERE, FARE, AVERE sono condizioni di esistenza.**
 
-| Condizione | Esempio | Effetto | Uso |
-|------------|---------|---------|-----|
-| **ESSERE** | "Sei un leader" / "Non sei abbastanza" | Giudizio identitario | ❌ EVITARE |
-| **FARE** | "Fai bene" / "Non fai abbastanza" | Giudizio comportamentale | ❌ EVITARE |
-| **AVERE** | "Hai già questa capacità" | Riconoscimento | ✅ SEMPRE |
-| **NON AVERE** | "Ti manca X" / "Non hai Y" | Deficit | ❌ MAI |
+#### La Differenza Fondamentale: LIBERTÀ
+
+| Condizione | Il soggetto... | Risultato |
+|------------|----------------|-----------|
+| **ESSERE/FARE** | È alla mercé del giudizio | Invalidazione o valutazione |
+| **AVERE/NON AVERE** | Ha una scelta | **LIBERTÀ** |
+
+**AVERE e NON AVERE sono due possibilità che implicano un livello di libertà.**
+Se posso AVERE o anche NON AVERE una cosa o una scelta — questa è una condizione di LIBERTÀ.
 
 #### Perché ESSERE e FARE sono problematici
-ESSERE e FARE sono sempre alla completa **"mercé" del soggetto** — sono per lo più **invalidanti** (giudicano negativamente) o **valutanti** (giudicano, anche positivamente). Mettono l'utente in posizione di essere giudicato.
+ESSERE e FARE mettono il soggetto **alla completa "mercé"** di chi parla — sono per lo più **invalidanti** (giudicano negativamente) o **valutanti** (giudicano, anche se positivamente). Il soggetto non ha scelta: È o NON È, FA o NON FA.
 
-#### Perché AVERE è validante
-AVERE riconosce ciò che il soggetto **possiede già**. Non giudica, constata. L'utente non è valutato — è riconosciuto.
+#### Perché AVERE implica libertà
+AVERE/NON AVERE riconoscono che il soggetto **può scegliere**. "Hai questa capacità" significa anche "puoi scegliere di usarla o no". La libertà sta nella possibilità stessa.
 
-#### Regola Fondamentale
+#### Applicazione Pratica
 ```
-✅ SEMPRE enfatizzare AVERE: "Hai già...", "Possiedi...", "È tuo..."
-❌ MAI enfatizzare NON AVERE: "Ti manca...", "Non hai...", "Devi acquisire..."
-❌ EVITARE ESSERE: "Sei/Non sei..." (giudizio identità)
-❌ EVITARE FARE: "Fai/Non fai..." (giudizio comportamento)
+✅ Enfatizzare AVERE: "Hai già...", "Possiedi...", "Puoi scegliere di..."
+   → Riconosce possesso E libertà di scelta
+
+❌ Evitare deficit forzati: "Ti manca...", "Non hai..." (come sentenza)
+   → Rimuove la libertà, impone un giudizio
+
+❌ Evitare ESSERE: "Sei/Non sei..."
+   → Giudizio identitario, nessuna via d'uscita
+
+❌ Evitare FARE: "Fai/Non fai..."
+   → Giudizio comportamentale, alla mercé del giudicante
 ```
 
 #### Esempi Pratici
-| ❌ Sbagliato | ✅ Corretto |
-|-------------|-------------|
-| "Non sei ancora un leader completo" | "Hai già capacità di leadership che puoi espandere" |
-| "Non fai abbastanza per crescere" | "Hai risorse che non stai usando" |
-| "Ti manca la visione strategica" | "Hai una visione — puoi ampliarla" |
-| "Devi migliorare la comunicazione" | "Hai modi di comunicare che funzionano — riconoscili" |
-| "Sei bravo in questo" | "Questo è qualcosa che hai" |
+| ❌ Sbagliato (giudizio/deficit) | ✅ Corretto (riconoscimento/libertà) |
+|--------------------------------|--------------------------------------|
+| "Non sei un vero leader" | "Hai capacità di leadership — puoi scegliere come usarle" |
+| "Ti manca la visione" | "Hai una visione — puoi ampliarla se vuoi" |
+| "Devi migliorare" | "Hai risorse che puoi attivare" |
+| "Sei bravo" | "Questo è qualcosa che hai" |
+| "Non fai abbastanza" | "Hai più opzioni di quelle che stai usando" |
 
-**L'utente POSSIEDE GIÀ tutte le capacità di leadership. Il percorso è RICONOSCERLE, non acquisirle.**
+**L'utente POSSIEDE GIÀ tutte le capacità di leadership. Ha la LIBERTÀ di riconoscerle e usarle.**
 
 ---
 
