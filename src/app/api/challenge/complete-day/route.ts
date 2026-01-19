@@ -147,54 +147,20 @@ export async function POST(request: NextRequest) {
     type ChallengeType = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
     const challengeTypeForEmail = normalizedChallenge as ChallengeType;
 
-    // 5. Gestisci email in base al giorno
+    // 5. Gestisci completamento in base al giorno
     if (dayNumber < 7) {
-      // Invia email giorno successivo
+      // Giorno 1-6 completato
+      // NON inviare email immediata - il cron job la invierà domani (time-based)
       nextDay = dayNumber + 1;
 
-      try {
-        const result = await sendChallengeEmail(
-          email,
-          'day_content',
-          challengeTypeForEmail,
-          nextDay,
-          subscriber.nome || undefined
-        );
-
-        emailSent = result.success;
-
-        if (!result.success) {
-          console.error('Errore invio email giorno successivo:', result.error);
-        }
-
-        // Registra invio email nel day_completions del giorno successivo
-        if (emailSent) {
-          await supabase
-            .from('challenge_day_completions')
-            .upsert({
-              subscriber_id: subscriber.id,
-              challenge: normalizedChallenge,
-              day_number: nextDay,
-              email_sent_at: new Date().toISOString()
-            }, {
-              onConflict: 'subscriber_id,challenge,day_number'
-            });
-        }
-
-      } catch (emailError) {
-        console.error('Errore invio email giorno successivo:', emailError);
-        // Non bloccare - email fallita ma completamento registrato
-      }
-
-      // Aggiorna subscriber con last_activity_at
-      // IMPORTANTE: last_email_type deve essere 'day_content' per coerenza con il cron
+      // Aggiorna subscriber: incrementa current_day, NON aggiorna last_email_*
       await supabase
         .from('challenge_subscribers')
         .update({
           current_day: nextDay,
-          last_activity_at: new Date().toISOString(),
-          last_email_sent_at: emailSent ? new Date().toISOString() : subscriber.last_email_sent_at,
-          last_email_type: emailSent ? 'day_content' : subscriber.last_email_type
+          last_activity_at: new Date().toISOString()
+          // NON aggiornare last_email_sent_at e last_email_type
+          // così il cron job sa che deve inviare l'email del giorno successivo
         })
         .eq('id', subscriber.id);
 
@@ -281,7 +247,7 @@ export async function POST(request: NextRequest) {
     } = {
       success: true,
       message: dayNumber < 7
-        ? `Giorno ${dayNumber} completato! Email giorno ${nextDay} inviata.`
+        ? `Giorno ${dayNumber} completato! Riceverai l'email del Giorno ${nextDay} domani mattina.`
         : 'Complimenti! Hai completato la Sfida dei 7 Giorni!',
       emailSent,
       isCompleted: dayNumber === 7
