@@ -676,27 +676,27 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     },
     5: {
       title: "Le 3 Forme",
-      subtitle: "Sensoriale, Relazionale, Metacognitiva",
+      subtitle: "Percettiva, Sensoriale, Metacognitiva",
       emailSubject: "Non tutte le microfelicità sono uguali. Qual è la TUA?",
       principle: "Esistono 3 tipi di microfelicità. Ognuno ha il suo \"mix\" preferito.",
       sections: [
         {
           icon: "📊",
           title: "Le 3 Forme",
-          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Sensoriale | Piaceri dei sensi | Caffè buono, luce bella, suono piacevole |\n| Relazionale | Connessione con altri | Messaggio affettuoso, risata condivisa |\n| Metacognitiva | Soddisfazione mentale | Compito finito, problema risolto |"
+          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Luce del tramonto, colori, un volto che sorride |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Caffè buono, musica, tessuto morbido, profumo |\n| Metacognitiva | Soddisfazione mentale | Compito finito, problema risolto, intuizione |"
         },
         {
           icon: "🎯",
           title: "Perché Conta Saperlo",
-          content: "Se sai che le tue microfelicità preferite sono SENSORIALI, puoi creare più occasioni sensoriali nella giornata (un tè particolare, una candela, un tessuto).\n\nSe sono RELAZIONALI, puoi investire più tempo in micro-connessioni (un messaggio in più, una chiamata breve).\n\nSe sono METACOGNITIVE, puoi organizzare la giornata per avere più \"completamenti\" (task piccoli che finisci, non solo grandi progetti infiniti).\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
+          content: "Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).\n\nSe sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, una playlist, un tessuto piacevole).\n\nSe sono METACOGNITIVE, puoi organizzare la giornata per avere più \"completamenti\" (task piccoli che finisci, non solo grandi progetti infiniti).\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
         }
       ],
       exercise: {
         instruction: "Scopri il tuo mix preferito.",
         steps: [
           "Ripensa agli ultimi 3 giorni. Scrivi 5-6 momenti positivi che hai notato",
-          "Per ogni momento, indica la forma: S (sensoriale), R (relazionale), M (metacognitiva)",
-          "Conta: quante S? Quante R? Quante M?",
+          "Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (metacognitiva)",
+          "Conta: quante P? Quante S? Quante M?",
           "Il tuo mix prevalente è: ___"
         ],
         duration: "10 minuti"
