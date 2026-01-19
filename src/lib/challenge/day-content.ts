@@ -323,7 +323,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
       openLoop: "Domani ti mostro il primo dei 3 Filtri: come vedere SCHEMI invece di rincorrere sintomi."
     },
     2: {
-      title: "Il Filtro Pattern",
+      title: "Il Filtro degli Schemi",
       subtitle: "Rincorrere sintomi ti stanca. Vedere schemi ti libera.",
       emailSubject: "Il rubinetto che perde (e cosa c'entra con i tuoi problemi)",
       principle: "Rincorrere sintomi ti stanca. Vedere schemi ti libera.",
@@ -336,7 +336,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🔍",
           title: "Il PRIMO FILTRO: Vedere SCHEMI",
-          content: "La maggior parte delle persone rincorre sintomi invece di vedere pattern.\n\n\"Il team non rispetta le scadenze\" → sintomo\n\"Le scadenze slittano sempre quando aspettiamo approvazioni esterne\" → schema\n\n\"I clienti si lamentano\" → sintomo\n\"I clienti si lamentano sempre dopo la stessa fase del progetto\" → schema\n\n\"Non ho tempo\" → sintomo\n\"Perdo tempo sempre sulle stesse cose\" → schema"
+          content: "La maggior parte delle persone rincorre sintomi invece di vedere schemi.\n\n\"Il team non rispetta le scadenze\" → sintomo\n\"Le scadenze slittano sempre quando aspettiamo approvazioni esterne\" → schema\n\n\"I clienti si lamentano\" → sintomo\n\"I clienti si lamentano sempre dopo la stessa fase del progetto\" → schema\n\n\"Non ho tempo\" → sintomo\n\"Perdo tempo sempre sulle stesse cose\" → schema"
         },
         {
           icon: "📋",
@@ -517,7 +517,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📋",
           title: "Cosa Hai Costruito Questa Settimana",
-          content: "| Giorno | Strumento |\n|--------|-----------||\n| 1 | Le PROVE che sai già risolvere |\n| 2 | Il Filtro PATTERN (vedere schemi) |\n| 3 | Il Filtro SEGNALI (leggere il non detto) |\n| 4 | Il Filtro RISORSE (trovare quello che hai) |\n| 5 | Il METODO 5 MINUTI (tutto insieme) |\n| 6 | I 3 TRADITORI (e come smascherarli) |\n\nQuesti strumenti non scadono. Puoi usarli su qualsiasi problema, per sempre."
+          content: "| Giorno | Strumento |\n|--------|-----------||\n| 1 | Le PROVE che sai già risolvere |\n| 2 | Il Filtro degli SCHEMI (vedere schemi) |\n| 3 | Il Filtro SEGNALI (leggere il non detto) |\n| 4 | Il Filtro RISORSE (trovare quello che hai) |\n| 5 | Il METODO 5 MINUTI (tutto insieme) |\n| 6 | I 3 TRADITORI (e come smascherarli) |\n\nQuesti strumenti non scadono. Puoi usarli su qualsiasi problema, per sempre."
         },
         {
           icon: "🎯",
@@ -590,7 +590,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🧠",
           title: "C'È Un Altro Problema",
-          content: "I momenti grandi hanno un effetto che diminuisce nel tempo:\n\n• Giorno 1 della vacanza: Felicità alta\n• Giorno 7: Ti sei abituato\n• 1 mese dopo: È come se non fosse mai successo\n\nSi chiama \"adattamento edonico\". Il cervello si abitua a tutto — anche alle cose belle.\n\nI momenti piccoli non hanno questo problema. Ogni momento piccolo è nuovo. Non c'è tempo per abituarsi."
+          content: "I momenti grandi hanno un effetto che diminuisce nel tempo:\n\n• Giorno 1 della vacanza: Felicità alta\n• Giorno 7: Ti sei abituato\n• 1 mese dopo: È come se non fosse mai successo\n\nIl cervello si abitua a tutto — anche alle cose belle. È fatto così: dopo un po', il \"nuovo\" diventa \"normale\".\n\nI momenti piccoli non hanno questo problema. Ogni momento piccolo è nuovo. Non c'è tempo per abituarsi."
         }
       ],
       exercise: {
@@ -744,7 +744,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📋",
           title: "Cosa Hai Imparato In 7 Giorni",
-          content: "| Giorno | Cosa Hai Scoperto |\n|--------|-------------------|\n| 1 | I momenti positivi ci sono — il problema è notarli |\n| 2 | 50 piccoli battono 4 grandi (matematica del benessere) |\n| 3 | Notare \"mentre succede\" vale 10 volte \"dopo\" |\n| 4 | R.A.D.A.R. = Rileva-Accogli-Distingui-Amplifica-Resta |\n| 5 | Esistono 3 forme: Sensoriale, Relazionale, Metacognitiva |\n| 6 | I segnali deboli sono i più nutrienti |\n| 7 | (Oggi) Come continuare da solo |"
+          content: "| Giorno | Cosa Hai Scoperto |\n|--------|-------------------|\n| 1 | I momenti positivi ci sono — il problema è notarli |\n| 2 | 50 piccoli battono 4 grandi (matematica del benessere) |\n| 3 | Notare \"mentre succede\" vale 10 volte \"dopo\" |\n| 4 | R.A.D.A.R. = Rileva-Accogli-Distingui-Amplifica-Resta |\n| 5 | Esistono 3 forme: Visiva, Sensoriale, Mentale |\n| 6 | I segnali deboli sono i più nutrienti |\n| 7 | (Oggi) Come continuare da solo |"
         },
         {
           icon: "📅",
@@ -758,14 +758,13 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         }
       ],
       exercise: {
-        instruction: "Conferma il tuo aggancio e inizia il conteggio di 21 giorni.",
+        instruction: "Conferma il tuo aggancio per i prossimi 21 giorni.",
         steps: [
-          "Conferma il tuo aggancio: \"Quando ___, faccio R.A.D.A.R.\"",
-          "Imposta un modo per tenere traccia (calendario, app, nota)",
-          "Obiettivo: 21 X di fila",
-          "Rispondi: \"Se notassi 10 momenti positivi in più ogni giorno, come cambierebbe la mia settimana?\""
+          "Scrivi: \"Quando ___, faccio R.A.D.A.R.\"",
+          "Scegli come tenere traccia (calendario, app, nota)",
+          "Obiettivo: 21 giorni di fila"
         ],
-        duration: "10 minuti"
+        duration: "5 minuti"
       },
       keyTakeaway: "Il benessere che cerchi ti sta già attraversando. Ora sai come notarlo.",
       openLoop: ""
