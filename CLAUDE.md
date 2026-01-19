@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.2
-**Ultimo aggiornamento:** 12 Gennaio 2026
+**Versione:** 2.3
+**Ultimo aggiornamento:** 19 Gennaio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -119,30 +119,56 @@ P4 (Correzione)  → Disponibile ON-DEMAND, non imposto
 
 ---
 
-### 1. Principio Validante
+### 1. Principio Validante: AVERE vs ESSERE/FARE (ESSENZIALE)
+
+**ESSERE, FARE, AVERE sono condizioni di esistenza.**
+
+| Condizione | Esempio | Effetto | Uso |
+|------------|---------|---------|-----|
+| **ESSERE** | "Sei un leader" / "Non sei abbastanza" | Giudizio identitario | ❌ EVITARE |
+| **FARE** | "Fai bene" / "Non fai abbastanza" | Giudizio comportamentale | ❌ EVITARE |
+| **AVERE** | "Hai già questa capacità" | Riconoscimento | ✅ SEMPRE |
+| **NON AVERE** | "Ti manca X" / "Non hai Y" | Deficit | ❌ MAI |
+
+#### Perché ESSERE e FARE sono problematici
+ESSERE e FARE sono sempre alla completa **"mercé" del soggetto** — sono per lo più **invalidanti** (giudicano negativamente) o **valutanti** (giudicano, anche positivamente). Mettono l'utente in posizione di essere giudicato.
+
+#### Perché AVERE è validante
+AVERE riconosce ciò che il soggetto **possiede già**. Non giudica, constata. L'utente non è valutato — è riconosciuto.
+
+#### Regola Fondamentale
 ```
-✅ SEMPRE: "dove già operi", "puoi espandere", "riconosci"
-❌ MAI: "ti manca", "area debole", "devi migliorare"
+✅ SEMPRE enfatizzare AVERE: "Hai già...", "Possiedi...", "È tuo..."
+❌ MAI enfatizzare NON AVERE: "Ti manca...", "Non hai...", "Devi acquisire..."
+❌ EVITARE ESSERE: "Sei/Non sei..." (giudizio identità)
+❌ EVITARE FARE: "Fai/Non fai..." (giudizio comportamento)
 ```
-L'utente **POSSIEDE GIÀ** tutte le capacità di leadership.
+
+#### Esempi Pratici
+| ❌ Sbagliato | ✅ Corretto |
+|-------------|-------------|
+| "Non sei ancora un leader completo" | "Hai già capacità di leadership che puoi espandere" |
+| "Non fai abbastanza per crescere" | "Hai risorse che non stai usando" |
+| "Ti manca la visione strategica" | "Hai una visione — puoi ampliarla" |
+| "Devi migliorare la comunicazione" | "Hai modi di comunicare che funzionano — riconoscili" |
+| "Sei bravo in questo" | "Questo è qualcosa che hai" |
+
+**L'utente POSSIEDE GIÀ tutte le capacità di leadership. Il percorso è RICONOSCERLE, non acquisirle.**
+
+---
 
 ### 2. User Agency
 - L'utente è **AGENTE attivo**, non paziente passivo
 - Mai prescrizioni dirette ("devi fare X")
 - Sempre domande e facilitazione
 
-### 3. Sequenza ESSERE → FARE → AVERE
-- Prima identità (chi sei)
-- Poi comportamento (cosa fai)
-- Poi risultato (cosa ottieni)
-
-### 4. AI Coach = FERNANDO (mai Marco)
+### 3. AI Coach = FERNANDO (mai Marco)
 ```
 ✅ "Sono Fernando, il tuo AI Coach"
 ❌ "Sono Marco" (ERRORE CRITICO)
 ```
 
-### 5. Principio STOP → START (Customer Journey)
+### 4. Principio STOP → START (Customer Journey)
 
 Il Customer Journey segue cicli **START → CHANGE → STOP**:
 - **START**: L'utente inizia un'azione (es. inizia assessment)
