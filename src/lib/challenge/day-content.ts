@@ -683,12 +683,12 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📊",
           title: "Le 3 Forme",
-          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Luce del tramonto, colori, un volto che sorride |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Caffè buono, musica, tessuto morbido, profumo |\n| Metacognitiva | Soddisfazione mentale | Compito finito, problema risolto, intuizione |"
+          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |\n| Metacognitiva | Consapevolezza mentale | Accorgersi di un pensiero che minimizza, riconoscere l'autocritica, notare un pattern |"
         },
         {
           icon: "🎯",
           title: "Perché Conta Saperlo",
-          content: "Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).\n\nSe sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, una playlist, un tessuto piacevole).\n\nSe sono METACOGNITIVE, puoi organizzare la giornata per avere più \"completamenti\" (task piccoli che finisci, non solo grandi progetti infiniti).\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
+          content: "Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).\n\nSe sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, il suono della pioggia, un tessuto piacevole).\n\nSe sono METACOGNITIVE, puoi sviluppare l'abitudine di notare i tuoi pattern mentali — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
         }
       ],
       exercise: {

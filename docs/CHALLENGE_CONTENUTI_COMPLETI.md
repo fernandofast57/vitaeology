@@ -956,16 +956,16 @@ La semplicità è il punto: deve essere così facile che lo fai davvero.
 ### Sezione 1: Le 3 Forme
 | Forma | Cosa Include | Esempi |
 |-------|--------------|--------|
-| Percettiva (visiva) | Ciò che vedi | Luce del tramonto, colori, un volto che sorride |
-| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Caffè buono, musica, tessuto morbido, profumo |
-| Metacognitiva | Soddisfazione mentale | Compito finito, problema risolto, intuizione |
+| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |
+| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |
+| Metacognitiva | Consapevolezza mentale | Accorgersi di un pensiero che minimizza, riconoscere l'autocritica, notare un pattern |
 
 ### Sezione 2: Perché Conta Saperlo
 Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).
 
-Se sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, una playlist, un tessuto piacevole).
+Se sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, il suono della pioggia, un tessuto piacevole).
 
-Se sono METACOGNITIVE, puoi organizzare la giornata per avere più "completamenti" (task piccoli che finisci, non solo grandi progetti infiniti).
+Se sono METACOGNITIVE, puoi sviluppare l'abitudine di notare i tuoi pattern mentali — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.
 
 Non c'è un mix giusto o sbagliato. C'è il tuo mix.
 
