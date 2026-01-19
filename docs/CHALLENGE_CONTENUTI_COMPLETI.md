@@ -414,7 +414,7 @@ Questa settimana ti mostro come.
 
 ---
 
-## GIORNO 2 - Il Filtro Pattern
+## GIORNO 2 - Il Filtro degli Schemi
 
 **Sottotitolo:** Rincorrere sintomi ti stanca. Vedere schemi ti libera.
 **Subject Email:** Il rubinetto che perde (e cosa c'entra con i tuoi problemi)
@@ -434,7 +434,7 @@ Il problema è la guarnizione consumata.
 Finché non la vedi, continuerai a strizzare stracci.
 
 ### Sezione 2: Il PRIMO FILTRO: Vedere SCHEMI
-La maggior parte delle persone rincorre sintomi invece di vedere pattern.
+La maggior parte delle persone rincorre sintomi invece di vedere schemi.
 
 "Il team non rispetta le scadenze" → sintomo
 "Le scadenze slittano sempre quando aspettiamo approvazioni esterne" → schema
@@ -719,7 +719,7 @@ La domanda non è "come evitarli". La domanda è "come affrontarli quando arriva
 | Giorno | Strumento |
 |--------|-----------|
 | 1 | Le PROVE che sai già risolvere |
-| 2 | Il Filtro PATTERN (vedere schemi) |
+| 2 | Il Filtro degli SCHEMI (vedere schemi) |
 | 3 | Il Filtro SEGNALI (leggere il non detto) |
 | 4 | Il Filtro RISORSE (trovare quello che hai) |
 | 5 | Il METODO 5 MINUTI (tutto insieme) |
@@ -831,7 +831,7 @@ I momenti grandi hanno un effetto che diminuisce nel tempo:
 • Giorno 7: Ti sei abituato
 • 1 mese dopo: È come se non fosse mai successo
 
-Si chiama "adattamento edonico". Il cervello si abitua a tutto — anche alle cose belle.
+Il cervello si abitua a tutto — anche alle cose belle. È fatto così: dopo un po', il "nuovo" diventa "normale".
 
 I momenti piccoli non hanno questo problema. Ogni momento piccolo è nuovo. Non c'è tempo per abituarsi.
 
@@ -1036,7 +1036,7 @@ Il benessere sostenibile si costruisce sui segnali deboli, non su quelli forti.
 | 2 | 50 piccoli battono 4 grandi (matematica del benessere) |
 | 3 | Notare "mentre succede" vale 10 volte "dopo" |
 | 4 | R.A.D.A.R. = Rileva-Accogli-Distingui-Amplifica-Resta |
-| 5 | Esistono 3 forme: Sensoriale, Relazionale, Metacognitiva |
+| 5 | Esistono 3 forme: Visiva, Sensoriale, Mentale |
 | 6 | I segnali deboli sono i più nutrienti |
 | 7 | (Oggi) Come continuare da solo |
 
@@ -1066,11 +1066,10 @@ Non è qualcosa che devi cercare. È qualcosa che devi notare.
 
 Grazie per aver fatto questo percorso con me.
 
-### Esercizio (10 minuti)
-- Conferma il tuo aggancio: "Quando ___, faccio R.A.D.A.R."
-- Imposta un modo per tenere traccia (calendario, app, nota)
-- Obiettivo: 21 X di fila
-- Rispondi: "Se notassi 10 momenti positivi in più ogni giorno, come cambierebbe la mia settimana?"
+### Esercizio (5 minuti)
+- Scrivi: "Quando ___, faccio R.A.D.A.R."
+- Scegli come tenere traccia (calendario, app, nota)
+- Obiettivo: 21 giorni di fila
 
 **Key Takeaway:** Il benessere che cerchi ti sta già attraversando. Ora sai come notarlo.
 
