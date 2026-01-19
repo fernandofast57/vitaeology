@@ -642,7 +642,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     4: {
       title: "Il Metodo R.A.D.A.R.",
       subtitle: "5 Passi per Catturare Ogni Momento",
-      emailSubject: "R.A.D.A.R. — il metodo in 5 passi che userai per sempre",
+      emailSubject: "Il trucco dei 10 secondi",
       principle: "R.A.D.A.R. = Rileva → Accogli → Distingui → Amplifica → Resta. Cinque passi, 10 secondi.",
       sections: [
         {
@@ -677,7 +677,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     5: {
       title: "Le 3 Forme",
       subtitle: "Percettiva, Sensoriale, Mentale",
-      emailSubject: "Non tutte le microfelicità sono uguali. Qual è la TUA?",
+      emailSubject: "Visiva, sensoriale o mentale: tu quale sei?",
       principle: "Esistono 3 tipi di microfelicità. Ognuno ha il suo \"mix\" preferito.",
       sections: [
         {
@@ -694,12 +694,11 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
       exercise: {
         instruction: "Scopri il tuo mix preferito.",
         steps: [
-          "Ripensa agli ultimi 3 giorni. Scrivi 5-6 momenti positivi che hai notato",
-          "Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (mentale)",
-          "Conta: quante P? Quante S? Quante M?",
+          "Ripensa a IERI. Scrivi 3 momenti positivi che hai notato",
+          "Per ogni momento, indica: P (visiva), S (sensoriale), M (mentale)",
           "Il tuo mix prevalente è: ___"
         ],
-        duration: "10 minuti"
+        duration: "5 minuti"
       },
       keyTakeaway: "Esistono 3 tipi di microfelicità. Ognuno ha il suo \"mix\" preferito.",
       openLoop: "I segnali più importanti sono spesso i più deboli. Come catturare quello che il cervello scarta."

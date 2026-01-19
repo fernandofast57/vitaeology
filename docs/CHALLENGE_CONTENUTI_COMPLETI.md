@@ -897,7 +897,7 @@ I momenti positivi funzionano così. Devi coglierli mentre accadono.
 ## GIORNO 4 - Il Metodo R.A.D.A.R.
 
 **Sottotitolo:** 5 Passi per Catturare Ogni Momento
-**Subject Email:** R.A.D.A.R. — il metodo in 5 passi che userai per sempre
+**Subject Email:** Il trucco dei 10 secondi
 **Principio:** R.A.D.A.R. = Rileva → Accogli → Distingui → Amplifica → Resta. Cinque passi, 10 secondi.
 
 ### Sezione 1: Perché Serve Un Metodo
@@ -950,7 +950,7 @@ La semplicità è il punto: deve essere così facile che lo fai davvero.
 ## GIORNO 5 - Le 3 Forme
 
 **Sottotitolo:** Percettiva, Sensoriale, Mentale
-**Subject Email:** Non tutte le microfelicità sono uguali. Qual è la TUA?
+**Subject Email:** Visiva, sensoriale o mentale: tu quale sei?
 **Principio:** Esistono 3 tipi di microfelicità. Ognuno ha il suo "mix" preferito.
 
 ### Sezione 1: Le 3 Forme
@@ -969,10 +969,9 @@ Se sono MENTALI, puoi sviluppare l'abitudine di notare i tuoi meccanismi sabotan
 
 Non c'è un mix giusto o sbagliato. C'è il tuo mix.
 
-### Esercizio (10 minuti)
-- Ripensa agli ultimi 3 giorni. Scrivi 5-6 momenti positivi che hai notato
-- Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (mentale)
-- Conta: quante P? Quante S? Quante M?
+### Esercizio (5 minuti)
+- Ripensa a IERI. Scrivi 3 momenti positivi che hai notato
+- Per ogni momento, indica: P (visiva), S (sensoriale), M (mentale)
 - Il tuo mix prevalente è: ___
 
 **Key Takeaway:** Esistono 3 tipi di microfelicità. Ognuno ha il suo "mix" preferito.
