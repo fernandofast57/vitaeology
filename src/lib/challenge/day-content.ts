@@ -247,7 +247,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     7: {
       title: "E Adesso?",
       subtitle: "La leadership che cerchi è già dentro di te",
-      emailSubject: "Hai già tutto. Ti manca solo vederlo.",
+      emailSubject: "Hai già tutto. Ora puoi vederlo.",
       principle: "Solo la competenza e il saper coinvolgere le persone AL LIVELLO in cui si trovano è l'unica cosa plausibile.",
       sections: [
         {
@@ -648,7 +648,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📡",
           title: "Perché Serve Un Metodo",
-          content: "Ieri ti ho chiesto di intercettare momenti in tempo reale.\n\nSe ci sei riuscito: ottimo, hai già la base.\n\nSe hai avuto difficoltà: è normale. Senza un metodo strutturato, il cervello torna alle sue abitudini automatiche.\n\nR.A.D.A.R. è il metodo.\n\nÈ semplice — così semplice che non hai scuse per non usarlo."
+          content: "Ieri ti ho chiesto di intercettare momenti in tempo reale.\n\nSe ci sei riuscito: ottimo, hai già la base.\n\nSe hai avuto difficoltà: è normale. Senza un metodo strutturato, il cervello torna alle sue abitudini automatiche.\n\nR.A.D.A.R. è il metodo.\n\nÈ semplice — così semplice che puoi usarlo quando vuoi."
         },
         {
           icon: "🎯",

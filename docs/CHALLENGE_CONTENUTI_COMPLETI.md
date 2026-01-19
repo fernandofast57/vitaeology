@@ -299,7 +299,7 @@ L'errore non è avere un certo stile. È cercare di averne un altro.
 ## GIORNO 7 - E Adesso?
 
 **Sottotitolo:** La leadership che cerchi è già dentro di te
-**Subject Email:** Hai già tutto. Ti manca solo vederlo.
+**Subject Email:** Hai già tutto. Ora puoi vederlo.
 **Principio:** Solo la competenza e il saper coinvolgere le persone AL LIVELLO in cui si trovano è l'unica cosa plausibile.
 
 ### Sezione 1: Il Momento In Cui Tutto È Cambiato

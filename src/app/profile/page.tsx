@@ -271,7 +271,7 @@ export default function ProfilePage() {
 
               {userPathways.length === 0 ? (
                 <div className="text-center py-6">
-                  <p className="text-neutral-500 mb-3">Non hai ancora attivato nessun percorso.</p>
+                  <p className="text-neutral-500 mb-3">I percorsi sono pronti per te.</p>
                   <Link
                     href="/dashboard"
                     className="inline-flex items-center gap-2 text-petrol-600 hover:text-petrol-700 font-medium"

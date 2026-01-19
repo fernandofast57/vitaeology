@@ -315,7 +315,7 @@ export default function ProgressPage() {
               <div className="divide-y divide-neutral-100">
                 {filteredProgress.length === 0 ? (
                   <div className="p-8 text-center text-neutral-500">
-                    <p>Non hai ancora iniziato nessun esercizio.</p>
+                    <p>I tuoi esercizi ti aspettano.</p>
                     <p className="text-sm mt-1">Vai agli Esercizi per iniziare il tuo percorso!</p>
                   </div>
                 ) : (

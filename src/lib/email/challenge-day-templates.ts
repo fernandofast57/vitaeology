@@ -758,7 +758,7 @@ export function getReminderEmail(
 
   <p>Ciao ${nome},</p>
 
-  <p>Ho notato che non hai ancora completato il <strong>Giorno ${day}</strong> della tua sfida.</p>
+  <p>Il <strong>Giorno ${day}</strong> della tua sfida è ancora disponibile per te.</p>
 
   <p>Nessuna fretta. La vita è piena di impegni e a volte le cose scivolano.</p>
 

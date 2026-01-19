@@ -367,7 +367,7 @@ export async function sendChallengeEmail(
         <div style="background: #f8f8f8; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="color: #333; font-size: 16px; margin: 0;">
             📍 <strong>Sei al Giorno ${dayNumber || 1}</strong><br>
-            <span style="color: #666;">Ti mancano ${7 - (dayNumber || 1)} giorni per completare la challenge</span>
+            <span style="color: #666;">Hai ancora ${7 - (dayNumber || 1)} giorni per completare la challenge</span>
           </p>
         </div>
 
