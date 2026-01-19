@@ -971,7 +971,7 @@ Non c'è un mix giusto o sbagliato. C'è il tuo mix.
 
 ### Esercizio (5 minuti)
 - Ripensa a IERI. Scrivi 3 momenti positivi che hai notato
-- Per ogni momento, indica: P (visiva), S (sensoriale), M (mentale)
+- Per ogni momento, indica: V (visiva), S (sensoriale), M (mentale)
 - Il tuo mix prevalente è: ___
 
 **Key Takeaway:** Esistono 3 tipi di microfelicità. Ognuno ha il suo "mix" preferito.

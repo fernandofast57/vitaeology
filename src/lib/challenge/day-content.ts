@@ -695,7 +695,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         instruction: "Scopri il tuo mix preferito.",
         steps: [
           "Ripensa a IERI. Scrivi 3 momenti positivi che hai notato",
-          "Per ogni momento, indica: P (visiva), S (sensoriale), M (mentale)",
+          "Per ogni momento, indica: V (visiva), S (sensoriale), M (mentale)",
           "Il tuo mix prevalente è: ___"
         ],
         duration: "5 minuti"
