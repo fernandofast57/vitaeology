@@ -74,11 +74,95 @@ export async function GET(request: NextRequest) {
     };
 
     // ============================================================
-    // 2. DAILY EMAILS - Invia email giornaliere (time-based)
+    // 2. DAY 1 EMAILS - Invia Giorno 1 a chi ha ricevuto solo welcome
+    // ============================================================
+    try {
+      // Trova utenti che hanno ricevuto welcome ma non ancora Day 1
+      const { data: day1Candidates } = await supabase
+        .from('challenge_subscribers')
+        .select('*')
+        .eq('status', 'active')
+        .eq('current_day', 1)
+        .eq('last_email_type', 'welcome');
+
+      if (day1Candidates && day1Candidates.length > 0) {
+        for (const subscriber of day1Candidates) {
+          try {
+            // Verifica che non abbiamo già inviato Day 1
+            const { data: day1Record } = await supabase
+              .from('challenge_day_completions')
+              .select('email_sent_at')
+              .eq('subscriber_id', subscriber.id)
+              .eq('challenge', subscriber.challenge)
+              .eq('day_number', 1)
+              .single();
+
+            if (day1Record?.email_sent_at) {
+              continue; // Già inviato
+            }
+
+            // Invia email Day 1
+            const emailContent = getChallengeEmail(
+              subscriber.challenge,
+              1,
+              subscriber.nome || 'Amico/a'
+            );
+
+            const config = CHALLENGE_CONFIG[subscriber.challenge as keyof typeof CHALLENGE_CONFIG];
+
+            await resend.emails.send({
+              from: 'Fernando <fernando@vitaeology.com>',
+              replyTo: 'fernando@vitaeology.com',
+              to: subscriber.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              tags: [
+                { name: 'challenge', value: config?.tag || 'challenge' },
+                { name: 'email_type', value: 'day_content' },
+                { name: 'day', value: '1' }
+              ]
+            });
+
+            // Registra invio
+            await supabase
+              .from('challenge_day_completions')
+              .upsert({
+                subscriber_id: subscriber.id,
+                challenge: subscriber.challenge,
+                day_number: 1,
+                email_sent_at: new Date().toISOString()
+              }, {
+                onConflict: 'subscriber_id,challenge,day_number'
+              });
+
+            await supabase
+              .from('challenge_subscribers')
+              .update({
+                last_email_sent_at: new Date().toISOString(),
+                last_email_type: 'day_content'
+              })
+              .eq('id', subscriber.id);
+
+            results.dailyEmails++;
+            console.log(`✅ Day 1 email sent: ${subscriber.email}`);
+
+          } catch (emailError) {
+            const errorMsg = `Day1Email ${subscriber.email}: ${emailError instanceof Error ? emailError.message : 'Unknown'}`;
+            results.errors.push(errorMsg);
+            console.error(errorMsg);
+          }
+        }
+      }
+    } catch (queryError) {
+      console.error('Query Day 1 emails error:', queryError);
+    }
+
+    // ============================================================
+    // 3. DAILY EMAILS (Day 2-7) - Invia email giornaliere (time-based)
     // Utenti che hanno completato il giorno precedente e devono ricevere il prossimo
     // ============================================================
     try {
-      // Trova utenti attivi con current_day > 1 (Day 1 inviato al signup)
+      // Trova utenti attivi con current_day > 1 (Day 1 gestito sopra)
       const { data: dailyCandidates } = await supabase
         .from('challenge_subscribers')
         .select('*')
@@ -188,7 +272,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ============================================================
-    // 3. REMINDER 48h - Utenti inattivi dopo email day_content
+    // 4. REMINDER 48h - Utenti inattivi dopo email day_content
     // ============================================================
     try {
       const { data: reminderCandidates } = await supabase
@@ -254,7 +338,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ============================================================
-    // 3. FORCE ADVANCE 72h - Auto-sblocco giorno successivo
+    // 5. FORCE ADVANCE 72h - Auto-sblocco giorno successivo
     // ============================================================
     try {
       const { data: forceAdvanceCandidates } = await supabase
@@ -361,7 +445,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ============================================================
-    // 4. RECOVERY 3 giorni post-completamento
+    // 6. RECOVERY 3 giorni post-completamento
     // ============================================================
     try {
       const { data: recoveryCandidates } = await supabase
@@ -426,7 +510,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ============================================================
-    // 6. Return risultati
+    // 7. Return risultati
     // ============================================================
     const totalSent = results.dailyEmails + results.reminders + results.forceAdvance + results.recovery;
 
