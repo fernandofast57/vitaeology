@@ -207,7 +207,7 @@ Come quando hai guidato da solo la prima volta: la paura è diminuita DOPO che h
 ## GIORNO 5 - Sapere Quando Fermarti
 
 **Sottotitolo:** L'energia non è infinita. Ma il modo in cui la usi, sì.
-**Subject Email:** La batteria del telefono
+**Subject Email:** Perché a fine giornata prendi decisioni che poi rimpiangi
 **Principio:** L'energia non è infinita. Ma il modo in cui la usi, sì.
 
 ### Sezione 1: La Batteria del Telefono
@@ -299,7 +299,7 @@ L'errore non è avere un certo stile. È cercare di averne un altro.
 ## GIORNO 7 - E Adesso?
 
 **Sottotitolo:** La leadership che cerchi è già dentro di te
-**Subject Email:** Il punto di svolta
+**Subject Email:** Hai già tutto. Ti manca solo vederlo.
 **Principio:** Solo la competenza e il saper coinvolgere le persone AL LIVELLO in cui si trovano è l'unica cosa plausibile.
 
 ### Sezione 1: Il Momento In Cui Tutto È Cambiato
@@ -570,7 +570,7 @@ Non ho visto queste risorse. Ho visto solo quello che mi mancava.
 ## GIORNO 5 - Il Metodo 5 Minuti
 
 **Sottotitolo:** Un'azione imperfetta è meglio di un'analisi infinita.
-**Subject Email:** Come usare tutto insieme in 5 minuti
+**Subject Email:** Il problema che ti blocca ha una soluzione in 5 minuti
 **Principio:** Un'azione imperfetta è meglio di un'analisi infinita.
 
 ### Sezione 1: I 3 Strumenti Insieme
@@ -699,7 +699,7 @@ A quel punto puoi SCEGLIERE se crederci o no.
 ## GIORNO 7 - E Adesso?
 
 **Sottotitolo:** I problemi arriveranno sempre. La domanda è come affrontarli.
-**Subject Email:** Da qui in avanti
+**Subject Email:** I problemi non finiranno. Ma tu sarai diverso.
 **Principio:** I problemi arriveranno sempre. La domanda è come affrontarli quando arrivano.
 
 ### Sezione 1: La Cosa Più Importante
@@ -1026,7 +1026,7 @@ Il benessere sostenibile si costruisce sui segnali deboli, non su quelli forti.
 ## GIORNO 7 - Come Continuare
 
 **Sottotitolo:** Da Oggi in Poi
-**Subject Email:** Giorno 7: Il tuo piano per continuare (e cosa c'è dopo)
+**Subject Email:** Tra 21 giorni non dovrai più pensarci
 **Principio:** Hai gli strumenti. Ora si tratta di usarli ogni giorno — finché diventano automatici.
 
 ### Sezione 1: Cosa Hai Imparato In 7 Giorni
