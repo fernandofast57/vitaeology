@@ -683,7 +683,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "📊",
           title: "Le 3 Forme",
-          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |\n| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che prenda il controllo |"
+          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |\n| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che ti affossi |"
         },
         {
           icon: "🎯",

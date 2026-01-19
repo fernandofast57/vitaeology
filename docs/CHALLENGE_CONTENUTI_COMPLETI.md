@@ -958,7 +958,7 @@ La semplicità è il punto: deve essere così facile che lo fai davvero.
 |-------|--------------|--------|
 | Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |
 | Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |
-| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che prenda il controllo |
+| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che ti affossi |
 
 ### Sezione 2: Perché Conta Saperlo
 Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).
