@@ -176,7 +176,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     5: {
       title: "Sapere Quando Fermarti",
       subtitle: "L'energia non è infinita. Ma il modo in cui la usi, sì.",
-      emailSubject: "La batteria del telefono",
+      emailSubject: "Perché a fine giornata prendi decisioni che poi rimpiangi",
       principle: "L'energia non è infinita. Ma il modo in cui la usi, sì.",
       sections: [
         {
@@ -247,7 +247,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     7: {
       title: "E Adesso?",
       subtitle: "La leadership che cerchi è già dentro di te",
-      emailSubject: "Il punto di svolta",
+      emailSubject: "Hai già tutto. Ti manca solo vederlo.",
       principle: "Solo la competenza e il saper coinvolgere le persone AL LIVELLO in cui si trovano è l'unica cosa plausibile.",
       sections: [
         {
@@ -435,7 +435,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     5: {
       title: "Il Metodo 5 Minuti",
       subtitle: "Un'azione imperfetta è meglio di un'analisi infinita.",
-      emailSubject: "Come usare tutto insieme in 5 minuti",
+      emailSubject: "Il problema che ti blocca ha una soluzione in 5 minuti",
       principle: "Un'azione imperfetta è meglio di un'analisi infinita.",
       sections: [
         {
@@ -506,7 +506,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     7: {
       title: "E Adesso?",
       subtitle: "I problemi arriveranno sempre. La domanda è come affrontarli.",
-      emailSubject: "Da qui in avanti",
+      emailSubject: "I problemi non finiranno. Ma tu sarai diverso.",
       principle: "I problemi arriveranno sempre. La domanda è come affrontarli quando arrivano.",
       sections: [
         {
@@ -738,7 +738,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     7: {
       title: "Come Continuare",
       subtitle: "Da Oggi in Poi",
-      emailSubject: "Giorno 7: Il tuo piano per continuare (e cosa c'è dopo)",
+      emailSubject: "Tra 21 giorni non dovrai più pensarci",
       principle: "Hai gli strumenti. Ora si tratta di usarli ogni giorno — finché diventano automatici.",
       sections: [
         {
