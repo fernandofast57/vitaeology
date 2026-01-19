@@ -676,26 +676,26 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
     },
     5: {
       title: "Le 3 Forme",
-      subtitle: "Percettiva, Sensoriale, Metacognitiva",
+      subtitle: "Percettiva, Sensoriale, Mentale",
       emailSubject: "Non tutte le microfelicità sono uguali. Qual è la TUA?",
       principle: "Esistono 3 tipi di microfelicità. Ognuno ha il suo \"mix\" preferito.",
       sections: [
         {
           icon: "📊",
           title: "Le 3 Forme",
-          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |\n| Metacognitiva | Consapevolezza mentale | Accorgersi di un pensiero che minimizza, riconoscere l'autocritica, notare un pattern |"
+          content: "| Forma | Cosa Include | Esempi |\n|-------|--------------|--------|\n| Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |\n| Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |\n| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che prenda il controllo |"
         },
         {
           icon: "🎯",
           title: "Perché Conta Saperlo",
-          content: "Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).\n\nSe sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, il suono della pioggia, un tessuto piacevole).\n\nSe sono METACOGNITIVE, puoi sviluppare l'abitudine di notare i tuoi pattern mentali — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
+          content: "Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).\n\nSe sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, il suono della pioggia, un tessuto piacevole).\n\nSe sono MENTALI, puoi sviluppare l'abitudine di notare i tuoi meccanismi sabotanti — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.\n\nNon c'è un mix giusto o sbagliato. C'è il tuo mix."
         }
       ],
       exercise: {
         instruction: "Scopri il tuo mix preferito.",
         steps: [
           "Ripensa agli ultimi 3 giorni. Scrivi 5-6 momenti positivi che hai notato",
-          "Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (metacognitiva)",
+          "Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (mentale)",
           "Conta: quante P? Quante S? Quante M?",
           "Il tuo mix prevalente è: ___"
         ],

@@ -949,7 +949,7 @@ La semplicità è il punto: deve essere così facile che lo fai davvero.
 
 ## GIORNO 5 - Le 3 Forme
 
-**Sottotitolo:** Percettiva, Sensoriale, Metacognitiva
+**Sottotitolo:** Percettiva, Sensoriale, Mentale
 **Subject Email:** Non tutte le microfelicità sono uguali. Qual è la TUA?
 **Principio:** Esistono 3 tipi di microfelicità. Ognuno ha il suo "mix" preferito.
 
@@ -958,20 +958,20 @@ La semplicità è il punto: deve essere così facile che lo fai davvero.
 |-------|--------------|--------|
 | Percettiva (visiva) | Ciò che vedi | Foto che cattura l'attenzione, espressione sul volto di qualcuno, gioco di luce |
 | Sensoriale (altri sensi) | Udito, tatto, gusto, olfatto | Suono della pioggia, temperatura che dà sollievo, odore che attiva un ricordo |
-| Metacognitiva | Consapevolezza mentale | Accorgersi di un pensiero che minimizza, riconoscere l'autocritica, notare un pattern |
+| Mentale | Consapevolezza di un meccanismo | Accorgerti di un pensiero sabotante, riconoscere l'autocritica prima che prenda il controllo |
 
 ### Sezione 2: Perché Conta Saperlo
 Se sai che le tue microfelicità preferite sono PERCETTIVE, puoi creare più occasioni visive nella giornata (una pianta sulla scrivania, una foto che ami, la luce giusta).
 
 Se sono SENSORIALI, puoi investire in esperienze degli altri sensi (un tè particolare, il suono della pioggia, un tessuto piacevole).
 
-Se sono METACOGNITIVE, puoi sviluppare l'abitudine di notare i tuoi pattern mentali — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.
+Se sono MENTALI, puoi sviluppare l'abitudine di notare i tuoi meccanismi sabotanti — quando ti accorgi di un pensiero critico e lo riconosci, quella consapevolezza È una microfelicità.
 
 Non c'è un mix giusto o sbagliato. C'è il tuo mix.
 
 ### Esercizio (10 minuti)
 - Ripensa agli ultimi 3 giorni. Scrivi 5-6 momenti positivi che hai notato
-- Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (metacognitiva)
+- Per ogni momento, indica la forma: P (percettiva/visiva), S (sensoriale/altri sensi), M (mentale)
 - Conta: quante P? Quante S? Quante M?
 - Il tuo mix prevalente è: ___
 
@@ -1103,7 +1103,7 @@ Grazie per aver fatto questo percorso con me.
 |-----------|---------------------|
 | **Leadership** | Voce sminuisce → Lucidità → Coraggio → Energia → Stile |
 | **Ostacoli** | 3 Filtri (Pattern, Segnali, Risorse) + Metodo 5 Min + 3 Traditori |
-| **Microfelicità** | R.A.D.A.R. (5 passi) + 3 Forme (Percettiva, Sensoriale, Metacognitiva) + Segnali Deboli |
+| **Microfelicità** | R.A.D.A.R. (5 passi) + 3 Forme (Percettiva, Sensoriale, Mentale) + Segnali Deboli |
 
 ## Durata Esercizi
 
