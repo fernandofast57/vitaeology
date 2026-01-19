@@ -121,6 +121,15 @@ export async function GET(request: NextRequest) {
               continue;
             }
 
+            // ⚠️ CONTROLLO ESPLICITO: verifica che la pagina sarà sbloccata
+            // Logica identica a useDiscoveryProgress: dayNumber <= currentDay + 1
+            // Questo evita di inviare email con link a pagine bloccate
+            const pageWillBeUnlocked = currentDay <= subscriber.current_day + 1;
+            if (!pageWillBeUnlocked) {
+              console.warn(`⚠️ Skip email Day ${currentDay} for ${subscriber.email}: page would be blocked (current_day=${subscriber.current_day})`);
+              continue;
+            }
+
             // Invia email per current_day
             const emailContent = getChallengeEmail(
               subscriber.challenge,
