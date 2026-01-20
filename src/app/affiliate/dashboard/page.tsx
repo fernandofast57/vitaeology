@@ -1,28 +1,15 @@
 // ============================================================================
 // PAGE: /affiliate/dashboard
-// Descrizione: Dashboard affiliato con stats, struttura commissioni e milestone
-// Auth: Richiede utente autenticato + affiliato attivo
+// Descrizione: Dashboard affiliato - statistiche, link, commissioni
+// Auth: Richiede autenticazione + status affiliato attivo
 // ============================================================================
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-interface ProssimoObiettivo {
-  tipo: string;
-  clienti_necessari: number;
-  bonus: string;
-  descrizione: string;
-}
-
-interface Milestone {
-  milestone_type: string;
-  importo: number;
-  is_recurring: boolean;
-  achieved_at: string;
-}
+import { createClient } from '@/lib/supabase/client';
 
 interface AffiliateStats {
   affiliate: {
@@ -49,19 +36,24 @@ interface AffiliateStats {
     bonus_performance: number;
     totale: number;
     bonus_milestone_mensile: number;
-    prossimo_obiettivo: ProssimoObiettivo | null;
+    prossimo_obiettivo: {
+      tipo: string;
+      clienti_necessari: number;
+      bonus: string;
+      descrizione: string;
+    } | null;
   };
-  milestones: Milestone[];
+  milestones: Array<{
+    milestone_type: string;
+    importo: number;
+    is_recurring: boolean;
+    achieved_at: string;
+  }>;
   recent_clicks: Array<{
     clicked_at: string;
     landing_page: string;
     challenge_type: string;
     stato_conversione: string;
-  }>;
-  pending_commissions: Array<{
-    importo_commissione_euro: number;
-    created_at: string;
-    prodotto: string;
   }>;
   recent_commissions: Array<{
     importo_commissione_euro: number;
@@ -72,399 +64,478 @@ interface AffiliateStats {
   }>;
 }
 
-export default function AffiliateDashboard() {
+interface AffiliateLink {
+  id: string;
+  destination_type: string;
+  challenge_type: string | null;
+  url_generato: string;
+  nome_link: string | null;
+  totale_click: number;
+  totale_conversioni: number;
+  created_at: string;
+}
+
+export default function AffiliateDashboardPage() {
   const router = useRouter();
-  const [data, setData] = useState<AffiliateStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [stats, setStats] = useState<AffiliateStats | null>(null);
+  const [links, setLinks] = useState<AffiliateLink[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'links' | 'commissions'>('overview');
+  const [copySuccess, setCopySuccess] = useState('');
+  const [creatingLink, setCreatingLink] = useState(false);
+  const [newLink, setNewLink] = useState({
+    destination_type: 'challenge',
+    challenge_type: 'leadership',
+    nome_link: '',
+  });
 
-  const fetchStats = useCallback(async () => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
     try {
-      const res = await fetch('/api/affiliate/stats');
-      if (res.status === 401) {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
         router.push('/auth/login?redirect=/affiliate/dashboard');
         return;
       }
-      if (res.status === 404) {
-        router.push('/affiliate');
-        return;
+
+      // Load stats
+      const statsRes = await fetch('/api/affiliate/stats');
+      if (!statsRes.ok) {
+        if (statsRes.status === 404) {
+          router.push('/affiliate');
+          return;
+        }
+        throw new Error('Errore caricamento statistiche');
       }
-      if (!res.ok) throw new Error('Errore caricamento dati');
-      const json = await res.json();
-      setData(json);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Errore sconosciuto';
-      setError(message);
+      const statsData = await statsRes.json();
+      setStats(statsData);
+
+      // Load links
+      const linksRes = await fetch('/api/affiliate/links');
+      if (linksRes.ok) {
+        const linksData = await linksRes.json();
+        setLinks(linksData.links || []);
+      }
+
+    } catch (err) {
+      console.error('Errore caricamento dati:', err);
+      setError('Errore nel caricamento dei dati');
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }
 
-  useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
+  async function createNewLink() {
+    setCreatingLink(true);
+    try {
+      const res = await fetch('/api/affiliate/links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newLink),
+      });
 
-  const copyLink = () => {
-    if (!data) return;
-    const link = `https://vitaeology.com/challenge/leadership?ref=${data.affiliate.ref_code}`;
-    navigator.clipboard.writeText(link);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+      if (!res.ok) throw new Error('Errore creazione link');
+
+      const data = await res.json();
+      setLinks([data.link, ...links]);
+      setNewLink({ destination_type: 'challenge', challenge_type: 'leadership', nome_link: '' });
+    } catch (err) {
+      console.error('Errore creazione link:', err);
+    } finally {
+      setCreatingLink(false);
+    }
+  }
+
+  function copyToClipboard(text: string, label: string) {
+    navigator.clipboard.writeText(text);
+    setCopySuccess(label);
+    setTimeout(() => setCopySuccess(''), 2000);
+  }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0A2540]"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-petrol-600"></div>
       </div>
     );
   }
 
-  if (error || !data) {
+  if (error || !stats) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error || 'Errore caricamento'}</p>
-          <button onClick={() => window.location.reload()} className="text-[#0A2540] underline">
-            Riprova
-          </button>
+          <p className="text-red-600 mb-4">{error || 'Dati non disponibili'}</p>
+          <Link href="/affiliate" className="text-petrol-600 underline">
+            Torna alla pagina affiliati
+          </Link>
         </div>
       </div>
     );
   }
 
-  const conversionRate = data.stats.totale_click > 0
-    ? ((data.stats.totale_conversioni / data.stats.totale_click) * 100).toFixed(1)
-    : '0';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://vitaeology.com';
+  const defaultLink = `${baseUrl}/challenge/leadership?ref=${stats.affiliate.ref_code}`;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-[#0A2540] text-white py-6 px-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold">Dashboard Affiliato</h1>
-            <p className="text-slate-300">Benvenuto, {data.affiliate.nome}</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="px-3 py-1 bg-[#F4B942] text-[#0A2540] rounded-full text-sm font-medium">
-              {data.commissioni.abbonamento.charAt(0).toUpperCase() + data.commissioni.abbonamento.slice(1)}
-            </span>
-            <Link href="/dashboard" className="text-slate-300 hover:text-white">
-              Dashboard
+      <header className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-display font-bold text-petrol-600">
+                Dashboard Partner
+              </h1>
+              <p className="text-gray-600 text-sm">
+                Ciao {stats.affiliate.nome}, ecco le tue statistiche
+              </p>
+            </div>
+            <Link
+              href="/dashboard"
+              className="text-petrol-600 hover:text-petrol-700 text-sm font-medium"
+            >
+              Torna alla Dashboard
             </Link>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto py-8 px-4">
-        {/* Link Rapido */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 className="text-lg font-semibold text-slate-800 mb-3">Il tuo Link Affiliato</h2>
-          <div className="flex gap-3">
-            <code className="flex-1 px-4 py-3 bg-slate-100 rounded-lg text-sm text-slate-700 overflow-x-auto">
-              https://vitaeology.com/challenge/leadership?ref={data.affiliate.ref_code}
-            </code>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Status Banner */}
+        {stats.affiliate.stato === 'pending' && (
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-800">
+              Il tuo account affiliato è in attesa di approvazione.
+              Riceverai una email quando sarà attivato.
+            </p>
+          </div>
+        )}
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <p className="text-gray-500 text-sm mb-1">Saldo Disponibile</p>
+            <p className="text-3xl font-bold text-green-600">
+              {stats.stats.saldo_disponibile_euro.toFixed(2)}
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <p className="text-gray-500 text-sm mb-1">Totale Guadagnato</p>
+            <p className="text-3xl font-bold text-petrol-600">
+              {stats.stats.totale_commissioni_euro.toFixed(2)}
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <p className="text-gray-500 text-sm mb-1">Click Totali</p>
+            <p className="text-3xl font-bold text-petrol-600">
+              {stats.stats.totale_click}
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <p className="text-gray-500 text-sm mb-1">Conversioni</p>
+            <p className="text-3xl font-bold text-petrol-600">
+              {stats.stats.totale_conversioni}
+            </p>
+          </div>
+        </div>
+
+        {/* Main Link Card */}
+        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
+          <h2 className="font-semibold text-petrol-600 mb-4">Il tuo link principale</h2>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              readOnly
+              value={defaultLink}
+              className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm"
+            />
             <button
-              onClick={copyLink}
-              className="px-6 py-3 bg-[#0A2540] text-white rounded-lg hover:bg-[#0A2540]/90 transition whitespace-nowrap"
+              onClick={() => copyToClipboard(defaultLink, 'main')}
+              className="px-4 py-2 bg-petrol-600 text-white rounded-lg hover:bg-petrol-700 transition whitespace-nowrap"
             >
-              {copied ? '✓ Copiato!' : 'Copia'}
+              {copySuccess === 'main' ? 'Copiato!' : 'Copia Link'}
             </button>
           </div>
-          <p className="text-sm text-slate-500 mt-2">
-            Cookie: 90 giorni | Commissione: {data.commissioni.totale}% | Codice: {data.affiliate.ref_code}
+          <p className="text-gray-500 text-sm mt-2">
+            Codice affiliato: <span className="font-mono font-semibold">{stats.affiliate.ref_code}</span>
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid md:grid-cols-5 gap-4 mb-8">
-          <StatCard
-            title="Click Totali"
-            value={data.stats.totale_click.toLocaleString()}
-            icon="cursor"
-          />
-          <StatCard
-            title="Conversioni"
-            value={data.stats.totale_conversioni.toLocaleString()}
-            subtitle={`${conversionRate}% tasso`}
-            icon="check"
-          />
-          <StatCard
-            title="Clienti Attivi"
-            value={data.stats.clienti_attivi.toLocaleString()}
-            icon="users"
-          />
-          <StatCard
-            title="Commissioni Totali"
-            value={`€${data.stats.totale_commissioni_euro.toFixed(2)}`}
-            icon="euro"
-          />
-          <StatCard
-            title="Saldo Disponibile"
-            value={`€${data.stats.saldo_disponibile_euro.toFixed(2)}`}
-            highlight={data.stats.saldo_disponibile_euro >= 50}
-            icon="wallet"
-          />
+        {/* Commission Info */}
+        <div className="bg-gradient-to-r from-petrol-600 to-petrol-700 rounded-xl p-6 text-white mb-8">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <p className="text-petrol-200 text-sm mb-1">La tua commissione</p>
+              <p className="text-4xl font-bold">{stats.commissioni.totale}%</p>
+              <p className="text-petrol-200 text-sm mt-1">
+                Base {stats.commissioni.base}% + Bonus {stats.commissioni.bonus_performance}%
+              </p>
+            </div>
+            <div>
+              <p className="text-petrol-200 text-sm mb-1">Clienti attivi</p>
+              <p className="text-4xl font-bold">{stats.stats.clienti_attivi}</p>
+            </div>
+            {stats.commissioni.prossimo_obiettivo && (
+              <div>
+                <p className="text-petrol-200 text-sm mb-1">Prossimo obiettivo</p>
+                <p className="text-lg font-semibold">{stats.commissioni.prossimo_obiettivo.bonus}</p>
+                <p className="text-petrol-200 text-sm">
+                  {stats.commissioni.prossimo_obiettivo.descrizione}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Struttura Commissioni */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-[#0A2540] mb-4">
-              La Tua Struttura Commissioni
-            </h3>
+        {/* Tabs */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="border-b border-gray-200">
+            <nav className="flex">
+              <button
+                onClick={() => setActiveTab('overview')}
+                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${
+                  activeTab === 'overview'
+                    ? 'border-petrol-600 text-petrol-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Panoramica
+              </button>
+              <button
+                onClick={() => setActiveTab('links')}
+                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${
+                  activeTab === 'links'
+                    ? 'border-petrol-600 text-petrol-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                I miei link
+              </button>
+              <button
+                onClick={() => setActiveTab('commissions')}
+                className={`px-6 py-4 font-medium text-sm border-b-2 transition ${
+                  activeTab === 'commissions'
+                    ? 'border-petrol-600 text-petrol-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Commissioni
+              </button>
+            </nav>
+          </div>
 
-            <div className="space-y-4">
-              {/* Abbonamento */}
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-600">Tuo abbonamento</span>
-                <span className="font-medium text-[#0A2540] capitalize">
-                  {data.commissioni.abbonamento}
-                </span>
-              </div>
-
-              {/* Commissione Base */}
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-600">Commissione base</span>
-                <span className="font-medium text-[#0A2540]">
-                  {data.commissioni.base}%
-                </span>
-              </div>
-
-              {/* Bonus Performance */}
-              <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                <span className="text-gray-600">Bonus performance</span>
-                <span className={`font-medium ${data.commissioni.bonus_performance > 0 ? 'text-green-600' : 'text-gray-400'}`}>
-                  {data.commissioni.bonus_performance > 0
-                    ? `+${data.commissioni.bonus_performance}%`
-                    : 'Non ancora sbloccato'}
-                </span>
-              </div>
-
-              {/* Totale */}
-              <div className="flex justify-between items-center py-3 bg-[#0A2540]/5 rounded-lg px-3 -mx-3">
-                <span className="font-semibold text-[#0A2540]">Commissione totale</span>
-                <span className="text-2xl font-bold text-[#F4B942]">
-                  {data.commissioni.totale}%
-                </span>
-              </div>
-
-              {/* Bonus Milestone Mensile (se attivo) */}
-              {data.commissioni.bonus_milestone_mensile > 0 && (
-                <div className="flex justify-between items-center py-3 bg-[#F4B942]/10 rounded-lg px-3 -mx-3 mt-2">
-                  <span className="font-medium text-[#0A2540]">🏆 Bonus mensile</span>
-                  <span className="text-xl font-bold text-[#0A2540]">
-                    €{data.commissioni.bonus_milestone_mensile}/mese
-                  </span>
+          <div className="p-6">
+            {/* Overview Tab */}
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-petrol-600 mb-4">Attività recente</h3>
+                  {stats.recent_clicks.length === 0 ? (
+                    <p className="text-gray-500 text-sm">I click sui tuoi link appariranno qui.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {stats.recent_clicks.slice(0, 5).map((click, i) => (
+                        <div key={i} className="flex justify-between items-center py-2 border-b border-gray-100">
+                          <div>
+                            <span className="text-sm font-medium">
+                              {click.challenge_type || 'Challenge'}
+                            </span>
+                            <span className={`ml-2 text-xs px-2 py-1 rounded-full ${
+                              click.stato_conversione === 'converted'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              {click.stato_conversione === 'converted' ? 'Convertito' : 'Click'}
+                            </span>
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {new Date(click.clicked_at).toLocaleDateString('it-IT')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Prossimo Obiettivo */}
-            {data.commissioni.prossimo_obiettivo && (
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">🎯</span>
-                  <div className="flex-1">
-                    <p className="font-medium text-blue-900">
-                      Prossimo obiettivo: {data.commissioni.prossimo_obiettivo.bonus}
-                    </p>
-                    <p className="text-sm text-blue-700 mt-1">
-                      {data.commissioni.prossimo_obiettivo.descrizione}
-                    </p>
-                    {/* Progress bar */}
-                    <div className="mt-3 h-2 bg-blue-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-600 rounded-full transition-all"
-                        style={{
-                          width: `${Math.min(100, (data.stats.clienti_attivi / (data.stats.clienti_attivi + data.commissioni.prossimo_obiettivo.clienti_necessari)) * 100)}%`
-                        }}
+                {stats.milestones.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-petrol-600 mb-4">Milestone raggiunti</h3>
+                    <div className="space-y-2">
+                      {stats.milestones.map((m, i) => (
+                        <div key={i} className="flex items-center gap-3 py-2">
+                          <span className="text-2xl">&#127942;</span>
+                          <div>
+                            <p className="font-medium">{m.milestone_type}</p>
+                            <p className="text-sm text-gray-500">
+                              {m.importo} {m.is_recurring ? '/mese' : 'una tantum'}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Links Tab */}
+            {activeTab === 'links' && (
+              <div className="space-y-6">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="font-semibold text-petrol-600 mb-4">Crea nuovo link</h3>
+                  <div className="grid md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm text-gray-600 mb-1">Destinazione</label>
+                      <select
+                        value={newLink.destination_type}
+                        onChange={(e) => setNewLink({ ...newLink, destination_type: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg"
+                      >
+                        <option value="challenge">Challenge</option>
+                        <option value="homepage">Homepage</option>
+                        <option value="pricing">Pricing</option>
+                      </select>
+                    </div>
+                    {newLink.destination_type === 'challenge' && (
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">Challenge</label>
+                        <select
+                          value={newLink.challenge_type}
+                          onChange={(e) => setNewLink({ ...newLink, challenge_type: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg"
+                        >
+                          <option value="leadership">Leadership</option>
+                          <option value="ostacoli">Ostacoli</option>
+                          <option value="microfelicita">Microfelicità</option>
+                        </select>
+                      </div>
+                    )}
+                    <div>
+                      <label className="block text-sm text-gray-600 mb-1">Nome (opzionale)</label>
+                      <input
+                        type="text"
+                        value={newLink.nome_link}
+                        onChange={(e) => setNewLink({ ...newLink, nome_link: e.target.value })}
+                        placeholder="Es: Instagram Bio"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg"
                       />
                     </div>
-                    <p className="text-xs text-blue-600 mt-1">
-                      {data.stats.clienti_attivi} / {data.stats.clienti_attivi + data.commissioni.prossimo_obiettivo.clienti_necessari} clienti
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Milestone Raggiunti */}
-            {data.milestones && data.milestones.length > 0 && (
-              <div className="mt-6">
-                <h4 className="text-sm font-medium text-gray-500 mb-3">Traguardi raggiunti</h4>
-                <div className="space-y-2">
-                  {data.milestones.map((m, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm">
-                      <span className="text-green-500">✓</span>
-                      <span className="text-gray-700">
-                        {m.milestone_type === 'prima_vendita' && 'Prima vendita'}
-                        {m.milestone_type === '50_clienti' && '50 clienti attivi'}
-                        {m.milestone_type === '100_clienti' && '100 clienti attivi'}
-                      </span>
-                      <span className="text-gray-400 ml-auto">
-                        €{m.importo}{m.is_recurring ? '/mese' : ''}
-                      </span>
+                    <div className="flex items-end">
+                      <button
+                        onClick={createNewLink}
+                        disabled={creatingLink}
+                        className="w-full px-4 py-2 bg-petrol-600 text-white rounded-lg hover:bg-petrol-700 transition disabled:opacity-50"
+                      >
+                        {creatingLink ? 'Creazione...' : 'Crea Link'}
+                      </button>
                     </div>
-                  ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-petrol-600 mb-4">I tuoi link</h3>
+                  {links.length === 0 ? (
+                    <p className="text-gray-500 text-sm">I tuoi link personalizzati appariranno qui.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {links.map((link) => (
+                        <div key={link.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm truncate">
+                              {link.nome_link || link.destination_type}
+                            </p>
+                            <p className="text-xs text-gray-500 truncate">{link.url_generato}</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {link.totale_click} click - {link.totale_conversioni} conversioni
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(link.url_generato, link.id)}
+                            className="px-3 py-1 text-sm bg-white border border-gray-200 rounded hover:bg-gray-50 transition"
+                          >
+                            {copySuccess === link.id ? 'OK' : 'Copia'}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Azioni Rapide */}
-          <div className="space-y-4">
-            <Link
-              href="/affiliate/links"
-              className="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#0A2540]/10 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#0A2540]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
+            {/* Commissions Tab */}
+            {activeTab === 'commissions' && (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-semibold text-petrol-600">Storico commissioni</h3>
+                  {stats.stats.saldo_disponibile_euro >= 50 && (
+                    <button
+                      onClick={() => router.push('/affiliate/payout')}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
+                    >
+                      Richiedi Pagamento
+                    </button>
+                  )}
                 </div>
-                <div>
-                  <h3 className="font-semibold text-slate-800">Genera Link</h3>
-                  <p className="text-sm text-slate-600">Crea link personalizzati con UTM</p>
-                </div>
+
+                {stats.recent_commissions.length === 0 ? (
+                  <p className="text-gray-500 text-sm">Le tue commissioni appariranno qui.</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-3 px-2 font-medium text-gray-600">Data</th>
+                          <th className="text-left py-3 px-2 font-medium text-gray-600">Prodotto</th>
+                          <th className="text-right py-3 px-2 font-medium text-gray-600">%</th>
+                          <th className="text-right py-3 px-2 font-medium text-gray-600">Importo</th>
+                          <th className="text-center py-3 px-2 font-medium text-gray-600">Stato</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stats.recent_commissions.map((c, i) => (
+                          <tr key={i} className="border-b border-gray-100">
+                            <td className="py-3 px-2">
+                              {new Date(c.created_at).toLocaleDateString('it-IT')}
+                            </td>
+                            <td className="py-3 px-2">{c.prodotto}</td>
+                            <td className="py-3 px-2 text-right">{c.percentuale_applicata}%</td>
+                            <td className="py-3 px-2 text-right font-medium">
+                              {c.importo_commissione_euro.toFixed(2)}
+                            </td>
+                            <td className="py-3 px-2 text-center">
+                              <span className={`text-xs px-2 py-1 rounded-full ${
+                                c.stato === 'approved' ? 'bg-green-100 text-green-700' :
+                                c.stato === 'paid' ? 'bg-blue-100 text-blue-700' :
+                                c.stato === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-gray-100 text-gray-600'
+                              }`}>
+                                {c.stato === 'approved' ? 'Approvata' :
+                                 c.stato === 'paid' ? 'Pagata' :
+                                 c.stato === 'pending' ? 'In attesa' : c.stato}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                <p className="text-sm text-gray-500">
+                  Le commissioni maturano dopo 30 giorni. Puoi richiedere il pagamento quando il saldo raggiunge 50 euro.
+                </p>
               </div>
-            </Link>
-
-            {data.stats.saldo_disponibile_euro >= 50 && (
-              <button
-                onClick={() => alert('Funzione payout in arrivo!')}
-                className="block w-full p-6 bg-green-50 border-2 border-green-200 rounded-xl text-left hover:bg-green-100 transition"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center">
-                    <svg className="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-green-800">Richiedi Payout</h3>
-                    <p className="text-sm text-green-600">Hai €{data.stats.saldo_disponibile_euro.toFixed(2)} disponibili</p>
-                  </div>
-                </div>
-              </button>
             )}
-
-            <Link
-              href="/affiliate"
-              className="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition border border-gray-100"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#F4B942]/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#F4B942]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-slate-800">Materiali Marketing</h3>
-                  <p className="text-sm text-slate-600">Badge, banner, email template</p>
-                </div>
-              </div>
-            </Link>
-
-            {/* Info Parametri */}
-            <div className="p-4 bg-slate-100 rounded-xl">
-              <h4 className="text-sm font-medium text-slate-600 mb-2">Parametri Programma</h4>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Cookie: 90 giorni</li>
-                <li>• Ricorrenza: A vita sui rinnovi</li>
-                <li>• Payout minimo: €50</li>
-                <li>• Elaborazione: 5 giorni lavorativi</li>
-              </ul>
-            </div>
           </div>
         </div>
-
-        {/* Ultime Commissioni */}
-        {data.pending_commissions.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-            <h2 className="text-lg font-semibold text-slate-800 mb-4">Commissioni in Attesa</h2>
-            <div className="space-y-3">
-              {data.pending_commissions.map((c, i) => (
-                <div key={i} className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
-                  <div>
-                    <span className="font-medium text-slate-800">{c.prodotto}</span>
-                    <span className="text-sm text-slate-500 ml-2">
-                      {new Date(c.created_at).toLocaleDateString('it-IT')}
-                    </span>
-                  </div>
-                  <span className="font-semibold text-[#F4B942]">
-                    +€{Number(c.importo_commissione_euro).toFixed(2)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Storico Commissioni */}
-        {data.recent_commissions && data.recent_commissions.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-slate-800 mb-4">Ultime Commissioni</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-2 font-medium text-gray-600">Data</th>
-                    <th className="text-left py-2 font-medium text-gray-600">Prodotto</th>
-                    <th className="text-center py-2 font-medium text-gray-600">%</th>
-                    <th className="text-right py-2 font-medium text-gray-600">Importo</th>
-                    <th className="text-center py-2 font-medium text-gray-600">Stato</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.recent_commissions.map((c, i) => (
-                    <tr key={i} className="border-b border-gray-100">
-                      <td className="py-3 text-gray-600">
-                        {new Date(c.created_at).toLocaleDateString('it-IT')}
-                      </td>
-                      <td className="py-3 font-medium text-gray-800">{c.prodotto}</td>
-                      <td className="py-3 text-center text-gray-600">{c.percentuale_applicata}%</td>
-                      <td className="py-3 text-right font-semibold text-[#0A2540]">
-                        €{Number(c.importo_commissione_euro).toFixed(2)}
-                      </td>
-                      <td className="py-3 text-center">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium
-                          ${c.stato === 'approved' ? 'bg-green-100 text-green-800' : ''}
-                          ${c.stato === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
-                          ${c.stato === 'paid' ? 'bg-blue-100 text-blue-800' : ''}
-                        `}>
-                          {c.stato === 'approved' && 'Approvata'}
-                          {c.stato === 'pending' && 'In attesa'}
-                          {c.stato === 'paid' && 'Pagata'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </main>
-    </div>
-  );
-}
-
-function StatCard({ title, value, subtitle, highlight, icon }: {
-  title: string;
-  value: string;
-  subtitle?: string;
-  highlight?: boolean;
-  icon: string;
-}) {
-  return (
-    <div className={`p-5 rounded-xl shadow-sm ${highlight ? 'bg-green-50 border-2 border-green-200' : 'bg-white border border-gray-100'}`}>
-      <p className="text-sm text-slate-500 mb-1">{title}</p>
-      <p className={`text-2xl font-bold ${highlight ? 'text-green-700' : 'text-slate-800'}`}>{value}</p>
-      {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
     </div>
   );
 }
