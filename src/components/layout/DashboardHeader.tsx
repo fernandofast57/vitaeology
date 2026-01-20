@@ -1,14 +1,17 @@
 ﻿'use client';
 
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, FlaskConical } from 'lucide-react';
 
 interface DashboardHeaderProps {
   userName?: string;
   userEmail?: string;
   onMenuClick: () => void;
+  // Flag per mostrare badge beta tester
+  // TODO: collegare a Supabase quando necessario
+  isBetaTester?: boolean;
 }
 
-export default function DashboardHeader({ userName, userEmail, onMenuClick }: DashboardHeaderProps) {
+export default function DashboardHeader({ userName, userEmail, onMenuClick, isBetaTester = true }: DashboardHeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-neutral-200">
       <div className="flex items-center justify-between px-4 py-3 md:px-6">
@@ -17,8 +20,29 @@ export default function DashboardHeader({ userName, userEmail, onMenuClick }: Da
             <Menu className="w-6 h-6 text-neutral-700" />
           </button>
           <h1 className="text-lg font-semibold text-neutral-900 hidden md:block">Dashboard</h1>
+
+          {/* Beta Tester Badge */}
+          {isBetaTester && (
+            <div
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium cursor-help"
+              title="Grazie per aiutarci a migliorare Vitaeology!"
+            >
+              <FlaskConical className="w-3.5 h-3.5" />
+              <span>Beta Tester</span>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-3">
+          {/* Beta Tester Badge Mobile */}
+          {isBetaTester && (
+            <div
+              className="sm:hidden flex items-center justify-center w-8 h-8 bg-amber-100 text-amber-700 rounded-full cursor-help"
+              title="Beta Tester - Grazie per aiutarci a migliorare!"
+            >
+              <FlaskConical className="w-4 h-4" />
+            </div>
+          )}
+
           <button className="relative p-2 hover:bg-neutral-100 rounded-lg" aria-label="Notifiche">
             <Bell className="w-5 h-5 text-neutral-600" />
           </button>
