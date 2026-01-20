@@ -14,8 +14,7 @@ const FeedbackWidget = dynamic(() => import('@/components/ui/FeedbackWidget'), {
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'
 
 // Microsoft Clarity Project ID
-// TODO: Sostituire con ID reale da clarity.microsoft.com
-const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'CLARITY_PROJECT_ID'
+const CLARITY_PROJECT_ID = 'v4dg8tygen'
 
 // Font per il body (sans-serif)
 const inter = Inter({
