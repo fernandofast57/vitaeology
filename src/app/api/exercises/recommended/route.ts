@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
+// Forza rendering dinamico (usa cookies)
+export const dynamic = 'force-dynamic';
+
 interface PillarScores {
   ESSERE: number;
   SENTIRE: number;

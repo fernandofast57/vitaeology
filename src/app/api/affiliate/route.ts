@@ -1,5 +1,5 @@
 // ============================================================================
-// API: /api/affiliate/commissions
+// API: /api/affiliate
 // Descrizione: Storico commissioni affiliato
 // Metodo: GET
 // Auth: Richiede autenticazione (affiliato)
@@ -8,6 +8,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+
+// Forza rendering dinamico (usa cookies)
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

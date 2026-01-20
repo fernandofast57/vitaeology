@@ -2,6 +2,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+// Forza rendering dinamico (usa cookies)
+export const dynamic = 'force-dynamic';
+
 // Calcola il prossimo obiettivo in base ai clienti attivi
 function calcolaProssimoObiettivo(clientiAttivi: number) {
   if (clientiAttivi < 10) {

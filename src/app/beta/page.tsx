@@ -1,25 +1,81 @@
+'use client';
+
 // ============================================================================
 // PAGE: /beta
 // Descrizione: Landing page per reclutamento beta tester (Founding Tester)
-// Form: Google Form embeddato
-// Tracking: Notion (manuale)
+// Form: Nativo React → Supabase
 // ============================================================================
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Gift, Sparkles, Award, Users, Clock, Zap } from 'lucide-react';
-
-export const metadata = {
-  title: 'Diventa Founding Tester | Vitaeology',
-  description: 'Aiutaci a costruire il futuro della leadership e ottieni accesso esclusivo gratuito a Vitaeology',
-};
+import { Gift, Sparkles, Award, Users, Clock, Zap, CheckCircle, Loader2 } from 'lucide-react';
 
 // Configurazione posti disponibili (aggiornare manualmente)
 const TOTAL_SPOTS = 20;
 const SPOTS_TAKEN = 0; // Aggiornare man mano che arrivano candidature
 const SPOTS_LEFT = TOTAL_SPOTS - SPOTS_TAKEN;
 
+interface FormData {
+  email: string;
+  full_name: string;
+  job_title: string;
+  company: string;
+  years_experience: string;
+  device: string;
+  motivation: string;
+  hours_available: string;
+  source: string;
+}
+
 export default function BetaPage() {
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    full_name: '',
+    job_title: '',
+    company: '',
+    years_experience: '',
+    device: '',
+    motivation: '',
+    hours_available: '',
+    source: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setError('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/beta/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Errore durante l\'invio');
+      }
+
+      setIsSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Errore durante l\'invio');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-petrol-50 via-white to-gold-50/30">
       {/* Header */}
@@ -157,37 +213,228 @@ export default function BetaPage() {
             </p>
           </div>
 
-          {/* Google Form Embed */}
           <div className="p-6 lg:p-8">
-            {/* Google Form iframe */}
-            <iframe
-              src="https://docs.google.com/forms/d/e/1FAIpQLSe9Vk4pOIv_2Ii9TRWtpA6O6LMInf7E9yRS-8hWiWSK76txBA/viewform?embedded=true"
-              width="100%"
-              height="800"
-              frameBorder={0}
-              className="rounded-lg w-full"
-              title="Form Candidatura Founding Tester"
-            >
-              Caricamento...
-            </iframe>
+            {isSubmitted ? (
+              // Success State
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-green-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Candidatura Ricevuta!
+                </h3>
+                <p className="text-gray-600 max-w-md mx-auto">
+                  Grazie per il tuo interesse. Ti contatteremo entro 48 ore
+                  all&apos;indirizzo email che hai fornito.
+                </p>
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-petrol-600 text-white font-medium rounded-lg hover:bg-petrol-700 transition-colors"
+                >
+                  Torna alla Homepage
+                </Link>
+              </div>
+            ) : (
+              // Form
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Row 1: Nome e Email */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+                      Nome completo *
+                    </label>
+                    <input
+                      type="text"
+                      id="full_name"
+                      name="full_name"
+                      required
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent"
+                      placeholder="Mario Rossi"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent"
+                      placeholder="mario@esempio.it"
+                    />
+                  </div>
+                </div>
 
-            {/* Alternativa: Link diretto */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-500 mb-4">
-                Preferisci compilare il form in una nuova finestra?
-              </p>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSe9Vk4pOIv_2Ii9TRWtpA6O6LMInf7E9yRS-8hWiWSK76txBA/viewform"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-petrol-600 text-white font-medium rounded-lg hover:bg-petrol-700 transition-colors"
-              >
-                Apri il Form
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
+                {/* Row 2: Ruolo e Azienda */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="job_title" className="block text-sm font-medium text-gray-700 mb-1">
+                      Ruolo professionale *
+                    </label>
+                    <input
+                      type="text"
+                      id="job_title"
+                      name="job_title"
+                      required
+                      value={formData.job_title}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent"
+                      placeholder="CEO, Manager, Consulente..."
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                      Azienda
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent"
+                      placeholder="Nome azienda (opzionale)"
+                    />
+                  </div>
+                </div>
+
+                {/* Row 3: Esperienza e Dispositivo */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="years_experience" className="block text-sm font-medium text-gray-700 mb-1">
+                      Anni di esperienza *
+                    </label>
+                    <select
+                      id="years_experience"
+                      name="years_experience"
+                      required
+                      value={formData.years_experience}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent bg-white"
+                    >
+                      <option value="">Seleziona...</option>
+                      <option value="0-2">0-2 anni</option>
+                      <option value="3-5">3-5 anni</option>
+                      <option value="6-10">6-10 anni</option>
+                      <option value="10+">Più di 10 anni</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="device" className="block text-sm font-medium text-gray-700 mb-1">
+                      Dispositivo principale *
+                    </label>
+                    <select
+                      id="device"
+                      name="device"
+                      required
+                      value={formData.device}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent bg-white"
+                    >
+                      <option value="">Seleziona...</option>
+                      <option value="desktop">Desktop/Laptop</option>
+                      <option value="mobile">Smartphone/Tablet</option>
+                      <option value="both">Entrambi</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Row 4: Ore disponibili e Source */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="hours_available" className="block text-sm font-medium text-gray-700 mb-1">
+                      Ore disponibili a settimana *
+                    </label>
+                    <select
+                      id="hours_available"
+                      name="hours_available"
+                      required
+                      value={formData.hours_available}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent bg-white"
+                    >
+                      <option value="">Seleziona...</option>
+                      <option value="1-2">1-2 ore</option>
+                      <option value="3-5">3-5 ore</option>
+                      <option value="5+">Più di 5 ore</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="source" className="block text-sm font-medium text-gray-700 mb-1">
+                      Come ci hai trovato?
+                    </label>
+                    <select
+                      id="source"
+                      name="source"
+                      value={formData.source}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent bg-white"
+                    >
+                      <option value="">Seleziona...</option>
+                      <option value="linkedin">LinkedIn</option>
+                      <option value="facebook">Facebook</option>
+                      <option value="google">Google</option>
+                      <option value="referral">Passaparola</option>
+                      <option value="other">Altro</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Motivazione */}
+                <div>
+                  <label htmlFor="motivation" className="block text-sm font-medium text-gray-700 mb-1">
+                    Perché vuoi diventare Founding Tester? *
+                  </label>
+                  <textarea
+                    id="motivation"
+                    name="motivation"
+                    required
+                    rows={4}
+                    value={formData.motivation}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-petrol-500 focus:border-transparent resize-none"
+                    placeholder="Raccontaci cosa ti interessa di Vitaeology e cosa speri di ottenere dalla partecipazione..."
+                  />
+                </div>
+
+                {/* Error */}
+                {error && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-700 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 bg-petrol-600 text-white font-semibold rounded-lg hover:bg-petrol-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Invio in corso...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5" />
+                      Invia Candidatura
+                    </>
+                  )}
+                </button>
+
+                <p className="text-xs text-gray-500 text-center">
+                  Inviando questo form accetti la nostra{' '}
+                  <Link href="/privacy" className="text-petrol-600 underline">Privacy Policy</Link>
+                </p>
+              </form>
+            )}
           </div>
         </div>
 
