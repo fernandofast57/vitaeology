@@ -11,19 +11,19 @@
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
-export type AssessmentType = 'lite' | 'risolutore' | 'microfelicita';
+export type AssessmentType = 'leadership' | 'risolutore' | 'microfelicita';
 export type AccessSource = 'book_purchase' | 'challenge_complete' | 'subscription' | 'admin_grant' | 'trial';
 
 // Mapping libro slug → assessment type
 export const LIBRO_TO_ASSESSMENT: Record<string, AssessmentType> = {
-  'leadership': 'lite',
+  'leadership': 'leadership',
   'risolutore': 'risolutore',
   'microfelicita': 'microfelicita',
 };
 
 // Mapping challenge → assessment type
 export const CHALLENGE_TO_ASSESSMENT: Record<string, AssessmentType> = {
-  'leadership-autentica': 'lite',
+  'leadership-autentica': 'leadership',
   'oltre-ostacoli': 'risolutore',
   'microfelicita': 'microfelicita',
 };
@@ -37,13 +37,13 @@ export const ASSESSMENT_INFO: Record<AssessmentType, {
   color: string;
   url: string;
 }> = {
-  'lite': {
+  'leadership': {
     name: 'Leadership Autentica',
     libro: 'Leadership Autentica',
     libroSlug: 'leadership',
     challenge: 'leadership-autentica',
     color: '#D4AF37',
-    url: '/assessment/lite',
+    url: '/assessment/leadership',
   },
   'risolutore': {
     name: 'Oltre gli Ostacoli',

@@ -76,12 +76,12 @@ export async function GET() {
 
   // 5. Determina quale libro/percorso
   const assessmentToBook: Record<string, string> = {
-    'lite': 'leadership',
+    'leadership': 'leadership',
     'risolutore': 'risolutore',
     'microfelicita': 'microfelicita'
   };
   const bookSlug = profile?.current_path ||
-                   assessmentToBook[assessment?.assessment_type || 'lite'] ||
+                   assessmentToBook[assessment?.assessment_type || 'leadership'] ||
                    'leadership';
 
   // 6. Calcola settimana corrente utente

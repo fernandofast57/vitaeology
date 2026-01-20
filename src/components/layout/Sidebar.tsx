@@ -45,7 +45,7 @@ const PATHWAY_TO_DASHBOARD: Record<string, string> = {
 
 // Mappa pathway slug → assessment path
 const PATHWAY_TO_ASSESSMENT: Record<string, string> = {
-  'leadership': '/assessment/lite',
+  'leadership': '/assessment/leadership',
   'risolutore': '/assessment/risolutore',
   'microfelicita': '/assessment/microfelicita',
 };
@@ -116,14 +116,14 @@ export default function Sidebar({ isOpen, onClose, userEmail, userName }: Sideba
   const availableAssessments = userPathways.length > 0
     ? userPathways.map(p => ({
         name: PATHWAY_NAMES[p.pathway.slug as keyof typeof PATHWAY_NAMES] || p.pathway.name,
-        href: PATHWAY_TO_ASSESSMENT[p.pathway.slug] || '/assessment/lite',
+        href: PATHWAY_TO_ASSESSMENT[p.pathway.slug] || '/assessment/leadership',
         icon: PATHWAY_ICONS[p.pathway.slug] || ClipboardCheck,
         color: PATHWAY_COLORS[p.pathway.slug as keyof typeof PATHWAY_COLORS] || '#D4AF37',
         slug: p.pathway.slug,
       }))
     : [
         // Default: solo leadership se nessun percorso
-        { name: 'Leadership Autentica', href: '/assessment/lite', icon: Crown, color: '#D4AF37', slug: 'leadership' },
+        { name: 'Leadership Autentica', href: '/assessment/leadership', icon: Crown, color: '#D4AF37', slug: 'leadership' },
       ];
 
   return (

@@ -1,4 +1,4 @@
-// Assessment LITE - Supabase Data Layer
+// Assessment Leadership - Supabase Data Layer
 import { SupabaseClient } from '@supabase/supabase-js';
 import {
   QuestionWithCharacteristic,
@@ -34,7 +34,7 @@ interface DBQuestion {
 interface DBAssessment {
   id: string;
   user_id: string;
-  assessment_type: 'lite' | 'full';
+  assessment_type: 'leadership' | 'full';
   status: 'in_progress' | 'completed' | 'abandoned';
   current_question_index: number;
   started_at: string;
@@ -51,9 +51,9 @@ interface DBAnswer {
 }
 
 /**
- * Carica tutte le domande LITE con le caratteristiche associate
+ * Carica tutte le domande Leadership con le caratteristiche associate
  */
-export async function loadLiteQuestions(
+export async function loadLeadershipQuestions(
   supabase: SupabaseClient
 ): Promise<QuestionWithCharacteristic[]> {
   const { data, error } = await supabase
@@ -149,7 +149,7 @@ export async function createAssessmentSession(
     .from('user_assessments_v2')
     .insert({
       user_id: userId,
-      assessment_type: 'lite',
+      assessment_type: 'leadership',
       status: 'in_progress',
       current_question_index: 0,
     })
@@ -320,7 +320,7 @@ export async function completeAssessment(
 ): Promise<AssessmentResults> {
   // 1. Carica domande e caratteristiche
   const [questions, characteristics] = await Promise.all([
-    loadLiteQuestions(supabase),
+    loadLeadershipQuestions(supabase),
     loadCharacteristics(supabase),
   ]);
 
@@ -376,7 +376,7 @@ export async function loadSavedResults(
 ): Promise<AssessmentResults | null> {
   // Carica domande e caratteristiche
   const [questions, characteristics] = await Promise.all([
-    loadLiteQuestions(supabase),
+    loadLeadershipQuestions(supabase),
     loadCharacteristics(supabase),
   ]);
 

@@ -24,8 +24,8 @@ const BOOK_CONFIG: Record<string, BookConfig> = {
     subtitle: 'Scopri il Leader che sei già',
     color: '#D4AF37', // Oro
     pdfEnvKey: 'PDF_URL_LEADERSHIP',
-    assessmentPath: '/assessment/lite',
-    assessmentName: 'Leadership Assessment LITE',
+    assessmentPath: '/assessment/leadership',
+    assessmentName: 'Assessment Leadership',
   },
   risolutore: {
     title: 'Oltre gli Ostacoli',

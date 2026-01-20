@@ -86,7 +86,7 @@ export interface UserAssessment {
 export interface UserAssessmentV2 {
   id: string
   user_id: string
-  assessment_type: 'lite' | 'full'
+  assessment_type: 'leadership' | 'full'
   status: 'in_progress' | 'completed' | 'abandoned'
   current_question_index: number
   started_at: string

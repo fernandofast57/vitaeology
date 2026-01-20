@@ -15,7 +15,7 @@ interface AssessmentStatus {
 }
 
 interface AssessmentConfig {
-  type: 'lite' | 'risolutore' | 'microfelicita';
+  type: 'leadership' | 'risolutore' | 'microfelicita';
   title: string;
   subtitle: string;
   description: string;
@@ -31,7 +31,7 @@ interface AssessmentConfig {
 
 const ASSESSMENTS: AssessmentConfig[] = [
   {
-    type: 'lite',
+    type: 'leadership',
     title: 'Leadership Autentica',
     subtitle: 'I 4 Pilastri della Leadership',
     description: 'Scopri il tuo profilo nei pilastri Essere, Sentire, Pensare, Agire',
@@ -40,8 +40,8 @@ const ASSESSMENTS: AssessmentConfig[] = [
     color: 'text-amber-600',
     bgColor: 'bg-amber-100',
     icon: <BookOpen className="w-6 h-6" />,
-    startUrl: '/assessment/lite',
-    resultsUrl: '/assessment/lite/results',
+    startUrl: '/assessment/leadership',
+    resultsUrl: '/assessment/leadership/results',
     table: 'user_assessments_v2',
   },
   {

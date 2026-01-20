@@ -63,7 +63,7 @@ export async function GET() {
 
     // 3. Assessment completati (mapping challenge → assessment type)
     const assessmentTypeMap: Record<string, string> = {
-      'leadership': 'lite',
+      'leadership': 'leadership',
       'ostacoli': 'risolutore',
       'microfelicita': 'microfelicita'
     };

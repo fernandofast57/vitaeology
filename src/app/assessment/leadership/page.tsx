@@ -40,7 +40,7 @@ export default function AssessmentLitePage() {
 
         if (!questionsRes.ok || !sessionRes.ok) {
           if (questionsRes.status === 401 || sessionRes.status === 401) {
-            router.push('/auth/login?redirect=/assessment/lite');
+            router.push('/auth/login?redirect=/assessment/leadership');
             return;
           }
           if (sessionRes.status === 403) {
@@ -121,7 +121,7 @@ export default function AssessmentLitePage() {
         const data = await completeRes.json();
 
         // Redirect ai risultati
-        router.push(`/assessment/lite/results?id=${data.assessmentId}`);
+        router.push(`/assessment/leadership/results?id=${data.assessmentId}`);
       } catch (err) {
         console.error('Errore completamento:', err);
         setError('Errore nel completamento. Riprova.');

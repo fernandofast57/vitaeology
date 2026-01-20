@@ -1,7 +1,7 @@
-// GET /api/assessment/questions - Carica le domande LITE
+// GET /api/assessment/questions - Carica le domande Leadership
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { loadLiteQuestions } from '@/lib/supabase/assessment';
+import { loadLeadershipQuestions } from '@/lib/supabase/assessment';
 import { sortQuestionsByPillar } from '@/lib/assessment-scoring';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     // Carica e ordina le domande
-    const questions = await loadLiteQuestions(supabase);
+    const questions = await loadLeadershipQuestions(supabase);
     const sortedQuestions = sortQuestionsByPillar(questions);
 
     return NextResponse.json({ questions: sortedQuestions });

@@ -178,8 +178,8 @@ export const FEATURE_METADATA: Record<FeatureName, FeatureMetadata> = {
   // Assessment
   assessment_lite: {
     name: 'assessment_lite',
-    displayName: 'Assessment Lite',
-    description: 'Assessment rapido a 72 domande',
+    displayName: 'Assessment Leadership',
+    description: 'Assessment Leadership a 72 domande',
     minTier: 'explorer',
     category: 'assessment',
   },

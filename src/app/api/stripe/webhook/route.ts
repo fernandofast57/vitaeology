@@ -264,7 +264,7 @@ export async function POST(request: NextRequest) {
             }
 
             // 3. Concedi accesso a tutti gli assessment (Leader tier)
-            const assessments = ['lite', 'risolutore', 'microfelicita'] as const;
+            const assessments = ['leadership', 'risolutore', 'microfelicita'] as const;
             for (const assessmentType of assessments) {
               await grantAssessmentAccess(
                 supabase,
@@ -345,7 +345,7 @@ export async function POST(request: NextRequest) {
 
           // Concedi accesso a tutti gli assessment per subscription
           if (tierSlug === 'leader' || tierSlug === 'mentor') {
-            const assessments = ['lite', 'risolutore', 'microfelicita'] as const;
+            const assessments = ['leadership', 'risolutore', 'microfelicita'] as const;
             for (const assessmentType of assessments) {
               await grantAssessmentAccess(
                 supabase,

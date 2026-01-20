@@ -188,7 +188,7 @@ export default function ResultsPage() {
           .from('user_assessments_v2')
           .select('*')
           .eq('user_id', user.id)
-          .eq('assessment_type', 'lite')
+          .eq('assessment_type', 'leadership')
           .eq('status', 'completed')
           .order('completed_at', { ascending: false })
           .limit(1)

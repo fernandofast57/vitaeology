@@ -31,7 +31,7 @@ function ResultsContent() {
         const res = await fetch(`/api/assessment/results/${assessmentId}`);
 
         if (res.status === 401) {
-          router.push('/auth/login?redirect=/assessment/lite/results');
+          router.push('/auth/login?redirect=/assessment/leadership/results');
           return;
         }
 
@@ -102,7 +102,7 @@ function ResultsContent() {
             Potrebbe essere necessario completare prima l&apos;assessment.
           </p>
           <Link
-            href="/assessment/lite"
+            href="/assessment/leadership"
             className="inline-block bg-amber-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-amber-600 transition"
           >
             Vai all&apos;Assessment

@@ -166,7 +166,7 @@ export async function hasPathwayAccess(
     .from('assessment_access')
     .select('id')
     .eq('user_id', userId)
-    .eq('assessment_type', pathwaySlug === 'leadership' ? 'lite' : pathwaySlug)
+    .eq('assessment_type', pathwaySlug)
     .maybeSingle();
 
   return !!legacyAccess;

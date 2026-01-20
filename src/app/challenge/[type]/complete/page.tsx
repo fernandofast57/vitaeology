@@ -36,7 +36,7 @@ const CHALLENGE_CONFIG = {
     badgeText: 'amber-400',
     completionMessage: 'Hai scoperto il leader che già opera in te.',
     nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/assessment/lite', cta: 'Fai il Test' },
+      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/assessment/leadership', cta: 'Fai il Test' },
       { icon: '🎯', title: 'Esercizi Pratici', description: 'Continua ad allenare la tua leadership', link: '/exercises', cta: 'Esplora Esercizi' }
     ]
   },
@@ -360,7 +360,7 @@ export default function ChallengeCompletePage() {
 
               {feedback.nextAction === 'assessment' && (
                 <Link
-                  href={`/assessment/${challengeType === 'ostacoli' ? 'risolutore' : challengeType === 'microfelicita' ? 'microfelicita' : 'lite'}`}
+                  href={`/assessment/${challengeType === 'ostacoli' ? 'risolutore' : challengeType === 'microfelicita' ? 'microfelicita' : 'leadership'}`}
                   className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
                 >
                   Fai l&apos;Assessment →

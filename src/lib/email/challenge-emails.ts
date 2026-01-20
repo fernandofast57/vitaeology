@@ -37,7 +37,7 @@ const CHALLENGE_CONFIG: Record<ChallengeType, ChallengeConfig> = {
     bookSlug: 'leadership',
     bookTitle: 'Leadership Autentica',
     bookPrice: '9,90',
-    assessmentPath: '/assessment/lite',
+    assessmentPath: '/assessment/leadership',
     landingPath: '/libro/leadership',
   },
   'oltre-ostacoli': {
@@ -111,7 +111,7 @@ const COMPLETION_BULLETS: Record<ChallengeType, string[]> = {
     'Hai identificato i tuoi valori guida',
     'Hai acquisito strumenti per relazioni autentiche',
     'Hai sviluppato consapevolezza del tuo impatto',
-    'Hai sbloccato l\'Assessment Leadership LITE',
+    'Hai sbloccato l\'Assessment Leadership',
   ],
   'oltre-ostacoli': [
     'Hai imparato a riconoscere i pattern limitanti',

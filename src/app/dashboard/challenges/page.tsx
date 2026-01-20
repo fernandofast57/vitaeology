@@ -201,7 +201,7 @@ function ChallengeCard({ challenge, isActive }: ChallengeCardProps) {
 
   // URL per assessment (se completata)
   const assessmentUrl = pathwaySlug === 'leadership'
-    ? '/assessment/lite'
+    ? '/assessment/leadership'
     : `/assessment/${pathwaySlug}`;
 
   return (

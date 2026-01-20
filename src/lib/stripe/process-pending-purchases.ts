@@ -145,7 +145,7 @@ export async function processPendingPurchases(
           }
 
           // 3. Grant accesso a tutti gli assessment (Leader tier)
-          const allAssessments = ['lite', 'risolutore', 'microfelicita'] as const;
+          const allAssessments = ['leadership', 'risolutore', 'microfelicita'] as const;
           for (const assessment of allAssessments) {
             await grantAssessmentAccess(
               supabase,

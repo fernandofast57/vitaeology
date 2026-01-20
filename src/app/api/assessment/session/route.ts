@@ -24,8 +24,8 @@ export async function GET() {
       );
     }
 
-    // Verifica accesso all'assessment LITE
-    const hasAccess = await checkAssessmentAccess(supabase, user.id, 'lite');
+    // Verifica accesso all'assessment Leadership
+    const hasAccess = await checkAssessmentAccess(supabase, user.id, 'leadership');
     if (!hasAccess) {
       return NextResponse.json(
         { error: 'Accesso non autorizzato. Acquista il libro Leadership Autentica o completa la challenge per sbloccare questo assessment.' },
@@ -49,7 +49,7 @@ export async function GET() {
       session = {
         id: sessionId,
         user_id: user.id,
-        assessment_type: 'lite',
+        assessment_type: 'leadership',
         status: 'in_progress',
         current_question_index: 0,
         started_at: new Date().toISOString(),
