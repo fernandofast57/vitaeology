@@ -1,7 +1,7 @@
 # VITAEOLOGY - DOCUMENTAZIONE COMPLETA DEL PROGETTO
 
-**Versione:** 1.0
-**Data:** 26 Dicembre 2024
+**Versione:** 2.0
+**Data:** 20 Gennaio 2026
 **Owner:** Fernando Marongiu
 **Stack:** Next.js 14 + TypeScript + Supabase + Stripe + Claude AI + Resend
 
@@ -35,7 +35,7 @@
 
 Vitaeology è una **piattaforma SaaS per lo sviluppo della leadership** destinata a imprenditori italiani (35-55 anni). Il progetto integra:
 
-- **Assessment psicometrici** (240 domande complete, 72 LITE)
+- **Assessment psicometrici** (3 assessment: Leadership 72, Risolutore 48, Microfelicità 47)
 - **AI Coach personalizzato** (Fernando) basato su Claude con RAG
 - **52 esercizi settimanali** con tracking progressi
 - **3 Challenge gratuite** (funnel 7 giorni con email automation)
@@ -157,8 +157,14 @@ vitaeology-Claude_Project/
 │   │   │   ├── page.tsx
 │   │   │   └── [exerciseId]/page.tsx
 │   │   │
-│   │   ├── assessment/               # Assessment
-│   │   │   └── lite/
+│   │   ├── assessment/               # Assessment (3 percorsi)
+│   │   │   ├── leadership/
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── results/page.tsx
+│   │   │   ├── risolutore/
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── results/page.tsx
+│   │   │   └── microfelicita/
 │   │   │       ├── page.tsx
 │   │   │       └── results/page.tsx
 │   │   │
@@ -368,7 +374,7 @@ vitaeology-Claude_Project/
 │
 └── supabase/                         # SUPABASE CONFIG
     ├── schema.sql
-    ├── seed_240_questions.sql
+    ├── seed_assessment_questions.sql
     ├── seed_52_exercises_final.sql
     └── migrations/
 ```
@@ -417,8 +423,12 @@ vitaeology-Claude_Project/
 | `/dashboard` | `dashboard/page.tsx` | Dashboard principale |
 | `/exercises` | `exercises/page.tsx` | Lista 52 esercizi |
 | `/exercises/[id]` | `exercises/[exerciseId]/page.tsx` | Dettaglio esercizio |
-| `/assessment/lite` | `assessment/lite/page.tsx` | Assessment 72 domande |
-| `/assessment/lite/results` | `assessment/lite/results/page.tsx` | Risultati assessment |
+| `/assessment/leadership` | `assessment/leadership/page.tsx` | Assessment Leadership 72 domande |
+| `/assessment/leadership/results` | `assessment/leadership/results/page.tsx` | Risultati Leadership |
+| `/assessment/risolutore` | `assessment/risolutore/page.tsx` | Assessment Risolutore 48 domande |
+| `/assessment/risolutore/results` | `assessment/risolutore/results/page.tsx` | Risultati Risolutore |
+| `/assessment/microfelicita` | `assessment/microfelicita/page.tsx` | Assessment Microfelicità 47 domande |
+| `/assessment/microfelicita/results` | `assessment/microfelicita/results/page.tsx` | Risultati Microfelicità |
 | `/profile` | `profile/page.tsx` | Profilo utente |
 | `/progress` | `progress/page.tsx` | Progressi |
 | `/results` | `results/page.tsx` | Risultati con radar chart |
@@ -595,7 +605,7 @@ CREATE TABLE characteristics (
 );
 ```
 
-#### assessment_questions (240 righe, 72 per LITE)
+#### assessment_questions (167 righe totali)
 ```sql
 CREATE TABLE assessment_questions (
   id UUID PRIMARY KEY,
@@ -703,16 +713,17 @@ Tutte le tabelle hanno RLS attivo:
 
 ## 8. SISTEMA ASSESSMENT
 
-### 8.1 Struttura Assessment LITE
+### 8.1 I 3 Assessment (per Percorso)
 
-| Parametro | Valore |
-|-----------|--------|
-| Domande totali | 72 |
-| Domande per caratteristica | 3 |
-| Caratteristiche | 24 |
-| Pilastri | 4 |
-| Scala risposta | 1-5 (Quasi mai → Costantemente) |
-| Scoring | Direct + Inverse |
+| Assessment | Domande | Percorso | Struttura |
+|------------|---------|----------|-----------|
+| **Leadership** | 72 | Leadership Autentica | 24 caratteristiche × 3 domande |
+| **Risolutore** | 48 | Oltre gli Ostacoli | 3 Filtri (Pattern, Segnali, Risorse) |
+| **Microfelicità** | 47 | Microfelicità Digitale | 5 fasi R.A.D.A.R. |
+
+**Parametri comuni:**
+- Scala risposta: 1-5 (Quasi mai → Costantemente)
+- Scoring: Direct + Inverse
 
 ### 8.2 Flusso Assessment
 
@@ -1309,7 +1320,7 @@ npm install          # Installa dipendenze
 | Tabelle Database | 18+ |
 | File SQL | 50+ |
 | Script Utility | 45+ |
-| Domande Assessment | 240 (72 LITE) |
+| Domande Assessment | 167 (72+48+47) |
 | Esercizi | 52 |
 | Caratteristiche | 24 |
 | Libri | 3 |

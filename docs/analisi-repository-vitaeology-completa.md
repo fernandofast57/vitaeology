@@ -28,7 +28,7 @@
 | Metrica | 16Personalities | Gallup | Vitaeology |
 |---------|-----------------|--------|------------|
 | **Visite/Mese** | 18.37M | ~2-5M | 0 (pre-lancio) |
-| **Assessment** | 16 tipi (MBTI) | 34 strengths | **3 assessment (240 domande)** |
+| **Assessment** | 16 tipi (MBTI) | 34 strengths | **3 assessment (167 domande)** |
 | **Esercizi Pratici** | ❌ No | ❌ No | ✅ **52 esercizi** |
 | **AI Coach** | ❌ No | ❌ No | ✅ **RAG 966 chunks** |
 | **Challenge Gratuiti** | ❌ No | ❌ No | ✅ **3 challenge 7 giorni** |
@@ -121,7 +121,7 @@ vitaeology/
 | Prodotto | Componente | Stato | Dettagli |
 |----------|------------|-------|----------|
 | **P1: Sistema** | Challenge 7 giorni | ✅ 100% | 3 percorsi (Leadership, Ostacoli, Microfelicità) |
-| | Assessment | ✅ 100% | 3 tipi: LITE (72), Risolutore (48), Microfelicità (47) |
+| | Assessment | ✅ 100% | 3 tipi: Leadership (72), Risolutore (48), Microfelicità (47) |
 | | Esercizi 52 | ⚠️ 83% | DB completo, frontend parziale |
 | **P2: Output** | Dashboard | ✅ 100% | 3 percorsi, stats, activity, radar |
 | | Risultati Assessment | ✅ 100% | Radar chart, export PDF, breakdown |
@@ -244,8 +244,8 @@ vitaeology/
 - `/affiliate/links` - Gestione link
 
 #### Assessment (6 pagine)
-- `/assessment/lite` - Assessment LITE 72 domande
-- `/assessment/lite/results` - Risultati LITE
+- `/assessment/leadership` - Assessment Leadership 72 domande
+- `/assessment/leadership/results` - Risultati Leadership
 - `/assessment/microfelicita` - Assessment Microfelicità 47
 - `/assessment/microfelicita/results` - Risultati Microfelicità
 - `/assessment/risolutore` - Assessment Risolutore 48
@@ -299,8 +299,7 @@ vitaeology/
 |---------|---------------|-------------|
 | **profiles** | 0-100 | Profili utenti estesi |
 | **characteristics** | 24 | 24 caratteristiche leadership |
-| **assessment_questions** | 240 | Domande assessment FULL |
-| **assessment_questions_v2** | 72+48+47 | Domande 3 assessment |
+| **assessment_questions_v2** | 167 (72+48+47) | Domande 3 assessment |
 | **characteristic_scores** | 0-2.400 | Score per caratteristica |
 | **exercises** | 52 | 52 esercizi settimanali |
 | **exercise_completions** | 0-5.200 | Completamenti esercizi |
@@ -395,7 +394,7 @@ vitaeology/
 
 | Feature | 16Personalities | Vitaeology | Winner |
 |---------|-----------------|------------|--------|
-| **Assessment** | 16 tipi MBTI (60 domande) | 3 assessment (240 domande totali) | **Vitaeology** (più profondo) |
+| **Assessment** | 16 tipi MBTI (60 domande) | 3 assessment (167 domande totali) | **Vitaeology** (più profondo) |
 | **Risultati** | Report statico PDF | Radar chart interattivo + PDF | **Vitaeology** (più visuale) |
 | **Esercizi Pratici** | ❌ No | ✅ 52 esercizi settimanali | **Vitaeology** (unico) |
 | **AI Coach** | ❌ No | ✅ RAG 966 chunks | **Vitaeology** (unico) |
@@ -415,7 +414,7 @@ vitaeology/
 
 | Feature | Gallup | Vitaeology | Winner |
 |---------|--------|------------|--------|
-| **Assessment** | 34 strengths (177 domande) | 24 caratteristiche (240 domande) | Pari (entrambi robusti) |
+| **Assessment** | 34 strengths (177 domande) | 3 assessment (167 domande) | Pari (entrambi robusti) |
 | **Risultati** | Top 5 o Full 34 report | Radar 24 caratteristiche | Pari |
 | **Esercizi Pratici** | ❌ No | ✅ 52 esercizi | **Vitaeology** |
 | **AI Coach** | ❌ No | ✅ RAG 966 chunks | **Vitaeology** |
@@ -669,7 +668,7 @@ Enterprise             |              Consumer
 9. "Come Passare da Manager a Leader"
 10. "Errori Comuni dei Nuovi Leader (e Come Evitarli)"
 11. "Il Metodo Vitaeology: 50 Anni di Esperienza Fernando Marongiu"
-12. "Assessment Leadership: Perché 240 Domande?"
+12. "Assessment Leadership: 72 Domande per 24 Caratteristiche"
 13. "AI Coach per Leader: Il Futuro dello Sviluppo Personale"
 14. "Leadership nelle PMI Italiane: Sfide e Opportunità"
 15. "Come Scalare la Tua Azienda Senza Burnout"
@@ -710,7 +709,7 @@ Enterprise             |              Consumer
 ```
 Challenge Gratuito (3 percorsi)
     ↓ (40% conversion)
-Assessment LITE Gratuito (72 domande)
+Assessment Leadership (72 domande)
     ↓ (10% conversion)
 Libro €9.90 (tripwire)
     ↓ (20% conversion)
@@ -721,7 +720,7 @@ Mentor Subscription €490/anno
 
 **Proiezioni Anno 1:**
 - 10.000 challenge/anno (organic + ads)
-- 4.000 assessment LITE (40%)
+- 4.000 assessment (40%)
 - 400 libro (10%)
 - 80 Leader (20%)
 - 12 Mentor (15%)
@@ -751,7 +750,7 @@ Mentor Subscription €490/anno
 ```
 Landing Page Assessment
     ↓ (5% conversion)
-Assessment LITE Paid €29
+Assessment Paid €29
     ↓ (30% conversion)
 Leader Subscription €149/anno
     ↓ (20% conversion)
@@ -862,7 +861,7 @@ Mentor Subscription €490/anno
 |---------|-----------|-----------|------------|
 | **Visite/Mese** | 1.000 | 10.000 | 50.000 |
 | **Challenge Signup** | 100 | 1.000 | 5.000 |
-| **Assessment LITE** | 40 | 400 | 2.000 |
+| **Assessment** | 40 | 400 | 2.000 |
 | **Libro Purchase** | 4 | 40 | 200 |
 | **Leader Signup** | 1 | 10 | 50 |
 
@@ -964,7 +963,7 @@ Mentor Subscription €490/anno
 ✅ **47+ pagine** frontend complete  
 ✅ **171 migrazioni SQL** (database robusto)  
 ✅ **3 challenge 7 giorni** (Leadership, Ostacoli, Microfelicità)  
-✅ **3 assessment** (LITE 72, Risolutore 48, Microfelicità 47)  
+✅ **3 assessment** (Leadership 72, Risolutore 48, Microfelicità 47)  
 ✅ **52 esercizi** (DB completo, frontend 83%)  
 ✅ **AI Coach Fernando** (RAG 966 chunks)  
 ✅ **Email automation** (21+ template)  
@@ -985,7 +984,7 @@ Mentor Subscription €490/anno
 1. ✅ **AI Coach Fernando** (RAG 966 chunks, supporto 24/7)
 2. ✅ **52 Esercizi Pratici** (settimanali, personalizzati)
 3. ✅ **3 Challenge Gratuiti** (7 giorni, lead magnet)
-4. ✅ **3 Assessment** (240 domande totali, scientifico)
+4. ✅ **3 Assessment** (167 domande totali: 72+48+47)
 5. ✅ **Radar Chart Interattivo** (visualizzazione progressi)
 6. ✅ **Recurring Revenue** (€149-2.997/anno vs €35-90 one-time)
 7. ✅ **Italiano Nativo** (lingua, cultura, contesto PMI)

@@ -274,7 +274,7 @@ Verifica che la pagina contenga:
    - Highlights dei 7 giorni
 
 3. PASSO - CTA chiare (STOP → prossimo START):
-   - "Fai l'Assessment Completo" → link a /assessment/lite
+   - "Fai l'Assessment Completo" → link a /assessment/leadership
    - "Acquista il Libro" → link a pagina libro
    - "Parla con Fernando" → link a AI Coach
 
@@ -324,7 +324,7 @@ Output: ✅/❌ con contenuto verificato.
 Verifica l'inizio del flusso Assessment.
 
 File da verificare:
-- src/app/assessment/lite/page.tsx (o /assessment/page.tsx)
+- src/app/assessment/leadership/page.tsx (o /assessment/page.tsx)
 
 Verifica:
 1. Pagina accessibile senza login (Explorer gratuito)
@@ -353,7 +353,7 @@ File da verificare:
 - Tabella Supabase: assessment_questions
 
 Verifica:
-1. Esistono 72 domande per assessment_type='leadership' (o 'lite')
+1. Esistono 72 domande per assessment_type='leadership'
 2. Ogni domanda ha:
    - id univoco
    - question_text
@@ -384,7 +384,7 @@ Output: Numero domande trovate + ✅/❌ per logica.
 ```
 Verifica la pagina risultati Assessment - questo è il STOP del ciclo 4.
 
-File: src/app/assessment/lite/results/page.tsx
+File: src/app/assessment/leadership/results/page.tsx
 
 CRITICO - Verifica che contenga:
 

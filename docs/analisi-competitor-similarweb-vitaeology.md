@@ -378,7 +378,7 @@ Ho analizzato i principali competitor di Vitaeology nel mercato leadership asses
 ### Vitaeology (Value Ladder)
 
 **Modello:**
-- Lead magnet gratuito (challenge, assessment LITE)
+- Lead magnet gratuito (challenge, assessment gratuito)
 - Libro €9.90 (tripwire)
 - Subscription €149-2.997/anno (recurring)
 - Partnership €5.000-50.000 (one-time + recurring)
@@ -499,7 +499,7 @@ Ho analizzato i principali competitor di Vitaeology nel mercato leadership asses
 2. **Content Creation:**
    - 50 articoli blog anno 1 (1/settimana)
    - Ogni articolo: 1.500-2.500 parole, SEO-optimized
-   - CTA: Lead magnet (challenge, assessment LITE)
+   - CTA: Lead magnet (challenge, assessment gratuito)
 
 3. **On-Page SEO:**
    - Schema markup (assessment, FAQ, review)
@@ -719,7 +719,7 @@ Enterprise             |              Consumer
 - Viral (social sharing assessment)
 
 **Come:**
-- Assessment LITE gratuito (72 domande)
+- Assessment Leadership gratuito (72 domande)
 - Challenge 7 giorni gratuito (3 varianti)
 - PDF lead magnet gratuito
 - Upsell chiaro (libro €9.90 → Leader €149)
@@ -811,7 +811,7 @@ Enterprise             |              Consumer
 2. **SEO Audit:** Keyword research italiano (100 keywords target)
 3. **Content Calendar:** 50 articoli blog anno 1 (1/settimana)
 4. **Mobile Design:** Wireframe + prototype mobile-first
-5. **Freemium Landing:** Assessment LITE + challenge 7 giorni
+5. **Freemium Landing:** Assessment Leadership + challenge 7 giorni
 
 ---
 

@@ -265,7 +265,7 @@ Giorgio ha 25+ anni di esperienza nel suo campo. È rispettato tecnicamente ma s
 | Canale | Contenuto | CTA |
 |--------|-----------|-----|
 | LinkedIn | Post su sindrome impostore e crescita | Challenge Leadership |
-| Instagram | Carousel "5 segnali che sei già leader" | Assessment Lite |
+| Instagram | Carousel "5 segnali che sei già leader" | Assessment Leadership |
 | Email | Newsletter su gestione team | Libro Leadership |
 
 ### GIORGIO - Professionista Affermato

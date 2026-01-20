@@ -35,7 +35,7 @@ La verifica dell'apprendimento si basa su:
 |-----------|--------------|------------------|------------------|
 | Challenge 7 giorni | ✅ | ✅ | ✅ |
 | **Percorsi disponibili** | ❌ | 1 a scelta | Tutti e 3 |
-| Assessment LITE (iniziale) | ❌ | ✅ (1 percorso) | ✅ (3 percorsi) |
+| Assessment iniziale (iniziale) | ❌ | ✅ (1 percorso) | ✅ (3 percorsi) |
 | Esercizi personalizzati AI | ❌ | ✅ (1 pool) | ✅ (3 pool) |
 | AI Coach Fernando illimitato | ❌ | ✅ | ✅ |
 | Cross-pollination percorsi | ❌ | ❌ | ✅ |
@@ -54,7 +54,7 @@ CHALLENGE (€0)
     ▼
 LEADER (€149/anno) - Sceglie 1 percorso
 │
-├── Assessment LITE del percorso scelto
+├── Assessment iniziale del percorso scelto
 ├── AI Fernando propone esercizi personalizzati dal pool
 ├── Progressi tracciati + radar evoluzione
 └── ✅ Percorso completato
@@ -64,17 +64,17 @@ LEADER (€149/anno) - Sceglie 1 percorso
 MENTOR (€490/anno) - Tutti e 3 i percorsi
 │
 ├── Percorso Leadership
-│   ├── Assessment LITE (72 domande)
+│   ├── Assessment iniziale (72 domande)
 │   ├── AI propone esercizi personalizzati
 │   └── ✅ Completato
 │
 ├── Percorso Ostacoli
-│   ├── Assessment LITE (48 domande)
+│   ├── Assessment iniziale (48 domande)
 │   ├── AI propone esercizi personalizzati
 │   └── ✅ Completato
 │
 ├── Percorso Microfelicità
-│   ├── Assessment LITE (47 domande)
+│   ├── Assessment iniziale (47 domande)
 │   ├── AI propone esercizi personalizzati
 │   └── ✅ Completato
 │
@@ -88,10 +88,10 @@ MENTOR (€490/anno) - Tutti e 3 i percorsi
 
 ---
 
-## 3. ASSESSMENT INIZIALI (LITE)
+## 3. ASSESSMENT INIZIALI (per percorso)
 
 ### 3.1 Scopo
-Gli assessment LITE servono a:
+Gli assessment iniziali servono a:
 - Creare il **radar iniziale** dell'utente
 - Identificare **aree di leva** per personalizzazione esercizi
 - Fornire **punto di partenza** misurabile
@@ -173,7 +173,7 @@ function proponiEsercizio(utente) {
 ### 5.1 Prerequisiti
 - Abbonamento Mentor attivo (€490/anno)
 - **Tutti e 3 i percorsi completati**
-- Assessment LITE di tutti e 3 i percorsi superati
+- Assessment iniziale di tutti e 3 i percorsi superati
 
 ### 5.2 Scopo
 L'esame **NON è un voto** ma una **verifica di comprensione reale**.
@@ -272,7 +272,7 @@ La certificazione attesta che il Mentor:
 │   └── /microfelicita (se acquistato)
 │
 ├── 📈 /assessment
-│   ├── Assessment LITE disponibili
+│   ├── Assessment iniziale disponibili
 │   ├── Risultati radar
 │   └── Esame Certificazione (se Mentor + 3 percorsi completati)
 │

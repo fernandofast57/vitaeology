@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.3
-**Ultimo aggiornamento:** 19 Gennaio 2026
+**Versione:** 2.4
+**Ultimo aggiornamento:** 20 Gennaio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -235,9 +235,15 @@ src/app/
 │   └── page.tsx                 # Dashboard principale
 │
 ├── assessment/
-│   └── lite/
-│       ├── page.tsx             # 72 domande scala 1-5
-│       └── results/page.tsx     # Risultati radar chart
+│   ├── leadership/
+│   │   ├── page.tsx             # 72 domande Leadership
+│   │   └── results/page.tsx     # Risultati radar chart
+│   ├── risolutore/
+│   │   ├── page.tsx             # 48 domande Risolutore
+│   │   └── results/page.tsx     # Risultati
+│   └── microfelicita/
+│       ├── page.tsx             # 47 domande Microfelicità
+│       └── results/page.tsx     # Risultati
 │
 ├── exercises/
 │   ├── page.tsx                 # Lista 52 esercizi
@@ -461,16 +467,22 @@ src/lib/
 
 ## SISTEMA ASSESSMENT
 
-### Assessment LITE
-- **72 domande** (3 per caratteristica × 24 caratteristiche)
+### 3 Assessment Indipendenti (per percorso)
+
+| Assessment | Domande | Percorso | Dimensioni |
+|------------|---------|----------|------------|
+| **Leadership** | 72 | Leadership Autentica | 24 caratteristiche (4 pilastri) |
+| **Risolutore** | 48 | Oltre gli Ostacoli | 3 Filtri (Pattern, Segnali, Risorse) |
+| **Microfelicità** | 47 | Microfelicità Digitale | 5 fasi R.A.D.A.R. |
+
 - **Scala 1-5:** Quasi mai → Costantemente
 - **Scoring:** Direct + Inverse
-- **Output:** Radar chart 4 pilastri + breakdown 24 caratteristiche
+- **Output:** Radar chart specifico per assessment
 
 ### Tabelle DB
-- `assessment_questions` (72/240 righe)
-- `user_assessments` (sessioni)
-- `user_answers` (risposte)
+- `assessment_questions_v2` (domande per assessment)
+- `user_assessments_v2` (sessioni con `assessment_type`)
+- `user_answers_v2` (risposte)
 - `characteristic_scores` (punteggi)
 
 ---
@@ -653,7 +665,7 @@ Per documentazione completa, consulta `/docs`:
 
 | Area | Status | File |
 |------|--------|------|
-| Assessment LITE (72 domande) | ✅ | `src/app/assessment/lite/` |
+| 3 Assessment (Leadership/Risolutore/Microfelicità) | ✅ | `src/app/assessment/[type]/` |
 | AI Coach Fernando + RAG | ✅ | `src/lib/ai-coach/` |
 | 52 Esercizi + Raccomandazioni | ✅ | `src/app/exercises/` |
 | 3 Challenge (7 giorni) A/B | ✅ | `src/app/challenge/` |

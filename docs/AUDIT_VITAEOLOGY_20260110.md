@@ -12,7 +12,7 @@
 | TypeScript | ✅ OK | Nessun errore di compilazione |
 | Build | ✅ OK | Build completato con successo |
 | AI Coach Fernando | ✅ OK | Struttura completa |
-| Assessment (3 tipi) | ✅ OK | Lite, Risolutore, Microfelicità |
+| Assessment (3 tipi) | ✅ OK | Leadership, Risolutore, Microfelicità |
 | Challenge (3 tipi) | ✅ OK | Leadership, Ostacoli, Microfelicità |
 | Discovery + Mini-Profilo | ✅ OK | Appena implementato |
 | Stripe Integration | ✅ OK | Checkout + Webhook |
@@ -96,12 +96,12 @@ src/components/ai-coach/
 ### 3 Assessment Implementati
 | Assessment | Domande | Dimensioni | Stato |
 |------------|---------|------------|-------|
-| Leadership LITE | 72 | 24 caratteristiche | ✅ |
+| Leadership | 72 | 24 caratteristiche | ✅ |
 | Risolutore | 47 | 3 filtri | ✅ |
 | Microfelicità | 48 | 5 R.A.D.A.R. | ✅ |
 
 ### API per Assessment
-- `/api/assessment/questions` - Domande LITE
+- `/api/assessment/questions` - Domande Leadership
 - `/api/assessment/session` - Crea sessione
 - `/api/assessment/answer` - Salva risposta
 - `/api/assessment/complete` - Completa

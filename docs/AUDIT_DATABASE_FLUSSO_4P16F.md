@@ -35,7 +35,7 @@
 ### Assessment System
 | Tabella | Status | Descrizione |
 |---------|--------|-------------|
-| `assessment_questions` | ✅ | 72/240 domande |
+| `assessment_questions` | ✅ | 167 domande (72+48+47) |
 | `user_assessments` | ✅ | Sessioni assessment |
 | `user_answers` | ✅ | Risposte utente |
 | `characteristic_scores` | ✅ | Punteggi caratteristiche |
@@ -181,7 +181,7 @@ POST /api/assessment/complete
 │ - score_percentage calcolato        │
 └─────────────────────────────────────┘
     ↓
-[Redirect a /assessment/lite/results]
+[Redirect a /assessment/leadership/results]
 ```
 
 ### STOP 3: Exercise Complete

@@ -51,7 +51,7 @@
 | Componente | Stato | Dettagli |
 |------------|-------|----------|
 | **Challenge 7 giorni** | ✅ 100% | 3 percorsi, A/B testing, email automation |
-| **Assessment** | ✅ 100% | 3 tipi (LITE 72, Risolutore 48, Microfelicità 47) |
+| **Assessment** | ✅ 100% | 3 tipi (Leadership 72, Risolutore 48, Microfelicità 47) |
 | **Esercizi** | ⚠️ 83% | 52 in DB, frontend incompleto |
 
 ### 2.2 P2 - PRODOTTO GENERATO (Output utente)

@@ -594,7 +594,7 @@ Scrivi i tuoi 3:
 Quello che hai fatto questa settimana è solo l'inizio. In realtà esistono 24 capacità che caratterizzano chi è un punto di riferimento naturale per gli altri. Lucidità, Coraggio, Equilibrio sono solo 3 di esse.
 
 Su Vitaeology puoi:
-- Fare un **test completo** (240 domande) che mappa tutte le 24 capacità — per vedere dove già operi bene e dove puoi espanderti
+- Fare un **test completo** (72 domande) che mappa tutte le 24 capacità — per vedere dove già operi bene e dove puoi espanderti
 - Usare un **assistente personale** che ti aiuta ad applicare quello che impari alle tue situazioni specifiche
 - Seguire **52 esercizi settimanali** — uno per ogni settimana dell'anno — per espandere gradualmente
 - Vedere un **grafico dei tuoi progressi** nel tempo

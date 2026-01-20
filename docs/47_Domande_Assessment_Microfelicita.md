@@ -228,5 +228,5 @@ Ogni caratteristica misurata corrisponde a capitoli specifici:
 
 ### Tempo di Completamento Stimato
 - 47 domande × 8 secondi media = ~6-7 minuti
-- Più breve dell'Assessment Leadership (240 domande, ~25 min)
+- Più breve dell'Assessment Leadership (72 domande, ~10 min)
 - Allineato con Assessment Risolutore (48 domande, ~7 min)

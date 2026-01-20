@@ -334,7 +334,7 @@ Hai gli strumenti. Puoi applicarli quando vuoi. Nessun obbligo, nessun costo.
 2. APPROFONDISCI
 Se vuoi una mappa più completa, ho creato qualcosa per te.
 
-È un test di 240 domande che misura 24 capacità di leadership.
+È un test di 72 domande che misura 24 capacità di leadership.
 
 Non ti dice cosa TI MANCA. Ti dice cosa HAI GIÀ — e dove puoi espanderti di più.
 
@@ -1115,7 +1115,7 @@ Grazie per aver fatto questo percorso con me.
 
 | Challenge | CTA Principale |
 |-----------|----------------|
-| **Leadership** | Assessment Leadership Autentica (240 domande, 24 capacità) |
+| **Leadership** | Assessment Leadership Autentica (72 domande, 24 capacità) |
 | **Ostacoli** | Assessment Risolutore (3 Filtri, 3 Traditori, Scala Risolutore) |
 | **Microfelicità** | Piano autonomo 21 giorni (nessun assessment esplicito) |
 

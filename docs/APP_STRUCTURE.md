@@ -30,8 +30,8 @@
 | `/admin/performance` | Client | 🔒 | Metriche performance sistema |
 | `/admin/quality-audit` | Client | 🔒 | Audit qualità risposte AI (7 score: 4 principi + 3 comprensione) |
 | `/admin/users` | Client | 🔒 | Gestione utenti e ruoli |
-| `/assessment/lite` | Client | 🌐 | Assessment Leadership 72 domande |
-| `/assessment/lite/results` | Client | 🌐 | Risultati assessment Leadership |
+| `/assessment/leadership` | Client | 🌐 | Assessment Leadership 72 domande |
+| `/assessment/leadership/results` | Client | 🌐 | Risultati assessment Leadership |
 | `/assessment/microfelicita` | Client | 🌐 | Assessment Microfelicità 47 domande |
 | `/assessment/microfelicita/results` | Client | 🌐 | Risultati assessment Microfelicità |
 | `/assessment/risolutore` | Client | 🌐 | Assessment Risolutore 47 domande |
@@ -397,7 +397,7 @@
 ### 2. Assessment
 
 ```
-/assessment/lite              → Assessment Leadership (72 domande)
+/assessment/leadership        → Assessment Leadership (72 domande)
 /assessment/risolutore        → Assessment Risolutore (47 domande)
 /assessment/microfelicita     → Assessment Microfelicità (47 domande)
     ↓ POST /api/assessment/[type]/session
@@ -469,4 +469,4 @@ Risposta AI Coach
 
 ---
 
-*Documentazione generata automaticamente - Ultimo update: 17/01/2026*
+*Documentazione generata automaticamente - Ultimo update: 20/01/2026*

@@ -43,7 +43,7 @@ Vitaeology ha **3 percorsi paralleli** (Leadership Autentica, Oltre gli Ostacoli
 
 **Contenuti:**
 - Challenge 7 giorni (gradiente -7 → -2)
-- Assessment LITE 72 domande (4 pilastri, 24 caratteristiche)
+- Assessment Leadership 72 domande (4 pilastri, 24 caratteristiche)
 - Libro "Leadership Autentica" (350+ pagine)
 - 52 esercizi settimanali (focus identità)
 - AI Coach Fernando (RAG 261 chunks)
@@ -51,7 +51,7 @@ Vitaeology ha **3 percorsi paralleli** (Leadership Autentica, Oltre gli Ostacoli
 
 **Pricing:**
 - Challenge: Gratuito
-- Assessment LITE: Gratuito
+- Assessment Leadership: Gratuito
 - Libro: €9.90
 - Subscription Leader: €149/anno
 - Subscription Mentor: €490/anno
@@ -128,7 +128,7 @@ Landing Page Challenge Leadership
     ↓
 Challenge 7 giorni (gratuito)
     ↓ (40% completion)
-Assessment LITE 72 domande (gratuito)
+Assessment Leadership 72 domande (gratuito)
     ↓ (10% conversion)
 Libro Leadership €9.90
     ↓ (20% conversion)
@@ -768,7 +768,7 @@ Ti aspetto.
 
 **Metriche:**
 - 500 challenge completati
-- 200 assessment LITE
+- 200 assessment Leadership
 - 50 libri venduti
 - 10 subscription Leader 1 percorso
 

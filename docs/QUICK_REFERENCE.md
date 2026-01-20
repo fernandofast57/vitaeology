@@ -46,8 +46,9 @@ src/config/pricing.ts       # Config prezzi
 |--------|-----|
 | Homepage | `/` |
 | Dashboard | `/dashboard` |
-| Assessment LITE | `/assessment/lite` |
-| Risultati | `/assessment/lite/results` |
+| Assessment Leadership | `/assessment/leadership` |
+| Assessment Risolutore | `/assessment/risolutore` |
+| Assessment Microfelicità | `/assessment/microfelicita` |
 | Esercizi | `/exercises` |
 | Challenge Leadership | `/challenge/leadership` |
 | Challenge Ostacoli | `/challenge/ostacoli` |
@@ -97,7 +98,7 @@ Gold (Accent):     #F4B942
 |---------|-------|-----|
 | `profiles` | N utenti | Profili utente |
 | `characteristics` | 24 | Caratteristiche leadership |
-| `assessment_questions` | 240/72 | Domande assessment |
+| `assessment_questions` | 167 | Domande assessment (72+48+47) |
 | `exercises` | 52 | Esercizi settimanali |
 | `ai_coach_conversations` | N | Storico chat AI |
 | `challenge_subscribers` | N | Iscritti challenge |
@@ -151,4 +152,4 @@ NEXT_PUBLIC_APP_URL
 
 ---
 
-*Ultimo aggiornamento: 17 Gennaio 2026*
+*Ultimo aggiornamento: 20 Gennaio 2026*

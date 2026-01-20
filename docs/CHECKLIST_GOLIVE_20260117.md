@@ -88,7 +88,7 @@
 ### 3.1 P1 - SISTEMA: Assessment
 | Task | Status | Note |
 |------|--------|------|
-| 72 domande Leadership LITE | ✅ | assessment_questions |
+| 72 domande Leadership | ✅ | assessment_questions |
 | 48 domande Risolutore | ✅ | Implementato |
 | 47 domande Microfelicità | ✅ | Implementato |
 | Sessione salvataggio | ✅ | user_assessments |

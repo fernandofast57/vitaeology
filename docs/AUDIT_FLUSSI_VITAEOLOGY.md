@@ -115,7 +115,7 @@ STOP: Utente con mini-profilo completato
 ### Handoff alla Fine
 | Next Step | Destinazione | Status |
 |-----------|--------------|--------|
-| Assessment Leadership | `/assessment/lite` | ✅ |
+| Assessment Leadership | `/assessment/leadership` | ✅ |
 | Assessment Risolutore | `/assessment/risolutore` | ✅ |
 | Assessment Microfelicità | `/assessment/microfelicita` | ✅ |
 | Esercizi | `/exercises` | ✅ |
@@ -190,7 +190,7 @@ STOP: Utente Leader con accesso completo
 START: Utente accede all'Assessment
   ↓
 3 Assessment disponibili:
-  ├─ Leadership LITE (/assessment/lite) - 72 domande
+  ├─ Leadership (/assessment/leadership) - 72 domande
   ├─ Risolutore (/assessment/risolutore) - 47 domande
   └─ Microfelicità (/assessment/microfelicita) - 48 domande
   ↓
@@ -220,7 +220,7 @@ STOP: Utente con mappa leadership completa
 ### Assessment Disponibili
 | Assessment | URL | Domande | Output |
 |------------|-----|---------|--------|
-| Leadership LITE | `/assessment/lite` | 72 | Radar 4 pilastri + 24 caratteristiche |
+| Leadership | `/assessment/leadership` | 72 | Radar 4 pilastri + 24 caratteristiche |
 | Risolutore | `/assessment/risolutore` | 47 | 3 filtri percezione |
 | Microfelicità | `/assessment/microfelicita` | 48 | 5 fasi R.A.D.A.R. |
 
@@ -379,7 +379,7 @@ Nessuno.
 ### Da Challenge Complete a...
 | Destinazione | Link | Status |
 |--------------|------|--------|
-| Assessment LITE | `/assessment/lite` | ✅ |
+| Assessment Leadership | `/assessment/leadership` | ✅ |
 | Assessment Risolutore | `/assessment/risolutore` | ✅ |
 | Assessment Microfelicità | `/assessment/microfelicita` | ✅ |
 | Esercizi | `/exercises` | ✅ |

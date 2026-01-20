@@ -58,10 +58,10 @@
 
 | Prodotto | Tipo | Assessment Sbloccato |
 |----------|------|---------------------|
-| Libro "Leadership Autentica" | `leadership` | `lite` (72 domande) |
+| Libro "Leadership Autentica" | `leadership` | `leadership` (72 domande) |
 | Libro "Oltre gli Ostacoli" | `risolutore` | `risolutore` (48 domande) |
 | Libro "Microfelicità Digitale" | `microfelicita` | `microfelicita` (47 domande) |
-| Challenge "Leadership Autentica" | `leadership-autentica` | `lite` |
+| Challenge "Leadership Autentica" | `leadership-autentica` | `leadership` |
 | Challenge "Oltre gli Ostacoli" | `oltre-ostacoli` | `risolutore` |
 | Challenge "Microfelicità" | `microfelicita` | `microfelicita` |
 | Subscription Leader/Mentor | - | **TUTTI** |
@@ -88,8 +88,8 @@
 
 | Componente | File | Stato |
 |------------|------|-------|
-| **Assessment LITE** | `src/app/api/assessment/session/route.ts` | ✅ |
-| **UI blocco LITE** | `src/app/assessment/lite/page.tsx` | ✅ |
+| **Assessment Leadership** | `src/app/api/assessment/session/route.ts` | ✅ |
+| **UI blocco Leadership** | `src/app/assessment/leadership/page.tsx` | ✅ |
 | **AI Coach limite msg** | `sql/ai-coach-daily-usage.sql` + `/api/ai-coach/route.ts` | ✅ |
 | **Esercizi per tier** | `src/app/exercises/page.tsx` + `[exerciseId]/page.tsx` | ✅ |
 
@@ -106,7 +106,7 @@
 ### Assessment
 
 ```
-ASSESSMENT LITE (Leadership):
+ASSESSMENT LEADERSHIP:
 ├── Explorer SENZA sblocco → ❌ Bloccato (CTA: libro/challenge)
 ├── Explorer CON sblocco (libro/challenge) → ✅ Accesso
 ├── Leader → ✅ Accesso (subscription include tutto)
@@ -146,9 +146,9 @@ Mentor: 52 esercizi + contenuti avanzati
 
 ## AZIONI COMPLETATE (28 Dicembre 2024)
 
-### ✅ 1. Assessment LITE Protetto
+### ✅ 1. Assessment Leadership Protetto
 - `src/app/api/assessment/session/route.ts` - Aggiunto controllo accesso con `checkAssessmentAccess()`
-- `src/app/assessment/lite/page.tsx` - Aggiunta UI ACCESS_DENIED con CTA libro/challenge
+- `src/app/assessment/leadership/page.tsx` - Aggiunta UI ACCESS_DENIED con CTA libro/challenge
 
 ### ✅ 2. Limite AI Coach Implementato
 - `sql/ai-coach-daily-usage.sql` - Tabella e funzioni PostgreSQL per tracking
@@ -182,4 +182,4 @@ Mentor: 52 esercizi + contenuti avanzati
 
 ---
 
-*Ultimo aggiornamento: 17 Gennaio 2026 - Value Ladder completo, RAG aggiornato (966 chunks)*
+*Ultimo aggiornamento: 20 Gennaio 2026 - Assessment rinominato da 'lite' a 'leadership'*

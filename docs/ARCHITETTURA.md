@@ -61,7 +61,7 @@
 | Percorso | Componente | Descrizione |
 |----------|------------|-------------|
 | `/dashboard/page.tsx` | DashboardPage | Dashboard principale con raccomandazioni |
-| `/test/page.tsx` | TestPage | Assessment 240 domande |
+| `/test/page.tsx` | TestPage | Pagina test sviluppo |
 | `/results/page.tsx` | ResultsPage | Risultati assessment con radar chart |
 | `/exercises/page.tsx` | ExercisesPage | Lista 52 esercizi |
 | `/exercises/[exerciseId]/page.tsx` | ExerciseDetailPage | Dettaglio singolo esercizio |
@@ -189,7 +189,7 @@
 | `profiles` | Profili utente (extends auth.users) |
 | `books` | Libri/corsi disponibili |
 | `characteristics` | 24 caratteristiche leadership |
-| `assessment_questions` | 240 domande assessment |
+| `assessment_questions` | 167 domande (3 assessment) |
 | `user_assessments` | Sessioni assessment utenti |
 | `user_answers` | Risposte utenti |
 | `characteristic_scores` | Punteggi per caratteristica |
@@ -295,7 +295,7 @@ Route accessibili da dashboard:
 ## ✅ FUNZIONALITÀ COMPLETE
 
 ### Assessment
-- [x] Assessment 240 domande con salvataggio progressi
+- [x] 3 Assessment (167 domande totali) con salvataggio progressi
 - [x] Calcolo punteggi per 24 caratteristiche
 - [x] Calcolo punteggi per 4 pillar (ESSERE, SENTIRE, PENSARE, AGIRE)
 - [x] Radar chart risultati
@@ -400,7 +400,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 ```
 
 ### Limiti e Soglie
-- Assessment: 240 domande
+- Assessment: 167 domande (72+48+47)
 - Esercizi: 52 totali
 - Caratteristiche: 24 (6 per pillar)
 - Response time target: P90 < 5s

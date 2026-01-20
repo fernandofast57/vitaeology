@@ -641,7 +641,7 @@ Hai due opzioni:
    Se vuoi una mappa più completa,
    ho creato qualcosa per te.
 
-   È un test di 240 domande 
+   È un test di 72 domande
    che misura 24 capacità di leadership.
 
    Non ti dice cosa TI MANCA.

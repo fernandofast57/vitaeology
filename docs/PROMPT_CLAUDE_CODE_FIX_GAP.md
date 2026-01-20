@@ -139,7 +139,7 @@ Testa con: stripe trigger checkout.session.completed --add checkout_session:meta
 ### Prompt 2.1 - Aggiungi CTA Fernando in Results
 
 ```
-Modifica src/app/assessment/lite/results/page.tsx per aggiungere la CTA "Parla con Fernando".
+Modifica src/app/assessment/leadership/results/page.tsx per aggiungere la CTA "Parla con Fernando".
 
 Trova la sezione con i bottoni/CTA esistenti (dovrebbero esserci "Vai alla Dashboard" e "Esplora Esercizi").
 

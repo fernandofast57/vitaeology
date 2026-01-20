@@ -92,12 +92,14 @@ Ogni fase ha touchpoint specifici, trigger di avanzamento e metriche di successo
 - **Quiz discovery:** Mappare fonti felicità quotidiana
 - **Obiettivo:** Sviluppare consapevolezza presente
 
-### Opzione B: Assessment LITE Gratuito
+### Opzione B: Assessment (sbloccato da Challenge/Libro)
 
-- **72 domande** (3 per caratteristica)
-- **Tempo:** 10 minuti
-- **Output:** Radar chart 4 pilastri (punteggio 0-100)
-- **CTA:** "Vuoi il profilo completo? Upgrade a FULL (240 domande)"
+Ogni percorso ha il suo assessment dedicato:
+- **Leadership:** 72 domande (24 caratteristiche × 3)
+- **Risolutore:** 48 domande (3 Filtri)
+- **Microfelicità:** 47 domande (5 fasi R.A.D.A.R.)
+
+**Output:** Radar chart specifico per percorso
 
 ### Opzione C: Acquisto Libro Singolo
 
@@ -133,12 +135,11 @@ Ogni fase ha touchpoint specifici, trigger di avanzamento e metriche di successo
 
 #### **EXPLORER (€0/anno)** - Free Forever
 **Incluso:**
-- ✅ Assessment LITE (72 domande)
+- ✅ Assessment sbloccati (da libro/challenge)
 - ✅ 5 messaggi AI Coach/giorno
 - ✅ 10 esercizi base
 - ✅ Dashboard progressi base
-- ❌ Assessment FULL
-- ❌ 52 esercizi settimanali
+- ❌ Tutti gli esercizi settimanali
 - ❌ AI illimitato
 
 **Target:** Lead nurturing, freemium hook
@@ -150,7 +151,7 @@ Ogni fase ha touchpoint specifici, trigger di avanzamento e metriche di successo
 - ✅ Tutto Explorer +
 - ✅ **52 esercizi settimanali** (uno/settimana tutto l'anno)
 - ✅ **AI Coach illimitato** (chat senza limiti)
-- ✅ **Assessment FULL** (240 domande, radar chart completo)
+- ✅ **Tutti gli Assessment** (Leadership, Risolutore, Microfelicità)
 - ✅ Tracking progressi avanzato
 - ✅ Export PDF risultati
 - ❌ Percorsi libro integrati
@@ -239,24 +240,21 @@ Ogni fase ha touchpoint specifici, trigger di avanzamento e metriche di successo
 
 ### Servizi Disponibili (in base al tier)
 
-#### **1. ASSESSMENT**
+#### **1. ASSESSMENT (3 per Percorso)**
 
-**LITE (72 domande):**
-- 3 domande per caratteristica
-- Tempo: 10 minuti
-- Output: Radar chart 4 pilastri
-- Disponibile: Tutti i tier
+| Assessment | Domande | Percorso | Dimensioni |
+|------------|---------|----------|------------|
+| **Leadership** | 72 | Leadership Autentica | 24 caratteristiche (4 pilastri) |
+| **Risolutore** | 48 | Oltre gli Ostacoli | 3 Filtri |
+| **Microfelicità** | 47 | Microfelicità Digitale | 5 fasi R.A.D.A.R. |
 
-**FULL (240 domande):**
-- 10 domande per caratteristica
-- Tempo: 25 minuti
-- Output: Radar chart dettagliato + report PDF
-- Disponibile: Leader, Mentor, Mastermind, Consulente
+**Sblocco:**
+- Explorer: Assessment sbloccato da libro/challenge corrispondente
+- Leader/Mentor/Mastermind: Tutti gli assessment sbloccati
 
 **Funzionalità:**
 - Salvataggio progressi (riprendi dopo)
 - Confronto nel tempo (re-test ogni 3-6 mesi)
-- Benchmark settore (anonimo)
 - Export PDF risultati
 
 ---
@@ -726,14 +724,14 @@ Dashboard aggiornato               Diventa cliente attivo
 - [ ] Testare automation end-to-end
 
 **Settimana 5-6: Assessment + Dashboard**
-- [ ] Implementare assessment LITE (72 domande)
+- [ ] Implementare assessment Leadership (72 domande)
 - [ ] Generare radar chart (Chart.js)
 - [ ] Creare dashboard base
 - [ ] Testare con 10 beta user
 
 **Settimana 7-8: Lancio Soft**
 - [ ] Challenge 2 e 3 (copy + pagine)
-- [ ] Assessment FULL (240 domande)
+- [ ] Assessment Risolutore e Microfelicità
 - [ ] AI Coach (integrazione LLM)
 - [ ] Lancio a 100 utenti beta
 
@@ -767,7 +765,7 @@ Dashboard aggiornato               Diventa cliente attivo
 - [ ] Tutte le 5 fasi documentate e approvate
 - [ ] Pricing tier definiti e testati (Stripe)
 - [ ] Challenge 1 completa (7 email + 7 pagine + 21 quiz)
-- [ ] Assessment LITE funzionante (72 domande + radar chart)
+- [ ] Assessment Leadership funzionante (72 domande + radar chart)
 - [ ] Dashboard base con metriche chiave
 - [ ] Email automation testata end-to-end
 - [ ] Analytics configurato (Google Analytics + Mixpanel)
@@ -787,4 +785,4 @@ Dashboard aggiornato               Diventa cliente attivo
 
 ---
 
-**Flusso Vitaeology creato per Fernando Marongiu — Dicembre 2025**
+**Flusso Vitaeology creato per Fernando Marongiu — Aggiornato Gennaio 2026**

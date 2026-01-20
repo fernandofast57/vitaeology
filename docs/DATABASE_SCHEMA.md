@@ -158,7 +158,7 @@ CREATE TABLE characteristics (
 
 ### 5. assessment_questions
 
-240 domande (72 per versione LITE).
+167 domande totali (72 Leadership + 48 Risolutore + 47 Microfelicità).
 
 ```sql
 CREATE TABLE assessment_questions (
@@ -175,15 +175,17 @@ CREATE TABLE assessment_questions (
   order_index INTEGER,
   code TEXT,  -- es: L01, R15
 
-  -- Versione
-  assessment_version TEXT DEFAULT 'full',  -- full, lite
+  -- Tipo Assessment
+  assessment_type TEXT DEFAULT 'leadership',  -- leadership, risolutore, microfelicita
 
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 240 righe (10 per caratteristica × 24 caratteristiche)
--- LITE: 72 righe (3 per caratteristica × 24 caratteristiche)
+-- 167 righe totali:
+-- Leadership: 72 (3 × 24 caratteristiche)
+-- Risolutore: 48 (3 Filtri)
+-- Microfelicità: 47 (5 fasi R.A.D.A.R.)
 ```
 
 ---
