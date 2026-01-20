@@ -256,7 +256,7 @@ export class ExerciseRecommendationService {
   private async getLeadershipScores(userId: string): Promise<DimensionScore[]> {
     // Trova l'assessment completato più recente
     const { data: assessment } = await this.supabase
-      .from('user_assessments')
+      .from('user_assessments_v2')
       .select('id')
       .eq('user_id', userId)
       .eq('status', 'completed')
@@ -270,7 +270,7 @@ export class ExerciseRecommendationService {
 
     // Carica caratteristiche
     const { data: characteristics } = await this.supabase
-      .from('characteristics')
+      .from('characteristics_v2')
       .select('id, slug, name_familiar, name_barrios, pillar')
       .eq('is_active', true);
 
@@ -280,11 +280,11 @@ export class ExerciseRecommendationService {
 
     // Carica risposte con domande
     const { data: answers } = await this.supabase
-      .from('user_answers')
+      .from('user_assessment_answers_v2')
       .select(`
         question_id,
-        points_earned,
-        assessment_questions (
+        normalized_score,
+        assessment_questions_v2 (
           characteristic_id
         )
       `)
@@ -298,12 +298,12 @@ export class ExerciseRecommendationService {
     const scoresByChar: Record<number, { points: number; count: number }> = {};
 
     answers.forEach((answer: any) => {
-      const charId = answer.assessment_questions?.characteristic_id;
+      const charId = answer.assessment_questions_v2?.characteristic_id;
       if (charId) {
         if (!scoresByChar[charId]) {
           scoresByChar[charId] = { points: 0, count: 0 };
         }
-        scoresByChar[charId].points += answer.points_earned || 0;
+        scoresByChar[charId].points += answer.normalized_score || 0;
         scoresByChar[charId].count += 1;
       }
     });

@@ -104,9 +104,9 @@ export async function getUserContext(
   let assessmentScores: Record<string, number> = {};
 
   if (pathType === 'leadership') {
-    // Per leadership, recupera da user_assessments + user_answers
+    // Per leadership, recupera da user_assessments_v2 + user_assessment_answers_v2
     const { data: assessment } = await supabase
-      .from('user_assessments')
+      .from('user_assessments_v2')
       .select('id')
       .eq('user_id', userId)
       .eq('status', 'completed')
@@ -116,25 +116,25 @@ export async function getUserContext(
 
     if (assessment) {
       const { data: characteristics } = await supabase
-        .from('characteristics')
+        .from('characteristics_v2')
         .select('id, name_familiar')
         .eq('is_active', true);
 
       const { data: answers } = await supabase
-        .from('user_answers')
+        .from('user_assessment_answers_v2')
         .select(`
-          points_earned,
-          assessment_questions (characteristic_id)
+          normalized_score,
+          assessment_questions_v2 (characteristic_id)
         `)
         .eq('assessment_id', assessment.id);
 
       if (characteristics && answers) {
         const scoresByChar: Record<number, { points: number; count: number }> = {};
         answers.forEach((answer: any) => {
-          const charId = answer.assessment_questions?.characteristic_id;
+          const charId = answer.assessment_questions_v2?.characteristic_id;
           if (charId) {
             if (!scoresByChar[charId]) scoresByChar[charId] = { points: 0, count: 0 };
-            scoresByChar[charId].points += answer.points_earned;
+            scoresByChar[charId].points += answer.normalized_score;
             scoresByChar[charId].count += 1;
           }
         });

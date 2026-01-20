@@ -185,10 +185,10 @@ export default function ResultsPage() {
 
         // Carica assessment completato
         const { data: assessment, error: assessmentError } = await supabase
-          .from('user_assessments')
+          .from('user_assessments_v2')
           .select('*')
           .eq('user_id', user.id)
-          .eq('book_id', 1)
+          .eq('assessment_type', 'lite')
           .eq('status', 'completed')
           .order('completed_at', { ascending: false })
           .limit(1)
@@ -205,10 +205,10 @@ export default function ResultsPage() {
 
         // Carica caratteristiche
         const { data: characteristics } = await supabase
-          .from('characteristics')
+          .from('characteristics_v2')
           .select('*')
           .eq('is_active', true)
-          .order('sort_order', { ascending: true })
+          .order('pillar_order', { ascending: true })
 
         if (!characteristics) {
           setError('Errore nel caricamento delle caratteristiche')
@@ -218,12 +218,12 @@ export default function ResultsPage() {
 
         // Carica risposte con domande
         const { data: answers } = await supabase
-          .from('user_answers')
+          .from('user_assessment_answers_v2')
           .select(`
             question_id,
-            answer,
-            points_earned,
-            assessment_questions (
+            raw_score,
+            normalized_score,
+            assessment_questions_v2 (
               id,
               characteristic_id,
               scoring_type
@@ -239,14 +239,14 @@ export default function ResultsPage() {
 
         // Calcola punteggi per caratteristica
         const scoresByCharacteristic: Record<number, { points: number; count: number }> = {}
-        
+
         answers.forEach((answer: any) => {
-          const charId = answer.assessment_questions?.characteristic_id
+          const charId = answer.assessment_questions_v2?.characteristic_id
           if (charId) {
             if (!scoresByCharacteristic[charId]) {
               scoresByCharacteristic[charId] = { points: 0, count: 0 }
             }
-            scoresByCharacteristic[charId].points += answer.points_earned
+            scoresByCharacteristic[charId].points += answer.normalized_score
             scoresByCharacteristic[charId].count += 1
           }
         })

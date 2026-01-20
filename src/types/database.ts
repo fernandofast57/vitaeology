@@ -45,7 +45,7 @@ export interface Characteristic {
   created_at: string
 }
 
-// Assessment Question
+// Assessment Question (DEPRECATED - usa AssessmentQuestionV2)
 export interface AssessmentQuestion {
   id: number
   book_id: number
@@ -56,7 +56,21 @@ export interface AssessmentQuestion {
   created_at: string
 }
 
-// User Assessment (test session)
+// Assessment Question V2 (ATTIVO - tabella: assessment_questions_v2)
+export interface AssessmentQuestionV2 {
+  id: number
+  characteristic_id: number
+  code: string
+  question_text: string
+  question_type: 'passive' | 'interlocutory' | 'active' | 'standard'
+  scoring_type: ScoringType
+  order_index: number
+  is_lite: boolean
+  is_active: boolean
+  created_at: string
+}
+
+// User Assessment (DEPRECATED - usa UserAssessmentV2)
 export interface UserAssessment {
   id: string
   user_id: string
@@ -68,13 +82,35 @@ export interface UserAssessment {
   created_at: string
 }
 
-// User Answer
+// User Assessment V2 (ATTIVO - tabella: user_assessments_v2)
+export interface UserAssessmentV2 {
+  id: string
+  user_id: string
+  assessment_type: 'lite' | 'full'
+  status: 'in_progress' | 'completed' | 'abandoned'
+  current_question_index: number
+  started_at: string
+  completed_at: string | null
+  created_at: string
+}
+
+// User Answer (DEPRECATED - usa UserAssessmentAnswerV2)
 export interface UserAnswer {
   id: string
   assessment_id: string
   question_id: number
   answer: AnswerType
   points_earned: number
+  answered_at: string
+}
+
+// User Assessment Answer V2 (ATTIVO - tabella: user_assessment_answers_v2)
+export interface UserAssessmentAnswerV2 {
+  id: string
+  assessment_id: string
+  question_id: number
+  raw_score: number
+  normalized_score: number
   answered_at: string
 }
 
