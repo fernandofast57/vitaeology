@@ -4,13 +4,8 @@ import { useState, useEffect } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
-// ============================================================================
-// CONFIGURAZIONE TALLY.SO
-// Sostituire XXXXXX con l'ID del form Tally
-// Per ottenere l'ID: crea un form su tally.so e copia l'ID dall'URL
-// Esempio: https://tally.so/r/ABC123 → ID = ABC123
-// ============================================================================
-const TALLY_FORM_URL = 'https://tally.so/r/XXXXXX';
+// Tally.so form per raccolta feedback in-app
+const TALLY_FORM_URL = 'https://tally.so/r/dW0BxA';
 
 interface FeedbackWidgetProps {
   // Se true, mostra sempre il widget (per testing)

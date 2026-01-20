@@ -159,55 +159,17 @@ export default function BetaPage() {
 
           {/* Google Form Embed */}
           <div className="p-6 lg:p-8">
-            {/*
-              =========================================================
-              ISTRUZIONI PER ATTIVARE IL FORM:
-
-              1. Crea un Google Form con queste domande suggerite:
-                 - Nome e cognome
-                 - Email
-                 - Ruolo professionale
-                 - Perché vuoi diventare Founding Tester?
-                 - Quante ore/settimana puoi dedicare al testing?
-                 - Hai esperienza con piattaforme di leadership/crescita?
-
-              2. Vai su Invia > Incorpora (</>)
-              3. Copia l'URL src dell'iframe
-              4. Sostituisci YOUR_GOOGLE_FORM_ID con il tuo ID
-
-              Esempio URL: https://docs.google.com/forms/d/e/1FAIpQ.../viewform
-              =========================================================
-            */}
-
-            {/* Placeholder - Sostituire con iframe reale */}
-            <div className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 p-8 lg:p-12">
-              <div className="text-center max-w-md mx-auto">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Form da configurare</h3>
-                <p className="text-gray-500 text-sm mb-6">
-                  Sostituisci questo placeholder con l&apos;iframe del Google Form.
-                </p>
-                <div className="bg-white rounded-lg p-4 border border-gray-200 text-left">
-                  <code className="text-xs text-gray-600 block overflow-x-auto whitespace-pre">
-{`<iframe
-  src="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform?embedded=true"
-  width="100%"
-  height="800"
-  frameBorder="0"
-  marginHeight={0}
-  marginWidth={0}
-  className="rounded-lg"
->
-  Caricamento...
-</iframe>`}
-                  </code>
-                </div>
-              </div>
-            </div>
+            {/* Google Form iframe */}
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSe9Vk4pOIv_2Ii9TRWtpA6O6LMInf7E9yRS-8hWiWSK76txBA/viewform?embedded=true"
+              width="100%"
+              height="800"
+              frameBorder={0}
+              className="rounded-lg w-full"
+              title="Form Candidatura Founding Tester"
+            >
+              Caricamento...
+            </iframe>
 
             {/* Alternativa: Link diretto */}
             <div className="mt-8 text-center">
@@ -215,7 +177,7 @@ export default function BetaPage() {
                 Preferisci compilare il form in una nuova finestra?
               </p>
               <a
-                href="https://docs.google.com/forms/d/e/YOUR_GOOGLE_FORM_ID/viewform"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSe9Vk4pOIv_2Ii9TRWtpA6O6LMInf7E9yRS-8hWiWSK76txBA/viewform"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-petrol-600 text-white font-medium rounded-lg hover:bg-petrol-700 transition-colors"
