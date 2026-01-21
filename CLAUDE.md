@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.4
-**Ultimo aggiornamento:** 20 Gennaio 2026
+**Versione:** 2.7
+**Ultimo aggiornamento:** 21 Gennaio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -213,6 +213,287 @@ NO opzioni multiple che creano incertezza decisionale.
 STOP: Assessment Results
   ❌ "Parla con Fernando dei tuoi risultati" (ambiguo)
   ✅ "Inizia l'Esercizio per la tua Area di Crescita" (azione chiara)
+```
+
+---
+
+### 5. Framework Verifica Comprensione (FORMAZIONE)
+
+> **Principio:** Se l'esame finale verifica comprensione a 3 livelli, TUTTO il percorso formativo deve preparare a quei livelli fin dall'inizio.
+
+#### Le 3 Barriere alla Comprensione (da prevenire SEMPRE)
+
+| Barriera | Significato | Come Prevenire |
+|----------|-------------|----------------|
+| **Parola mal compresa** | L'utente non capisce un termine | Spiegare OGNI termine non comune immediatamente |
+| **Mancanza di concretezza** | Concetti astratti senza esempi | SEMPRE esempi dalla vita reale dell'imprenditore |
+| **Gradiente saltato** | Passaggi logici mancanti | Progressione graduale, mai saltare step |
+
+#### I 3 Livelli di Comprensione (da costruire in OGNI contenuto)
+
+| Livello | Cosa Insegna | Domanda di Verifica | Applicazione |
+|---------|--------------|---------------------|--------------|
+| **DATI STABILI** | Il "COSA" - definizioni, regole, principi | "Cos'è [X]? Definiscilo con parole tue" | Ogni esercizio deve definire i concetti chiave |
+| **DOINGNESS** | Il "COME" - passi concreti, procedura | "Come si fa [X]? Descrivi i passi" | Ogni esercizio deve avere istruzioni step-by-step |
+| **TEORIA** | Il "PERCHÉ" - logica sottostante, scopo | "Perché funziona [X]?" | Ogni esercizio deve spiegare il razionale |
+
+#### Applicazione Pratica
+
+```
+⚠️ REGOLA: Ogni contenuto formativo (esercizio, challenge, assessment) deve:
+
+1. PREVENIRE le 3 barriere:
+   - Glossario/spiegazione termini integrata
+   - Esempi concreti per ogni concetto
+   - Progressione graduale verificabile
+
+2. COSTRUIRE i 3 livelli:
+   - Definire COSA si sta imparando (Dati Stabili)
+   - Mostrare COME si applica (Doingness)
+   - Spiegare PERCHÉ funziona (Teoria)
+
+3. VERIFICARE la comprensione:
+   - Domande di riflessione che testano i 3 livelli
+   - Deliverable che dimostrano applicazione pratica
+```
+
+#### Checklist per Ogni Contenuto Formativo
+
+- [ ] **Termini:** Tutti i termini non comuni sono spiegati?
+- [ ] **Esempi:** Ci sono esempi concreti dalla vita imprenditoriale?
+- [ ] **Gradualità:** La progressione è logica e senza salti?
+- [ ] **Dati Stabili:** L'utente saprà definire il concetto?
+- [ ] **Doingness:** L'utente saprà applicarlo passo per passo?
+- [ ] **Teoria:** L'utente capirà perché funziona?
+
+---
+
+### 6. Struttura Esercizio Vincolante (OBBLIGATORIA)
+
+> **⚠️ REGOLA INDEROGABILE:** Ogni esercizio DEVE seguire questa struttura. Esercizi che non rispettano questo schema NON possono essere pubblicati.
+
+#### Schema Completo Esercizio
+
+```typescript
+interface ExerciseComplete {
+  // === IDENTIFICAZIONE ===
+  id: string;
+  week_number: number;              // 1-52
+  title: string;                    // Titolo evocativo
+  subtitle: string;                 // Sottotitolo descrittivo
+  characteristic_slug: string;      // Collegamento a caratteristica
+
+  // === CATEGORIZZAZIONE ===
+  pillar: 'Vision' | 'Action' | 'Relations' | 'Adaptation';
+  exercise_type: 'riconoscimento' | 'espansione' | 'sfida' | 'integrazione';
+  difficulty_level: 'base' | 'intermedio' | 'avanzato';
+  quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  estimated_time_minutes: number;
+
+  // === PREVENZIONE 3 BARRIERE ===
+  glossary: {                       // BARRIERA 1: Parole mal comprese
+    term: string;
+    definition: string;
+    example: string;
+  }[];
+
+  concrete_examples: {              // BARRIERA 2: Mancanza concretezza
+    situation: string;              // Situazione riconoscibile
+    application: string;            // Come si applica
+  }[];
+
+  prerequisites: string[];          // BARRIERA 3: Gradiente saltato
+                                    // Lista di cosa l'utente deve già sapere
+
+  // === LIVELLO 1: DATI STABILI (COSA) ===
+  key_concepts: {
+    concept: string;                // Il concetto
+    definition: string;             // Definizione chiara
+    why_important: string;          // Perché è importante
+  }[];
+
+  // === LIVELLO 2: DOINGNESS (COME) ===
+  intro_validante: string;          // Intro che PRESUME la capacità esistente
+
+  phase_1_recognition: {            // Fase ESSERE
+    title: string;                  // "Riconoscimento - Chi Eri"
+    being_focus: string;            // Identità quando operi così
+    prompt: string;                 // "Quando hai già operato con [X]?"
+    instructions: string[];         // Passi concreti
+  };
+
+  phase_2_pattern: {                // Fase FARE
+    title: string;                  // "Pattern - Cosa Facevi"
+    doing_focus: string;            // Comportamento caratteristico
+    prompt: string;                 // "Cosa caratterizzava quei momenti?"
+    guiding_questions: string[];    // Domande guida
+  };
+
+  phase_3_expansion: {              // Fase AVERE
+    title: string;                  // "Espansione - Come Ricreare"
+    having_focus: string;           // Risultato ottenibile
+    prompt: string;                 // "Come portare quel pattern dove non lo usi?"
+    action_steps: string[];         // Passi azione concreti
+  };
+
+  deliverable: string;              // Output tangibile richiesto
+
+  // === LIVELLO 3: TEORIA (PERCHÉ) ===
+  why_it_works: {
+    principle: string;              // Il principio sottostante
+    explanation: string;            // Spiegazione del perché funziona
+    scientific_basis?: string;      // Base scientifica (se applicabile)
+  };
+
+  // === VERIFICA COMPRENSIONE ===
+  reflection_prompts: {
+    level: 'dati_stabili' | 'doingness' | 'teoria';
+    question: string;
+  }[];
+
+  // === SUPPORTO ===
+  failure_response: string;         // Risposta validante se non completa
+  ai_coach_hints: string[];         // Suggerimenti per AI Coach Fernando
+}
+```
+
+#### Esempio Esercizio Conforme
+
+```json
+{
+  "week_number": 1,
+  "title": "La Consapevolezza che Già Operi",
+  "subtitle": "Riconosci dove già usi l'autoconsapevolezza",
+  "characteristic_slug": "autoconsapevolezza",
+  "pillar": "Vision",
+  "exercise_type": "riconoscimento",
+  "difficulty_level": "base",
+  "quarter": "Q1",
+  "estimated_time_minutes": 25,
+
+  "glossary": [
+    {
+      "term": "Autoconsapevolezza",
+      "definition": "La capacità di osservare te stesso mentre agisci, come se ti guardassi dall'esterno",
+      "example": "Quando guidi e ti accorgi di star pensando ad altro - quel momento di 'accorgerti' È autoconsapevolezza"
+    }
+  ],
+
+  "concrete_examples": [
+    {
+      "situation": "Sei in una riunione tesa e noti che ti stai irrigidendo",
+      "application": "Il fatto stesso di NOTARE che ti stai irrigidendo è autoconsapevolezza in azione"
+    }
+  ],
+
+  "prerequisites": [],
+
+  "key_concepts": [
+    {
+      "concept": "Autoconsapevolezza",
+      "definition": "Vedere te stesso mentre operi",
+      "why_important": "Senza vedere cosa fai, non puoi scegliere di cambiarlo"
+    }
+  ],
+
+  "intro_validante": "Probabilmente prendi decisioni importanti ogni settimana senza chiamarle 'leadership'. Questo esercizio ti aiuta a RICONOSCERE la consapevolezza che già operi naturalmente - non a sviluppare qualcosa che ti manca.",
+
+  "phase_1_recognition": {
+    "title": "Riconoscimento - Chi Eri",
+    "being_focus": "L'identità di chi osserva se stesso",
+    "prompt": "Ricorda 3 decisioni importanti dell'ultimo anno. Per ognuna: come ti sentivi DURANTE?",
+    "instructions": [
+      "Trova un momento tranquillo di 10 minuti",
+      "Scrivi 3 decisioni importanti dell'ultimo anno",
+      "Per ogni decisione, nota l'emozione che provavi MENTRE decidevi",
+      "Non giudicare se erano 'giuste' - osserva solo l'esperienza"
+    ]
+  },
+
+  "phase_2_pattern": {
+    "title": "Pattern - Cosa Facevi",
+    "doing_focus": "Le condizioni che favorivano la consapevolezza",
+    "prompt": "Cerca il pattern comune tra quei momenti",
+    "guiding_questions": [
+      "Eri solo o con altri?",
+      "Era mattina, pomeriggio o sera?",
+      "Eri in fretta o avevi calma?",
+      "Dove ti trovavi fisicamente?"
+    ]
+  },
+
+  "phase_3_expansion": {
+    "title": "Espansione - Come Ricreare",
+    "having_focus": "La capacità di ricreare quelle condizioni intenzionalmente",
+    "prompt": "Come puoi ricreare quelle condizioni quando serve?",
+    "action_steps": [
+      "Scegli UNA condizione che puoi replicare facilmente",
+      "Identifica UNA situazione della prossima settimana dove la userai",
+      "Scrivi un promemoria per ricordarti"
+    ]
+  },
+
+  "deliverable": "Documento con: 3 decisioni + emozioni durante + pattern comune + 1 condizione da replicare + 1 situazione dove la userai",
+
+  "why_it_works": {
+    "principle": "L'attenzione crea scelta",
+    "explanation": "Quando noti cosa stai facendo, puoi scegliere se continuare o cambiare. Senza notare, reagisci automaticamente. L'autoconsapevolezza trasforma reazioni automatiche in scelte consapevoli.",
+    "scientific_basis": "Metacognizione - la capacità del cervello di osservare i propri processi mentali"
+  },
+
+  "reflection_prompts": [
+    {
+      "level": "dati_stabili",
+      "question": "Con parole tue, cos'è l'autoconsapevolezza?"
+    },
+    {
+      "level": "doingness",
+      "question": "Descrivi i passi che hai seguito per identificare il tuo pattern"
+    },
+    {
+      "level": "teoria",
+      "question": "Perché notare cosa fai ti dà più potere di scelta?"
+    }
+  ],
+
+  "failure_response": "Forse stai cercando decisioni 'grandi'. Prova con decisioni più piccole ma comunque significative per te - anche scegliere di NON decidere è una decisione.",
+
+  "ai_coach_hints": [
+    "Se l'utente fatica a trovare decisioni, suggerisci: assunzioni, licenziamenti, investimenti, cambio fornitori",
+    "Se l'utente non trova pattern, aiutalo a cercare: luogo fisico, ora del giorno, stato emotivo pre-decisione"
+  ]
+}
+```
+
+#### Validazione Obbligatoria
+
+Prima di pubblicare un esercizio, verifica:
+
+```
+✅ PREVENZIONE BARRIERE
+□ Glossary: Tutti i termini non comuni hanno definizione + esempio?
+□ Concrete examples: Ci sono almeno 2 situazioni riconoscibili?
+□ Prerequisites: È chiaro cosa l'utente deve già sapere?
+
+✅ LIVELLO 1 - DATI STABILI
+□ Key concepts: Ogni concetto ha definizione + why_important?
+□ L'utente saprà rispondere a "Cos'è [X]?"
+
+✅ LIVELLO 2 - DOINGNESS
+□ Phase 1-2-3: Tutte e 3 le fasi sono complete?
+□ Instructions/steps: Sono concreti e sequenziali?
+□ L'utente saprà rispondere a "Come si fa [X]?"
+
+✅ LIVELLO 3 - TEORIA
+□ Why it works: C'è principle + explanation?
+□ L'utente saprà rispondere a "Perché funziona [X]?"
+
+✅ VERIFICA COMPRENSIONE
+□ Reflection prompts: Ci sono domande per tutti e 3 i livelli?
+
+✅ LINGUAGGIO VALIDANTE
+□ Intro presume la capacità esistente (mai deficit)?
+□ Failure response è validante (non giudicante)?
 ```
 
 ---
@@ -465,6 +746,189 @@ src/lib/
 
 ---
 
+## REGOLE TECNICHE PER FLUSSO CHALLENGE (CONTRATTO)
+
+> **Principio guida:** L'utente è AGENTE ATTIVO. La progressione dipende dalle SUE azioni, non dal tempo.
+
+### 1. Semantica `current_day` (FONTE DI VERITÀ UNICA)
+
+| Valore | Significato |
+|--------|-------------|
+| `0` | Iscritto, nessun giorno completato |
+| `1` | Day 1 completato |
+| `N` | Day N completato |
+| `7` | Challenge completata |
+
+```
+⚠️ REGOLA CRITICA:
+current_day = ULTIMO GIORNO COMPLETATO dall'utente
+NON "prossimo da fare", NON "ultimo email inviato"
+```
+
+### 2. Tabelle Database e Ruoli
+
+| Tabella | Ruolo | Fonte di verità per |
+|---------|-------|---------------------|
+| `challenge_subscribers` | Master | Stato iscrizione, `current_day`, status |
+| `challenge_day_completions` | Tracking | Timestamp completamento + email inviate |
+| `challenge_discovery_responses` | Analytics | Risposte discovery (opzionale) |
+| `ab_test_events` | Analytics | Eventi A/B testing |
+
+```
+⚠️ REGOLA: challenge_subscribers.current_day è l'UNICA fonte di verità
+per determinare quali giorni sono sbloccati/completati.
+```
+
+### 3. Logica Sblocco Giorni
+
+```typescript
+// REGOLA DI SBLOCCO
+const isUnlocked = (dayNumber: number, currentDay: number, isSubscribed: boolean) => {
+  if (!isSubscribed) return false;           // Non iscritto → nessun accesso
+  if (dayNumber === 1) return true;          // Day 1 sempre sbloccato se iscritto
+  return dayNumber <= currentDay + 1;        // Day N sbloccato se N-1 completato
+};
+
+// REGOLA DI COMPLETAMENTO
+const isCompleted = (dayNumber: number, currentDay: number) => {
+  return dayNumber <= currentDay;            // Completato se <= current_day
+};
+```
+
+**Esempi:**
+| `current_day` | Day 1 | Day 2 | Day 3 | Day 4-7 |
+|---------------|-------|-------|-------|---------|
+| 0 | 🔓 Sbloccato | 🔒 | 🔒 | 🔒 |
+| 1 | ✅ Completato | 🔓 Sbloccato | 🔒 | 🔒 |
+| 2 | ✅ | ✅ Completato | 🔓 Sbloccato | 🔒 |
+| 7 | ✅ | ✅ | ✅ | ✅ Challenge completa |
+
+### 4. API Contracts
+
+#### POST `/api/challenge/subscribe`
+```typescript
+// INPUT
+{ email, nome, challenge, variant }
+
+// AZIONI
+1. Verifica email non già iscritto a questa challenge
+2. Crea record in challenge_subscribers con:
+   - current_day: 0  // ⚠️ ZERO, non 1!
+   - status: 'active'
+3. Invia welcome email
+4. Aggiorna last_email_sent_at, last_email_type: 'welcome'
+
+// OUTPUT
+{ success: true, subscriberId }
+```
+
+#### POST `/api/challenge/complete-day`
+```typescript
+// INPUT
+{ email, challengeType, dayNumber, responses }
+
+// VALIDAZIONI
+1. Utente deve essere iscritto (challenge_subscribers esiste)
+2. dayNumber deve essere <= current_day + 1 (giorno sbloccato)
+3. dayNumber non deve essere già completato
+
+// AZIONI
+1. Salva completamento in challenge_day_completions
+2. Aggiorna challenge_subscribers:
+   - current_day: dayNumber  // ⚠️ IL GIORNO APPENA COMPLETATO, non dayNumber+1!
+   - last_activity_at: now()
+3. Se dayNumber === 7: status: 'completed', invia email finale
+
+// OUTPUT
+{ success: true, nextDay: dayNumber + 1, isCompleted: dayNumber === 7 }
+```
+
+#### Cron `/api/cron/send-challenge-emails`
+```typescript
+// LOGICA INVIO EMAIL
+Per ogni subscriber con status: 'active':
+
+1. SE current_day === 0 E last_email_type === 'welcome':
+   → Invia email Day 1 (contenuto, non welcome)
+   → Aggiorna last_email_type: 'day_1'
+
+2. SE current_day >= 1 E current_day < 7:
+   → Calcola nextEmailDay = current_day + 1
+   → SE last_email_type !== 'day_' + nextEmailDay:
+     → Invia email Day nextEmailDay
+     → Aggiorna last_email_type: 'day_' + nextEmailDay
+
+// ⚠️ REGOLA USER AGENCY:
+Il cron invia email del giorno SUCCESSIVO solo DOPO che l'utente
+ha completato il giorno corrente. L'utente controlla la progressione.
+```
+
+### 5. Autenticazione e Accesso
+
+| Pagina | Auth Required | Iscrizione Required |
+|--------|---------------|---------------------|
+| `/challenge/[type]` (landing) | ❌ No | ❌ No |
+| `/challenge/[type]/day/[N]` | ✅ Sì | ✅ Sì |
+| `/challenge/[type]/complete` | ✅ Sì | ✅ Sì + Day 7 completato |
+
+```typescript
+// VERIFICA ACCESSO DAY PAGE
+async function checkDayAccess(user, challengeType, dayNumber) {
+  // 1. Verifica autenticazione
+  if (!user) return { redirect: '/auth/login' };
+
+  // 2. Verifica iscrizione
+  const subscriber = await getSubscriber(user.email, challengeType);
+  if (!subscriber) return { redirect: `/challenge/${challengeType}` };
+
+  // 3. Verifica sblocco
+  if (!isUnlocked(dayNumber, subscriber.current_day, true)) {
+    return { locked: true, message: `Completa prima il Giorno ${dayNumber - 1}` };
+  }
+
+  return { allowed: true, isCompleted: dayNumber <= subscriber.current_day };
+}
+```
+
+### 6. Mapping Challenge Types
+
+```typescript
+// Frontend URL → Database value
+const CHALLENGE_TYPE_MAP = {
+  'leadership': 'leadership-autentica',
+  'ostacoli': 'oltre-ostacoli',
+  'microfelicita': 'microfelicita'
+};
+
+// ⚠️ Usare SEMPRE questo mapping per query database
+```
+
+### 7. Post-Challenge Flow (STOP → START)
+
+```
+STOP: Challenge Day 7 completato
+  ↓
+CTA PRIMARIA: "Acquista il Libro" (€24,90 fisico / €9,90 PDF)
+  - Il libro contiene QR code per Assessment Explorer
+  ↓
+CTA SECONDARIA: "Hai già il libro? Vai all'Assessment"
+  ↓
+START: Assessment Explorer (72 domande Leadership)
+```
+
+### 8. Checklist Implementazione
+
+Prima di modificare codice challenge, verifica:
+
+- [ ] `current_day` è interpretato come "ultimo completato"?
+- [ ] Subscribe setta `current_day: 0`?
+- [ ] Complete-day setta `current_day: dayNumber` (non `dayNumber + 1`)?
+- [ ] Hook usa `challenge_subscribers` come fonte unica?
+- [ ] Day page verifica iscrizione PRIMA di mostrare contenuto?
+- [ ] Cron rispetta user agency (non forza progressione)?
+
+---
+
 ## SISTEMA ASSESSMENT
 
 ### 3 Assessment Indipendenti (per percorso)
@@ -489,6 +953,8 @@ src/lib/
 
 ## SISTEMA AI COACH FERNANDO
 
+> **⚠️ DOCUMENTO COMPLETO:** `docs/AI_COACH_SYSTEM.md` contiene system prompt, scenari, safety protocols e compliance.
+
 ### Architettura
 ```
 ChatWidget → /api/ai-coach → Claude API
@@ -504,6 +970,14 @@ Sei Fernando Marongiu, autore della trilogia "Rivoluzione Aurea".
 Le persone hanno già dentro di sé le capacità di leadership.
 Non devono "acquisirle" - devono RICONOSCERLE e ESPANDERLE.
 ```
+
+### Esercizi nel Database
+| Percorso | Fondamentali | Applicazione | Mentor | Totale |
+|----------|--------------|--------------|--------|--------|
+| Leadership | 4 | 52 | 8 | 64 |
+| Risolutore | 4 | 24 | 3 | 31 |
+| Microfelicità | 4 | 24 | 3 | 31 |
+| **TOTALE** | **12** | **100** | **14** | **126** |
 
 ### User Memory
 - `communication_style`: directive | socratic | storytelling
@@ -571,11 +1045,29 @@ Ogni utente vede solo i propri dati.
 
 ## SUBSCRIPTION TIERS
 
-| Tier | Prezzo | Features |
-|------|--------|----------|
-| Explorer | €0 | Assessment, 5 AI msg/day, 10 esercizi |
-| Leader | €149/anno | 52 esercizi, AI illimitato |
-| Mentor | €490/anno | 3 percorsi, Q&A live |
+> Riferimento: `docs/ARCHITETTURA_DASHBOARD_VITAEOLOGY_DEFINITIVA.md`
+
+| Tier | Prezzo | Percorsi | AI Coach | Esercizi | Extra |
+|------|--------|----------|----------|----------|-------|
+| **Challenge** | €0 | ❌ | ❌ | ❌ | 7 giorni email + discovery |
+| **Leader** | €149/anno | 1 a scelta | ✅ Illimitato | Pool percorso scelto | - |
+| **Mentor** | €490/anno | Tutti e 3 | ✅ Illimitato | Tutti i pool | 2 sessioni 1:1/anno, Certificazione |
+
+### Flusso Progressione
+```
+Challenge (€0) → Leader (€149) → Mentor (€490) → Certificazione
+```
+
+### Paradigma Esercizi (IMPORTANTE)
+```
+⚠️ NON esiste percorso sequenziale "Settimana 1, 2, 3..."
+
+AI Fernando:
+- Ha accesso al pool completo di esercizi del percorso
+- Conosce i risultati assessment dell'utente
+- PROPONE l'esercizio giusto per quella persona in quel momento
+- SPIEGA PERCHÉ quell'esercizio è rilevante
+```
 
 ---
 
@@ -642,17 +1134,30 @@ Contatta IMMEDIATAMENTE:
 
 Per documentazione completa, consulta `/docs`:
 
+### ⚠️ DOCUMENTI AUTORITATIVI (INSINDACABILI)
+
+| File | Contenuto | Autorità su |
+|------|-----------|-------------|
+| `docs/ARCHITETTURA_DASHBOARD_VITAEOLOGY_DEFINITIVA.md` | **Architettura ufficiale** approvata da Fernando | Tier, flussi utente, dashboard, esercizi AI, certificazione |
+| `docs/AI_COACH_SYSTEM.md` | **Fernando AI completo** - System prompt, scenari, safety | AI Coach, compliance, disclaimer, 126 esercizi |
+| `docs/CUSTOMER_JOURNEY_VITAEOLOGY_COMPLETO.pdf` | **Customer Journey e Value Ladder** | 8 fasi, prezzi, funnel |
+
+### Documenti di Riferimento
+
 | File | Contenuto |
 |------|-----------|
-| `docs/PROGETTO_VITAEOLOGY_COMPLETO.md` | Documentazione master (1300+ righe) |
+| `docs/PROGETTO_VITAEOLOGY_COMPLETO.md` | Documentazione tecnica master (1300+ righe) |
 | `docs/DATABASE_SCHEMA.md` | Schema DB completo |
+| `docs/ESERCIZI_STRUTTURA_COMPLETA.md` | Struttura 126 esercizi (12 Fond + 100 App + 14 Mentor) |
 | `docs/QUICK_REFERENCE.md` | Riferimento rapido |
 
 ---
 
 ## NOTE PER CLAUDE CODE
 
-1. **LEGGI SEMPRE** `/docs/PROGETTO_VITAEOLOGY_COMPLETO.md` prima di modifiche major
+1. **LEGGI SEMPRE** `docs/ARCHITETTURA_DASHBOARD_VITAEOLOGY_DEFINITIVA.md` per logiche di business (AUTOREVOLE)
+2. **LEGGI** `/docs/PROGETTO_VITAEOLOGY_COMPLETO.md` prima di modifiche tecniche major
+3. **IN CASO DI CONFLITTO** tra documenti, ARCHITETTURA_DASHBOARD prevale su altri docs
 2. Usa `'use client'` per componenti interattivi
 3. TypeScript strict sempre
 4. Tailwind per styling, no CSS separato
@@ -667,7 +1172,7 @@ Per documentazione completa, consulta `/docs`:
 |------|--------|------|
 | 3 Assessment (Leadership/Risolutore/Microfelicità) | ✅ | `src/app/assessment/[type]/` |
 | AI Coach Fernando + RAG | ✅ | `src/lib/ai-coach/` |
-| 52 Esercizi + Raccomandazioni | ✅ | `src/app/exercises/` |
+| 126 Esercizi (12 Fond + 100 App + 14 Mentor) | ✅ | `src/app/exercises/` |
 | 3 Challenge (7 giorni) A/B | ✅ | `src/app/challenge/` |
 | 63 Domande Discovery | ✅ | `src/lib/challenge/discovery-data.ts` |
 | 21 Template Email | ✅ | `src/lib/email/` |
