@@ -1,7 +1,7 @@
 // Template email per i 7 giorni delle Challenge
 // Basati su LEAD_MAGNET_CHALLENGE_VITAEOLOGY_v5_PULITO.md
 
-type ChallengeKey = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicità';
+type ChallengeKey = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
 type DayNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 interface EmailContent {
@@ -23,7 +23,7 @@ const CHALLENGE_CONFIG = {
     urlPath: 'ostacoli',
     tag: 'challenge-ostacoli'
   },
-  'microfelicità': {
+  'microfelicita': {
     name: 'Microfelicità',
     color: '#8B5CF6', // Violet
     urlPath: 'microfelicita',
@@ -93,7 +93,7 @@ const DAY_TITLES: Record<ChallengeKey, Record<DayNumber, { title: string; subjec
       subject: "Giorno 7: Come una lingua straniera"
     }
   },
-  'microfelicità': {
+  'microfelicita': {
     1: {
       title: "Quello che Ti Perdi Ogni Giorno",
       subject: "Giorno 1: I 50 momenti che non vedi"
@@ -652,7 +652,7 @@ export function getChallengeEmail(
     case 'oltre-ostacoli':
       contentFn = OSTACOLI_EMAILS[day];
       break;
-    case 'microfelicità':
+    case 'microfelicita':
       contentFn = MICROFELICITA_EMAILS[day];
       break;
     default:
