@@ -99,7 +99,7 @@ export default function PrivacyPolicyPage() {
 
                 <div className="border-l-4 border-amber-500 pl-4">
                   <h3 className="font-medium text-gray-900">Dati dell&apos;Assessment</h3>
-                  <p className="text-sm">Risposte alle 240 domande del test di leadership, punteggi per pilastro e caratteristica</p>
+                  <p className="text-sm">Risposte alle 72 domande del test di leadership, punteggi per pilastro e caratteristica</p>
                 </div>
 
                 <div className="border-l-4 border-amber-500 pl-4">

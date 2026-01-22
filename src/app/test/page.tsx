@@ -305,7 +305,7 @@ export default function TestPage() {
               Assessment Leadership Autentica
             </h1>
             <p className="text-slate-600 text-lg">
-              Scopri il tuo profilo di leadership attraverso 240 domande sulle 24 caratteristiche fondamentali.
+              Scopri il tuo profilo di leadership attraverso 72 domande sulle 24 caratteristiche fondamentali.
             </p>
           </div>
 
@@ -327,7 +327,7 @@ export default function TestPage() {
             <ul className="space-y-2 text-slate-700">
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">✓</span>
-                <span>240 domande divise in 4 pilastri</span>
+                <span>72 domande divise in 4 pilastri</span>
               </li>
               <li className="flex items-start">
                 <span className="text-blue-600 mr-2">✓</span>

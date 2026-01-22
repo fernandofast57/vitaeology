@@ -89,7 +89,7 @@ export default function TermsOfServicePage() {
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-600">•</span>
-                    <span><strong>Assessment di Leadership:</strong> Test di 240 domande basato su 24 caratteristiche e 4 pilastri</span>
+                    <span><strong>Assessment di Leadership:</strong> Test di 72 domande basato su 24 caratteristiche e 4 pilastri</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-600">•</span>

@@ -50,7 +50,7 @@ export interface PricingConfig {
 // ============================================================
 
 const EXPLORER_FEATURES = [
-  'Assessment completo 240 domande',
+  'Assessment Leadership 72 domande',
   'Radar Chart interattivo',
   'Analisi 4 pilastri leadership',
   'Report base risultati',

@@ -186,7 +186,7 @@ export const FEATURE_METADATA: Record<FeatureName, FeatureMetadata> = {
   assessment_full: {
     name: 'assessment_full',
     displayName: 'Assessment Completo',
-    description: 'Assessment completo a 240 domande',
+    description: 'Assessment Leadership a 72 domande (tutti i percorsi)',
     minTier: 'leader',
     category: 'assessment',
   },
@@ -339,13 +339,13 @@ export function getUsageLimits(tier: SubscriptionTier): UsageLimits {
       };
     case 'leader':
       return {
-        aiCoachMessagesPerDay: 20,
-        exercisesCount: 30,
+        aiCoachMessagesPerDay: 'unlimited',
+        exercisesCount: 52,
         assessmentType: 'full',
       };
     case 'mentor':
       return {
-        aiCoachMessagesPerDay: 50,
+        aiCoachMessagesPerDay: 'unlimited',
         exercisesCount: 52,
         assessmentType: 'full',
       };

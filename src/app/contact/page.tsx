@@ -257,8 +257,8 @@ export default function ContactPage() {
                         Come funziona l&apos;assessment?
                       </summary>
                       <p className="mt-2 text-gray-600 pl-4">
-                        L&apos;assessment consiste in 240 domande che valutano 24 caratteristiche di leadership
-                        distribuite su 4 pilastri. Richiede circa 30-45 minuti.
+                        L&apos;assessment consiste in 72 domande che valutano 24 caratteristiche di leadership
+                        distribuite su 4 pilastri. Richiede circa 15-20 minuti.
                       </p>
                     </details>
                     <details className="group">

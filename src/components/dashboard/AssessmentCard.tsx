@@ -17,7 +17,7 @@ type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
 const PATH_CONFIG = {
   leadership: {
     name: 'Leadership Autentica',
-    totalQuestions: 240,
+    totalQuestions: 72,
     testUrl: '/test',
     resultsUrl: '/results',
   },

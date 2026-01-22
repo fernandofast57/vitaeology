@@ -125,8 +125,8 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, SubscriptionTierConfig
     display_name: 'Leader',
     level: 20,
     features: {
-      ai_coach_messages_per_day: 20,
-      exercises_access: 'basic',
+      ai_coach_messages_per_day: 'unlimited',
+      exercises_access: 'all',  // 52 esercizi Leadership
       premium_content: false,
       priority_support: false,
     },
@@ -136,10 +136,10 @@ export const SUBSCRIPTION_TIERS: Record<SubscriptionTier, SubscriptionTierConfig
     display_name: 'Mentor',
     level: 30,
     features: {
-      ai_coach_messages_per_day: 50,
-      exercises_access: 'advanced',
+      ai_coach_messages_per_day: 'unlimited',
+      exercises_access: 'all',  // Tutti i 52 esercizi × 3 percorsi
       premium_content: true,
-      priority_support: false,
+      priority_support: true,
     },
   },
   mastermind: {

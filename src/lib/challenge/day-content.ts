@@ -263,7 +263,7 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
         {
           icon: "🎯",
           title: "Cosa Succede Adesso?",
-          content: "Hai due opzioni:\n\n1. CONTINUA DA SOLO\nHai gli strumenti. Puoi applicarli quando vuoi. Nessun obbligo, nessun costo.\n\n2. APPROFONDISCI\nSe vuoi una mappa più completa, ho creato qualcosa per te.\n\nÈ un test di 240 domande che misura 24 capacità di leadership.\n\nNon ti dice cosa TI MANCA. Ti dice cosa HAI GIÀ — e dove puoi espanderti di più.\n\nSi chiama Assessment Leadership Autentica."
+          content: "Hai due opzioni:\n\n1. CONTINUA DA SOLO\nHai gli strumenti. Puoi applicarli quando vuoi. Nessun obbligo, nessun costo.\n\n2. APPROFONDISCI\nSe vuoi una mappa più completa, ho creato qualcosa per te.\n\nÈ un test di 72 domande che misura 24 capacità di leadership.\n\nNon ti dice cosa TI MANCA. Ti dice cosa HAI GIÀ — e dove puoi espanderti di più.\n\nSi chiama Assessment Leadership Autentica."
         }
       ],
       exercise: {
