@@ -1,21 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle } from 'lucide-react'
+import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle, BookOpen } from 'lucide-react'
 
 export default function SignupPage() {
   const router = useRouter()
-  
+  const searchParams = useSearchParams()
+
+  // Parametri da URL (da pagina /attiva)
+  const bookCode = searchParams.get('book_code')
+  const prefillEmail = searchParams.get('email')
+
   const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(prefillEmail || '')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+
+  // Pre-compila email se presente nell'URL
+  useEffect(() => {
+    if (prefillEmail) {
+      setEmail(prefillEmail)
+    }
+  }, [prefillEmail])
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,14 +42,20 @@ export default function SignupPage() {
 
     const supabase = createClient()
 
+    // Se c'è un codice libro, lo passiamo al callback per attivazione automatica
+    const redirectUrl = bookCode
+      ? `${window.location.origin}/auth/callback?book_code=${bookCode}`
+      : `${window.location.origin}/auth/callback`
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: fullName,
+          book_code: bookCode || undefined, // Salva il codice nei metadata utente
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: redirectUrl,
       },
     })
 
@@ -111,6 +129,21 @@ export default function SignupPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm rounded-xl sm:px-10">
+          {/* Banner codice libro */}
+          {bookCode && (
+            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3">
+              <BookOpen className="h-6 w-6 text-amber-600 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-amber-800">
+                  Registrati per attivare il tuo libro
+                </p>
+                <p className="text-xs text-amber-600">
+                  Codice: <span className="font-mono">{bookCode}</span>
+                </p>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSignup} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
