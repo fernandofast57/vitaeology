@@ -1,17 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle, BookOpen } from 'lucide-react'
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // Parametri da URL (da pagina /attiva)
+  // Parametri da URL (da pagina /libro)
   const bookCode = searchParams.get('book_code')
   const prefillEmail = searchParams.get('email')
 
@@ -53,7 +53,7 @@ export default function SignupPage() {
       options: {
         data: {
           full_name: fullName,
-          book_code: bookCode || undefined, // Salva il codice nei metadata utente
+          book_code: bookCode || undefined,
         },
         emailRedirectTo: redirectUrl,
       },
@@ -85,13 +85,13 @@ export default function SignupPage() {
               Controlla la tua email
             </h2>
             <p className="text-gray-600 mb-6">
-              Ti abbiamo inviato un link di conferma a <strong>{email}</strong>. 
+              Ti abbiamo inviato un link di conferma a <strong>{email}</strong>.
               Clicca sul link per attivare il tuo account.
             </p>
             <p className="text-sm text-gray-500">
               Non hai ricevuto l&apos;email? Controlla la cartella spam o{' '}
-              <button 
-                onClick={() => setSuccess(false)} 
+              <button
+                onClick={() => setSuccess(false)}
                 className="text-petrol-600 hover:text-petrol-700"
               >
                 riprova
@@ -248,5 +248,27 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Loading fallback
+function SignupLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Componente principale wrappato in Suspense
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<SignupLoading />}>
+      <SignupForm />
+    </Suspense>
   )
 }
