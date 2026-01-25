@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { alertAPIError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 
@@ -181,7 +182,11 @@ export async function POST(request: NextRequest) {
       subscriberId: subscriber.id
     });
 
-  } catch {
+  } catch (error) {
+    await alertAPIError(
+      '/api/challenge/subscribe',
+      error instanceof Error ? error : new Error('Challenge subscription failed')
+    );
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

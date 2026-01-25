@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { grantAssessmentAccess, AssessmentType, LIBRO_TO_ASSESSMENT } from '@/lib/assessment-access';
+import { alertAPIError } from '@/lib/error-alerts';
 
 export async function POST(request: NextRequest) {
   try {
@@ -174,7 +175,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-  } catch {
+  } catch (error) {
+    await alertAPIError(
+      '/api/libro/attiva',
+      error instanceof Error ? error : new Error('Book code activation failed')
+    );
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

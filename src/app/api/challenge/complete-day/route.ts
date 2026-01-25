@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
 import { onChallengeDayCompleted } from '@/lib/awareness';
+import { alertAPIError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -259,7 +260,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
 
-  } catch {
+  } catch (error) {
+    await alertAPIError(
+      '/api/challenge/complete-day',
+      error instanceof Error ? error : new Error('Challenge day completion failed')
+    );
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }
