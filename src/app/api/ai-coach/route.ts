@@ -86,9 +86,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
           });
 
         if (limitError) {
-          console.error('Errore verifica limite AI Coach:', limitError);
+          // Errore silenzioso - non blocca l'esecuzione
         } else if (limitCheck && limitCheck.length > 0 && !limitCheck[0].can_send) {
-          console.log(`⚠️ Limite AI Coach raggiunto: ${limitCheck[0].current_count}/${dailyLimit} (tier: ${userTier})`);
           return NextResponse.json(
             {
               message: `Hai raggiunto il limite giornaliero di ${dailyLimit} messaggi per il tuo piano ${SUBSCRIPTION_TIERS[userTier].display_name}. Passa a un piano superiore per più messaggi.`,
@@ -120,23 +119,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       .filter(m => m.role === 'user')
       .pop()?.content || '';
 
-    // DEBUG RAG - Log messaggio utente
-    console.log('\n🔍 [RAG DEBUG] ===================================');
-    console.log('📝 Messaggio utente:', lastUserMessage);
-    console.log('📂 Percorso corrente:', currentPath || 'nessuno');
-
     // Cerca contesto rilevante dai libri (filtrato per percorso) con metadati
     const ragResult = await getRAGContextWithMetadata(lastUserMessage, currentPath);
-
-    // DEBUG RAG - Log contesto trovato
-    if (ragResult.context && ragResult.context.trim().length > 0) {
-      console.log('✅ Contesto RAG trovato:', ragResult.context.substring(0, 500) + '...');
-      console.log('📊 Chunk IDs:', ragResult.chunkIds);
-      console.log('📈 Similarity scores:', ragResult.similarityScores);
-    } else {
-      console.log('⚠️ Nessun contesto RAG trovato');
-    }
-    console.log('🔍 [RAG DEBUG] ===================================\n');
 
     // === TRACKING SEGNALI IMPLICITI ===
     const userMessages = messages.filter((m: Message) => m.role === 'user');
@@ -157,9 +141,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
             previousMessage: previousUserMsg.content.substring(0, 100),
             currentMessage: currentUserMsg.content.substring(0, 100),
           }
-        }).catch(err => console.error('[ImplicitSignals] Track error:', err));
-
-        console.log('🔄 Segnale implicito: riformulazione rilevata');
+        }).catch(() => {}); // Fire and forget
       }
 
       // Nota: detectImmediateQuestion richiede timestamp che non abbiamo nel Message
@@ -176,15 +158,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         userMemory = await createUserMemory(userContext.userId);
       }
       memoryContext = generateMemoryContext(userMemory);
-      if (memoryContext) {
-        console.log('🧠 Memoria utente caricata');
-      }
 
       // Carica livello awareness per adattamento Fernando
       const awarenessData = await getCurrentAwarenessLevel(userContext.userId);
       if (awarenessData) {
         awarenessLevel = awarenessData.level;
-        console.log(`🎯 Awareness Level: ${awarenessLevel}`);
       }
     }
 
@@ -204,14 +182,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         ragChunks.forEach(chunk => {
           ragCorrectionsContext += chunk.content + '\n\n';
         });
-        console.log(`🔧 ${ragChunks.length} chunk RAG correttivi caricati`);
       }
-
-      if (correctionsContext) {
-        console.log('🔧 Correzioni prompt attive caricate');
-      }
-    } catch (corrError) {
-      console.error('Errore caricamento correzioni:', corrError);
+    } catch {
+      // Errore silenzioso - correzioni sono opzionali
     }
 
     // Carica raccomandazioni esercizi personalizzate
@@ -220,21 +193,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       try {
         const recommendationService = createExerciseRecommendationService(supabase);
         exerciseRecommendationsContext = await recommendationService.generateAICoachContext(userContext.userId);
-        if (exerciseRecommendationsContext) {
-          console.log('📚 Raccomandazioni esercizi caricate');
-        }
-      } catch (recError) {
-        console.error('Errore caricamento raccomandazioni:', recError);
+      } catch {
+        // Errore silenzioso - raccomandazioni sono opzionali
       }
     }
 
     // Rileva se è un messaggio di chiusura (grazie, ciao, ecc.)
     const isClosing = isClosingMessage(lastUserMessage);
-    let closingHint = '';
-    if (isClosing) {
-      console.log('👋 Messaggio di chiusura rilevato - attivando wrap-up');
-      closingHint = '\n\n[SISTEMA: L\'utente sta salutando. Applica le istruzioni di WRAP-UP CONVERSAZIONE: riepiloga brevemente il tema discusso, suggerisci un\'azione concreta per le prossime 24-48 ore, e se pertinente menziona un esercizio dalla lista disponibile.]';
-    }
+    const closingHint = isClosing
+      ? '\n\n[SISTEMA: L\'utente sta salutando. Applica le istruzioni di WRAP-UP CONVERSAZIONE: riepiloga brevemente il tema discusso, suggerisci un\'azione concreta per le prossime 24-48 ore, e se pertinente menziona un esercizio dalla lista disponibile.]'
+      : '';
 
     // Costruisci system prompt con contesto RAG, memoria utente, correzioni, RAG correttivi, raccomandazioni e awareness
     const systemPrompt = buildSystemPrompt(userContext, currentPath || 'leadership', awarenessLevel) + ragResult.context + memoryContext + correctionsContext + ragCorrectionsContext + exerciseRecommendationsContext + closingHint;
@@ -275,27 +243,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       topicsIntroduced: [],
     });
 
-    // Log warning per monitoring (solo se score < 70)
-    if (paroleResult.score < 70 || concretezzaResult.score < 70 || gradualityResult.score < 70) {
-      console.log('\n⚠️ [COMPRENSIONE WARNING] ===========================');
-
-      if (paroleResult.score < 70) {
-        console.log('📖 PAROLE Score:', paroleResult.score + '/100');
-        console.log('   Issues:', paroleResult.issues.slice(0, 2).map(i => i.term).join(', '));
-      }
-
-      if (concretezzaResult.score < 70) {
-        console.log('🎯 CONCRETEZZA Score:', concretezzaResult.score + '/100');
-        console.log('   Quality:', concretezzaResult.exampleQuality);
-      }
-
-      if (gradualityResult.score < 70) {
-        console.log('📊 GRADUALITÀ Score:', gradualityResult.score + '/100');
-        console.log('   Issues:', gradualityResult.metrics);
-      }
-
-      console.log('⚠️ [COMPRENSIONE WARNING] ===========================\n');
-    }
+    // Scores salvati nel DB per monitoring (nessun log in production)
 
     // Rileva se e un alert di sicurezza
     const safetyKeywords = [
@@ -345,30 +293,18 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
           .select('id')
           .single();
 
-        if (convError) {
-          console.error('Errore salvataggio conversazione:', convError);
-        } else {
-          conversationId = convData?.id;
-          console.log('✅ Conversazione salvata:', conversationId);
+        if (!convError && convData) {
+          conversationId = convData.id;
 
           // Aggiorna awareness level in background (prima conversazione o rating)
           const isFirstConversation = messages.filter((m: Message) => m.role === 'assistant').length === 0;
-          onAIConversation(userContext.userId, isFirstConversation).catch(err =>
-            console.error('[Awareness] Update error:', err)
-          );
+          onAIConversation(userContext.userId, isFirstConversation).catch(() => {});
         }
 
-        // Incrementa contatore utilizzo giornaliero AI Coach
-        const { data: newCount, error: incrementError } = await supabase
-          .rpc('increment_daily_usage', { p_user_id: userContext.userId });
-
-        if (incrementError) {
-          console.error('Errore incremento contatore AI Coach:', incrementError);
-        } else {
-          console.log(`📊 AI Coach usage: ${newCount}/${dailyLimit} (tier: ${userTier})`);
-        }
-      } catch (dbError) {
-        console.error('Errore DB conversazione:', dbError);
+        // Incrementa contatore utilizzo giornaliero AI Coach (fire and forget)
+        await supabase.rpc('increment_daily_usage', { p_user_id: userContext.userId });
+      } catch {
+        // Errore DB silenzioso - non blocca la risposta
       }
     }
 
@@ -380,9 +316,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     });
 
   } catch (error) {
-    console.error('Errore AI Coach:', error);
-
-    // Invia alert per errori AI Coach
+    // Invia alert per errori AI Coach (sostituisce console.error)
     await alertAICoachError(
       error instanceof Error ? error : new Error('Unknown AI Coach error'),
       { endpoint: '/api/ai-coach' }
