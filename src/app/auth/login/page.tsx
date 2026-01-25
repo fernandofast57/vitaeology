@@ -6,6 +6,16 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { createBrowserClient } from '@supabase/ssr'
 
+// Valida che il redirect sia interno (sicurezza anti-open-redirect)
+function getSafeRedirect(url: string | null): string {
+  if (!url) return '/dashboard'
+  // Accetta solo path relativi che iniziano con /
+  if (url.startsWith('/') && !url.startsWith('//')) {
+    return url
+  }
+  return '/dashboard'
+}
+
 function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,7 +26,7 @@ function LoginForm() {
   const [resendSuccess, setResendSuccess] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirectTo') || '/dashboard'
+  const redirectTo = getSafeRedirect(searchParams.get('redirectTo'))
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

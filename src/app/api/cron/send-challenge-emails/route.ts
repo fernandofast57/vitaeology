@@ -54,8 +54,15 @@ export async function GET(request: NextRequest) {
     const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
 
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      console.error('Unauthorized cron request');
+    // SECURITY: Richiedi sempre CRON_SECRET - fallisce se non configurato
+    if (!cronSecret) {
+      return NextResponse.json(
+        { error: 'CRON_SECRET not configured' },
+        { status: 500 }
+      );
+    }
+
+    if (authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -75,14 +82,16 @@ export async function GET(request: NextRequest) {
 
     // ============================================================
     // 2. DAY 1 EMAILS - Invia Giorno 1 a chi ha ricevuto solo welcome
+    // SEMANTICA: current_day = 0 significa "iscritto, nessun giorno completato"
     // ============================================================
     try {
-      // Trova utenti che hanno ricevuto welcome ma non ancora Day 1
+      // Trova utenti che hanno ricevuto welcome ma non ancora Day 1 content
+      // current_day = 0 = iscritto ma nessun giorno completato
       const { data: day1Candidates } = await supabase
         .from('challenge_subscribers')
         .select('*')
         .eq('status', 'active')
-        .eq('current_day', 1)
+        .eq('current_day', 0)  // Nessun giorno completato ancora
         .eq('last_email_type', 'welcome');
 
       if (day1Candidates && day1Candidates.length > 0) {
@@ -158,66 +167,57 @@ export async function GET(request: NextRequest) {
     }
 
     // ============================================================
-    // 3. DAILY EMAILS (Day 2-7) - Invia email giornaliere (time-based)
-    // Utenti che hanno completato il giorno precedente e devono ricevere il prossimo
+    // 3. DAILY EMAILS (Day 2-7) - Invia email giornaliere
+    // SEMANTICA: current_day = ultimo giorno COMPLETATO
+    // Se current_day = N, l'utente deve ricevere email per Day N+1
     // ============================================================
     try {
-      // Trova utenti attivi con current_day > 1 (Day 1 gestito sopra)
+      // Trova utenti attivi che hanno completato almeno Day 1 ma non tutti i 7 giorni
+      // current_day >= 1 = ha completato almeno Day 1
+      // current_day < 7 = non ha ancora completato tutto
       const { data: dailyCandidates } = await supabase
         .from('challenge_subscribers')
         .select('*')
         .eq('status', 'active')
-        .gt('current_day', 1)
-        .lte('current_day', 7);
+        .gte('current_day', 1)  // Ha completato almeno Day 1
+        .lt('current_day', 7);   // Non ha ancora completato tutto
 
       if (dailyCandidates && dailyCandidates.length > 0) {
         for (const subscriber of dailyCandidates) {
           try {
-            const currentDay = subscriber.current_day;
-            const prevDay = currentDay - 1;
+            // SEMANTICA: current_day = ultimo completato
+            // nextDayToSend = giorno per cui inviare email = current_day + 1
+            const lastCompletedDay = subscriber.current_day;
+            const nextDayToSend = lastCompletedDay + 1;
 
-            // Verifica se hanno completato il giorno precedente
-            const { data: prevCompletion } = await supabase
-              .from('challenge_day_completions')
-              .select('action_completed_at')
-              .eq('subscriber_id', subscriber.id)
-              .eq('challenge', subscriber.challenge)
-              .eq('day_number', prevDay)
-              .not('action_completed_at', 'is', null)
-              .single();
-
-            if (!prevCompletion) {
-              // Non hanno completato il giorno precedente, skip
+            // Safety check: nextDayToSend deve essere tra 2 e 7
+            if (nextDayToSend < 2 || nextDayToSend > 7) {
               continue;
             }
 
-            // Verifica se abbiamo già inviato l'email per current_day
-            const { data: currentDayRecord } = await supabase
+            // Verifica se abbiamo già inviato l'email per nextDayToSend
+            const { data: nextDayRecord } = await supabase
               .from('challenge_day_completions')
               .select('email_sent_at')
               .eq('subscriber_id', subscriber.id)
               .eq('challenge', subscriber.challenge)
-              .eq('day_number', currentDay)
+              .eq('day_number', nextDayToSend)
               .single();
 
-            if (currentDayRecord?.email_sent_at) {
+            if (nextDayRecord?.email_sent_at) {
               // Email già inviata per questo giorno, skip
               continue;
             }
 
-            // ⚠️ CONTROLLO ESPLICITO: verifica che la pagina sarà sbloccata
-            // Logica identica a useDiscoveryProgress: dayNumber <= currentDay + 1
-            // Questo evita di inviare email con link a pagine bloccate
-            const pageWillBeUnlocked = currentDay <= subscriber.current_day + 1;
-            if (!pageWillBeUnlocked) {
-              console.warn(`⚠️ Skip email Day ${currentDay} for ${subscriber.email}: page would be blocked (current_day=${subscriber.current_day})`);
-              continue;
-            }
+            // La pagina per nextDayToSend è sbloccata perché:
+            // - current_day = lastCompletedDay
+            // - Day N sbloccato se N <= current_day + 1
+            // - nextDayToSend = current_day + 1, quindi è sbloccato ✓
 
-            // Invia email per current_day
+            // Invia email per nextDayToSend
             const emailContent = getChallengeEmail(
               subscriber.challenge,
-              currentDay as 1 | 2 | 3 | 4 | 5 | 6 | 7,
+              nextDayToSend as 1 | 2 | 3 | 4 | 5 | 6 | 7,
               subscriber.nome || 'Amico/a'
             );
 
@@ -232,23 +232,23 @@ export async function GET(request: NextRequest) {
               tags: [
                 { name: 'challenge', value: config?.tag || 'challenge' },
                 { name: 'email_type', value: 'day_content' },
-                { name: 'day', value: String(currentDay) }
+                { name: 'day', value: String(nextDayToSend) }
               ]
             });
 
-            // Registra invio email
+            // Registra invio email per nextDayToSend
             await supabase
               .from('challenge_day_completions')
               .upsert({
                 subscriber_id: subscriber.id,
                 challenge: subscriber.challenge,
-                day_number: currentDay,
+                day_number: nextDayToSend,
                 email_sent_at: new Date().toISOString()
               }, {
                 onConflict: 'subscriber_id,challenge,day_number'
               });
 
-            // Aggiorna subscriber
+            // Aggiorna subscriber (NON modifichiamo current_day - quello è controllato dall'utente!)
             await supabase
               .from('challenge_subscribers')
               .update({
@@ -258,7 +258,7 @@ export async function GET(request: NextRequest) {
               .eq('id', subscriber.id);
 
             results.dailyEmails++;
-            console.log(`✅ Daily email sent: ${subscriber.email} - Day ${currentDay}`);
+            console.log(`✅ Daily email sent: ${subscriber.email} - Day ${nextDayToSend}`);
 
           } catch (emailError) {
             const errorMsg = `DailyEmail ${subscriber.email}: ${emailError instanceof Error ? emailError.message : 'Unknown'}`;
@@ -339,6 +339,10 @@ export async function GET(request: NextRequest) {
 
     // ============================================================
     // 5. FORCE ADVANCE 72h - Auto-sblocco giorno successivo
+    // ⚠️ NOTA: Questa logica MODIFICA current_day, che normalmente dovrebbe
+    // essere controllato solo dall'utente (user agency). Questo è un compromesso
+    // per evitare che utenti rimangano bloccati indefinitamente.
+    // Se si vuole user agency pura, rimuovere la modifica a current_day qui.
     // ============================================================
     try {
       const { data: forceAdvanceCandidates } = await supabase

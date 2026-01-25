@@ -76,6 +76,20 @@ export default function BumpOfferModal({
     };
   }, [handleMouseLeave, handleScroll]);
 
+  // SECURITY: Valida che l'URL sia sicuro (solo Stripe o path relativi)
+  const isValidRedirectUrl = (url: string): boolean => {
+    if (!url) return false;
+    // Accetta path relativi che iniziano con /
+    if (url.startsWith('/') && !url.startsWith('//')) return true;
+    // Accetta solo URL Stripe
+    try {
+      const parsed = new URL(url);
+      return parsed.hostname.endsWith('stripe.com');
+    } catch {
+      return false;
+    }
+  };
+
   // Gestisci accettazione bump
   const handleAcceptBump = async () => {
     setLoading(true);
@@ -91,9 +105,12 @@ export default function BumpOfferModal({
 
       const data = await response.json();
 
-      if (data.url) {
+      // SECURITY: Valida URL prima del redirect
+      if (data.url && isValidRedirectUrl(data.url)) {
         onAccept?.();
         window.location.href = data.url;
+      } else if (data.url) {
+        throw new Error('URL di redirect non valido');
       } else {
         throw new Error(data.error || 'Errore checkout');
       }

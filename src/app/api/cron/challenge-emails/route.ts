@@ -393,10 +393,14 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
 // POST per chiamate manuali con auth
 export async function POST(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
-  const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+  const cronSecret = process.env.CRON_SECRET;
 
-  if (process.env.CRON_SECRET && authHeader !== expectedAuth) {
-    console.error('Cron challenge-emails POST: Unauthorized');
+  // SECURITY: Richiedi sempre CRON_SECRET
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 });
+  }
+
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -411,11 +415,15 @@ export async function POST(request: NextRequest) {
 // GET per Vercel Cron
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
-  const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+  const cronSecret = process.env.CRON_SECRET;
 
-  // Vercel Cron non sempre invia auth header, ma limita l'accesso via configurazione
-  if (process.env.CRON_SECRET && authHeader && authHeader !== expectedAuth) {
-    console.error('Cron challenge-emails GET: Unauthorized');
+  // SECURITY: Richiedi sempre CRON_SECRET
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 });
+  }
+
+  // Vercel Cron invia l'auth header configurato in vercel.json
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

@@ -4,11 +4,21 @@ import { NextResponse } from 'next/server'
 import { processPendingPurchases } from '@/lib/stripe/process-pending-purchases'
 import { grantAssessmentAccess, LIBRO_TO_ASSESSMENT, AssessmentType } from '@/lib/assessment-access'
 
+// Valida che il redirect sia interno (sicurezza anti-open-redirect)
+function getSafeRedirect(url: string | null): string {
+  if (!url) return '/dashboard'
+  // Accetta solo path relativi che iniziano con /
+  if (url.startsWith('/') && !url.startsWith('//')) {
+    return url
+  }
+  return '/dashboard'
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   const bookCode = searchParams.get('book_code') // Codice libro per attivazione
-  const next = searchParams.get('next') ?? '/dashboard'
+  const next = getSafeRedirect(searchParams.get('next'))
 
   if (code) {
     const supabase = await createClient()

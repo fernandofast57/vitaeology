@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,12 +18,24 @@ function getSupabase() {
 
 export async function POST(request: NextRequest) {
   try {
+    // SECURITY: Verifica autenticazione e che userId corrisponda all'utente autenticato
+    const supabaseAuth = await createServerClient();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { userId } = await request.json();
 
-    if (!userId) {
+    // SECURITY: Verifica che userId corrisponda all'utente autenticato
+    if (!userId || userId !== user.id) {
       return NextResponse.json(
-        { error: 'Missing user ID' },
-        { status: 400 }
+        { error: 'Forbidden - Cannot access other user portal' },
+        { status: 403 }
       );
     }
 
