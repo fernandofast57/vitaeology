@@ -174,8 +174,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-  } catch (error) {
-    console.error('Errore attivazione codice:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

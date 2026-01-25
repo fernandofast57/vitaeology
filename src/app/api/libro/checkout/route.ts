@@ -73,8 +73,6 @@ export async function POST(request: NextRequest) {
         if (click) {
           clickId = click.id;
         }
-
-        console.log(`📊 Affiliate tracking: ref=${refCode}, affiliate_id=${affiliateId}, click_id=${clickId}`);
       }
     }
 
@@ -129,8 +127,7 @@ export async function POST(request: NextRequest) {
       sessionId: session.id,
       url: session.url
     });
-  } catch (error) {
-    console.error('Errore checkout libro:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Errore creazione checkout' },
       { status: 500 }

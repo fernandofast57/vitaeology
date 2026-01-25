@@ -30,13 +30,13 @@ interface CompleteRequestBody {
   email: string;
   challengeType: string;
   dayNumber: number;
-  responses?: string[];
+  // responses ora salvate direttamente in challenge_discovery_responses dal frontend
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body: CompleteRequestBody = await request.json();
-    const { email, challengeType, dayNumber, responses } = body;
+    const { email, challengeType, dayNumber } = body;
 
     // Validazione input
     if (!email || !challengeType || !dayNumber) {
@@ -80,7 +80,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. Verifica se giorno gia completato
+    // 2. Verifica se giorno è sbloccato (user agency: deve aver completato i precedenti)
+    // Regola: Day 1 sempre sbloccato, Day N sbloccato se current_day >= N-1
+    const currentDay = subscriber.current_day || 0;
+    const isDayUnlocked = dayNumber === 1 || dayNumber <= currentDay + 1;
+
+    if (!isDayUnlocked) {
+      return NextResponse.json(
+        { error: `Devi completare prima il Giorno ${dayNumber - 1}` },
+        { status: 403 }
+      );
+    }
+
+    // 3. Verifica se giorno gia completato
     const { data: existingCompletion } = await supabase
       .from('challenge_day_completions')
       .select('id')
@@ -111,7 +123,6 @@ export async function POST(request: NextRequest) {
       });
 
     if (completionError) {
-      console.error('Errore salvataggio completamento:', completionError);
       return NextResponse.json(
         { error: 'Errore nel salvataggio del completamento' },
         { status: 500 }
@@ -120,25 +131,20 @@ export async function POST(request: NextRequest) {
 
     // Aggiorna awareness level per giorno completato (non giorno 7 che ha hook separato)
     if (dayNumber < 7) {
-      onChallengeDayCompleted(email, dayNumber).catch(err =>
-        console.error('[Awareness] Day completion update error:', err)
-      );
+      onChallengeDayCompleted(email, dayNumber).catch(() => {});
     }
 
-    // 4. Salva risposte se fornite (in ab_test_events come metadata)
-    if (responses && responses.length > 0) {
-      await supabase.from('ab_test_events').insert({
-        challenge: normalizedChallenge,
-        variant: subscriber.variant || 'A',
-        event_type: 'day_completed',
-        subscriber_id: subscriber.id,
-        metadata: {
-          day_number: dayNumber,
-          responses: responses
-        },
-        created_at: new Date().toISOString()
-      });
-    }
+    // 4. Traccia evento completamento giorno in ab_test_events (senza risposte - quelle vanno in challenge_discovery_responses)
+    await supabase.from('ab_test_events').insert({
+      challenge: normalizedChallenge,
+      variant: subscriber.variant || 'A',
+      event_type: 'day_completed',
+      subscriber_id: subscriber.id,
+      metadata: {
+        day_number: dayNumber
+      },
+      created_at: new Date().toISOString()
+    });
 
     let emailSent = false;
     let nextDay: number | undefined;
@@ -150,17 +156,18 @@ export async function POST(request: NextRequest) {
     // 5. Gestisci completamento in base al giorno
     if (dayNumber < 7) {
       // Giorno 1-6 completato
-      // NON inviare email immediata - il cron job la invierà domani (time-based)
+      // NON inviare email immediata - il cron job la invierà domani (user agency)
       nextDay = dayNumber + 1;
 
-      // Aggiorna subscriber: incrementa current_day, NON aggiorna last_email_*
+      // Aggiorna subscriber: current_day = giorno APPENA COMPLETATO
+      // SEMANTICA: current_day = ultimo giorno completato dall'utente
       await supabase
         .from('challenge_subscribers')
         .update({
-          current_day: nextDay,
+          current_day: dayNumber,  // Il giorno che l'utente ha APPENA completato
           last_activity_at: new Date().toISOString()
           // NON aggiornare last_email_sent_at e last_email_type
-          // così il cron job sa che deve inviare l'email del giorno successivo
+          // Il cron job verificherà current_day per decidere quale email inviare
         })
         .eq('id', subscriber.id);
 
@@ -176,12 +183,8 @@ export async function POST(request: NextRequest) {
         );
 
         emailSent = result.success;
-
-        if (!result.success) {
-          console.error('Errore invio email completamento:', result.error);
-        }
-      } catch (emailError) {
-        console.error('Errore invio email completamento:', emailError);
+      } catch {
+        // Errore email silenzioso - non blocca il completamento
       }
 
       // Marca challenge come completata con last_activity_at
@@ -211,9 +214,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Aggiorna awareness level (challenge completata)
-      onChallengeDayCompleted(email, 7).catch(err =>
-        console.error('[Awareness] Challenge completion update error:', err)
-      );
+      onChallengeDayCompleted(email, 7).catch(() => {});
 
       // Concedi accesso all'assessment corrispondente
       const { data: profile } = await supabase
@@ -232,7 +233,6 @@ export async function POST(request: NextRequest) {
             'challenge_complete',
             subscriber.id
           );
-          console.log(`✅ Access granted: ${assessmentType} to user ${profile.id} (challenge: ${normalizedChallenge})`);
         }
       }
     }
@@ -259,8 +259,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
 
-  } catch (error) {
-    console.error('Errore API complete-day:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }
