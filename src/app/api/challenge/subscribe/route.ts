@@ -3,6 +3,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { alertAPIError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 
@@ -97,7 +98,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertError) {
-      console.error('Supabase insert error:', insertError);
       return NextResponse.json(
         { error: 'Errore nel salvataggio' },
         { status: 500 }
@@ -126,9 +126,8 @@ export async function POST(request: NextRequest) {
           audienceId: process.env.RESEND_AUDIENCE_ID
         });
       }
-    } catch (resendError) {
-      console.error('Resend contact error:', resendError);
-      // Non bloccare se Resend fallisce
+    } catch {
+      // Errore Resend silenzioso - non blocca l'iscrizione
     }
 
     // Invia email di benvenuto
@@ -146,19 +145,20 @@ export async function POST(request: NextRequest) {
       if (!emailError) {
         welcomeEmailSent = true;
       }
-    } catch (emailError) {
-      console.error('Email send error:', emailError);
-      // Non bloccare se email fallisce
+    } catch {
+      // Errore email silenzioso - non blocca l'iscrizione
     }
 
     // Aggiorna subscriber con info email inviata (CRITICO per il cron job)
+    // NOTA: current_day rimane 0 - significa "iscritto, nessun giorno completato"
+    // L'utente deve COMPLETARE Day 1 per passare a current_day: 1
     if (welcomeEmailSent) {
       await supabase
         .from('challenge_subscribers')
         .update({
           last_email_sent_at: new Date().toISOString(),
-          last_email_type: 'welcome',
-          current_day: 1 // Pronto per ricevere Day 1 content
+          last_email_type: 'welcome'
+          // current_day rimane 0 - verrà incrementato quando l'utente completa il giorno
         })
         .eq('id', subscriber.id);
 
@@ -183,7 +183,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Challenge subscribe error:', error);
+    await alertAPIError(
+      '/api/challenge/subscribe',
+      error instanceof Error ? error : new Error('Challenge subscription failed')
+    );
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

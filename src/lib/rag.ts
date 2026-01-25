@@ -47,21 +47,14 @@ export interface SearchOptions {
  */
 async function getQueryEmbedding(query: string): Promise<number[] | null> {
   try {
-    // DEBUG: verifica configurazione
-    console.log('[RAG] OpenAI API Key presente:', process.env.OPENAI_API_KEY ? 'SI' : 'NO');
-    console.log('[RAG] OpenAI Org ID:', process.env.OPENAI_ORG_ID || 'NON CONFIGURATO');
-
     const openai = getOpenAIClient();
     const response = await openai.embeddings.create({
       model: 'text-embedding-3-small',
       input: query,
     });
 
-    const embedding = response.data?.[0]?.embedding;
-    console.log('[RAG] Embedding generato con successo, dimensioni:', embedding?.length);
-    return embedding || null;
-  } catch (error: any) {
-    console.error('[RAG] Errore OpenAI embedding:', error?.message || error);
+    return response.data?.[0]?.embedding || null;
+  } catch {
     return null;
   }
 }
@@ -79,7 +72,6 @@ export async function searchByEmbedding(
   try {
     const embedding = await getQueryEmbedding(query);
     if (!embedding) {
-      console.log('Embedding fallito, uso keyword search');
       return searchByKeywords(query, limit, currentPath);
     }
 
@@ -95,13 +87,11 @@ export async function searchByEmbedding(
     });
 
     if (error) {
-      console.error('Errore similarity search:', error);
       return searchByKeywords(query, limit, currentPath);
     }
 
     return data || [];
-  } catch (error) {
-    console.error('Errore RAG:', error);
+  } catch {
     return [];
   }
 }
@@ -131,10 +121,7 @@ async function searchByKeywords(
 
   const { data, error } = await queryBuilder.limit(limit);
 
-  if (error) {
-    console.error('Errore keyword search:', error);
-    return [];
-  }
+  if (error) return [];
 
   return data || [];
 }

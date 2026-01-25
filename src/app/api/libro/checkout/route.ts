@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { getLibroBySlug } from '@/data/libri';
+import { alertPaymentError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,8 +74,6 @@ export async function POST(request: NextRequest) {
         if (click) {
           clickId = click.id;
         }
-
-        console.log(`📊 Affiliate tracking: ref=${refCode}, affiliate_id=${affiliateId}, click_id=${clickId}`);
       }
     }
 
@@ -130,7 +129,10 @@ export async function POST(request: NextRequest) {
       url: session.url
     });
   } catch (error) {
-    console.error('Errore checkout libro:', error);
+    await alertPaymentError(
+      error instanceof Error ? error : new Error('Checkout creation failed'),
+      { endpoint: '/api/libro/checkout' }
+    );
     return NextResponse.json(
       { error: 'Errore creazione checkout' },
       { status: 500 }
