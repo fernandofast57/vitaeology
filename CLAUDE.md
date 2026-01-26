@@ -1112,6 +1112,7 @@ npm run lint         # ESLint
 # Script utility
 node scripts/run-sql.js sql/file.sql
 node scripts/verify_ai_coach_tables.js
+node scripts/security-audit.js       # ⚠️ ESEGUIRE PRIMA DI OGNI DEPLOY
 ```
 
 ---
@@ -1197,21 +1198,26 @@ AS $$ ... $$;
 
 ### 3. Script Audit Sicurezza
 
-**File:** `sql/security_audit.sql`
+**File:** `scripts/security-audit.js`
 
 **Eseguire PRIMA di ogni deploy:**
 ```bash
-# In Supabase SQL Editor, esegui tutto il contenuto di:
-sql/security_audit.sql
+node scripts/security-audit.js
 ```
 
 **Output atteso (sicuro):**
 ```
-ZERO views con SECURITY DEFINER
-ZERO tabelle senza RLS
-ZERO tabelle con RLS ma senza policies
-ZERO riferimenti a auth.users in views public
+============================================================
+✅ AUDIT COMPLETATO: NESSUN PROBLEMA DI SICUREZZA
+============================================================
 ```
+
+**Cosa verifica:**
+1. Views con SECURITY DEFINER (dovrebbero essere ZERO)
+2. Tabelle senza RLS
+3. Tabelle con RLS ma senza policies
+4. Views che espongono auth.users
+5. Funzioni con SECURITY DEFINER non autorizzate
 
 ### 4. Checklist Pre-Deploy (OBBLIGATORIA)
 
