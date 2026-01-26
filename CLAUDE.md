@@ -1180,6 +1180,18 @@ CREATE TABLE public.my_table (...);
 -- "Lo aggiungo dopo" = vulnerabilità
 ```
 
+#### POLICY per SERVICE ROLE (tabelle di sistema)
+```sql
+-- Per tabelle che devono essere accessibili da API/cron (es. system_logs, monitoring)
+-- Service role può leggere/scrivere tutto (bypassa RLS)
+CREATE POLICY "Service role full access" ON public.my_system_table
+  FOR ALL USING (auth.role() = 'service_role');
+
+-- Per INSERT da service role (es. logging)
+CREATE POLICY "Service role can insert" ON public.my_logs_table
+  FOR INSERT WITH CHECK (true);  -- ⚠️ INSERT usa WITH CHECK, non USING
+```
+
 #### FUNZIONE (INVOKER di default, DEFINER solo se necessario)
 ```sql
 -- ✅ CORRETTO: SECURITY INVOKER (default, esplicito per chiarezza)

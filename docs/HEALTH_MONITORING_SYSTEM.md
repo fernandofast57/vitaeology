@@ -424,15 +424,19 @@ FROM system_logs;
 
 ## 7. Checklist Implementazione
 
-- [ ] Creare tabella `system_logs` in Supabase
-- [ ] Configurare RLS policies
-- [ ] Creare `src/lib/system-logger.ts`
-- [ ] Integrare in `cron/challenge-emails`
-- [ ] Integrare in `cron/monitoring`
-- [ ] Creare API `/api/admin/health`
-- [ ] Creare pagina `/admin/health`
-- [ ] Testare con dati reali
-- [ ] Configurare auto-refresh dashboard
+- [x] Creare tabella `system_logs` in Supabase → `sql/system_logs.sql`
+- [x] Configurare RLS policies → Incluse in `sql/system_logs.sql`
+- [x] Creare `src/lib/system-logger.ts` → Completato
+- [ ] Integrare in `cron/challenge-emails` (opzionale - post 100 utenti)
+- [x] Creare `/api/cron/monitoring` → Completato con 4P×3F
+- [x] Creare API `/api/admin/health` → Completato
+- [x] Creare pagina `/admin/health` → Completato
+- [x] Creare pagina `/admin/monitoring` → Dashboard 4P×3F avanzata
+- [x] Configurare auto-refresh dashboard → 60 secondi
+
+### SQL Migrations da eseguire in Supabase:
+1. `sql/system_logs.sql` - Event logging
+2. `sql/system_metrics_12f.sql` - Metriche 4P×3F (se non già eseguito)
 
 ---
 

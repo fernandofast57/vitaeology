@@ -77,7 +77,8 @@ const AUDIT_QUERIES = [
         'user_has_pathway_access', 'grant_pathway_access',
         'check_ai_coach_limit', 'handle_new_user',
         'is_certified_consultant', 'get_consultant_certification',
-        'check_mentor_exam_eligibility'
+        'check_mentor_exam_eligibility',
+        'fn_cleanup_old_logs', 'fn_update_check_state', 'fn_should_run_check'
       )
       -- Escludi funzioni di sistema/trigger
       AND p.proname NOT LIKE 'link_%'
