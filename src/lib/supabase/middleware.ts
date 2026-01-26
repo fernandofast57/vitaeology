@@ -15,7 +15,7 @@ const AFFILIATE_REF_PATTERN = /^AFF-[A-Z0-9]{6}$/;
 // Route protection configuration
 const ROUTE_CONFIG = {
   // Public routes - no auth required
-  public: ['/challenge', '/api/challenge', '/api/analytics/behavioral', '/libro', '/og'],
+  public: ['/challenge', '/api/challenge', '/api/analytics/behavioral', '/libro', '/og', '/api/cron', '/api/stripe/webhook'],
 
   // Auth required routes
   protected: ['/dashboard', '/test', '/results', '/exercises', '/settings', '/profile', '/progress', '/subscription', '/assessment'],
