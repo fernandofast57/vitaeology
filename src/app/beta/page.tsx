@@ -56,6 +56,9 @@ function BetaPageContent() {
     ? CHALLENGE_DISPLAY[challengeParam]
     : null;
 
+  // Leggi utm_content per tracking creatività ADS
+  const utmContent = searchParams.get('utm_content');
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     full_name: '',
@@ -103,6 +106,7 @@ function BetaPageContent() {
           ...formData,
           turnstileToken,
           preferred_challenge: preferredChallenge, // Challenge da ADS
+          utm_content: utmContent, // Creatività ADS (emotivo/pratico/domanda)
         }),
       });
 

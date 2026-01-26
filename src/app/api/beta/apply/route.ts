@@ -39,6 +39,7 @@ export async function POST(request: Request) {
       source,
       turnstileToken,
       preferred_challenge, // Challenge da ADS: leadership-autentica|oltre-ostacoli|microfelicita
+      utm_content, // Creatività ADS: leadership_emotivo|leadership_pratico|etc.
     } = body;
 
     // Verifica Turnstile (anti-bot)
@@ -112,6 +113,7 @@ export async function POST(request: Request) {
         status,
         cohort: null, // Assegnato al momento dell'approvazione
         preferred_challenge: preferred_challenge || null, // Challenge da ADS
+        utm_content: utm_content || null, // Creatività ADS per A/B testing
       })
       .select()
       .single();
