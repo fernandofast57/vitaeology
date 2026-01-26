@@ -1,12 +1,17 @@
 // POST /api/beta/apply - Candidatura pubblica beta tester
+// Auto-approva se ci sono posti disponibili, altrimenti waitlist
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendBetaWelcomeEmail, sendBetaWaitlistEmail } from '@/lib/email/beta-tester-emails';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+// Configurazione posti disponibili
+const MAX_BETA_TESTERS = 20;
 
 export async function POST(request: Request) {
   try {
@@ -55,6 +60,18 @@ export async function POST(request: Request) {
       );
     }
 
+    // Conta tester attualmente approvati/attivi
+    const { count: currentTesters } = await supabase
+      .from('beta_testers')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['approved', 'active']);
+
+    const spotsAvailable = (currentTesters || 0) < MAX_BETA_TESTERS;
+
+    // Determina status e cohort
+    const status = spotsAvailable ? 'approved' : 'pending';
+    const cohort = spotsAvailable ? 'A' : null;
+
     // Inserisci candidatura
     const { data, error } = await supabase
       .from('beta_testers')
@@ -68,7 +85,8 @@ export async function POST(request: Request) {
         motivation,
         hours_available,
         source: source || null,
-        status: 'pending',
+        status,
+        cohort,
       })
       .select()
       .single();
@@ -81,11 +99,50 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Candidatura ricevuta! Ti contatteremo entro 48 ore.',
-      id: data.id,
-    });
+    // Invia email appropriata
+    if (spotsAvailable) {
+      // Auto-approvato: invia email di benvenuto
+      const emailResult = await sendBetaWelcomeEmail({
+        email: email.toLowerCase(),
+        fullName: full_name,
+        cohort: cohort || undefined,
+      });
+
+      if (!emailResult.success) {
+        console.error('Errore invio email benvenuto beta:', emailResult.error);
+      }
+
+      return NextResponse.json({
+        success: true,
+        approved: true,
+        message: 'Congratulazioni! Sei stato approvato come Founding Tester. Controlla la tua email per i prossimi passi.',
+        id: data.id,
+      });
+    } else {
+      // Posti esauriti: invia email waitlist
+      const { count: waitlistPosition } = await supabase
+        .from('beta_testers')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
+      const emailResult = await sendBetaWaitlistEmail({
+        email: email.toLowerCase(),
+        fullName: full_name,
+        position: waitlistPosition || 1,
+      });
+
+      if (!emailResult.success) {
+        console.error('Errore invio email waitlist:', emailResult.error);
+      }
+
+      return NextResponse.json({
+        success: true,
+        approved: false,
+        message: 'Grazie! Sei in lista d\'attesa. Ti contatteremo appena si libera un posto.',
+        id: data.id,
+        waitlistPosition: waitlistPosition || 1,
+      });
+    }
   } catch (error) {
     console.error('Errore API beta/apply:', error);
     return NextResponse.json(
