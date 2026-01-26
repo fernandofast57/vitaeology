@@ -4,7 +4,7 @@ Piattaforma SaaS per lo sviluppo della leadership destinata a imprenditori e man
 
 ## 🎯 Features
 
-- **Test Diagnostico**: 240 domande per valutare 24 caratteristiche di leadership
+- **Test Diagnostico**: 72 domande per valutare 24 caratteristiche di leadership
 - **Radar Chart Interattivo**: Visualizzazione grafica dei risultati
 - **4 Pilastri**: ESSERE, SENTIRE, PENSARE, AGIRE
 - **52 Esercizi Settimanali**: Percorso guidato di un anno
