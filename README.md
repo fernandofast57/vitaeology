@@ -1,4 +1,4 @@
-# 🌱 Vitaeology - Leadership Autentica
+ # 🌱 Vitaeology - Leadership Autentica
 
 Piattaforma SaaS per lo sviluppo della leadership destinata a imprenditori e manager di PMI italiane.
 
