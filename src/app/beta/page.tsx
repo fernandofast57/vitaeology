@@ -4,9 +4,11 @@
 // PAGE: /beta
 // Descrizione: Landing page per reclutamento beta tester (Founding Tester)
 // Form: Nativo React → Supabase
+// Supporta parametro ?challenge=leadership|ostacoli|microfelicita per ADS
 // ============================================================================
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Gift, Sparkles, Award, Users, Clock, Zap, CheckCircle, Loader2 } from 'lucide-react';
@@ -29,7 +31,31 @@ interface FormData {
   source: string;
 }
 
-export default function BetaPage() {
+// Mapping challenge URL param → valore DB
+const CHALLENGE_MAP: Record<string, string> = {
+  'leadership': 'leadership-autentica',
+  'ostacoli': 'oltre-ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+const CHALLENGE_DISPLAY: Record<string, string> = {
+  'leadership': 'Leadership Autentica',
+  'ostacoli': 'Oltre gli Ostacoli',
+  'microfelicita': 'Microfelicità',
+};
+
+function BetaPageContent() {
+  const searchParams = useSearchParams();
+
+  // Leggi challenge da URL: /beta?challenge=leadership
+  const challengeParam = searchParams.get('challenge');
+  const preferredChallenge = challengeParam && CHALLENGE_MAP[challengeParam]
+    ? CHALLENGE_MAP[challengeParam]
+    : null;
+  const challengeDisplayName = challengeParam && CHALLENGE_DISPLAY[challengeParam]
+    ? CHALLENGE_DISPLAY[challengeParam]
+    : null;
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     full_name: '',
@@ -73,7 +99,11 @@ export default function BetaPage() {
       const response = await fetch('/api/beta/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, turnstileToken }),
+        body: JSON.stringify({
+          ...formData,
+          turnstileToken,
+          preferred_challenge: preferredChallenge, // Challenge da ADS
+        }),
       });
 
       const data = await response.json();
@@ -120,6 +150,18 @@ export default function BetaPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Challenge Badge (se arriva da ADS con parametro) */}
+        {challengeDisplayName && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-petrol-50 to-gold-50 border border-petrol-200 rounded-xl text-center">
+            <p className="text-sm text-petrol-600">
+              Stai per iniziare il percorso
+            </p>
+            <p className="text-xl font-bold text-petrol-700 mt-1">
+              {challengeDisplayName}
+            </p>
+          </div>
+        )}
+
         {/* Hero Section */}
         <div className="text-center mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gold-100 text-gold-700 rounded-full text-sm font-medium mb-6">
@@ -563,5 +605,23 @@ export default function BetaPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Loading fallback per Suspense
+function BetaPageLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-petrol-50 via-white to-gold-50/30 flex items-center justify-center">
+      <Loader2 className="w-8 h-8 animate-spin text-petrol-600" />
+    </div>
+  );
+}
+
+// Export con Suspense wrapper (necessario per useSearchParams)
+export default function BetaPage() {
+  return (
+    <Suspense fallback={<BetaPageLoading />}>
+      <BetaPageContent />
+    </Suspense>
   );
 }

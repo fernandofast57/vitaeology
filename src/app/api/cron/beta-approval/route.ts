@@ -91,11 +91,12 @@ export async function GET(request: NextRequest) {
           .update({ is_founding_tester: true })
           .eq('email', tester.email.toLowerCase());
 
-        // Invia email di benvenuto
+        // Invia email di benvenuto con CTA dinamica basata sulla challenge
         const emailResult = await sendBetaWelcomeEmail({
           email: tester.email,
           fullName: tester.full_name,
           cohort: 'A',
+          preferredChallenge: tester.preferred_challenge || undefined,
         });
 
         if (emailResult.success) {

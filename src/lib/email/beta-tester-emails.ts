@@ -18,6 +18,7 @@ export interface BetaWelcomeEmailParams {
   email: string;
   fullName: string;
   cohort?: string;
+  preferredChallenge?: string; // leadership-autentica|oltre-ostacoli|microfelicita
 }
 
 export interface BetaWaitlistEmailParams {
@@ -44,9 +45,34 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.vitaeology.com';
 // EMAIL: BENVENUTO BETA TESTER
 // ============================================================
 
+// Mapping challenge → URL param per landing
+const CHALLENGE_URL_MAP: Record<string, string> = {
+  'leadership-autentica': 'leadership',
+  'oltre-ostacoli': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+const CHALLENGE_DISPLAY_MAP: Record<string, string> = {
+  'leadership-autentica': 'Leadership Autentica',
+  'oltre-ostacoli': 'Oltre gli Ostacoli',
+  'microfelicita': 'Microfelicità',
+};
+
 export async function sendBetaWelcomeEmail(params: BetaWelcomeEmailParams): Promise<EmailResult> {
-  const { email, fullName } = params;
+  const { email, fullName, preferredChallenge } = params;
   const firstName = fullName.split(' ')[0];
+
+  // Determina CTA dinamica in base alla challenge
+  const challengeUrlParam = preferredChallenge ? CHALLENGE_URL_MAP[preferredChallenge] : null;
+  const challengeDisplayName = preferredChallenge ? CHALLENGE_DISPLAY_MAP[preferredChallenge] : null;
+
+  // CTA: se ha una challenge preferita → vai alla challenge, altrimenti → signup
+  const ctaUrl = challengeUrlParam
+    ? `${APP_URL}/challenge/${challengeUrlParam}?beta=true&email=${encodeURIComponent(email)}`
+    : `${APP_URL}/auth/signup?email=${encodeURIComponent(email)}&beta=true`;
+  const ctaText = challengeUrlParam
+    ? `Inizia la Challenge ${challengeDisplayName}`
+    : 'Crea il Tuo Account';
 
   const subject = `Benvenuto tra i Founding Tester di Vitaeology!`;
 
@@ -126,9 +152,9 @@ export async function sendBetaWelcomeEmail(params: BetaWelcomeEmailParams): Prom
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="${APP_URL}/auth/signup?email=${encodeURIComponent(email)}&beta=true"
+                    <a href="${ctaUrl}"
                        style="display: inline-block; background-color: #F4B942; color: #0A2540; font-size: 16px; font-weight: 700; text-decoration: none; padding: 16px 40px; border-radius: 8px;">
-                      Crea il Tuo Account
+                      ${ctaText}
                     </a>
                   </td>
                 </tr>

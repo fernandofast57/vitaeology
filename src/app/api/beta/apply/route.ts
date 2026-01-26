@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       hours_available,
       source,
       turnstileToken,
+      preferred_challenge, // Challenge da ADS: leadership-autentica|oltre-ostacoli|microfelicita
     } = body;
 
     // Verifica Turnstile (anti-bot)
@@ -110,6 +111,7 @@ export async function POST(request: Request) {
         source: source || null,
         status,
         cohort: null, // Assegnato al momento dell'approvazione
+        preferred_challenge: preferred_challenge || null, // Challenge da ADS
       })
       .select()
       .single();
