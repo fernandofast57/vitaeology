@@ -498,15 +498,31 @@ export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
+  // DEBUG: Log auth info per troubleshooting
+  console.log('[Cron challenge-emails] Auth debug:', {
+    hasAuthHeader: !!authHeader,
+    authHeaderPrefix: authHeader?.substring(0, 20) + '...',
+    hasCronSecret: !!cronSecret,
+    cronSecretLength: cronSecret?.length,
+    match: authHeader === `Bearer ${cronSecret}`
+  });
+
   // SECURITY: Richiedi sempre CRON_SECRET
   if (!cronSecret) {
+    console.error('[Cron challenge-emails] CRON_SECRET not configured!');
     return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 });
   }
 
   // Vercel Cron invia l'auth header configurato in vercel.json
   if (authHeader !== `Bearer ${cronSecret}`) {
+    console.error('[Cron challenge-emails] Auth mismatch!', {
+      expected: `Bearer ${cronSecret.substring(0, 5)}...`,
+      received: authHeader?.substring(0, 20) + '...'
+    });
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  console.log('[Cron challenge-emails] Auth OK, proceeding...');
 
   const result = await runCronJob();
 
