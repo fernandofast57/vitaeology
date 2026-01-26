@@ -63,13 +63,6 @@ export default function ChallengesAdminPage() {
     'microfelicita': 'Microfelicita'
   };
 
-  const statusColors: Record<string, string> = {
-    active: 'bg-green-500/20 text-green-400',
-    completed: 'bg-blue-500/20 text-blue-400',
-    unsubscribed: 'bg-red-500/20 text-red-400',
-    paused: 'bg-yellow-500/20 text-yellow-400'
-  };
-
   const fetchData = useCallback(async () => {
     try {
       // Fetch subscribers

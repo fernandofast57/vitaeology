@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, AlertTriangle, CheckCircle, XCircle, Clock, Activity, TrendingUp, Zap } from 'lucide-react';
+import { RefreshCw, AlertTriangle, CheckCircle, XCircle, Clock, Activity, Zap } from 'lucide-react';
 
 interface MetricCard {
   label: string;
