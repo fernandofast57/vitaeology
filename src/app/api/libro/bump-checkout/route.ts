@@ -56,19 +56,21 @@ export async function POST(request: NextRequest) {
     let customerId: string | undefined;
     let userId: string | undefined;
     let userEmail: string | undefined;
+    let isFoundingTester = false;
 
     if (user) {
       userId = user.id;
       userEmail = user.email;
 
-      // Recupera o crea Stripe customer
+      // Recupera o crea Stripe customer e founding tester status
       const { data: profile } = await supabaseAdmin
         .from('profiles')
-        .select('stripe_customer_id')
+        .select('stripe_customer_id, is_founding_tester')
         .eq('id', user.id)
         .single();
 
       customerId = profile?.stripe_customer_id;
+      isFoundingTester = profile?.is_founding_tester === true;
 
       if (!customerId) {
         const customer = await stripe.customers.create({
@@ -131,6 +133,10 @@ export async function POST(request: NextRequest) {
     if (affiliateId) sessionMetadata.affiliate_id = affiliateId;
     if (clickId) sessionMetadata.affiliate_click_id = clickId;
 
+    // Founding Tester Discount
+    const foundingTesterCouponId = process.env.STRIPE_FOUNDING_TESTER_COUPON_ID;
+    const hasFoundingDiscount = isFoundingTester && foundingTesterCouponId;
+
     // Crea checkout session
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ['card'],
@@ -141,7 +147,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/libro/${libro.slug}/grazie?bump=true`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/libro/${libro.slug}/grazie?bump=true${hasFoundingDiscount ? '&founding=true' : ''}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/libro/${libro.slug}`,
       metadata: sessionMetadata,
       subscription_data: {
@@ -150,16 +156,24 @@ export async function POST(request: NextRequest) {
           tier_name: leaderTier.name,
           libro_slug: libro.slug,
           libro_incluso: 'true',
+          is_founding_tester: hasFoundingDiscount ? 'true' : 'false',
         },
       },
-      allow_promotion_codes: true,
       // Descrizione personalizzata
       custom_text: {
         submit: {
-          message: `Include: "${libro.titolo}" (PDF) + Accesso Leader per 1 anno`,
+          message: `Include: "${libro.titolo}" (PDF) + Accesso Leader per 1 anno${hasFoundingDiscount ? ' (Sconto Founding Tester applicato!)' : ''}`,
         },
       },
     };
+
+    // Auto-apply founding tester discount OR allow promo codes
+    if (hasFoundingDiscount) {
+      sessionConfig.discounts = [{ coupon: foundingTesterCouponId }];
+      console.log(`[Bump Checkout] Applying founding tester discount for user ${userId}`);
+    } else {
+      sessionConfig.allow_promotion_codes = true;
+    }
 
     // Aggiungi customer se autenticato
     if (customerId) {

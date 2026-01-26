@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useBehavioralTracking } from '@/hooks/useBehavioralTracking';
@@ -11,6 +11,7 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
+import Turnstile from '@/components/Turnstile';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando
 // Conformità: MEGA_PROMPT v4.3, CONTROL_TOWER v1.2, COPY_REALIGNMENT_ANALYSIS
@@ -24,6 +25,11 @@ function LeadershipLandingContent() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   // Behavioral tracking
   const [behavior, behaviorActions] = useBehavioralTracking('leadership', 'epiphany');
@@ -40,6 +46,12 @@ function LeadershipLandingContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!turnstileToken) {
+      setError('Attendi la verifica di sicurezza...');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -54,7 +66,8 @@ function LeadershipLandingContent() {
           variant: 'epiphany',
           utmSource,
           utmMedium,
-          utmCampaign
+          utmCampaign,
+          turnstileToken
         })
       });
 
@@ -80,6 +93,10 @@ function LeadershipLandingContent() {
 
   // Handler per exit intent popup
   const handleExitIntentSubmit = async (exitEmail: string) => {
+    if (!turnstileToken) {
+      throw new Error('Verifica di sicurezza non completata');
+    }
+
     setEmail(exitEmail);
     setNome('Visitatore');
 
@@ -93,7 +110,8 @@ function LeadershipLandingContent() {
         variant: 'epiphany',
         utmSource,
         utmMedium,
-        utmCampaign
+        utmCampaign,
+        turnstileToken
       })
     });
 
@@ -139,10 +157,16 @@ function LeadershipLandingContent() {
         required
         className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-colors"
       />
+      {/* Turnstile - captcha invisibile */}
+      <Turnstile
+        onVerify={handleTurnstileVerify}
+        theme="dark"
+        className="flex justify-center"
+      />
       {error && <p className="text-red-400 text-sm">{error}</p>}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !turnstileToken}
         className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition disabled:opacity-50"
       >
         {loading ? 'Iscrizione in corso...' : 'Inizia la Challenge Gratuita'}

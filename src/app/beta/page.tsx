@@ -6,10 +6,11 @@
 // Form: Nativo React → Supabase
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Gift, Sparkles, Award, Users, Clock, Zap, CheckCircle, Loader2 } from 'lucide-react';
+import Turnstile from '@/components/Turnstile';
 
 // Configurazione posti disponibili (aggiornare manualmente)
 const TOTAL_SPOTS = 20;
@@ -45,6 +46,11 @@ export default function BetaPage() {
   const [willBeApproved, setWillBeApproved] = useState(false);
   const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
   const [error, setError] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -54,6 +60,12 @@ export default function BetaPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!turnstileToken) {
+      setError('Attendi la verifica di sicurezza...');
+      return;
+    }
+
     setIsSubmitting(true);
     setError('');
 
@@ -61,7 +73,7 @@ export default function BetaPage() {
       const response = await fetch('/api/beta/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, turnstileToken }),
       });
 
       const data = await response.json();
@@ -448,6 +460,14 @@ export default function BetaPage() {
                   />
                 </div>
 
+                {/* Turnstile - captcha invisibile */}
+                <div className="flex justify-center">
+                  <Turnstile
+                    onVerify={handleTurnstileVerify}
+                    theme="light"
+                  />
+                </div>
+
                 {/* Error */}
                 {error && (
                   <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -458,7 +478,7 @@ export default function BetaPage() {
                 {/* Submit */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !turnstileToken}
                   className="w-full py-3.5 bg-petrol-600 text-white font-semibold rounded-lg hover:bg-petrol-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (

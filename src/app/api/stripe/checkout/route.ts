@@ -60,10 +60,10 @@ export async function POST(request: NextRequest) {
     const stripe = getStripe();
     const supabase = getSupabase();
 
-    // Check if user already has a Stripe customer ID
+    // Check if user already has a Stripe customer ID and founding tester status
     const { data: profile } = await supabase
       .from('profiles')
-      .select('stripe_customer_id')
+      .select('stripe_customer_id, is_founding_tester')
       .eq('id', userId)
       .single();
 
@@ -86,8 +86,12 @@ export async function POST(request: NextRequest) {
         .eq('id', userId);
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    // Founding Tester Discount: auto-apply lifetime 30% discount
+    const isFoundingTester = profile?.is_founding_tester === true;
+    const foundingTesterCouponId = process.env.STRIPE_FOUNDING_TESTER_COUPON_ID;
+
+    // Build checkout session options
+    const checkoutOptions: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       payment_method_types: ['card'],
       line_items: [
@@ -97,22 +101,34 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription/success?plan=${tierSlug}`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription/success?plan=${tierSlug}${isFoundingTester ? '&founding=true' : ''}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
       metadata: {
         user_id: userId,
         tier_slug: tierSlug,
+        is_founding_tester: isFoundingTester ? 'true' : 'false',
       },
       // Add subscription metadata
       subscription_data: {
         metadata: {
           tier_slug: tierSlug,
           tier_name: tier.name,
+          is_founding_tester: isFoundingTester ? 'true' : 'false',
         },
       },
-      // Allow promo codes
-      allow_promotion_codes: true,
-    });
+    };
+
+    // Auto-apply founding tester discount OR allow promo codes
+    if (isFoundingTester && foundingTesterCouponId) {
+      checkoutOptions.discounts = [{ coupon: foundingTesterCouponId }];
+      console.log(`[Checkout] Applying founding tester discount for user ${userId}`);
+    } else {
+      // Allow manual promo codes for non-founding testers
+      checkoutOptions.allow_promotion_codes = true;
+    }
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create(checkoutOptions);
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error) {

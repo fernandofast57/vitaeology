@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
-import { sendAffiliateInviteEmail } from '@/lib/email/beta-tester-emails';
+import { sendAffiliateInviteEmail, sendBetaPremiumActivatedEmail } from '@/lib/email/beta-tester-emails';
 import { onChallengeDayCompleted } from '@/lib/awareness';
 import { alertAPIError } from '@/lib/error-alerts';
 
@@ -239,8 +239,7 @@ export async function POST(request: NextRequest) {
       }
 
       // =========================================================
-      // FOUNDING AFFILIATE INVITE
-      // Se l'utente è un beta tester, invia invito programma affiliati
+      // BETA TESTER BENEFITS (6 mesi premium + affiliate invite)
       // =========================================================
       try {
         const { data: betaTester } = await supabase
@@ -250,37 +249,77 @@ export async function POST(request: NextRequest) {
           .in('status', ['approved', 'active'])
           .single();
 
-        // Se è beta tester e non ha già ricevuto l'invito
-        if (betaTester && !betaTester.affiliate_invite_sent_at) {
-          // Verifica che non sia già affiliato
-          const { data: existingAffiliate } = await supabase
-            .from('affiliates')
-            .select('id')
-            .eq('email', email.toLowerCase())
-            .single();
+        if (betaTester) {
+          // =========================================================
+          // 1. GRANT 6 MONTHS FREE PREMIUM
+          // =========================================================
+          if (profile) {
+            // Calcola data scadenza: 6 mesi da oggi
+            const premiumUntil = new Date();
+            premiumUntil.setMonth(premiumUntil.getMonth() + 6);
 
-          if (!existingAffiliate) {
-            // Invia email invito affiliato
-            const inviteResult = await sendAffiliateInviteEmail({
+            // Aggiorna profilo con accesso premium
+            await supabase
+              .from('profiles')
+              .update({
+                subscription_tier: 'leader',
+                beta_premium_until: premiumUntil.toISOString(),
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', profile.id);
+
+            // Formatta data per email
+            const premiumUntilFormatted = premiumUntil.toLocaleDateString('it-IT', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
+
+            // Invia email conferma premium
+            await sendBetaPremiumActivatedEmail({
               email: email.toLowerCase(),
               fullName: betaTester.full_name,
               challengeCompleted: normalizedChallenge,
+              premiumUntil: premiumUntilFormatted,
             });
 
-            if (inviteResult.success) {
-              // Marca invito come inviato
-              await supabase
-                .from('beta_testers')
-                .update({ affiliate_invite_sent_at: new Date().toISOString() })
-                .eq('id', betaTester.id);
+            console.log('[Beta Premium] Attivato 6 mesi per:', email, 'fino al:', premiumUntilFormatted);
+          }
 
-              console.log('[Affiliate Invite] Inviato a beta tester:', email);
+          // =========================================================
+          // 2. FOUNDING AFFILIATE INVITE
+          // =========================================================
+          if (!betaTester.affiliate_invite_sent_at) {
+            // Verifica che non sia già affiliato
+            const { data: existingAffiliate } = await supabase
+              .from('affiliates')
+              .select('id')
+              .eq('email', email.toLowerCase())
+              .single();
+
+            if (!existingAffiliate) {
+              // Invia email invito affiliato
+              const inviteResult = await sendAffiliateInviteEmail({
+                email: email.toLowerCase(),
+                fullName: betaTester.full_name,
+                challengeCompleted: normalizedChallenge,
+              });
+
+              if (inviteResult.success) {
+                // Marca invito come inviato
+                await supabase
+                  .from('beta_testers')
+                  .update({ affiliate_invite_sent_at: new Date().toISOString() })
+                  .eq('id', betaTester.id);
+
+                console.log('[Affiliate Invite] Inviato a beta tester:', email);
+              }
             }
           }
         }
-      } catch (affiliateError) {
-        // Non bloccare il completamento se l'invito affiliato fallisce
-        console.error('[Affiliate Invite] Errore:', affiliateError);
+      } catch (betaError) {
+        // Non bloccare il completamento se i benefit beta falliscono
+        console.error('[Beta Benefits] Errore:', betaError);
       }
     }
 

@@ -23,6 +23,7 @@ export default function ChallengesPage() {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isFoundingTester, setIsFoundingTester] = useState(false);
 
   const supabase = createClient();
 
@@ -37,6 +38,14 @@ export default function ChallengesPage() {
 
         setUserEmail(user.email || '');
         setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '');
+
+        // Check founding tester status
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_founding_tester')
+          .eq('id', user.id)
+          .single();
+        setIsFoundingTester(profile?.is_founding_tester || false);
 
         // Collega eventuali challenge non ancora collegate
         if (user.email) {
@@ -95,6 +104,7 @@ export default function ChallengesPage() {
           userName={userName}
           userEmail={userEmail}
           onMenuClick={() => setSidebarOpen(true)}
+          isBetaTester={isFoundingTester}
         />
 
         <main className="p-4 md:p-6 lg:p-8">

@@ -4,6 +4,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendBetaWelcomeEmail, sendBetaWaitlistEmail } from '@/lib/email/beta-tester-emails';
+import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, isSpamEmail, spamEmailResponse } from '@/lib/rate-limiter';
+import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,6 +16,14 @@ const supabase = createClient(
 const MAX_BETA_TESTERS = 20;
 
 export async function POST(request: Request) {
+  // Rate limiting: max 5 richieste per minuto per IP
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, RATE_LIMITS.publicForm);
+
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn);
+  }
+
   try {
     const body = await request.json();
 
@@ -27,7 +37,14 @@ export async function POST(request: Request) {
       motivation,
       hours_available,
       source,
+      turnstileToken,
     } = body;
+
+    // Verifica Turnstile (anti-bot)
+    const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP);
+    if (!turnstileResult.success) {
+      return turnstileFailedResponse(turnstileResult.error);
+    }
 
     // Validazione
     if (!email || !full_name || !job_title || !years_experience || !device || !motivation || !hours_available) {
@@ -44,6 +61,11 @@ export async function POST(request: Request) {
         { error: 'Email non valida' },
         { status: 400 }
       );
+    }
+
+    // Blocca email spam
+    if (isSpamEmail(email)) {
+      return spamEmailResponse();
     }
 
     // Verifica se email già registrata

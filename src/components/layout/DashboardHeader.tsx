@@ -6,12 +6,11 @@ interface DashboardHeaderProps {
   userName?: string;
   userEmail?: string;
   onMenuClick: () => void;
-  // Flag per mostrare badge beta tester
-  // TODO: collegare a Supabase quando necessario
+  // Flag per mostrare badge Founding Tester (collegato a profiles.is_founding_tester)
   isBetaTester?: boolean;
 }
 
-export default function DashboardHeader({ userName, userEmail, onMenuClick, isBetaTester = true }: DashboardHeaderProps) {
+export default function DashboardHeader({ userName, userEmail, onMenuClick, isBetaTester = false }: DashboardHeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-neutral-200">
       <div className="flex items-center justify-between px-4 py-3 md:px-6">
@@ -21,23 +20,23 @@ export default function DashboardHeader({ userName, userEmail, onMenuClick, isBe
           </button>
           <h1 className="text-lg font-semibold text-neutral-900 hidden md:block">Dashboard</h1>
 
-          {/* Beta Tester Badge */}
+          {/* Founding Tester Badge */}
           {isBetaTester && (
             <div
               className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium cursor-help"
-              title="Grazie per aiutarci a migliorare Vitaeology!"
+              title="Grazie per essere un Founding Tester di Vitaeology!"
             >
               <FlaskConical className="w-3.5 h-3.5" />
-              <span>Beta Tester</span>
+              <span>Founding Tester</span>
             </div>
           )}
         </div>
         <div className="flex items-center gap-3">
-          {/* Beta Tester Badge Mobile */}
+          {/* Founding Tester Badge Mobile */}
           {isBetaTester && (
             <div
               className="sm:hidden flex items-center justify-center w-8 h-8 bg-amber-100 text-amber-700 rounded-full cursor-help"
-              title="Beta Tester - Grazie per aiutarci a migliorare!"
+              title="Founding Tester - Grazie per il tuo supporto!"
             >
               <FlaskConical className="w-4 h-4" />
             </div>

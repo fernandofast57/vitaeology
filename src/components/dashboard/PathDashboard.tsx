@@ -93,6 +93,7 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([]);
+  const [isFoundingTester, setIsFoundingTester] = useState(false);
 
   const supabase = createClient();
 
@@ -109,6 +110,14 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
         // Ottieni percorsi attivi dell'utente
         const pathways = await getUserPathways(supabase, user.id);
         setUserPathways(pathways);
+
+        // Fetch founding tester status and update current_path
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_founding_tester')
+          .eq('id', user.id)
+          .single();
+        setIsFoundingTester(profile?.is_founding_tester || false);
 
         // Aggiorna current_path nel profilo
         await supabase
@@ -278,7 +287,7 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
       {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} userEmail={userEmail} userName={userName} />
       <div className="lg:pl-64">
-        <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} />
+        <DashboardHeader userName={userName} userEmail={userEmail} onMenuClick={() => setSidebarOpen(true)} isBetaTester={isFoundingTester} />
 
         {/* Path indicator / Pathway Switcher */}
         <div className={`${config.accentBg} text-white py-2 px-4`}>

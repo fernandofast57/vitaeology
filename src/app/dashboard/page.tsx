@@ -25,6 +25,7 @@ function DashboardContent() {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isFoundingTester, setIsFoundingTester] = useState(false);
 
   const supabase = createClient();
 
@@ -49,6 +50,14 @@ function DashboardContent() {
 
         setUserEmail(user.email || '');
         setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '');
+
+        // Check if user is a founding tester
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_founding_tester')
+          .eq('id', user.id)
+          .single();
+        setIsFoundingTester(profile?.is_founding_tester || false);
 
         // 3. Ottieni percorsi attivi da user_pathways
         const pathways = await getUserPathways(supabase, user.id);
@@ -126,6 +135,7 @@ function DashboardContent() {
           userName={userName}
           userEmail={userEmail}
           onMenuClick={() => setSidebarOpen(true)}
+          isBetaTester={isFoundingTester}
         />
 
         {/* Multi-pathway header */}

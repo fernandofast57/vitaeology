@@ -10,7 +10,7 @@
  * Storia: Fernando 1973-1982 "gli anni perduti" (16-25 anni) - cerca piacere nei posti sbagliati
  */
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useBehavioralTracking } from '@/hooks/useBehavioralTracking';
@@ -21,6 +21,7 @@ import {
 } from '@/components/behavioral';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
+import Turnstile from '@/components/Turnstile';
 
 // ============================================================================
 // SIGNUP FORM COMPONENT
@@ -41,6 +42,8 @@ interface SignupFormProps {
   };
   engagementScore?: number;
   showEngagementBadge?: boolean;
+  onTurnstileVerify: (token: string) => void;
+  turnstileReady: boolean;
 }
 
 function SignupForm({
@@ -55,6 +58,8 @@ function SignupForm({
   behaviorActions,
   engagementScore = 0,
   showEngagementBadge = false,
+  onTurnstileVerify,
+  turnstileReady,
 }: SignupFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
@@ -80,10 +85,16 @@ function SignupForm({
         required
         className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-violet-500"
       />
+      {/* Turnstile - captcha invisibile */}
+      <Turnstile
+        onVerify={onTurnstileVerify}
+        theme="dark"
+        className="flex justify-center"
+      />
       {error && <p className="text-red-400 text-sm">{error}</p>}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !turnstileReady}
         className="w-full bg-violet-500 hover:bg-violet-600 text-white font-bold py-4 px-8 rounded-lg transition disabled:opacity-50 text-lg"
       >
         {loading ? 'Iscrizione in corso...' : 'INIZIA LA CHALLENGE GRATUITA'}
@@ -114,6 +125,11 @@ function MicrofelicitaLandingContent() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const handleTurnstileVerify = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
 
   // Behavioral tracking con variante "epiphany"
   const [behavior, behaviorActions] = useBehavioralTracking('microfelicita', 'epiphany');
@@ -126,6 +142,12 @@ function MicrofelicitaLandingContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!turnstileToken) {
+      setError('Attendi la verifica di sicurezza...');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -140,7 +162,8 @@ function MicrofelicitaLandingContent() {
           variant: 'epiphany',
           utmSource,
           utmMedium,
-          utmCampaign
+          utmCampaign,
+          turnstileToken
         })
       });
 
@@ -166,6 +189,10 @@ function MicrofelicitaLandingContent() {
 
   // Handler per exit intent popup
   const handleExitIntentSubmit = async (exitEmail: string) => {
+    if (!turnstileToken) {
+      throw new Error('Verifica di sicurezza non completata');
+    }
+
     setEmail(exitEmail);
     setNome('Visitatore');
 
@@ -179,7 +206,8 @@ function MicrofelicitaLandingContent() {
         variant: 'epiphany',
         utmSource,
         utmMedium,
-        utmCampaign
+        utmCampaign,
+        turnstileToken
       })
     });
 
@@ -314,6 +342,8 @@ function MicrofelicitaLandingContent() {
               behaviorActions={behaviorActions}
               engagementScore={behavior.engagementScore}
               showEngagementBadge={true}
+              onTurnstileVerify={handleTurnstileVerify}
+              turnstileReady={!!turnstileToken}
             />
           </div>
 
@@ -751,6 +781,8 @@ function MicrofelicitaLandingContent() {
             behaviorActions={behaviorActions}
             engagementScore={behavior.engagementScore}
             showEngagementBadge={true}
+            onTurnstileVerify={handleTurnstileVerify}
+            turnstileReady={!!turnstileToken}
           />
 
           <p className="text-slate-500 text-sm mt-4">

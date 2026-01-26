@@ -85,6 +85,12 @@ export async function GET(request: NextRequest) {
 
         results.approved++;
 
+        // Imposta badge Founding Tester sul profilo (se esiste)
+        await supabase
+          .from('profiles')
+          .update({ is_founding_tester: true })
+          .eq('email', tester.email.toLowerCase());
+
         // Invia email di benvenuto
         const emailResult = await sendBetaWelcomeEmail({
           email: tester.email,

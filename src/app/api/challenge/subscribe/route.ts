@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { alertAPIError } from '@/lib/error-alerts';
+import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, isSpamEmail, spamEmailResponse } from '@/lib/rate-limiter';
+import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,9 +43,23 @@ const CHALLENGE_CONFIG = {
 };
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: max 5 richieste per minuto per IP
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, RATE_LIMITS.publicForm);
+
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn);
+  }
+
   try {
     const body = await request.json();
-    const { email, nome, challenge, variant, utmSource, utmMedium, utmCampaign } = body;
+    const { email, nome, challenge, variant, utmSource, utmMedium, utmCampaign, turnstileToken } = body;
+
+    // Verifica Turnstile (anti-bot)
+    const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP);
+    if (!turnstileResult.success) {
+      return turnstileFailedResponse(turnstileResult.error);
+    }
 
     // Validazione
     if (!email || !challenge) {
@@ -51,6 +67,11 @@ export async function POST(request: NextRequest) {
         { error: 'Email e challenge sono obbligatori' },
         { status: 400 }
       );
+    }
+
+    // Blocca email spam
+    if (isSpamEmail(email)) {
+      return spamEmailResponse();
     }
 
     const config = CHALLENGE_CONFIG[challenge as keyof typeof CHALLENGE_CONFIG];
