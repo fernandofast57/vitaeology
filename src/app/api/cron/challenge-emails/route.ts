@@ -14,6 +14,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
+import { alertAPIError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -38,9 +39,19 @@ function getSupabase() {
   );
 }
 
-async function runCronJob(): Promise<{ success: boolean; results: CronResults; duration_ms: number; error?: string }> {
+async function runCronJob(): Promise<{ success: boolean; results: CronResults; duration_ms: number; error?: string; debug?: Record<string, unknown> }> {
   const startTime = Date.now();
   const supabase = getSupabase();
+
+  // Debug info per troubleshooting
+  const debug: Record<string, unknown> = {
+    startedAt: new Date().toISOString(),
+    env: {
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      hasResendKey: !!process.env.RESEND_API_KEY,
+    }
+  };
 
   const results: CronResults = {
     day_content_sent: 0,
@@ -54,6 +65,29 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
   };
 
   try {
+    console.log('🚀 [Cron] Challenge emails cron job STARTED at', new Date().toISOString());
+
+    // ========================================
+    // DEBUG: Mostra tutti gli iscritti attivi per diagnostica
+    // ========================================
+    const { data: allActive, error: allActiveError } = await supabase
+      .from('challenge_subscribers')
+      .select('id, email, challenge, current_day, status, last_email_type, last_email_sent_at, subscribed_at')
+      .eq('status', 'active')
+      .order('subscribed_at', { ascending: false })
+      .limit(20);
+
+    debug.allActiveSubscribers = {
+      count: allActive?.length || 0,
+      error: allActiveError?.message || null,
+      subscribers: allActive || []
+    };
+
+    console.log(`📊 [Cron] Totale iscritti attivi: ${allActive?.length || 0}`);
+    if (allActive && allActive.length > 0) {
+      console.log('📊 [Cron] Ultimi iscritti:', JSON.stringify(allActive.slice(0, 5), null, 2));
+    }
+
     // ========================================
     // 0. DAY CONTENT - Nuovi iscritti (welcome -> day 1)
     // ========================================
@@ -63,6 +97,8 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
     // e sono pronti per ricevere il contenuto del giorno
     const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
 
+    console.log(`📧 [Cron] Query: status=active, last_email_type=welcome, last_email_sent_at < ${twoHoursAgo}`);
+
     const { data: newSubscribers, error: newSubError } = await supabase
       .from('challenge_subscribers')
       .select('*')
@@ -71,6 +107,20 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
       .lt('last_email_sent_at', twoHoursAgo)
       .lte('current_day', 7);
 
+    debug.dayContentQuery = {
+      twoHoursAgo,
+      found: newSubscribers?.length || 0,
+      error: newSubError?.message || null,
+      subscribers: newSubscribers?.map(s => ({
+        id: s.id,
+        email: s.email,
+        challenge: s.challenge,
+        current_day: s.current_day,
+        last_email_type: s.last_email_type,
+        last_email_sent_at: s.last_email_sent_at
+      })) || []
+    };
+
     if (newSubError) {
       console.error('[Cron] Errore query newSubscribers:', newSubError.message);
     } else if (newSubscribers && newSubscribers.length > 0) {
@@ -78,7 +128,10 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
 
       for (const user of newSubscribers) {
         try {
-          const dayToSend = user.current_day || 1;
+          // Se current_day è 0, invia Day 1. Altrimenti invia current_day + 1
+          const dayToSend = user.current_day === 0 ? 1 : Math.min(user.current_day + 1, 7);
+
+          console.log(`📧 [Cron] Tentativo invio Day ${dayToSend} a ${user.email} (challenge: ${user.challenge}, current_day: ${user.current_day})`);
 
           const result = await sendChallengeEmail(
             user.email,
@@ -89,13 +142,19 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
           );
 
           if (result.success) {
-            await supabase
+            console.log(`✅ [Cron] Email Day ${dayToSend} INVIATA a ${user.email}`);
+
+            const { error: updateError } = await supabase
               .from('challenge_subscribers')
               .update({
                 last_email_sent_at: new Date().toISOString(),
                 last_email_type: 'day_content'
               })
               .eq('id', user.id);
+
+            if (updateError) {
+              console.error(`❌ [Cron] Errore update subscriber ${user.email}:`, updateError.message);
+            }
 
             // Log evento (non bloccare se fallisce)
             try {
@@ -111,16 +170,17 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
             }
 
             results.day_content_sent++;
-            console.log(`✅ Day ${dayToSend} inviato a ${user.email}`);
           } else {
-            console.error(`Day content error for ${user.email}:`, result.error);
+            console.error(`❌ [Cron] Day content FALLITO per ${user.email}:`, result.error);
             results.day_content_errors++;
           }
         } catch (err) {
-          console.error(`Day content exception for ${user.email}:`, err);
+          console.error(`❌ [Cron] Day content EXCEPTION per ${user.email}:`, err);
           results.day_content_errors++;
         }
       }
+    } else {
+      console.log('📧 [Cron] Nessun nuovo iscritto trovato per Day Content');
     }
 
     // ========================================
@@ -137,6 +197,12 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
       .eq('last_email_type', 'day_content')
       .lt('last_email_sent_at', fortyEightHoursAgo)
       .lt('current_day', 7);
+
+    debug.reminderQuery = {
+      fortyEightHoursAgo,
+      found: inactiveUsers?.length || 0,
+      error: inactiveError?.message || null
+    };
 
     if (inactiveError) {
       console.error('[Cron] Errore query inactiveUsers:', inactiveError.message);
@@ -372,20 +438,35 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
       ...results
     });
 
+    // Alert se ci sono stati errori
+    const totalErrors = results.day_content_errors + results.reminders_errors +
+                        results.force_unlock_errors + results.post_challenge_errors;
+    if (totalErrors > 0) {
+      console.warn(`⚠️ [Cron] ${totalErrors} errori durante l'esecuzione`);
+    }
+
     return {
       success: true,
       results,
-      duration_ms: duration
+      duration_ms: duration,
+      debug
     };
 
   } catch (error) {
     console.error('❌ [Cron] Errore challenge-emails:', error);
 
+    // Invia alert per errori critici
+    await alertAPIError(
+      '/api/cron/challenge-emails',
+      error instanceof Error ? error : new Error('Challenge emails cron failed')
+    ).catch(() => {}); // Non bloccare se l'alert fallisce
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
       results,
-      duration_ms: Date.now() - startTime
+      duration_ms: Date.now() - startTime,
+      debug
     };
   }
 }
