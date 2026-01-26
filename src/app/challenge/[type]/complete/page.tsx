@@ -35,10 +35,25 @@ const CHALLENGE_CONFIG = {
     badgeBorder: 'amber-500/30',
     badgeText: 'amber-400',
     completionMessage: 'Hai scoperto il leader che già opera in te.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/assessment/leadership', cta: 'Fai il Test' },
-      { icon: '🎯', title: 'Esercizi Pratici', description: 'Continua ad allenare la tua leadership', link: '/exercises', cta: 'Esplora Esercizi' }
-    ]
+    bookTitle: 'Leadership Autentica',
+    bookSlug: 'leadership',
+    bookPrice: '24,90',
+    assessmentPath: '/assessment/leadership',
+    primaryCta: {
+      icon: '📖',
+      title: 'Continua il Percorso con il Libro',
+      description: 'Il libro contiene il QR code per sbloccare l\'Assessment completo e accedere a Explorer',
+      link: '/libro/leadership',
+      cta: 'Acquista €24,90',
+      price: '24,90'
+    },
+    secondaryCta: {
+      icon: '📊',
+      title: 'Hai già il libro?',
+      description: 'Accedi all\'Assessment completo con il QR code',
+      link: '/assessment/leadership',
+      cta: 'Vai all\'Assessment'
+    }
   },
   ostacoli: {
     name: 'Oltre gli Ostacoli',
@@ -49,10 +64,25 @@ const CHALLENGE_CONFIG = {
     badgeBorder: 'emerald-500/30',
     badgeText: 'emerald-400',
     completionMessage: 'Hai risvegliato il risolutore che è in te.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di problem-solving', link: '/assessment/risolutore', cta: 'Fai il Test' },
-      { icon: '🛠️', title: 'Strumenti Avanzati', description: 'Approfondisci i sistemi A.Z.I.O.N.E. e C.R.E.S.C.I.T.A.', link: '/exercises', cta: 'Esplora Strumenti' }
-    ]
+    bookTitle: 'Oltre gli Ostacoli',
+    bookSlug: 'risolutore',
+    bookPrice: '24,90',
+    assessmentPath: '/assessment/risolutore',
+    primaryCta: {
+      icon: '📖',
+      title: 'Continua il Percorso con il Libro',
+      description: 'Il libro contiene il QR code per sbloccare l\'Assessment completo e accedere a Explorer',
+      link: '/libro/risolutore',
+      cta: 'Acquista €24,90',
+      price: '24,90'
+    },
+    secondaryCta: {
+      icon: '📊',
+      title: 'Hai già il libro?',
+      description: 'Accedi all\'Assessment completo con il QR code',
+      link: '/assessment/risolutore',
+      cta: 'Vai all\'Assessment'
+    }
   },
   microfelicita: {
     name: 'Microfelicità',
@@ -63,10 +93,25 @@ const CHALLENGE_CONFIG = {
     badgeBorder: 'violet-500/30',
     badgeText: 'violet-400',
     completionMessage: 'Hai imparato a notare il benessere che già ti attraversa.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di benessere', link: '/assessment/microfelicita', cta: 'Fai il Test' },
-      { icon: '🧘', title: 'Pratiche Quotidiane', description: 'Esercizi per consolidare R.A.D.A.R.', link: '/exercises', cta: 'Esplora Pratiche' }
-    ]
+    bookTitle: 'Microfelicità Digitale',
+    bookSlug: 'microfelicita',
+    bookPrice: '24,90',
+    assessmentPath: '/assessment/microfelicita',
+    primaryCta: {
+      icon: '📖',
+      title: 'Continua il Percorso con il Libro',
+      description: 'Il libro contiene il QR code per sbloccare l\'Assessment completo e accedere a Explorer',
+      link: '/libro/microfelicita',
+      cta: 'Acquista €24,90',
+      price: '24,90'
+    },
+    secondaryCta: {
+      icon: '📊',
+      title: 'Hai già il libro?',
+      description: 'Accedi all\'Assessment completo con il QR code',
+      link: '/assessment/microfelicita',
+      cta: 'Vai all\'Assessment'
+    }
   }
 };
 
@@ -295,10 +340,9 @@ export default function ChallengeCompletePage() {
                   <label className="text-white font-medium block mb-3">Cosa vorresti fare adesso?</label>
                   <div className="space-y-3">
                     {[
-                      { value: 'assessment', label: 'Capire meglio i miei punti forti', icon: '📊' },
-                      { value: 'exercises', label: 'Iniziare subito con esercizi pratici', icon: '🎯' },
-                      { value: 'book', label: 'Voglio approfondire con il libro', icon: '📖' },
-                      { value: 'time', label: 'Ho bisogno di tempo per elaborare', icon: '⏳' }
+                      { value: 'book', label: 'Continua con il libro (Consigliato)', icon: '📖', recommended: true },
+                      { value: 'assessment', label: 'Ho già il libro, voglio fare l\'Assessment', icon: '📊', recommended: false },
+                      { value: 'time', label: 'Ho bisogno di tempo per elaborare', icon: '⏳', recommended: false }
                     ].map((option) => (
                       <label
                         key={option.value}
@@ -358,29 +402,31 @@ export default function ChallengeCompletePage() {
               <div className={`text-${config.badgeText} text-4xl mb-4`}>✓</div>
               <p className="text-white font-medium mb-6">Grazie per il feedback!</p>
 
-              {feedback.nextAction === 'assessment' && (
-                <Link
-                  href={`/assessment/${challengeType === 'ostacoli' ? 'risolutore' : challengeType === 'microfelicita' ? 'microfelicita' : 'leadership'}`}
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Fai l&apos;Assessment →
-                </Link>
-              )}
-              {feedback.nextAction === 'exercises' && (
-                <Link
-                  href="/exercises"
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Vai agli Esercizi →
-                </Link>
-              )}
               {feedback.nextAction === 'book' && (
-                <Link
-                  href={`/libro/${challengeType === 'ostacoli' ? 'risolutore' : challengeType}`}
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Scopri il Libro →
-                </Link>
+                <div className="space-y-4">
+                  <p className="text-slate-300 mb-2">
+                    Il libro &quot;{config.bookTitle}&quot; contiene il QR code per sbloccare l&apos;Assessment completo e accedere a Explorer.
+                  </p>
+                  <Link
+                    href={`/libro/${config.bookSlug}`}
+                    className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-4 px-10 rounded-lg transition text-lg`}
+                  >
+                    Acquista il Libro €{config.bookPrice} →
+                  </Link>
+                </div>
+              )}
+              {feedback.nextAction === 'assessment' && (
+                <div className="space-y-4">
+                  <p className="text-slate-300 mb-2">
+                    Inserisci il codice QR trovato nel libro per sbloccare l&apos;Assessment completo.
+                  </p>
+                  <Link
+                    href={config.assessmentPath}
+                    className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+                  >
+                    Vai all&apos;Assessment →
+                  </Link>
+                </div>
               )}
               {feedback.nextAction === 'time' && (
                 <div>
@@ -400,7 +446,7 @@ export default function ChallengeCompletePage() {
         </div>
       </section>
 
-      {/* Next Steps */}
+      {/* Next Steps - LIBRO come CTA primaria */}
       <section className="py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-white text-center mb-8">
@@ -408,31 +454,55 @@ export default function ChallengeCompletePage() {
           </h2>
 
           <div className="space-y-4">
-            {config.nextSteps.map((step, index) => (
-              <Link
-                key={index}
-                href={step.link}
-                className="block bg-slate-800/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600 transition group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 bg-${config.badge} rounded-xl flex items-center justify-center text-2xl`}>
-                    {step.icon}
+            {/* CTA PRIMARIA: LIBRO */}
+            <Link
+              href={config.primaryCta.link}
+              className={`block bg-${config.badge} rounded-xl p-6 border-2 border-${config.accent} hover:bg-${config.accent}/30 transition group`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 bg-${config.accent} rounded-xl flex items-center justify-center text-2xl`}>
+                  {config.primaryCta.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-white font-bold text-lg group-hover:text-white transition">
+                    {config.primaryCta.title}
+                  </h3>
+                  <p className="text-slate-300 text-sm">{config.primaryCta.description}</p>
+                </div>
+                <div className="text-center">
+                  <div className={`text-${config.badgeText} font-bold text-xl`}>
+                    €{config.primaryCta.price}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-white font-semibold group-hover:text-amber-400 transition">
-                      {step.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm">{step.description}</p>
-                  </div>
-                  <div className={`text-${config.badgeText} font-medium flex items-center gap-2`}>
-                    {step.cta}
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <div className={`bg-${config.accent} text-white font-semibold py-2 px-4 rounded-lg mt-2 group-hover:scale-105 transition`}>
+                    {config.primaryCta.cta.replace(`€${config.primaryCta.price}`, '').trim() || 'Acquista Ora'}
                   </div>
                 </div>
-              </Link>
-            ))}
+              </div>
+            </Link>
+
+            {/* CTA SECONDARIA: Assessment (per chi ha già il libro) */}
+            <Link
+              href={config.secondaryCta.link}
+              className="block bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:border-slate-600 transition group"
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-10 h-10 bg-slate-700 rounded-lg flex items-center justify-center text-xl`}>
+                  {config.secondaryCta.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-slate-300 font-medium group-hover:text-white transition">
+                    {config.secondaryCta.title}
+                  </h3>
+                  <p className="text-slate-500 text-sm">{config.secondaryCta.description}</p>
+                </div>
+                <div className={`text-slate-400 font-medium flex items-center gap-2 group-hover:text-${config.badgeText}`}>
+                  {config.secondaryCta.cta}
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

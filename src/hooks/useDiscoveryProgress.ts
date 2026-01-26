@@ -13,6 +13,7 @@ interface DayProgress {
 interface DiscoveryProgress {
   isUnlocked: boolean;
   isCompleted: boolean;
+  isSubscribed: boolean;  // Indica se l'utente è iscritto alla challenge
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -36,8 +37,9 @@ export function useDiscoveryProgress(
   challengeType: ChallengeType,
   dayNumber: number
 ): DiscoveryProgress {
-  const [isUnlocked, setIsUnlocked] = useState(dayNumber === 1);
+  const [isUnlocked, setIsUnlocked] = useState(false);  // Default: bloccato finché non verifichiamo
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);  // Nuovo: traccia iscrizione
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,26 +76,39 @@ export function useDiscoveryProgress(
         .single();
 
       if (subscriberError || !subscriber) {
-        // Utente non iscritto a questa challenge - giorno 1 sbloccato, nessun completamento
-        setIsUnlocked(dayNumber === 1);
+        // Utente NON iscritto a questa challenge → nessun accesso ai contenuti
+        // Deve prima iscriversi dalla landing page
+        setIsSubscribed(false);
+        setIsUnlocked(false);
         setIsCompleted(false);
         setIsLoading(false);
         return;
       }
 
-      // Logica allineata alla dashboard (vedi ChallengeCard in dashboard/challenges/page.tsx):
-      // - current_day indica l'ultimo giorno completato
-      // - Il prossimo giorno da fare è current_day + 1
-      // - Day N è sbloccato se: N <= current_day + 1 (o N === 1)
-      // - Day N è completato se: N <= current_day
+      // Utente ISCRITTO alla challenge
+      setIsSubscribed(true);
+
+      // SEMANTICA current_day (da CLAUDE.md):
+      // - current_day = ultimo giorno COMPLETATO dall'utente
+      // - 0 = iscritto ma nessun giorno completato
+      // - N = giorno N completato
+      //
+      // REGOLE SBLOCCO:
+      // - Day 1: sempre sbloccato se iscritto
+      // - Day N (N>1): sbloccato se current_day >= N-1 (cioè N <= current_day + 1)
+      //
+      // REGOLE COMPLETAMENTO:
+      // - Day N completato se current_day >= N (cioè N <= current_day)
 
       const currentDay = subscriber.current_day || 0;
 
-      // Giorno 1 sempre sbloccato, altri sbloccati se <= current_day + 1
-      setIsUnlocked(dayNumber === 1 || dayNumber <= currentDay + 1);
+      // Day 1 sempre sbloccato se iscritto, altri sbloccati se giorno precedente completato
+      const dayIsUnlocked = dayNumber === 1 || dayNumber <= currentDay + 1;
+      setIsUnlocked(dayIsUnlocked);
 
-      // Completato se abbiamo già superato questo giorno
-      setIsCompleted(dayNumber <= currentDay);
+      // Completato se questo giorno è già stato fatto
+      const dayIsCompleted = dayNumber <= currentDay;
+      setIsCompleted(dayIsCompleted);
 
     } catch (err) {
       console.error('Error checking discovery progress:', err);
@@ -110,6 +125,7 @@ export function useDiscoveryProgress(
   return {
     isUnlocked,
     isCompleted,
+    isSubscribed,
     isLoading,
     error,
     refresh: checkProgress

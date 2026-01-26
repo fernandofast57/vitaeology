@@ -56,18 +56,10 @@ export default function ChallengeDayPage() {
   const dayNumber = parseInt(params.day as string) as DayNumber;
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [showDiscovery, setShowDiscovery] = useState(false);
-
-  // Form completamento giorno
-  const [responses, setResponses] = useState<string[]>(['', '', '']);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string>('');
-  const [showEmailInput, setShowEmailInput] = useState(false);
 
   const supabase = createClient();
-  const { isUnlocked, isCompleted, isLoading } = useDiscoveryProgress(challengeType, dayNumber);
+  const { isUnlocked, isCompleted, isSubscribed, isLoading } = useDiscoveryProgress(challengeType, dayNumber);
 
   // Validate params
   const isValidChallenge = ['leadership', 'ostacoli', 'microfelicita'].includes(challengeType);
@@ -93,18 +85,50 @@ export default function ChallengeDayPage() {
     checkAuth();
   }, [supabase, router, challengeType, dayNumber]);
 
-  // Load email from localStorage
+  // Load email from localStorage (backup per handleDiscoveryComplete)
   useEffect(() => {
     const storedEmail = localStorage.getItem('challenge_email');
     if (storedEmail) {
       setUserEmail(storedEmail);
-    } else {
-      setShowEmailInput(true);
     }
   }, []);
 
-  // Handle completion
-  const handleDiscoveryComplete = () => {
+  // Handle completion - chiama API complete-day dopo che DiscoveryConfirmation ha salvato le risposte
+  const handleDiscoveryComplete = async () => {
+    // Recupera email per API
+    const { data: { user } } = await supabase.auth.getUser();
+    const email = user?.email || userEmail || localStorage.getItem('challenge_email');
+
+    if (!email) {
+      console.error('No email found for day completion');
+      return;
+    }
+
+    try {
+      // Chiama API per marcare il giorno come completato
+      const response = await fetch('/api/challenge/complete-day', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          challengeType,
+          dayNumber
+          // responses non servono - già salvate da DiscoveryConfirmation in challenge_discovery_responses
+        })
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        // 409 = già completato, non è un errore
+        if (response.status !== 409) {
+          console.error('Error completing day:', data.error);
+        }
+      }
+    } catch (error) {
+      console.error('Error calling complete-day API:', error);
+    }
+
+    // Naviga al prossimo giorno o completamento
     if (dayNumber < 7) {
       router.push(`/challenge/${challengeType}/day/${dayNumber + 1}`);
     } else {
@@ -112,64 +136,6 @@ export default function ChallengeDayPage() {
     }
   };
 
-  // Handle form submission to complete day
-  const handleCompleteDaySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const email = userEmail.trim();
-    if (!email) {
-      setSubmitError('Inserisci la tua email');
-      return;
-    }
-
-    // Salva email in localStorage per future visite
-    localStorage.setItem('challenge_email', email);
-
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    try {
-      const response = await fetch('/api/challenge/complete-day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          challengeType,
-          dayNumber,
-          responses: responses.filter(r => r.trim() !== '')
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          // Giorno già completato - non è un errore grave
-          setSubmitSuccess(true);
-        } else {
-          throw new Error(data.error || 'Errore nel completamento');
-        }
-      } else {
-        setSubmitSuccess(true);
-      }
-    } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Errore sconosciuto');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Update response at index
-  const updateResponse = (index: number, value: string) => {
-    setResponses(prev => {
-      const updated = [...prev];
-      updated[index] = value;
-      return updated;
-    });
-  };
-
-  // Check if all responses are filled
-  const hasAllResponses = responses.every(r => r.trim().length > 0);
 
   // Loading state
   if (isAuthenticated === null || isLoading) {
@@ -188,6 +154,31 @@ export default function ChallengeDayPage() {
           <h1 className="text-2xl font-bold text-white mb-4">Pagina non trovata</h1>
           <Link href="/dashboard" className="text-amber-400 hover:underline">
             Torna alla Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Not subscribed - redirect to landing page to subscribe
+  if (!isSubscribed) {
+    return (
+      <div className={`min-h-screen bg-gradient-to-b ${colors.gradient} flex items-center justify-center p-4`}>
+        <div className="max-w-md text-center">
+          <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-4">Iscriviti alla Sfida</h2>
+          <p className="text-slate-300 mb-6">
+            Per accedere ai contenuti della sfida, devi prima iscriverti gratuitamente.
+          </p>
+          <Link
+            href={`/challenge/${challengeType}`}
+            className={`inline-block bg-${colors.accent} hover:bg-${colors.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+          >
+            Iscriviti Gratis
           </Link>
         </div>
       </div>
@@ -377,149 +368,21 @@ export default function ChallengeDayPage() {
             </div>
           )}
 
-          {/* Form Completamento Giorno */}
-          {!isCompleted && !submitSuccess && (
-            <section className="bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-700/50">
-              <h2 className="text-xl md:text-2xl font-semibold text-white mb-2">
-                Completa il Giorno {dayNumber}
-              </h2>
-              <p className="text-slate-400 mb-6">
-                Rispondi a queste domande per consolidare quello che hai imparato oggi.
-              </p>
-
-              <form onSubmit={handleCompleteDaySubmit} className="space-y-6">
-                {/* Email input se necessario */}
-                {showEmailInput && (
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      La tua email (usata per iscriverti alla sfida)
-                    </label>
-                    <input
-                      type="email"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                      placeholder="tu@email.com"
-                      className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-                      required
-                    />
-                  </div>
-                )}
-
-                {/* Domande di riflessione */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    1. Cosa ti ha colpito di più oggi?
-                  </label>
-                  <textarea
-                    value={responses[0]}
-                    onChange={(e) => updateResponse(0, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    2. Come puoi applicare questo nella tua vita?
-                  </label>
-                  <textarea
-                    value={responses[1]}
-                    onChange={(e) => updateResponse(1, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    3. Qual è una cosa concreta che farai domani?
-                  </label>
-                  <textarea
-                    value={responses[2]}
-                    onChange={(e) => updateResponse(2, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                {/* Error message */}
-                {submitError && (
-                  <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-red-300">
-                    {submitError}
-                  </div>
-                )}
-
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !hasAllResponses || (showEmailInput && !userEmail.trim())}
-                  className={`w-full py-4 px-6 rounded-xl font-bold text-white transition ${
-                    isSubmitting || !hasAllResponses || (showEmailInput && !userEmail.trim())
-                      ? 'bg-slate-600 cursor-not-allowed'
-                      : `bg-${colors.accent} hover:bg-${colors.accentHover} shadow-lg hover:shadow-xl`
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Invio in corso...
-                    </span>
-                  ) : (
-                    `Completa il Giorno ${dayNumber} →`
-                  )}
-                </button>
-
-                {!hasAllResponses && (
-                  <p className="text-center text-slate-500 text-sm">
-                    Rispondi a tutte le domande per completare il giorno
-                  </p>
-                )}
-              </form>
-            </section>
+          {/* Discovery Confirmation - Quiz A/B/C per completare il giorno */}
+          {!isCompleted && discoveryData && (
+            <DiscoveryConfirmation
+              challengeType={challengeType}
+              dayNumber={dayNumber}
+              title={discoveryData.title}
+              intro={discoveryData.intro}
+              questions={discoveryData.questions}
+              ctaText={dayNumber < 7 ? `Completa e vai al Giorno ${dayNumber + 1}` : 'Completa la Sfida'}
+              onComplete={handleDiscoveryComplete}
+            />
           )}
 
-          {/* Success Message */}
-          {submitSuccess && (
-            <div className="bg-slate-800/50 rounded-2xl p-6 md:p-8 text-center border border-slate-700/50">
-              <div className={`w-16 h-16 bg-${colors.accent} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-2">
-                Giorno {dayNumber} Completato!
-              </h3>
-              <p className="text-slate-300 mb-6">
-                {dayNumber < 7
-                  ? `Ottimo lavoro! Domani riceverai il Giorno ${dayNumber + 1} nella tua email.`
-                  : 'Complimenti! Hai completato la Sfida dei 7 Giorni. Controlla la tua email per scoprire il prossimo passo.'}
-              </p>
-              {dayNumber < 7 ? (
-                <Link
-                  href={`/challenge/${challengeType}/day/${dayNumber + 1}`}
-                  className={`inline-block bg-${colors.accent} hover:bg-${colors.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Vai al Giorno {dayNumber + 1} →
-                </Link>
-              ) : (
-                <Link
-                  href="/test"
-                  className={`inline-block bg-${colors.accent} hover:bg-${colors.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Scopri il tuo Profilo →
-                </Link>
-              )}
-            </div>
-          )}
-
-          {/* Discovery Confirmation - solo se non completato via form */}
-          {!submitSuccess && isCompleted && (
+          {/* Messaggio giorno già completato */}
+          {isCompleted && (
             <div className="bg-slate-800/50 rounded-2xl p-6 text-center border border-slate-700/50">
               <div className={`w-16 h-16 bg-${colors.accent} rounded-full flex items-center justify-center mx-auto mb-4`}>
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
