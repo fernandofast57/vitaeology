@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.7
-**Ultimo aggiornamento:** 21 Gennaio 2026
+**Versione:** 2.8
+**Ultimo aggiornamento:** 26 Gennaio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -1127,6 +1127,89 @@ Contatta IMMEDIATAMENTE:
 • Telefono Amico: 199 284 284
 • Samaritans Onlus: 800 86 00 22
 ```
+
+---
+
+## PROTOCOLLO MANUTENZIONE SESSIONE
+
+### 1. INIZIO SESSIONE (Obbligatorio)
+
+```bash
+# Check health endpoint
+curl -s "https://www.vitaeology.com/api/cron/monitoring" \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+**Verifica:**
+- `success: true`
+- `isAnomaly: false`
+- `alertsTriggered: 0`
+
+Se ci sono problemi critici → **RISOLVILI PRIMA** di procedere con altre richieste.
+
+### 2. DURANTE MODIFICHE SIGNIFICATIVE
+
+Prima di completare qualsiasi modifica:
+- ❌ ZERO nuovi errori TypeScript
+- ❌ ZERO nuovi `console.error` non gestiti
+- ❌ ZERO regressioni significative
+
+```bash
+npm run lint   # Deve passare senza errori
+npm run build  # Deve completare con successo
+```
+
+### 3. FINE SESSIONE
+
+- Conferma health check pulito
+- Documenta TODO aperti nel messaggio finale
+
+### 4. CALENDARIO MANUTENZIONE
+
+| Frequenza | Attività |
+|-----------|----------|
+| **Giornaliero** | Health check rapido (2 min) |
+| **Pre-deploy** | `npm run lint && npm run build` obbligatorio |
+| **Lunedì** | Review settimanale errori Vercel |
+| **1° del mese** | Pulizia log, `npm audit`, aggiorna dipendenze |
+| **Trimestrale** | Audit completo architettura |
+
+### 5. PATTERN SPAM CHALLENGE SUBSCRIBERS
+
+Email spam tipiche hanno **punti random inseriti** nel nome:
+```
+❌ s.hi.nz.y@gmail.com        (shinzy)
+❌ a.b.oal.r.ezz@gmail.com    (aboalrezz)
+❌ ka.yl.a.c.o.na@gmail.com   (kaylacona)
+```
+
+**Script pulizia spam:**
+```javascript
+// Pattern: più di 3 punti nella parte locale + meno di 15 lettere
+const suspicious = subscribers.filter(s => {
+  const local = s.email.split('@')[0];
+  const dots = (local.match(/\./g) || []).length;
+  const letters = local.replace(/[^a-zA-Z]/g, '').length;
+  return dots > 3 && letters < 15;
+});
+```
+
+### 6. CRON JOBS
+
+| Endpoint | Schedule | Descrizione |
+|----------|----------|-------------|
+| `/api/cron/monitoring` | `*/15 * * * *` | Health check ogni 15 min |
+| `/api/cron/challenge-emails` | `0 8 * * *` | Email challenge 8:00 UTC |
+| `/api/cron/affiliate-emails` | `0 9 * * *` | Email affiliati 9:00 UTC |
+| `/api/ai-coach/cron/combined` | `0 23 * * *` | Metriche AI 23:00 UTC |
+
+**Test manuale cron:**
+```bash
+curl -s "https://www.vitaeology.com/api/cron/challenge-emails" \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+**⚠️ IMPORTANTE:** I cron usano `CRON_SECRET` per auth. Le route `/api/cron/*` sono pubbliche nel middleware (no Supabase auth).
 
 ---
 
