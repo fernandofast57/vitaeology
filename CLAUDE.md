@@ -1,7 +1,7 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.8
+**Versione:** 2.9
 **Ultimo aggiornamento:** 26 Gennaio 2026
 **Owner:** Fernando Marongiu
 
@@ -1127,6 +1127,121 @@ Contatta IMMEDIATAMENTE:
 • Telefono Amico: 199 284 284
 • Samaritans Onlus: 800 86 00 22
 ```
+
+---
+
+## SICUREZZA INTRINSECA DATABASE (OBBLIGATORIO)
+
+> **⚠️ PRINCIPIO FONDAMENTALE:** La sicurezza deve essere BY DESIGN, non BY FIX.
+> Ogni componente database DEVE essere sicuro al momento della creazione.
+
+### 1. Regole Inderogabili
+
+```
+❌ MAI creare views senza SECURITY INVOKER
+❌ MAI creare tabelle senza RLS + policies
+❌ MAI esporre auth.users in views/funzioni public
+❌ MAI usare SECURITY DEFINER senza necessità documentata
+```
+
+### 2. Template Creazione Sicura
+
+#### VIEW (sempre con security_invoker)
+```sql
+-- ✅ CORRETTO: security_invoker = on
+CREATE VIEW public.my_view
+WITH (security_invoker = on) AS
+SELECT ...;
+
+-- ❌ SBAGLIATO: senza security_invoker (usa DEFINER di default)
+CREATE VIEW public.my_view AS
+SELECT ...;
+```
+
+#### TABELLA (sempre con RLS + policy)
+```sql
+-- ✅ CORRETTO: RLS abilitato + policy
+CREATE TABLE public.my_table (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) NOT NULL,
+  ...
+);
+
+-- Abilita RLS IMMEDIATAMENTE
+ALTER TABLE public.my_table ENABLE ROW LEVEL SECURITY;
+
+-- Crea policy IMMEDIATAMENTE
+CREATE POLICY "Users can only see own data" ON public.my_table
+  FOR ALL USING (auth.uid() = user_id);
+
+-- ❌ SBAGLIATO: tabella senza RLS
+CREATE TABLE public.my_table (...);
+-- "Lo aggiungo dopo" = vulnerabilità
+```
+
+#### FUNZIONE (INVOKER di default, DEFINER solo se necessario)
+```sql
+-- ✅ CORRETTO: SECURITY INVOKER (default, esplicito per chiarezza)
+CREATE FUNCTION public.my_function()
+RETURNS ...
+SECURITY INVOKER  -- Esegue con permessi del chiamante
+AS $$ ... $$;
+
+-- ⚠️ SECURITY DEFINER solo se NECESSARIO (documentare il perché)
+CREATE FUNCTION public.admin_only_function()
+RETURNS ...
+SECURITY DEFINER  -- ATTENZIONE: bypassa RLS!
+-- MOTIVO: Questa funzione deve accedere a dati admin per [MOTIVO]
+AS $$ ... $$;
+```
+
+### 3. Script Audit Sicurezza
+
+**File:** `sql/security_audit.sql`
+
+**Eseguire PRIMA di ogni deploy:**
+```bash
+# In Supabase SQL Editor, esegui tutto il contenuto di:
+sql/security_audit.sql
+```
+
+**Output atteso (sicuro):**
+```
+ZERO views con SECURITY DEFINER
+ZERO tabelle senza RLS
+ZERO tabelle con RLS ma senza policies
+ZERO riferimenti a auth.users in views public
+```
+
+### 4. Checklist Pre-Deploy (OBBLIGATORIA)
+
+Prima di OGNI deploy che modifica il database:
+
+```
+□ Ho eseguito sql/security_audit.sql?
+□ Tutte le nuove views hanno security_invoker = on?
+□ Tutte le nuove tabelle hanno RLS + policies?
+□ Nessuna view/funzione espone auth.users?
+□ Ogni SECURITY DEFINER ha un commento che spiega PERCHÉ?
+```
+
+### 5. Anti-Pattern da Evitare
+
+| Anti-Pattern | Problema | Soluzione |
+|--------------|----------|-----------|
+| "Lo sistemo dopo" | Finestra di vulnerabilità | Sicurezza al momento della creazione |
+| View senza security_invoker | Bypassa RLS utente | `WITH (security_invoker = on)` |
+| Tabella → poi RLS | Dati esposti nel frattempo | RLS nella stessa transazione |
+| SECURITY DEFINER "per comodità" | Privilegi eccessivi | INVOKER + grants specifici |
+| SELECT * FROM auth.users | Espone dati sensibili | Mai in schema public |
+
+### 6. Audit Periodico
+
+| Frequenza | Azione |
+|-----------|--------|
+| **Pre-deploy** | Esegui `sql/security_audit.sql` |
+| **Settimanale** | Verifica `SELECT * FROM auth.security_warnings()` |
+| **Mensile** | Review completa policies RLS |
 
 ---
 
