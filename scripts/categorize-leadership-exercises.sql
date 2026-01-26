@@ -25,6 +25,15 @@ WHERE book_slug = 'leadership' AND week_number IN (
 );
 
 -- ═══════════════════════════════════════════════════
+-- ESERCIZI "CHALLENGE_FOLLOWUP" (7 - Consolidamenti post-Challenge)
+-- Settimane tra i core iniziali, consolidano i concetti della Challenge
+-- ═══════════════════════════════════════════════════
+UPDATE exercises SET source_type = 'challenge_followup'
+WHERE book_slug = 'leadership' AND week_number IN (
+  2, 3, 4, 6, 7, 11, 12
+);
+
+-- ═══════════════════════════════════════════════════
 -- ESERCIZI "ADVANCED" (Settimane 49-52)
 -- Richiedono completamento prerequisiti
 -- ═══════════════════════════════════════════════════

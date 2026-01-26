@@ -42,7 +42,7 @@ export default function BetaPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isApproved, setIsApproved] = useState(false);
+  const [willBeApproved, setWillBeApproved] = useState(false);
   const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
   const [error, setError] = useState('');
 
@@ -71,7 +71,7 @@ export default function BetaPage() {
       }
 
       setIsSubmitted(true);
-      setIsApproved(data.approved === true);
+      setWillBeApproved(data.willBeApproved === true);
       if (data.waitlistPosition) {
         setWaitlistPosition(data.waitlistPosition);
       }
@@ -221,30 +221,34 @@ export default function BetaPage() {
 
           <div className="p-6 lg:p-8">
             {isSubmitted ? (
-              // Success State - Different for approved vs waitlist
+              // Success State - Different for pending approval vs waitlist
               <div className="text-center py-12">
-                {isApproved ? (
-                  // Approved
+                {willBeApproved ? (
+                  // Will be approved tomorrow
                   <>
-                    <div className="w-20 h-20 bg-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Sparkles className="w-10 h-10 text-gold-600" />
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                      Congratulazioni! Sei Dentro!
+                      Candidatura Ricevuta!
                     </h3>
                     <p className="text-gray-600 max-w-md mx-auto mb-4">
-                      Sei stato approvato come <strong className="text-gold-600">Founding Tester</strong>!
+                      Grazie per il tuo interesse nel programma <strong className="text-gold-600">Founding Tester</strong>.
                     </p>
-                    <p className="text-gray-600 max-w-md mx-auto">
-                      Controlla la tua email per le istruzioni su come creare il tuo account
-                      e iniziare subito il tuo percorso.
+                    <div className="bg-petrol-50 rounded-xl px-6 py-4 inline-block mb-4">
+                      <p className="text-sm text-petrol-600 flex items-center gap-2 justify-center">
+                        <Clock className="w-4 h-4" />
+                        Riceverai conferma via email entro 24 ore
+                      </p>
+                    </div>
+                    <p className="text-gray-500 text-sm max-w-md mx-auto">
+                      Controlla la tua casella email (anche spam) per le istruzioni su come accedere alla piattaforma.
                     </p>
                     <Link
-                      href="/auth/signup"
-                      className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-gold-500 text-petrol-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
+                      href="/"
+                      className="inline-flex items-center gap-2 mt-8 px-6 py-3 bg-petrol-600 text-white font-medium rounded-lg hover:bg-petrol-700 transition-colors"
                     >
-                      <Sparkles className="w-5 h-5" />
-                      Crea il Tuo Account
+                      Torna alla Homepage
                     </Link>
                   </>
                 ) : (

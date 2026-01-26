@@ -64,13 +64,14 @@ export async function POST(request: Request) {
     const { count: currentTesters } = await supabase
       .from('beta_testers')
       .select('*', { count: 'exact', head: true })
-      .in('status', ['approved', 'active']);
+      .in('status', ['approved', 'active', 'pending_approval']);
 
     const spotsAvailable = (currentTesters || 0) < MAX_BETA_TESTERS;
 
-    // Determina status e cohort
-    const status = spotsAvailable ? 'approved' : 'pending';
-    const cohort = spotsAvailable ? 'A' : null;
+    // Determina status:
+    // - pending_approval: sarà approvato domani dal cron (posti disponibili)
+    // - pending: waitlist (posti esauriti)
+    const status = spotsAvailable ? 'pending_approval' : 'pending';
 
     // Inserisci candidatura
     const { data, error } = await supabase
@@ -86,7 +87,7 @@ export async function POST(request: Request) {
         hours_available,
         source: source || null,
         status,
-        cohort,
+        cohort: null, // Assegnato al momento dell'approvazione
       })
       .select()
       .single();
@@ -99,23 +100,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Invia email appropriata
+    // NON inviare email subito - il cron la invierà domani
     if (spotsAvailable) {
-      // Auto-approvato: invia email di benvenuto
-      const emailResult = await sendBetaWelcomeEmail({
-        email: email.toLowerCase(),
-        fullName: full_name,
-        cohort: cohort || undefined,
-      });
-
-      if (!emailResult.success) {
-        console.error('Errore invio email benvenuto beta:', emailResult.error);
-      }
-
+      // Sarà approvato domani
       return NextResponse.json({
         success: true,
-        approved: true,
-        message: 'Congratulazioni! Sei stato approvato come Founding Tester. Controlla la tua email per i prossimi passi.',
+        approved: false, // Non ancora approvato formalmente
+        willBeApproved: true,
+        message: 'Candidatura ricevuta! Riceverai conferma via email entro 24 ore.',
         id: data.id,
       });
     } else {

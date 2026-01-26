@@ -15,6 +15,10 @@
     {
       "path": "/api/cron/affiliate-emails",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/beta-approval",
+      "schedule": "0 9 * * *"
     }
   ]
 }
