@@ -186,6 +186,165 @@ export async function sendBetaWelcomeEmail(params: BetaWelcomeEmailParams): Prom
 // EMAIL: WAITLIST (posti esauriti)
 // ============================================================
 
+// ============================================================
+// EMAIL: INVITO PROGRAMMA AFFILIATI (Founding Affiliate)
+// ============================================================
+
+export interface AffiliateInviteEmailParams {
+  email: string;
+  fullName: string;
+  challengeCompleted: string;
+}
+
+export async function sendAffiliateInviteEmail(params: AffiliateInviteEmailParams): Promise<EmailResult> {
+  const { email, fullName, challengeCompleted } = params;
+  const firstName = fullName.split(' ')[0];
+
+  // Mappa challenge name per display
+  const challengeDisplayName: Record<string, string> = {
+    'leadership-autentica': 'Leadership Autentica',
+    'oltre-ostacoli': 'Oltre gli Ostacoli',
+    'microfelicita': 'Microfelicità',
+  };
+
+  const challengeName = challengeDisplayName[challengeCompleted] || challengeCompleted;
+
+  const subject = `${firstName}, diventa Founding Affiliate di Vitaeology (30% commissioni)`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f5;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #D4AF37 0%, #B8960C 100%); padding: 40px 40px 30px; text-align: center;">
+              <img src="${APP_URL}/logo-white.svg" alt="Vitaeology" width="180" style="margin-bottom: 20px;">
+              <h1 style="color: #0A2540; font-size: 26px; margin: 0; font-weight: 700;">
+                Opportunit&agrave; Esclusiva
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <p style="font-size: 18px; color: #1a1a1a; margin: 0 0 20px;">
+                Ciao <strong>${firstName}</strong>,
+              </p>
+
+              <p style="font-size: 16px; color: #4a4a4a; line-height: 1.6; margin: 0 0 20px;">
+                Congratulazioni per aver completato la sfida <strong>"${challengeName}"</strong>!
+              </p>
+
+              <p style="font-size: 16px; color: #4a4a4a; line-height: 1.6; margin: 0 0 20px;">
+                Come <strong>Founding Tester</strong>, hai vissuto l'esperienza Vitaeology in prima persona. Ora hai l'opportunit&agrave; di trasformare questa esperienza in un'entrata ricorrente.
+              </p>
+
+              <div style="background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 100%); border-radius: 12px; padding: 25px; margin: 25px 0;">
+                <h3 style="color: #F4B942; font-size: 20px; margin: 0 0 15px; text-align: center;">
+                  Diventa Founding Affiliate
+                </h3>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="padding: 8px 0;">
+                      <span style="color: #F4B942; font-size: 18px; margin-right: 10px;">&#10003;</span>
+                      <span style="color: #ffffff; font-size: 15px;"><strong>30% di commissione</strong> su ogni vendita (vs 20% standard)</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0;">
+                      <span style="color: #F4B942; font-size: 18px; margin-right: 10px;">&#10003;</span>
+                      <span style="color: #ffffff; font-size: 15px;"><strong>Cookie 90 giorni</strong> (vs 30 standard)</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0;">
+                      <span style="color: #F4B942; font-size: 18px; margin-right: 10px;">&#10003;</span>
+                      <span style="color: #ffffff; font-size: 15px;"><strong>Badge esclusivo</strong> "Founding Affiliate"</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0;">
+                      <span style="color: #F4B942; font-size: 18px; margin-right: 10px;">&#10003;</span>
+                      <span style="color: #ffffff; font-size: 15px;"><strong>Materiali marketing</strong> esclusivi</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <p style="font-size: 16px; color: #4a4a4a; line-height: 1.6; margin: 0 0 25px;">
+                Conosci altri imprenditori che potrebbero beneficiare di Vitaeology? Con il programma Founding Affiliate, ogni persona che si iscrive attraverso il tuo link ti genera una commissione del <strong>30%</strong>.
+              </p>
+
+              <!-- CTA Button -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="${APP_URL}/affiliate?founding=true&email=${encodeURIComponent(email)}"
+                       style="display: inline-block; background-color: #F4B942; color: #0A2540; font-size: 16px; font-weight: 700; text-decoration: none; padding: 16px 40px; border-radius: 8px;">
+                      Diventa Founding Affiliate
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="font-size: 14px; color: #888; text-align: center; margin: 20px 0 0;">
+                Questa offerta &egrave; riservata ai Founding Tester
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8f9fa; padding: 25px 40px; border-top: 1px solid #eee;">
+              <p style="font-size: 14px; color: #666; margin: 0 0 10px; text-align: center;">
+                Hai domande? Rispondi direttamente a questa email.
+              </p>
+              <p style="font-size: 13px; color: #999; margin: 0; text-align: center;">
+                &copy; 2026 Vitaeology. Tutti i diritti riservati.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      replyTo: REPLY_TO,
+      subject,
+      html,
+    });
+
+    if (error) {
+      console.error('[Beta Email] Errore invio affiliate invite:', error);
+      return { success: false, error: error.message };
+    }
+
+    console.log('[Beta Email] Affiliate invite inviata a:', email);
+    return { success: true, messageId: data?.id };
+  } catch (err) {
+    console.error('[Beta Email] Errore critico:', err);
+    return { success: false, error: err instanceof Error ? err.message : 'Errore sconosciuto' };
+  }
+}
+
 export async function sendBetaWaitlistEmail(params: BetaWaitlistEmailParams): Promise<EmailResult> {
   const { email, fullName, position } = params;
   const firstName = fullName.split(' ')[0];

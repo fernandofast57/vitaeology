@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
+import { sendAffiliateInviteEmail } from '@/lib/email/beta-tester-emails';
 import { onChallengeDayCompleted } from '@/lib/awareness';
 import { alertAPIError } from '@/lib/error-alerts';
 
@@ -235,6 +236,51 @@ export async function POST(request: NextRequest) {
             subscriber.id
           );
         }
+      }
+
+      // =========================================================
+      // FOUNDING AFFILIATE INVITE
+      // Se l'utente è un beta tester, invia invito programma affiliati
+      // =========================================================
+      try {
+        const { data: betaTester } = await supabase
+          .from('beta_testers')
+          .select('id, full_name, affiliate_invite_sent_at')
+          .eq('email', email.toLowerCase())
+          .in('status', ['approved', 'active'])
+          .single();
+
+        // Se è beta tester e non ha già ricevuto l'invito
+        if (betaTester && !betaTester.affiliate_invite_sent_at) {
+          // Verifica che non sia già affiliato
+          const { data: existingAffiliate } = await supabase
+            .from('affiliates')
+            .select('id')
+            .eq('email', email.toLowerCase())
+            .single();
+
+          if (!existingAffiliate) {
+            // Invia email invito affiliato
+            const inviteResult = await sendAffiliateInviteEmail({
+              email: email.toLowerCase(),
+              fullName: betaTester.full_name,
+              challengeCompleted: normalizedChallenge,
+            });
+
+            if (inviteResult.success) {
+              // Marca invito come inviato
+              await supabase
+                .from('beta_testers')
+                .update({ affiliate_invite_sent_at: new Date().toISOString() })
+                .eq('id', betaTester.id);
+
+              console.log('[Affiliate Invite] Inviato a beta tester:', email);
+            }
+          }
+        }
+      } catch (affiliateError) {
+        // Non bloccare il completamento se l'invito affiliato fallisce
+        console.error('[Affiliate Invite] Errore:', affiliateError);
       }
     }
 
