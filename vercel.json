@@ -1,4 +1,27 @@
 {
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://www.vitaeology.com/api/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "vitaeology.com"
+        }
+      ]
+    }
+  ],
   "crons": [
     {
       "path": "/api/cron/monitoring",
