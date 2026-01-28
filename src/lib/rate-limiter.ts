@@ -152,27 +152,114 @@ export function rateLimitExceededResponse(resetIn: number): Response {
 }
 
 /**
+ * Domini email temporanei/disposable comuni
+ * Usati per registrazioni spam
+ */
+const DISPOSABLE_DOMAINS = new Set([
+  'tempmail.com', 'temp-mail.org', 'guerrillamail.com', 'guerrillamail.org',
+  '10minutemail.com', '10minutemail.net', 'mailinator.com', 'maildrop.cc',
+  'throwaway.email', 'fakeinbox.com', 'trashmail.com', 'getnada.com',
+  'mohmal.com', 'tempail.com', 'emailondeck.com', 'dispostable.com',
+  'yopmail.com', 'sharklasers.com', 'grr.la', 'guerrillamailblock.com',
+  'pokemail.net', 'spam4.me', 'trash-mail.com', 'mytemp.email',
+  'tmpmail.org', 'tmpmail.net', 'tempr.email', 'discard.email',
+  'mailnesia.com', 'spamgourmet.com', 'mintemail.com', 'tempinbox.com'
+]);
+
+/**
+ * Valida il formato email (RFC 5322 semplificato)
+ */
+export function isValidEmailFormat(email: string): boolean {
+  if (!email || typeof email !== 'string') return false;
+
+  // Trim e lowercase
+  const trimmed = email.trim().toLowerCase();
+
+  // Lunghezza ragionevole
+  if (trimmed.length < 5 || trimmed.length > 254) return false;
+
+  // Regex RFC 5322 semplificata
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(trimmed)) return false;
+
+  const [localPart, domain] = trimmed.split('@');
+
+  // Validazioni parte locale
+  if (!localPart || localPart.length > 64) return false;
+  if (localPart.startsWith('.') || localPart.endsWith('.')) return false;
+  if (localPart.includes('..')) return false;
+
+  // Validazioni dominio
+  if (!domain || domain.length < 3) return false;
+  if (domain.startsWith('.') || domain.startsWith('-')) return false;
+  if (domain.includes('..')) return false;
+
+  return true;
+}
+
+/**
  * Rileva email spam con pattern tipici
- * Pattern: molti punti singoli nella parte locale (es. a.b.c.d.e@gmail.com)
+ * Pattern da CLAUDE.md: più di 3 punti nella parte locale + meno di 15 lettere
  */
 export function isSpamEmail(email: string): boolean {
-  const localPart = email.split('@')[0];
+  if (!email) return true;
 
-  // Conta i punti nella parte locale
-  const dots = (localPart.match(/\./g) || []).length;
+  const trimmed = email.trim().toLowerCase();
+  const [localPart, domain] = trimmed.split('@');
 
-  // Se ha 4+ punti, probabilmente è spam
-  if (dots >= 4) {
+  if (!localPart || !domain) return true;
+
+  // 1. Blocca domini disposable
+  if (DISPOSABLE_DOMAINS.has(domain)) {
     return true;
   }
 
-  // Pattern: sequenze di singole lettere separate da punti (a.b.c.d)
+  // 2. Pattern CLAUDE.md: più di 3 punti E meno di 15 lettere
+  const dots = (localPart.match(/\./g) || []).length;
+  const letters = localPart.replace(/[^a-zA-Z]/g, '').length;
+
+  if (dots > 3 && letters < 15) {
+    return true;
+  }
+
+  // 3. Pattern: sequenze di singole lettere separate da punti (a.b.c.d)
   const singleLetterPattern = /^([a-z]\.){3,}/i;
   if (singleLetterPattern.test(localPart)) {
     return true;
   }
 
+  // 4. Punti consecutivi o malformati
+  if (localPart.includes('..')) {
+    return true;
+  }
+
+  // 5. Pattern sospetto: 3 punti con pochissime lettere
+  if (dots >= 3 && letters < 10) {
+    return true;
+  }
+
+  // 6. Troppi punti in generale (6+) indipendentemente dalle lettere
+  if (dots >= 6) {
+    return true;
+  }
+
   return false;
+}
+
+/**
+ * Validazione email completa (formato + spam)
+ * Restituisce { valid: boolean, reason?: string }
+ */
+export function validateEmail(email: string): { valid: boolean; reason?: string } {
+  if (!isValidEmailFormat(email)) {
+    return { valid: false, reason: 'Formato email non valido' };
+  }
+
+  if (isSpamEmail(email)) {
+    return { valid: false, reason: 'Email non accettata' };
+  }
+
+  return { valid: true };
 }
 
 /**

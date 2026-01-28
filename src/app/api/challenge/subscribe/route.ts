@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { alertAPIError } from '@/lib/error-alerts';
-import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, isSpamEmail, spamEmailResponse } from '@/lib/rate-limiter';
+import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
 import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 
 export const dynamic = 'force-dynamic';
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       return turnstileFailedResponse(turnstileResult.error);
     }
 
-    // Validazione
+    // Validazione base
     if (!email || !challenge) {
       return NextResponse.json(
         { error: 'Email e challenge sono obbligatori' },
@@ -69,9 +69,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Blocca email spam
-    if (isSpamEmail(email)) {
-      return spamEmailResponse();
+    // Validazione email completa (formato + spam + domini disposable)
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      return NextResponse.json(
+        { error: emailValidation.reason || 'Email non valida' },
+        { status: 400 }
+      );
     }
 
     const config = CHALLENGE_CONFIG[challenge as keyof typeof CHALLENGE_CONFIG];

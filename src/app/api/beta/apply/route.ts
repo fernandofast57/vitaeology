@@ -4,7 +4,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendBetaWelcomeEmail, sendBetaWaitlistEmail } from '@/lib/email/beta-tester-emails';
-import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, isSpamEmail, spamEmailResponse } from '@/lib/rate-limiter';
+import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
 import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 
 const supabase = createClient(
@@ -56,18 +56,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verifica email valida
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validazione email completa (formato + spam + domini disposable)
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
       return NextResponse.json(
-        { error: 'Email non valida' },
+        { error: emailValidation.reason || 'Email non valida' },
         { status: 400 }
       );
-    }
-
-    // Blocca email spam
-    if (isSpamEmail(email)) {
-      return spamEmailResponse();
     }
 
     // Verifica se email già registrata
