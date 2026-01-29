@@ -4,8 +4,8 @@ import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Mail, Lock, User, AlertCircle, Loader2, CheckCircle, BookOpen } from 'lucide-react'
+import { Mail, Lock, User, AlertCircle, Loader2, BookOpen, Shield } from 'lucide-react'
+import Turnstile from '@/components/Turnstile'
 
 function SignupForm() {
   const router = useRouter()
@@ -20,7 +20,7 @@ function SignupForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   // Pre-compila email se presente nell'URL
   useEffect(() => {
@@ -32,75 +32,66 @@ function SignupForm() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    setLoading(true)
+
+    // Validazioni frontend
+    if (!fullName.trim()) {
+      setError('Inserisci il tuo nome')
+      return
+    }
+
+    if (!email.trim()) {
+      setError('Inserisci la tua email')
+      return
+    }
 
     if (password.length < 6) {
       setError('La password deve essere di almeno 6 caratteri')
-      setLoading(false)
       return
     }
 
-    const supabase = createClient()
+    if (!turnstileToken) {
+      setError('Completa la verifica di sicurezza')
+      return
+    }
 
-    // Se c'è un codice libro, lo passiamo al callback per attivazione automatica
-    const redirectUrl = bookCode
-      ? `${window.location.origin}/auth/callback?book_code=${bookCode}`
-      : `${window.location.origin}/auth/callback`
+    setLoading(true)
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          book_code: bookCode || undefined,
-        },
-        emailRedirectTo: redirectUrl,
-      },
-    })
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+          fullName: fullName.trim(),
+          turnstileToken,
+          bookCode: bookCode || undefined,
+        }),
+      })
 
-    if (error) {
-      if (error.message.includes('already registered')) {
-        setError('Questa email è già registrata. Prova ad accedere.')
-      } else {
-        setError('Errore durante la registrazione. Riprova.')
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Errore durante la registrazione')
+        setLoading(false)
+        return
       }
+
+      // Salva dati per la pagina di verifica
+      sessionStorage.setItem('signupData', JSON.stringify({
+        email: email.trim().toLowerCase(),
+        password,
+        fullName: fullName.trim(),
+        bookCode: bookCode || undefined,
+      }))
+
+      // Redirect alla pagina di verifica OTP
+      router.push(`/auth/verify?email=${encodeURIComponent(email.trim().toLowerCase())}`)
+
+    } catch {
+      setError('Errore di connessione. Riprova.')
       setLoading(false)
-      return
     }
-
-    setSuccess(true)
-    setLoading(false)
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-sm rounded-xl sm:px-10 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Controlla la tua email
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Ti abbiamo inviato un link di conferma a <strong>{email}</strong>.
-              Clicca sul link per attivare il tuo account.
-            </p>
-            <p className="text-sm text-gray-500">
-              Non hai ricevuto l&apos;email? Controlla la cartella spam o{' '}
-              <button
-                onClick={() => setSuccess(false)}
-                className="text-petrol-600 hover:text-petrol-700"
-              >
-                riprova
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -219,22 +210,41 @@ function SignupForm() {
               </div>
             </div>
 
+            {/* Turnstile CAPTCHA */}
+            <div className="flex flex-col items-center gap-2">
+              <Turnstile
+                onVerify={(token) => setTurnstileToken(token)}
+                onError={() => setError('Verifica di sicurezza fallita. Ricarica la pagina.')}
+                onExpire={() => setTurnstileToken(null)}
+                theme="light"
+                size="normal"
+              />
+              {turnstileToken && (
+                <div className="flex items-center gap-1 text-xs text-green-600">
+                  <Shield className="h-3 w-3" />
+                  Verificato
+                </div>
+              )}
+            </div>
+
             <button
               type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
+              disabled={loading || !turnstileToken}
+              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                  Registrazione in corso...
+                  Invio codice di verifica...
                 </>
               ) : (
-                'Crea Account Gratuito'
+                'Continua'
               )}
             </button>
 
             <p className="text-xs text-gray-500 text-center">
+              Ti invieremo un codice di verifica via email.
+              <br />
               Registrandoti accetti i nostri{' '}
               <Link href="/terms" className="text-petrol-600 hover:underline">
                 Termini di Servizio
