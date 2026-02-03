@@ -273,7 +273,7 @@ function OstacoliLandingContent() {
           {/* Video Hero */}
           <div className="mb-8">
             <LandingVideoPlayer
-              heygenId={LANDING_VIDEOS.ostacoli.heygenId}
+              videoUrl={LANDING_VIDEOS.ostacoli.videoUrl}
               thumbnailUrl={LANDING_VIDEOS.ostacoli.thumbnail}
               title="Challenge Oltre gli Ostacoli"
             />

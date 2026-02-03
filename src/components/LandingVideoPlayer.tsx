@@ -1,39 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Play } from 'lucide-react';
-import { getHeygenEmbedUrl } from '@/config/videos';
 
 interface LandingVideoPlayerProps {
-  heygenId: string;
+  videoUrl: string;
   thumbnailUrl: string;
   title?: string;
   className?: string;
 }
 
 /**
- * LandingVideoPlayer - Video player con thumbnail click-to-play
+ * LandingVideoPlayer - Video player HTML5 con thumbnail click-to-play
  *
- * Mostra la thumbnail, al click carica l'iframe HeyGen.
- * Formato 16:9 per landing page.
+ * Mostra la thumbnail, al click avvia il video MP4.
+ * Un solo click per avviare.
  */
 export function LandingVideoPlayer({
-  heygenId,
+  videoUrl,
   thumbnailUrl,
   title = 'Video Vitaeology',
   className = '',
 }: LandingVideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handlePlay = () => {
     setIsPlaying(true);
+    // Avvia il video dopo il render
+    setTimeout(() => {
+      videoRef.current?.play();
+    }, 100);
   };
 
   return (
-    <div className={`relative w-full max-w-3xl mx-auto ${className}`}>
-      {/* Aspect ratio 16:9 container */}
-      <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
+    <div className={`relative w-full max-w-2xl mx-auto ${className}`}>
+      <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl bg-black">
         {!isPlaying ? (
           // Thumbnail con play button
           <button
@@ -61,14 +64,16 @@ export function LandingVideoPlayer({
             </div>
           </button>
         ) : (
-          // HeyGen iframe player
-          <iframe
-            src={getHeygenEmbedUrl(heygenId)}
-            title={title}
-            className="absolute inset-0 w-full h-full"
-            allow="encrypted-media; fullscreen;"
-            allowFullScreen
-          />
+          // HTML5 Video Player
+          <video
+            ref={videoRef}
+            className="w-full h-full object-contain"
+            controls
+            playsInline
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Il tuo browser non supporta il video.
+          </video>
         )}
       </div>
     </div>

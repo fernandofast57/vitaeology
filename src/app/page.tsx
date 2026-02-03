@@ -106,7 +106,7 @@ export default function HomePage() {
             <div className="flex justify-center lg:justify-end">
               <div className="relative w-full max-w-lg">
                 <LandingVideoPlayer
-                  heygenId={LANDING_VIDEOS.homepage.heygenId}
+                  videoUrl={LANDING_VIDEOS.homepage.videoUrl}
                   thumbnailUrl={LANDING_VIDEOS.homepage.thumbnail}
                   title="Vitaeology - Il Principio Validante"
                 />

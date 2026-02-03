@@ -273,7 +273,7 @@ function LeadershipLandingContent() {
           {/* Video Hero */}
           <div className="mb-8">
             <LandingVideoPlayer
-              heygenId={LANDING_VIDEOS.leadership.heygenId}
+              videoUrl={LANDING_VIDEOS.leadership.videoUrl}
               thumbnailUrl={LANDING_VIDEOS.leadership.thumbnail}
               title="Challenge Leadership Autentica"
             />

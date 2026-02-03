@@ -324,7 +324,7 @@ function MicrofelicitaLandingContent() {
           {/* Video Hero */}
           <div className="mb-8">
             <LandingVideoPlayer
-              heygenId={LANDING_VIDEOS.microfelicita.heygenId}
+              videoUrl={LANDING_VIDEOS.microfelicita.videoUrl}
               thumbnailUrl={LANDING_VIDEOS.microfelicita.thumbnail}
               title="Challenge Microfelicità"
             />
