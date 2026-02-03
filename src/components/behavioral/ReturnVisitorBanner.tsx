@@ -137,8 +137,8 @@ export function ReturnVisitorBanner({
         {/* Mobile: Stack verticale */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Testo */}
-          <p className="text-gray-800 font-medium text-center sm:text-left">
-            <span className={styles.accent}>👋</span> {copy}
+          <p className="text-white font-medium text-center sm:text-left">
+            <span>👋</span> {copy}
           </p>
 
           {/* Actions */}
@@ -156,7 +156,7 @@ export function ReturnVisitorBanner({
 
             <button
               onClick={handleDismiss}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+              className="text-white/60 hover:text-white transition-colors p-1"
               aria-label="Chiudi banner"
             >
               <svg
