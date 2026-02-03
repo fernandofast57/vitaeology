@@ -72,18 +72,22 @@ export function VideoPlaceholder({
   }
 
   // Se videoUrl esiste, mostra il video player
+  // I video challenge sono verticali (9:16), quindi usiamo aspect-[9/16] e max-w-sm
   if (videoUrl) {
     return (
-      <div className="w-full max-w-2xl mx-auto my-8 rounded-xl overflow-hidden shadow-lg">
-        <video
-          className="w-full"
-          controls
-          preload="metadata"
-          poster={posterUrl}
-        >
-          <source src={videoUrl} type="video/mp4" />
-          Il tuo browser non supporta il tag video.
-        </video>
+      <div className="w-full max-w-sm mx-auto my-8 rounded-xl overflow-hidden shadow-lg bg-black">
+        <div className="relative aspect-[9/16]">
+          <video
+            className="absolute inset-0 w-full h-full object-contain"
+            controls
+            preload="metadata"
+            poster={posterUrl}
+            playsInline
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Il tuo browser non supporta il tag video.
+          </video>
+        </div>
       </div>
     );
   }

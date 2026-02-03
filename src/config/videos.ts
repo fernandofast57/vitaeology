@@ -28,43 +28,43 @@ export const LANDING_VIDEOS = {
   },
 };
 
-// Video delle challenge (7 giorni ciascuna)
+// Video delle challenge (7 giorni ciascuna) - hostati su Cloudflare R2
 export const CHALLENGE_VIDEOS = {
   leadership: {
-    hero: undefined as string | undefined,
+    hero: `${R2_CDN_URL}/leadership.mp4`,
     days: [
-      undefined, // Day 1
-      undefined, // Day 2
-      undefined, // Day 3
-      undefined, // Day 4
-      undefined, // Day 5
-      undefined, // Day 6
-      undefined, // Day 7
-    ] as (string | undefined)[],
+      `${R2_CDN_URL}/leadership-day-1.mp4`,
+      `${R2_CDN_URL}/leadership-day-2.mp4`,
+      `${R2_CDN_URL}/leadership-day-3.mp4`,
+      `${R2_CDN_URL}/leadership-day-4.mp4`,
+      `${R2_CDN_URL}/leadership-day-5.mp4`,
+      `${R2_CDN_URL}/leadership-day-6.mp4`,
+      `${R2_CDN_URL}/leadership-day-7.mp4`,
+    ],
   },
   ostacoli: {
-    hero: undefined as string | undefined,
+    hero: `${R2_CDN_URL}/ostacoli.mp4`,
     days: [
-      undefined, // Day 1
-      undefined, // Day 2
-      undefined, // Day 3
-      undefined, // Day 4
-      undefined, // Day 5
-      undefined, // Day 6
-      undefined, // Day 7
-    ] as (string | undefined)[],
+      `${R2_CDN_URL}/ostacoli-day-1.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-2.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-3.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-4.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-5.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-6.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-7.mp4`,
+    ],
   },
   microfelicita: {
-    hero: undefined as string | undefined,
+    hero: `${R2_CDN_URL}/microfelicita.mp4`,
     days: [
-      undefined, // Day 1
-      undefined, // Day 2
-      undefined, // Day 3
-      undefined, // Day 4
-      undefined, // Day 5
-      undefined, // Day 6
-      undefined, // Day 7
-    ] as (string | undefined)[],
+      `${R2_CDN_URL}/microfelicita-day-1.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-2.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-3.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-4.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-5.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-6.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-7.mp4`,
+    ],
   },
 };
 
@@ -77,10 +77,11 @@ export function getChallengeVideo(
   if (!challenge) return undefined;
 
   // dayNumber è 1-based, array è 0-based
+  if (dayNumber < 1 || dayNumber > 7) return undefined;
   return challenge.days[dayNumber - 1];
 }
 
-// Helper per ottenere video hero
+// Helper per ottenere video hero (landing page della challenge)
 export function getHeroVideo(
   challengeType: keyof typeof CHALLENGE_VIDEOS
 ): string | undefined {
