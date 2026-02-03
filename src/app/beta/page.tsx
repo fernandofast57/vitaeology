@@ -414,11 +414,11 @@ function BetaPageContent() {
               {/* Photo */}
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden flex-shrink-0 shadow-lg ring-4 ring-gold-500/30">
                 <Image
-                  src="/images/fernando.jpg"
+                  src="/images/fernando.png"
                   alt="Fernando Marongiu"
                   width={160}
                   height={160}
-                  className="w-full h-full object-cover object-[center_25%]"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
