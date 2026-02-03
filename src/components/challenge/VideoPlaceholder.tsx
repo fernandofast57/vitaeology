@@ -72,11 +72,15 @@ export function VideoPlaceholder({
   }
 
   // Se videoUrl esiste, mostra il video player
-  // I video challenge sono verticali (9:16), quindi usiamo aspect-[9/16] e max-w-sm
+  // Leadership: orizzontale (16:9), Ostacoli/Microfelicità: verticale (9:16)
   if (videoUrl) {
+    const isVertical = challengeType === 'ostacoli' || challengeType === 'microfelicita';
+
     return (
-      <div className="w-full max-w-sm mx-auto my-8 rounded-xl overflow-hidden shadow-lg bg-black">
-        <div className="relative aspect-[9/16]">
+      <div className={`w-full mx-auto my-8 rounded-xl overflow-hidden shadow-lg bg-black ${
+        isVertical ? 'max-w-sm' : 'max-w-2xl'
+      }`}>
+        <div className={`relative ${isVertical ? 'aspect-[9/16]' : 'aspect-video'}`}>
           <video
             className="absolute inset-0 w-full h-full object-contain"
             controls
