@@ -2,18 +2,73 @@
 
 // ============================================================================
 // PAGE: /beta
-// Descrizione: Landing page semplificata per beta tester
+// Descrizione: Landing page per beta tester con social proof e FAQ
 // Flow: Video → Scegli Challenge → Form (email+nome) → Redirect Day 1
 // ============================================================================
 
-import { useState, useCallback, useEffect, Suspense } from 'react';
+import { useState, useCallback, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Play, Loader2, ArrowRight, X } from 'lucide-react';
+import { Play, Loader2, ArrowRight, X, Check, ChevronDown, Target, MessageSquare, User } from 'lucide-react';
 import Turnstile from '@/components/Turnstile';
 import { LANDING_VIDEOS } from '@/config/videos';
 import { createClient } from '@/lib/supabase/client';
+
+// FAQ Data
+const FAQ_ITEMS = [
+  {
+    question: 'Quanto tempo richiede?',
+    answer: '10 minuti al giorno per 7 giorni. Puoi farlo quando vuoi tu, al ritmo che preferisci.',
+  },
+  {
+    question: 'Devo pagare qualcosa?',
+    answer: 'La challenge di 7 giorni è gratuita. I beta tester ricevono anche 6 mesi di accesso premium in regalo (valore €149). Dopo, decidi tu se continuare.',
+  },
+  {
+    question: 'Posso scegliere quale percorso?',
+    answer: 'Sì. Puoi scegliere tra Leadership Autentica, Oltre gli Ostacoli o Microfelicità. Scegli quello che senti più vicino.',
+  },
+  {
+    question: 'Cosa succede dopo i 7 giorni?',
+    answer: 'Ti chiederò un feedback di 5 minuti per aiutarmi a migliorare. Come beta tester ricevi 6 mesi di premium gratis. Dopo potrai decidere se continuare.',
+  },
+];
+
+// Perché Beta Tester cards
+const WHY_BETA_CARDS = [
+  {
+    icon: Target,
+    title: 'ESCLUSIVO',
+    description: 'Solo 100 imprenditori selezionati prima del lancio ufficiale',
+  },
+  {
+    icon: MessageSquare,
+    title: 'INFLUENZA',
+    description: 'Il tuo feedback migliorerà il percorso per tutti quelli che verranno dopo',
+  },
+  {
+    icon: User,
+    title: 'CREATO DA FERNANDO',
+    description: 'Percorso basato su 50 anni di esperienza imprenditoriale reale',
+  },
+];
+
+// Cosa Ricevi list
+const BENEFITS_LIST = [
+  '1 esercizio pratico al giorno (10 minuti)',
+  'Framework testato in 50 anni di imprenditoria',
+  'Email giornaliera con video-guida',
+  'Nessuna teoria — solo pratica applicabile subito',
+  '6 mesi di accesso premium in regalo',
+];
+
+// Cosa Ti Chiedo list
+const REQUIREMENTS_LIST = [
+  '10 minuti al giorno per 7 giorni',
+  'Un feedback onesto alla fine (5 minuti)',
+  "Nient'altro. Nessun pagamento. Mai.",
+];
 
 // Configurazione challenge
 const CHALLENGES = [
@@ -62,6 +117,7 @@ function BetaPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const supabase = createClient();
+  const challengeSectionRef = useRef<HTMLDivElement>(null);
 
   // UTM tracking
   const utmSource = searchParams.get('utm_source');
@@ -71,6 +127,14 @@ function BetaPageContent() {
 
   // Auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // FAQ accordion state
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // Scroll to challenge section
+  const scrollToChallenge = () => {
+    challengeSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   // Check auth status
   useEffect(() => {
@@ -255,7 +319,7 @@ function BetaPageContent() {
         </div>
 
         {/* Sezione Challenge */}
-        <div className="text-center mb-8">
+        <div ref={challengeSectionRef} className="text-center mb-8 scroll-mt-24">
           <h2 className="text-2xl font-bold text-white mb-2">
             Quale sfida ti chiama?
           </h2>
@@ -293,9 +357,146 @@ function BetaPageContent() {
         </div>
 
         {/* Info aggiuntive */}
-        <div className="text-center text-white/50 text-sm">
+        <div className="text-center text-white/50 text-sm mb-20">
           <p>7 giorni • 10 minuti al giorno • Completamente gratuito</p>
         </div>
+
+        {/* ============================================================ */}
+        {/* SEZIONE: Perché Beta Tester */}
+        {/* ============================================================ */}
+        <section className="mb-20">
+          <h2 className="text-2xl font-bold text-white text-center mb-10">
+            Perché diventare Beta Tester?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {WHY_BETA_CARDS.map((card, index) => (
+              <div
+                key={index}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-colors"
+              >
+                <div className="w-14 h-14 bg-gold-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <card.icon className="w-7 h-7 text-gold-400" />
+                </div>
+                <h3 className="text-lg font-bold text-gold-400 mb-2">{card.title}</h3>
+                <p className="text-white/70 text-sm">{card.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* SEZIONE: Cosa Ricevi */}
+        {/* ============================================================ */}
+        <section className="mb-20">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
+              Cosa ricevi
+            </h2>
+            <ul className="space-y-4">
+              {BENEFITS_LIST.map((benefit, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <span className="text-white/90">{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* SEZIONE: Chi è Fernando */}
+        {/* ============================================================ */}
+        <section className="mb-20">
+          <div className="bg-gradient-to-r from-petrol-700/50 to-petrol-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              {/* Photo placeholder */}
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                <span className="text-5xl md:text-6xl font-display font-bold text-white">F</span>
+              </div>
+
+              {/* Bio text */}
+              <div className="text-center md:text-left">
+                <h3 className="text-xl font-bold text-white mb-1">Fernando Marongiu</h3>
+                <p className="text-gold-400 text-sm mb-4">Imprenditore da oltre 50 anni • Fondatore HZ Holding</p>
+                <blockquote className="text-white/80 italic">
+                  &ldquo;Ho creato Vitaeology perché credo che le capacità che cerchiamo fuori le abbiamo già dentro.
+                  Cerco 100 persone che vogliano testarlo con me prima del lancio.&rdquo;
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* SEZIONE: Cosa Ti Chiedo */}
+        {/* ============================================================ */}
+        <section className="mb-12">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-white text-center mb-8">
+              Cosa ti chiedo
+            </h2>
+            <ul className="space-y-4">
+              {REQUIREMENTS_LIST.map((req, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-amber-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <ArrowRight className="w-4 h-4 text-amber-400" />
+                  </div>
+                  <span className="text-white/90">{req}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* CTA SECONDARIA */}
+        {/* ============================================================ */}
+        <section className="mb-20 text-center">
+          <button
+            onClick={scrollToChallenge}
+            className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-petrol-900 font-bold py-4 px-8 rounded-lg transition-all hover:gap-3 shadow-lg hover:shadow-xl"
+          >
+            Scegli la Tua Sfida
+            <ArrowRight className="w-5 h-5" />
+          </button>
+          <p className="text-white/50 text-sm mt-3">Solo 100 posti disponibili</p>
+        </section>
+
+        {/* ============================================================ */}
+        {/* FAQ ACCORDION */}
+        {/* ============================================================ */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
+            Domande frequenti
+          </h2>
+          <div className="max-w-2xl mx-auto space-y-3">
+            {FAQ_ITEMS.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
+                >
+                  <span className="font-medium text-white">{faq.question}</span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-white/60 transition-transform ${
+                      openFaqIndex === index ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {openFaqIndex === index && (
+                  <div className="px-6 pb-4">
+                    <p className="text-white/70">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
       {/* Modal Form */}
