@@ -1,28 +1,29 @@
 /**
  * Configurazione Video Challenge
  *
- * Video HeyGen con embedded player iframe
- * Formato: https://app.heygen.com/embedded-player/{VIDEO_ID}
- *
+ * Video hostati su Cloudflare R2 (egress gratuito)
  * Thumbnail locali in /public/videos/thumbnails/
  */
 
-// Video locali per le landing page
+// Cloudflare R2 CDN base URL
+const R2_CDN_URL = 'https://pub-2417d7e6729544f893d3a858ccab7ea2.r2.dev';
+
+// Video landing page (hostati su Cloudflare R2)
 export const LANDING_VIDEOS = {
   homepage: {
-    videoUrl: '/videos/homepage.mp4',
+    videoUrl: `${R2_CDN_URL}/homepage.mp4`,
     thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png',
   },
   leadership: {
-    videoUrl: '/videos/leadership.mp4',
+    videoUrl: `${R2_CDN_URL}/leadership.mp4`,
     thumbnail: '/videos/thumbnails/02_leadership_thumbnail.png',
   },
   ostacoli: {
-    videoUrl: '/videos/ostacoli.mp4',
+    videoUrl: `${R2_CDN_URL}/ostacoli.mp4`,
     thumbnail: '/videos/thumbnails/03_ostacoli_thumbnail.png',
   },
   microfelicita: {
-    videoUrl: '/videos/microfelicita.mp4',
+    videoUrl: `${R2_CDN_URL}/microfelicita.mp4`,
     thumbnail: '/videos/thumbnails/04_microfelicita_thumbnail.png',
   },
 };

@@ -61,3 +61,6 @@ books/
 # Large PDF files (reference docs, not needed for site)
 docs/Presentazione - 15 Esercizi Polivagali.pdf
 docs/STORYBOARD_VIDEO_VITAEOLOGY_-_3_CHALLENGE.pdf
+
+# Video files (hosted on Cloudflare R2)
+public/videos/*.mp4
