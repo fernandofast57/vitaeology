@@ -14,6 +14,11 @@ export const LANDING_VIDEOS = {
     videoUrl: `${R2_CDN_URL}/homepage.mp4`,
     thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png',
   },
+  // Video per /beta - TODO: aggiornare quando pronto
+  beta: {
+    videoUrl: `${R2_CDN_URL}/beta.mp4`,
+    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png', // Usa homepage come placeholder
+  },
   leadership: {
     videoUrl: `${R2_CDN_URL}/leadership.mp4`,
     thumbnail: '/videos/thumbnails/02_leadership_thumbnail.png',
