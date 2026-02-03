@@ -19,8 +19,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
-import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
-import { CHALLENGE_VIDEOS } from '@/config/videos';
+import { LandingVideoPlayer } from '@/components/LandingVideoPlayer';
+import { LANDING_VIDEOS } from '@/config/videos';
 import Turnstile from '@/components/Turnstile';
 
 // ============================================================================
@@ -323,9 +323,10 @@ function MicrofelicitaLandingContent() {
 
           {/* Video Hero */}
           <div className="mb-8">
-            <VideoPlaceholder
-              challengeType="microfelicita"
-              videoUrl={CHALLENGE_VIDEOS.microfelicita.hero}
+            <LandingVideoPlayer
+              heygenId={LANDING_VIDEOS.microfelicita.heygenId}
+              thumbnailUrl={LANDING_VIDEOS.microfelicita.thumbnail}
+              title="Challenge Microfelicità"
             />
           </div>
 

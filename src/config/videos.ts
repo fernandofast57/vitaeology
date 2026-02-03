@@ -1,19 +1,38 @@
 /**
  * Configurazione Video Challenge
  *
- * Sostituire `undefined` con URL video HeyGen quando pronti.
+ * Video HeyGen con embedded player iframe
+ * Formato: https://app.heygen.com/embedded-player/{VIDEO_ID}
  *
- * Esempio:
- *   hero: "https://cdn.heygen.com/xxxxx.mp4"
- *   days: ["https://cdn.heygen.com/day1.mp4", ...]
- *
- * I video possono essere ospitati su:
- * - HeyGen CDN (consigliato per video AI)
- * - Cloudflare Stream
- * - Vercel Blob Storage
- * - AWS S3 / CloudFront
+ * Thumbnail locali in /public/videos/thumbnails/
  */
 
+// Video ID HeyGen per le landing page
+export const LANDING_VIDEOS = {
+  homepage: {
+    heygenId: '96db220f526648919acfdf428fd44dd5',
+    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png',
+  },
+  leadership: {
+    heygenId: 'a32aeedd895942a59796a58fd3c71f58',
+    thumbnail: '/videos/thumbnails/02_leadership_thumbnail.png',
+  },
+  ostacoli: {
+    heygenId: 'afcef7f8bff34a749dad7e7283107e4c',
+    thumbnail: '/videos/thumbnails/03_ostacoli_thumbnail.png',
+  },
+  microfelicita: {
+    heygenId: 'f3a2403f04264828b28db1b029db37ec',
+    thumbnail: '/videos/thumbnails/04_microfelicita_thumbnail.png',
+  },
+};
+
+// Helper per ottenere URL embedded player HeyGen
+export function getHeygenEmbedUrl(videoId: string): string {
+  return `https://app.heygen.com/embedded-player/${videoId}`;
+}
+
+// Video delle challenge (7 giorni ciascuna)
 export const CHALLENGE_VIDEOS = {
   leadership: {
     hero: undefined as string | undefined,

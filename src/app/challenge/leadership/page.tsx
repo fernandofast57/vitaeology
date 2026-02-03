@@ -9,8 +9,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
-import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
-import { CHALLENGE_VIDEOS } from '@/config/videos';
+import { LandingVideoPlayer } from '@/components/LandingVideoPlayer';
+import { LANDING_VIDEOS } from '@/config/videos';
 import Turnstile from '@/components/Turnstile';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando
@@ -270,11 +270,12 @@ function LeadershipLandingContent() {
             </p>
           </div>
 
-          {/* Video Hero (opzionale) */}
+          {/* Video Hero */}
           <div className="mb-8">
-            <VideoPlaceholder
-              challengeType="leadership"
-              videoUrl={CHALLENGE_VIDEOS.leadership.hero}
+            <LandingVideoPlayer
+              heygenId={LANDING_VIDEOS.leadership.heygenId}
+              thumbnailUrl={LANDING_VIDEOS.leadership.thumbnail}
+              title="Challenge Leadership Autentica"
             />
           </div>
 

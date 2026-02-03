@@ -15,6 +15,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import { LandingVideoPlayer } from '@/components/LandingVideoPlayer';
+import { LANDING_VIDEOS } from '@/config/videos';
 import JsonLd from '@/components/seo/JsonLd';
 import { organizationSchema, personSchema, websiteSchema } from '@/lib/schema-org';
 
@@ -100,29 +102,16 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Colonna Destra - Video Placeholder */}
+            {/* Colonna Destra - Video */}
             <div className="flex justify-center lg:justify-end">
-              <div className="relative">
-                {/* Cerchio esterno decorativo */}
-                <div className="absolute -inset-3 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full opacity-20 blur-sm" />
-
-                {/* Video Container - Cerchio */}
-                <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-gold-500/50 shadow-2xl">
-                  {/* Placeholder - sostituire con video */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-petrol-500 to-petrol-700 flex flex-col items-center justify-center">
-                    {/* Play button placeholder */}
-                    <div className="w-20 h-20 bg-gold-500/90 rounded-full flex items-center justify-center mb-4 cursor-pointer hover:bg-gold-400 transition shadow-lg">
-                      <svg className="w-8 h-8 text-petrol-700 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <p className="text-white/80 text-sm font-medium">Guarda il video</p>
-                    <p className="text-gold-400 text-xs mt-1">2 minuti</p>
-                  </div>
-                </div>
-
+              <div className="relative w-full max-w-lg">
+                <LandingVideoPlayer
+                  heygenId={LANDING_VIDEOS.homepage.heygenId}
+                  thumbnailUrl={LANDING_VIDEOS.homepage.thumbnail}
+                  title="Vitaeology - Il Principio Validante"
+                />
                 {/* Badge */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-petrol-800 text-gold-400 text-xs font-medium px-4 py-1.5 rounded-full border border-gold-500/30">
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-petrol-800 text-gold-400 text-xs font-medium px-4 py-1.5 rounded-full border border-gold-500/30 z-10">
                   Fernando Marongiu
                 </div>
               </div>

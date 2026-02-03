@@ -9,8 +9,8 @@ import {
   EngagementBadge,
   ReturnVisitorBanner,
 } from '@/components/behavioral';
-import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
-import { CHALLENGE_VIDEOS } from '@/config/videos';
+import { LandingVideoPlayer } from '@/components/LandingVideoPlayer';
+import { LANDING_VIDEOS } from '@/config/videos';
 import Turnstile from '@/components/Turnstile';
 
 // Nuova versione: Epiphany Bridge con Storia Fernando (TheFork 1993)
@@ -270,11 +270,12 @@ function OstacoliLandingContent() {
             </p>
           </div>
 
-          {/* Video Hero (opzionale) */}
+          {/* Video Hero */}
           <div className="mb-8">
-            <VideoPlaceholder
-              challengeType="ostacoli"
-              videoUrl={CHALLENGE_VIDEOS.ostacoli.hero}
+            <LandingVideoPlayer
+              heygenId={LANDING_VIDEOS.ostacoli.heygenId}
+              thumbnailUrl={LANDING_VIDEOS.ostacoli.thumbnail}
+              title="Challenge Oltre gli Ostacoli"
             />
           </div>
 
