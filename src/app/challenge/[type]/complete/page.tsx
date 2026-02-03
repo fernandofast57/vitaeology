@@ -282,6 +282,38 @@ export default function ChallengeCompletePage() {
         </div>
       </section>
 
+      {/* Beta Feedback CTA - Prima del feedback standard */}
+      <section className="py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          <Link
+            href={`/challenge/${challengeType}/feedback`}
+            className="block bg-gradient-to-r from-gold-500/20 to-gold-500/10 border border-gold-500/30 rounded-xl p-6 hover:border-gold-500/50 transition group"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-white font-bold text-lg mb-1 group-hover:text-gold-400 transition">
+                  Aiutaci a migliorare!
+                </h3>
+                <p className="text-slate-300 text-sm mb-2">
+                  Sei un beta tester e il tuo feedback è prezioso. Racconta la tua esperienza in 2 minuti.
+                </p>
+                <span className={`text-${config.badgeText} font-medium text-sm flex items-center gap-1`}>
+                  Lascia il tuo feedback
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* Feedback Section */}
       <section className="py-12 px-4">
         <div className="max-w-2xl mx-auto">

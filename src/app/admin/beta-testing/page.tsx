@@ -22,6 +22,9 @@ import {
   Heart,
   ChevronDown,
   ChevronUp,
+  Star,
+  TrendingUp,
+  Award,
 } from 'lucide-react';
 
 // Types
@@ -99,7 +102,45 @@ interface Feedback {
   beta_testers: { email: string; full_name: string } | null;
 }
 
-type Tab = 'candidature' | 'feedback' | 'report';
+type Tab = 'candidature' | 'feedback' | 'report' | 'challenge-feedback';
+
+// Challenge Beta Feedback types
+interface ChallengeFeedbackStats {
+  total_feedbacks: number;
+  avg_rating: number;
+  avg_nps: number;
+  testimonials_available: number;
+  promoters: number;
+  passives: number;
+  detractors: number;
+  nps_net_score: number;
+  by_challenge: Record<string, {
+    count: number;
+    avg_rating: number;
+    testimonials: number;
+  }>;
+  rating_distribution: number[];
+}
+
+interface ChallengeFeedbackTestimonial {
+  id: string;
+  challenge_type: string;
+  overall_rating: number;
+  testimonial: string;
+  display_name: string | null;
+  created_at: string;
+}
+
+interface ChallengeChoiceStats {
+  total_signups: number;
+  by_challenge: Record<string, {
+    signups: number;
+    active: number;
+    completed: number;
+    avg_progress: number;
+    percentage: number;
+  }>;
+}
 
 export default function AdminBetaTestingPage() {
   const [activeTab, setActiveTab] = useState<Tab>('candidature');
@@ -107,6 +148,11 @@ export default function AdminBetaTestingPage() {
   const [testers, setTesters] = useState<Tester[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Challenge feedback state
+  const [challengeFeedbackStats, setChallengeFeedbackStats] = useState<ChallengeFeedbackStats | null>(null);
+  const [challengeTestimonials, setChallengeTestimonials] = useState<ChallengeFeedbackTestimonial[]>([]);
+  const [challengeChoiceStats, setChallengeChoiceStats] = useState<ChallengeChoiceStats | null>(null);
 
   // Filters
   const [testerFilter, setTesterFilter] = useState<string>('all');
@@ -165,14 +211,29 @@ export default function AdminBetaTestingPage() {
     }
   }, [feedbackTypeFilter, feedbackStatusFilter]);
 
+  // Fetch challenge beta feedback (from new system)
+  const fetchChallengeFeedback = useCallback(async () => {
+    try {
+      const res = await fetch('/api/challenge/beta-feedback');
+      if (res.ok) {
+        const data = await res.json();
+        setChallengeFeedbackStats(data.stats || null);
+        setChallengeTestimonials(data.testimonials || []);
+        setChallengeChoiceStats(data.challenge_choice_stats || null);
+      }
+    } catch (err) {
+      console.error('Errore caricamento challenge feedback:', err);
+    }
+  }, []);
+
   useEffect(() => {
     const loadAll = async () => {
       setLoading(true);
-      await Promise.all([fetchStats(), fetchTesters(), fetchFeedback()]);
+      await Promise.all([fetchStats(), fetchTesters(), fetchFeedback(), fetchChallengeFeedback()]);
       setLoading(false);
     };
     loadAll();
-  }, [fetchStats, fetchTesters, fetchFeedback]);
+  }, [fetchStats, fetchTesters, fetchFeedback, fetchChallengeFeedback]);
 
   // Tester actions
   const updateTester = async (id: string, data: Record<string, unknown>) => {
@@ -281,10 +342,11 @@ export default function AdminBetaTestingPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-white rounded-lg p-1 shadow-sm w-fit">
+        <div className="flex gap-1 mb-6 bg-white rounded-lg p-1 shadow-sm w-fit flex-wrap">
           {([
             { key: 'candidature', label: 'Candidature', icon: Users },
             { key: 'feedback', label: 'Feedback', icon: MessageSquare },
+            { key: 'challenge-feedback', label: 'Challenge Feedback', icon: Heart },
             { key: 'report', label: 'Report', icon: BarChart3 },
           ] as const).map((tab) => {
             const Icon = tab.icon;
@@ -336,6 +398,14 @@ export default function AdminBetaTestingPage() {
 
         {activeTab === 'report' && stats && (
           <ReportTab stats={stats} />
+        )}
+
+        {activeTab === 'challenge-feedback' && (
+          <ChallengeFeedbackTab
+            stats={challengeFeedbackStats}
+            testimonials={challengeTestimonials}
+            choiceStats={challengeChoiceStats}
+          />
         )}
       </main>
     </div>
@@ -994,6 +1064,340 @@ function ReportTab({ stats }: ReportTabProps) {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// CHALLENGE FEEDBACK TAB
+// Feedback raccolti dalle challenge 7 giorni (obiettivo: 30+ feedback, 10+ testimonials)
+// ============================================================================
+
+interface ChallengeFeedbackTabProps {
+  stats: ChallengeFeedbackStats | null;
+  testimonials: ChallengeFeedbackTestimonial[];
+  choiceStats: ChallengeChoiceStats | null;
+}
+
+function ChallengeFeedbackTab({ stats, testimonials, choiceStats }: ChallengeFeedbackTabProps) {
+  if (!stats) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+        <p className="text-slate-500">Nessun feedback challenge ancora raccolto.</p>
+        <p className="text-sm text-slate-400 mt-2">
+          I feedback verranno raccolti quando i beta tester completeranno le challenge.
+        </p>
+      </div>
+    );
+  }
+
+  const challengeColors: Record<string, { bg: string; text: string; border: string }> = {
+    leadership: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
+    ostacoli: { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-200' },
+    microfelicita: { bg: 'bg-violet-50', text: 'text-violet-800', border: 'border-violet-200' },
+  };
+
+  // Progress toward goals
+  const feedbackProgress = Math.min((stats.total_feedbacks / 30) * 100, 100);
+  const testimonialsProgress = Math.min((stats.testimonials_available / 10) * 100, 100);
+
+  return (
+    <div className="space-y-6">
+      {/* Progress toward Goals */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-blue-500" />
+          Progresso Obiettivi Beta
+        </h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm text-slate-600">Feedback Raccolti</span>
+              <span className="text-sm font-semibold text-slate-800">
+                {stats.total_feedbacks} / 30
+              </span>
+            </div>
+            <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all"
+                style={{ width: `${feedbackProgress}%` }}
+              />
+            </div>
+            {feedbackProgress >= 100 && (
+              <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" /> Obiettivo raggiunto!
+              </p>
+            )}
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-sm text-slate-600">Testimonials Utilizzabili</span>
+              <span className="text-sm font-semibold text-slate-800">
+                {stats.testimonials_available} / 10
+              </span>
+            </div>
+            <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-green-500 rounded-full transition-all"
+                style={{ width: `${testimonialsProgress}%` }}
+              />
+            </div>
+            {testimonialsProgress >= 100 && (
+              <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" /> Obiettivo raggiunto!
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Challenge Choice Stats (Most Popular) */}
+      {choiceStats && choiceStats.total_signups > 0 && (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-blue-500" />
+            Challenge Scelte dai Beta Tester
+          </h3>
+          <p className="text-sm text-slate-500 mb-4">
+            {choiceStats.total_signups} iscrizioni totali dalla pagina /beta
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {Object.entries(choiceStats.by_challenge)
+              .sort(([, a], [, b]) => b.signups - a.signups)
+              .map(([challenge, data], index) => {
+                const colors = challengeColors[challenge] || challengeColors.leadership;
+                const challengeNames: Record<string, string> = {
+                  leadership: 'Leadership Autentica',
+                  ostacoli: 'Oltre gli Ostacoli',
+                  microfelicita: 'Microfelicita',
+                };
+                const isWinner = index === 0;
+
+                return (
+                  <div
+                    key={challenge}
+                    className={`p-4 rounded-xl border-2 ${colors.bg} ${colors.border} ${
+                      isWinner ? 'ring-2 ring-offset-2 ring-blue-500' : ''
+                    }`}
+                  >
+                    {isWinner && (
+                      <div className="flex items-center gap-1 text-xs font-bold text-blue-600 mb-2">
+                        <Award className="w-4 h-4" /> PIU&apos; SCELTA
+                      </div>
+                    )}
+                    <h4 className={`font-semibold ${colors.text} mb-3`}>
+                      {challengeNames[challenge] || challenge}
+                    </h4>
+
+                    {/* Progress bar */}
+                    <div className="mb-3">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-slate-600">Iscrizioni</span>
+                        <span className="font-bold">{data.signups} ({data.percentage}%)</span>
+                      </div>
+                      <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${
+                            challenge === 'leadership' ? 'bg-amber-500' :
+                            challenge === 'ostacoli' ? 'bg-emerald-500' : 'bg-violet-500'
+                          }`}
+                          style={{ width: `${data.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="text-center p-2 bg-white/50 rounded-lg">
+                        <div className="font-semibold text-green-700">{data.completed}</div>
+                        <div className="text-xs text-slate-500">Completati</div>
+                      </div>
+                      <div className="text-center p-2 bg-white/50 rounded-lg">
+                        <div className="font-semibold text-slate-700">{data.avg_progress.toFixed(1)}</div>
+                        <div className="text-xs text-slate-500">Giorno medio</div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      )}
+
+      {/* Key Metrics */}
+      <div className="grid md:grid-cols-4 gap-4">
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <Star className="w-5 h-5 text-yellow-500" />
+            <p className="text-sm text-slate-500">Rating Medio</p>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-bold text-slate-800">{stats.avg_rating.toFixed(1)}</p>
+            <p className="text-slate-400">/ 5</p>
+          </div>
+          <div className="flex gap-1 mt-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`w-4 h-4 ${
+                  star <= Math.round(stats.avg_rating)
+                    ? 'fill-yellow-400 text-yellow-400'
+                    : 'text-slate-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <TrendingUp className="w-5 h-5 text-purple-500" />
+            <p className="text-sm text-slate-500">NPS Score</p>
+          </div>
+          <p className={`text-3xl font-bold ${
+            stats.nps_net_score >= 50 ? 'text-green-600' :
+            stats.nps_net_score >= 0 ? 'text-yellow-600' : 'text-red-600'
+          }`}>
+            {stats.nps_net_score}
+          </p>
+          <p className="text-xs text-slate-400 mt-2">
+            {stats.promoters} promoter, {stats.passives} passive, {stats.detractors} detractor
+          </p>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <MessageSquare className="w-5 h-5 text-blue-500" />
+            <p className="text-sm text-slate-500">Feedback Totali</p>
+          </div>
+          <p className="text-3xl font-bold text-slate-800">{stats.total_feedbacks}</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="flex items-center gap-3 mb-2">
+            <Award className="w-5 h-5 text-green-500" />
+            <p className="text-sm text-slate-500">Testimonials</p>
+          </div>
+          <p className="text-3xl font-bold text-slate-800">{stats.testimonials_available}</p>
+          <p className="text-xs text-slate-400 mt-2">Con consenso all&apos;uso</p>
+        </div>
+      </div>
+
+      {/* Rating Distribution */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Distribuzione Rating</h3>
+        <div className="space-y-3">
+          {[5, 4, 3, 2, 1].map((rating) => {
+            const count = stats.rating_distribution[rating - 1] || 0;
+            const percentage = stats.total_feedbacks > 0
+              ? (count / stats.total_feedbacks) * 100
+              : 0;
+            return (
+              <div key={rating} className="flex items-center gap-3">
+                <div className="flex items-center gap-1 w-20">
+                  <span className="text-sm text-slate-600">{rating}</span>
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                </div>
+                <div className="flex-1 h-6 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-yellow-400 rounded-full transition-all"
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+                <span className="text-sm text-slate-500 w-12 text-right">{count}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* By Challenge */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Feedback per Challenge</h3>
+        <div className="grid md:grid-cols-3 gap-4">
+          {Object.entries(stats.by_challenge).map(([challenge, data]) => {
+            const colors = challengeColors[challenge] || challengeColors.leadership;
+            const challengeNames: Record<string, string> = {
+              leadership: 'Leadership Autentica',
+              ostacoli: 'Oltre gli Ostacoli',
+              microfelicita: 'Microfelicita',
+            };
+            return (
+              <div
+                key={challenge}
+                className={`p-4 rounded-xl border ${colors.bg} ${colors.border}`}
+              >
+                <h4 className={`font-semibold ${colors.text} mb-3`}>
+                  {challengeNames[challenge] || challenge}
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Feedback:</span>
+                    <span className="font-semibold">{data.count}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Rating medio:</span>
+                    <span className="font-semibold">{data.avg_rating.toFixed(1)} / 5</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Testimonials:</span>
+                    <span className="font-semibold">{data.testimonials}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {Object.keys(stats.by_challenge).length === 0 && (
+          <p className="text-slate-400 text-center py-4">Nessun feedback per challenge ancora</p>
+        )}
+      </div>
+
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <Award className="w-5 h-5 text-green-500" />
+            Testimonials Approvati
+          </h3>
+          <div className="space-y-4">
+            {testimonials.map((t) => {
+              const colors = challengeColors[t.challenge_type] || challengeColors.leadership;
+              return (
+                <div
+                  key={t.id}
+                  className={`p-4 rounded-lg border ${colors.bg} ${colors.border}`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <p className="text-slate-700 italic">&quot;{t.testimonial}&quot;</p>
+                      <div className="flex items-center gap-3 mt-3 text-sm">
+                        <span className={`font-medium ${colors.text}`}>
+                          {t.display_name || 'Anonimo'}
+                        </span>
+                        <span className="text-slate-400">•</span>
+                        <span className="text-slate-500 capitalize">{t.challenge_type}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-4 h-4 ${
+                            star <= t.overall_rating
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-slate-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

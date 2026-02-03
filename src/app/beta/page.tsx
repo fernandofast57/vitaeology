@@ -6,13 +6,14 @@
 // Flow: Video → Scegli Challenge → Form (email+nome) → Redirect Day 1
 // ============================================================================
 
-import { useState, useCallback, Suspense } from 'react';
+import { useState, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Play, Loader2, ArrowRight, X } from 'lucide-react';
 import Turnstile from '@/components/Turnstile';
 import { LANDING_VIDEOS } from '@/config/videos';
+import { createClient } from '@/lib/supabase/client';
 
 // Configurazione challenge
 const CHALLENGES = [
@@ -60,12 +61,25 @@ const CHALLENGES = [
 function BetaPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const supabase = createClient();
 
   // UTM tracking
   const utmSource = searchParams.get('utm_source');
   const utmMedium = searchParams.get('utm_medium');
   const utmCampaign = searchParams.get('utm_campaign');
   const utmContent = searchParams.get('utm_content');
+
+  // Auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+    };
+    checkAuth();
+  }, [supabase]);
 
   // State
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -167,10 +181,10 @@ function BetaPageContent() {
               />
             </Link>
             <Link
-              href="/auth/login"
+              href={isLoggedIn ? '/dashboard' : '/auth/login'}
               className="text-white/70 hover:text-white font-medium text-sm"
             >
-              Accedi
+              {isLoggedIn ? 'Dashboard' : 'Accedi'}
             </Link>
           </div>
         </nav>
