@@ -411,9 +411,15 @@ function BetaPageContent() {
         <section className="mb-20">
           <div className="bg-gradient-to-r from-petrol-700/50 to-petrol-800/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-8">
-              {/* Photo placeholder */}
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                <span className="text-5xl md:text-6xl font-display font-bold text-white">F</span>
+              {/* Photo */}
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden flex-shrink-0 shadow-lg ring-4 ring-gold-500/30">
+                <Image
+                  src="/images/fernando.jpg"
+                  alt="Fernando Marongiu"
+                  width={160}
+                  height={160}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Bio text */}
