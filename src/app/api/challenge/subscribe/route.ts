@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { email, nome, challenge, variant, utmSource, utmMedium, utmCampaign, turnstileToken } = body;
+    const { email, nome, challenge, variant, utmSource, utmMedium, utmCampaign, utmContent, turnstileToken } = body;
 
     // Verifica Turnstile (anti-bot)
     const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP);
@@ -115,6 +115,7 @@ export async function POST(request: NextRequest) {
         utm_source: utmSource || null,
         utm_medium: utmMedium || null,
         utm_campaign: utmCampaign || null,
+        utm_content: utmContent || null,
         subscribed_at: new Date().toISOString(),
         current_day: 0,
         status: 'active'
@@ -138,6 +139,7 @@ export async function POST(request: NextRequest) {
       utm_source: utmSource,
       utm_medium: utmMedium,
       utm_campaign: utmCampaign,
+      utm_content: utmContent,
       created_at: new Date().toISOString()
     });
 

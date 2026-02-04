@@ -7,13 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useFullChallengeProgress } from '@/hooks/useDiscoveryProgress';
 import type { ChallengeType } from '@/lib/challenge/discovery-data';
 import MiniProfileChart from '@/components/challenge/MiniProfileChart';
-
-// Feedback state type
-interface FeedbackState {
-  nextAction: string;
-  missingFeedback: string;
-  submitted: boolean;
-}
+import { getChallengeColors, isValidChallengeType, CHALLENGE_TO_ASSESSMENT } from '@/lib/challenge/config';
 
 // Mini-profile data type
 interface MiniProfileData {
@@ -25,49 +19,35 @@ interface MiniProfileData {
   completedDays: number;
 }
 
-const CHALLENGE_CONFIG = {
+// Dati specifici per la pagina di completamento (gap creator)
+const COMPLETION_DATA: Record<string, {
+  completionMessage: string;
+  gapExplored: number;
+  gapTotal: number;
+  gapMessage: string;
+  gapCta: string;
+}> = {
   leadership: {
-    name: 'Leadership Autentica',
-    gradient: 'from-amber-900 to-slate-900',
-    accent: 'amber-500',
-    accentHover: 'amber-600',
-    badge: 'amber-500/20',
-    badgeBorder: 'amber-500/30',
-    badgeText: 'amber-400',
     completionMessage: 'Hai scoperto il leader che già opera in te.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri tutte le 24 caratteristiche di leadership', link: '/assessment/leadership', cta: 'Fai il Test' },
-      { icon: '🎯', title: 'Esercizi Pratici', description: 'Continua ad allenare la tua leadership', link: '/exercises', cta: 'Esplora Esercizi' }
-    ]
+    gapExplored: 4,
+    gapTotal: 24,
+    gapMessage: 'Le tue risposte hanno esplorato 4 dimensioni della leadership. Ce ne sono 24.',
+    gapCta: 'L\'Assessment completo ti mostra tutte le sfumature — anche quelle che hai ma non hai ancora riconosciuto.',
   },
   ostacoli: {
-    name: 'Oltre gli Ostacoli',
-    gradient: 'from-emerald-900 to-slate-900',
-    accent: 'emerald-500',
-    accentHover: 'emerald-600',
-    badge: 'emerald-500/20',
-    badgeBorder: 'emerald-500/30',
-    badgeText: 'emerald-400',
     completionMessage: 'Hai risvegliato il risolutore che è in te.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di problem-solving', link: '/assessment/risolutore', cta: 'Fai il Test' },
-      { icon: '🛠️', title: 'Strumenti Avanzati', description: 'Approfondisci i sistemi A.Z.I.O.N.E. e C.R.E.S.C.I.T.A.', link: '/exercises', cta: 'Esplora Strumenti' }
-    ]
+    gapExplored: 3,
+    gapTotal: 12,
+    gapMessage: 'Hai esplorato 3 filtri di problem-solving. L\'Assessment ne rivela le sfumature.',
+    gapCta: 'Scopri come usi Pattern, Segnali e Risorse in situazioni diverse — e dove hai margine di crescita.',
   },
   microfelicita: {
-    name: 'Microfelicità',
-    gradient: 'from-violet-900 to-slate-900',
-    accent: 'violet-500',
-    accentHover: 'violet-600',
-    badge: 'violet-500/20',
-    badgeBorder: 'violet-500/30',
-    badgeText: 'violet-400',
     completionMessage: 'Hai imparato a notare il benessere che già ti attraversa.',
-    nextSteps: [
-      { icon: '📊', title: 'Assessment Completo', description: 'Scopri il tuo profilo di benessere', link: '/assessment/microfelicita', cta: 'Fai il Test' },
-      { icon: '🧘', title: 'Pratiche Quotidiane', description: 'Esercizi per consolidare R.A.D.A.R.', link: '/exercises', cta: 'Esplora Pratiche' }
-    ]
-  }
+    gapExplored: 5,
+    gapTotal: 15,
+    gapMessage: 'Hai esplorato le 5 fasi R.A.D.A.R. L\'Assessment ti mostra dove sei in ciascuna.',
+    gapCta: 'Scopri il tuo profilo di benessere completo — e quali fasi puoi amplificare subito.',
+  },
 };
 
 export default function ChallengeCompletePage() {
@@ -76,11 +56,6 @@ export default function ChallengeCompletePage() {
   const challengeType = params.type as ChallengeType;
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [feedback, setFeedback] = useState<FeedbackState>({
-    nextAction: '',
-    missingFeedback: '',
-    submitted: false
-  });
   const [miniProfile, setMiniProfile] = useState<MiniProfileData | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileError, setProfileError] = useState(false);
@@ -88,31 +63,10 @@ export default function ChallengeCompletePage() {
 
   const { isComplete, completionPercentage, isLoading } = useFullChallengeProgress(challengeType);
 
-  // Handle feedback submission
-  const handleFeedback = async () => {
-    try {
-      const response = await fetch('/api/challenge/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          challenge_type: challengeType,
-          next_action: feedback.nextAction,
-          missing_feedback: feedback.missingFeedback || null
-        })
-      });
-
-      if (response.ok) {
-        setFeedback(prev => ({ ...prev, submitted: true }));
-      }
-    } catch (error) {
-      console.error('Errore invio feedback:', error);
-      // Continua comunque per UX
-      setFeedback(prev => ({ ...prev, submitted: true }));
-    }
-  };
-
-  const isValidChallenge = ['leadership', 'ostacoli', 'microfelicita'].includes(challengeType);
-  const config = CHALLENGE_CONFIG[challengeType] || CHALLENGE_CONFIG.leadership;
+  const isValidChallenge = isValidChallengeType(challengeType);
+  const colors = getChallengeColors(challengeType);
+  const gap = COMPLETION_DATA[challengeType] || COMPLETION_DATA.leadership;
+  const assessmentSlug = CHALLENGE_TO_ASSESSMENT[challengeType] || 'leadership';
 
   // Check authentication
   useEffect(() => {
@@ -138,8 +92,7 @@ export default function ChallengeCompletePage() {
             setMiniProfile(data.profile);
           }
         }
-      } catch (error) {
-        console.error('Errore caricamento mini-profilo:', error);
+      } catch {
         setProfileError(true);
       } finally {
         setProfileLoading(false);
@@ -151,10 +104,30 @@ export default function ChallengeCompletePage() {
     }
   }, [challengeType, isAuthenticated]);
 
+  // Traccia completamento challenge (Meta Pixel + GA)
+  useEffect(() => {
+    if (isComplete && typeof window !== 'undefined') {
+      const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
+      if (fbq) {
+        fbq('track', 'CompleteRegistration', {
+          content_name: `challenge_${challengeType}`,
+          content_category: 'challenge_complete',
+        });
+      }
+      const gtag = (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag;
+      if (gtag) {
+        gtag('event', 'challenge_complete', { challenge: challengeType });
+      }
+    }
+  }, [isComplete, challengeType]);
+
   // Loading state
   if (isAuthenticated === null || isLoading) {
     return (
-      <div className={`min-h-screen bg-gradient-to-b ${config.gradient} flex items-center justify-center`}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+      >
         <div className="text-white text-xl">Caricamento...</div>
       </div>
     );
@@ -177,7 +150,10 @@ export default function ChallengeCompletePage() {
   // Not complete
   if (!isComplete) {
     return (
-      <div className={`min-h-screen bg-gradient-to-b ${config.gradient} flex items-center justify-center p-4`}>
+      <div
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+      >
         <div className="max-w-md text-center">
           <div className="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,7 +169,8 @@ export default function ChallengeCompletePage() {
           </p>
           <Link
             href={`/challenge/${challengeType}/day/1`}
-            className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
+            className="inline-block text-white font-bold py-3 px-8 rounded-lg transition hover:opacity-90"
+            style={{ backgroundColor: colors.accentColor }}
           >
             Continua la Sfida
           </Link>
@@ -203,63 +180,41 @@ export default function ChallengeCompletePage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b ${config.gradient}`}>
-      {/* Hero */}
-      <section className="pt-20 pb-16 px-4">
+    <div
+      className="min-h-screen"
+      style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+    >
+      {/* Hero: Celebrazione */}
+      <section className="pt-20 pb-12 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Celebration Animation */}
-          <div className="relative w-32 h-32 mx-auto mb-8">
-            <div className={`absolute inset-0 bg-${config.accent} rounded-full animate-ping opacity-25`} />
-            <div className={`relative w-32 h-32 bg-${config.accent} rounded-full flex items-center justify-center`}>
-              <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Celebration */}
+          <div className="relative w-24 h-24 mx-auto mb-6">
+            <div
+              className="absolute inset-0 rounded-full animate-ping opacity-25"
+              style={{ backgroundColor: colors.accentColor }}
+            />
+            <div
+              className="relative w-24 h-24 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: colors.accentColor }}
+            >
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
 
-          {/* Badge */}
-          <div className={`inline-block bg-${config.badge} border border-${config.badgeBorder} rounded-full px-6 py-2 mb-6`}>
-            <span className={`text-${config.badgeText} font-semibold`}>
-              🎉 Sfida Completata!
-            </span>
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Congratulazioni!
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Hai completato la Challenge {colors.name}
           </h1>
 
-          <p className="text-xl text-slate-300 mb-4">
-            Hai completato la sfida <span className="text-white font-semibold">{config.name}</span>
+          <p className="text-lg" style={{ color: colors.badgeColor }}>
+            {gap.completionMessage}
           </p>
-
-          <p className={`text-${config.badgeText} text-lg`}>
-            {config.completionMessage}
-          </p>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-slate-800/50 rounded-xl p-6 text-center border border-slate-700/50">
-              <div className={`text-3xl font-bold text-${config.badgeText} mb-2`}>7</div>
-              <div className="text-slate-400 text-sm">Giorni Completati</div>
-            </div>
-            <div className="bg-slate-800/50 rounded-xl p-6 text-center border border-slate-700/50">
-              <div className={`text-3xl font-bold text-${config.badgeText} mb-2`}>21</div>
-              <div className="text-slate-400 text-sm">Riflessioni</div>
-            </div>
-            <div className="bg-slate-800/50 rounded-xl p-6 text-center border border-slate-700/50">
-              <div className={`text-3xl font-bold text-${config.badgeText} mb-2`}>100%</div>
-              <div className="text-slate-400 text-sm">Completamento</div>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Mini-Profilo */}
-      <section className="py-12 px-4">
+      <section className="py-8 px-4">
         <div className="max-w-2xl mx-auto">
           {profileLoading ? (
             <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
@@ -273,264 +228,81 @@ export default function ChallengeCompletePage() {
           ) : profileError ? (
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
               <p className="text-yellow-800">
-                Non siamo riusciti a caricare il tuo profilo. Continua pure con i prossimi passi.
+                Non siamo riusciti a caricare il tuo profilo. Continua pure con il passo successivo.
               </p>
             </div>
           ) : miniProfile ? (
-            <MiniProfileChart profile={miniProfile} />
+            <MiniProfileChart profile={miniProfile} showGap={true} assessmentDimensions={gap.gapTotal} />
           ) : null}
         </div>
       </section>
 
-      {/* Beta Feedback CTA - Prima del feedback standard */}
+      {/* GAP + UNA CTA Assessment */}
       <section className="py-8 px-4">
         <div className="max-w-2xl mx-auto">
-          <Link
-            href={`/challenge/${challengeType}/feedback`}
-            className="block bg-gradient-to-r from-gold-500/20 to-gold-500/10 border border-gold-500/30 rounded-xl p-6 hover:border-gold-500/50 transition group"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-white font-bold text-lg mb-1 group-hover:text-gold-400 transition">
-                  Aiutaci a migliorare!
-                </h3>
-                <p className="text-slate-300 text-sm mb-2">
-                  Sei un beta tester e il tuo feedback è prezioso. Racconta la tua esperienza in 2 minuti.
-                </p>
-                <span className={`text-${config.badgeText} font-medium text-sm flex items-center gap-1`}>
-                  Lascia il tuo feedback
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* Feedback Section */}
-      <section className="py-12 px-4">
-        <div className="max-w-2xl mx-auto">
-          {!feedback.submitted ? (
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
-              <h3 className="text-xl font-bold text-white mb-2">Prima di continuare...</h3>
-              <p className="text-slate-400 mb-6">Una domanda veloce per personalizzare il tuo percorso</p>
-
-              <div className="space-y-6">
-                <div>
-                  <label className="text-white font-medium block mb-3">Cosa vorresti fare adesso?</label>
-                  <div className="space-y-3">
-                    {[
-                      { value: 'assessment', label: 'Capire meglio i miei punti forti', icon: '📊' },
-                      { value: 'exercises', label: 'Iniziare subito con esercizi pratici', icon: '🎯' },
-                      { value: 'book', label: 'Voglio approfondire con il libro', icon: '📖' },
-                      { value: 'time', label: 'Ho bisogno di tempo per elaborare', icon: '⏳' }
-                    ].map((option) => (
-                      <label
-                        key={option.value}
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
-                          feedback.nextAction === option.value
-                            ? `bg-${config.badge} border-${config.accent}`
-                            : 'bg-slate-700/50 hover:bg-slate-700'
-                        } border border-slate-600`}
-                      >
-                        <input
-                          type="radio"
-                          name="nextAction"
-                          value={option.value}
-                          checked={feedback.nextAction === option.value}
-                          onChange={(e) => setFeedback(prev => ({ ...prev, nextAction: e.target.value }))}
-                          className="sr-only"
-                        />
-                        <span className="text-xl">{option.icon}</span>
-                        <span className="text-white">{option.label}</span>
-                        {feedback.nextAction === option.value && (
-                          <svg className={`w-5 h-5 ml-auto text-${config.badgeText}`} fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-white font-medium block mb-2">
-                    C&apos;è qualcosa che ti è mancato? <span className="text-slate-400 font-normal">(opzionale)</span>
-                  </label>
-                  <textarea
-                    placeholder="Aiutaci a migliorare..."
-                    value={feedback.missingFeedback}
-                    onChange={(e) => setFeedback(prev => ({ ...prev, missingFeedback: e.target.value }))}
-                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg p-3 text-white placeholder-slate-400 focus:outline-none focus:border-slate-500 min-h-[80px]"
+          <div className="bg-slate-800/50 rounded-xl p-8 border border-slate-700/50 text-center">
+            {/* GAP visuale: barre esplorate vs non esplorate */}
+            <div className="mb-6">
+              <div className="flex justify-center items-center gap-1.5 mb-4 flex-wrap">
+                {/* Barre esplorate (colorate) */}
+                {Array.from({ length: gap.gapExplored }).map((_, i) => (
+                  <div
+                    key={`explored-${i}`}
+                    className="w-2.5 h-8 rounded-full"
+                    style={{ backgroundColor: colors.accentColor }}
                   />
-                </div>
-
-                <button
-                  onClick={handleFeedback}
-                  disabled={!feedback.nextAction}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold transition ${
-                    feedback.nextAction
-                      ? `bg-${config.accent} hover:bg-${config.accentHover} text-white`
-                      : 'bg-slate-600 text-slate-400 cursor-not-allowed'
-                  }`}
-                >
-                  Continua →
-                </button>
+                ))}
+                {/* Barre non esplorate (grigie) */}
+                {Array.from({ length: Math.min(gap.gapTotal - gap.gapExplored, 20) }).map((_, i) => (
+                  <div
+                    key={`unexplored-${i}`}
+                    className="w-2.5 h-8 bg-slate-700 rounded-full opacity-40"
+                  />
+                ))}
               </div>
+
+              <p className="text-slate-300 text-lg mb-2">
+                {gap.gapMessage}
+              </p>
+
+              <p className="text-slate-400 text-sm">
+                {gap.gapCta}
+              </p>
             </div>
-          ) : (
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50 text-center">
-              <div className={`text-${config.badgeText} text-4xl mb-4`}>✓</div>
-              <p className="text-white font-medium mb-6">Grazie per il feedback!</p>
 
-              {feedback.nextAction === 'assessment' && (
-                <Link
-                  href={`/assessment/${challengeType === 'ostacoli' ? 'risolutore' : challengeType === 'microfelicita' ? 'microfelicita' : 'leadership'}`}
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Fai l&apos;Assessment →
-                </Link>
-              )}
-              {feedback.nextAction === 'exercises' && (
-                <Link
-                  href="/exercises"
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Vai agli Esercizi →
-                </Link>
-              )}
-              {feedback.nextAction === 'book' && (
-                <Link
-                  href={`/libro/${challengeType === 'ostacoli' ? 'risolutore' : challengeType}`}
-                  className={`inline-block bg-${config.accent} hover:bg-${config.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
-                >
-                  Scopri il Libro →
-                </Link>
-              )}
-              {feedback.nextAction === 'time' && (
-                <div>
-                  <p className="text-slate-400 mb-4">
-                    Prenditi il tempo che ti serve. Quando sei pronto, troverai tutto nella dashboard.
-                  </p>
-                  <Link
-                    href="/dashboard"
-                    className="inline-block bg-slate-700 hover:bg-slate-600 text-white font-medium py-3 px-8 rounded-lg transition"
-                  >
-                    Vai alla Dashboard
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
+            {/* Messaggio validante */}
+            <p className="text-sm mb-8" style={{ color: colors.badgeColor }}>
+              Hai anche capacità che non hai ancora riconosciuto. L&apos;Assessment ti aiuta a vederle.
+            </p>
 
-      {/* Next Steps */}
-      <section className="py-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">
-            Continua il Tuo Percorso
-          </h2>
-
-          <div className="space-y-4">
-            {config.nextSteps.map((step, index) => (
-              <Link
-                key={index}
-                href={step.link}
-                className="block bg-slate-800/50 rounded-xl p-6 border border-slate-700/50 hover:border-slate-600 transition group"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 bg-${config.badge} rounded-xl flex items-center justify-center text-2xl`}>
-                    {step.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-white font-semibold group-hover:text-amber-400 transition">
-                      {step.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm">{step.description}</p>
-                  </div>
-                  <div className={`text-${config.badgeText} font-medium flex items-center gap-2`}>
-                    {step.cta}
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Share */}
-      <section className="py-12 px-4">
-        <div className="max-w-lg mx-auto text-center">
-          <p className="text-slate-400 mb-4">Condividi il tuo risultato</p>
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={() => {
-                const text = `Ho completato la sfida "${config.name}" di Vitaeology! 🎉`;
-                if (navigator.share) {
-                  navigator.share({ text, url: window.location.href });
-                }
-              }}
-              className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg transition flex items-center gap-2"
+            {/* UNA CTA — STOP→START */}
+            <Link
+              href={`/assessment/${assessmentSlug}`}
+              className="inline-block text-white font-bold py-4 px-12 rounded-lg transition text-lg hover:opacity-90"
+              style={{ backgroundColor: colors.accentColor }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              Condividi
-            </button>
+              Scopri il profilo completo
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Other Challenges */}
-      <section className="py-12 px-4 border-t border-slate-800">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-xl font-semibold text-white mb-6">
-            Esplora le Altre Sfide
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {challengeType !== 'leadership' && (
-              <Link
-                href="/challenge/leadership"
-                className="bg-amber-500/20 border border-amber-500/30 text-amber-400 px-6 py-3 rounded-lg hover:bg-amber-500/30 transition"
-              >
-                Leadership Autentica
-              </Link>
-            )}
-            {challengeType !== 'ostacoli' && (
-              <Link
-                href="/challenge/ostacoli"
-                className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 px-6 py-3 rounded-lg hover:bg-emerald-500/30 transition"
-              >
-                Oltre gli Ostacoli
-              </Link>
-            )}
-            {challengeType !== 'microfelicita' && (
-              <Link
-                href="/challenge/microfelicita"
-                className="bg-violet-500/20 border border-violet-500/30 text-violet-400 px-6 py-3 rounded-lg hover:bg-violet-500/30 transition"
-              >
-                Microfelicità
-              </Link>
-            )}
-          </div>
+      {/* Link secondario piccolo (non prominente) */}
+      <section className="py-8 px-4">
+        <div className="max-w-2xl mx-auto text-center">
+          <Link
+            href="/dashboard"
+            className="text-slate-500 hover:text-slate-300 text-sm underline transition"
+          >
+            Torna alla Dashboard
+          </Link>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-slate-800">
         <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>© 2026 Vitaeology</p>
+          <p>&copy; 2026 Vitaeology</p>
         </div>
       </footer>
     </div>

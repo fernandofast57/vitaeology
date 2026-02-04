@@ -12,36 +12,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Star, Loader2, ArrowRight, Check, Heart, MessageSquare } from 'lucide-react';
-
-// Challenge config
-const CHALLENGE_CONFIG = {
-  leadership: {
-    name: 'Leadership Autentica',
-    gradient: 'from-amber-900 to-slate-900',
-    accent: 'amber',
-    bgAccent: 'bg-amber-500',
-    textAccent: 'text-amber-400',
-    borderAccent: 'border-amber-500',
-  },
-  ostacoli: {
-    name: 'Oltre gli Ostacoli',
-    gradient: 'from-emerald-900 to-slate-900',
-    accent: 'emerald',
-    bgAccent: 'bg-emerald-500',
-    textAccent: 'text-emerald-400',
-    borderAccent: 'border-emerald-500',
-  },
-  microfelicita: {
-    name: 'Microfelicità',
-    gradient: 'from-violet-900 to-slate-900',
-    accent: 'violet',
-    bgAccent: 'bg-violet-500',
-    textAccent: 'text-violet-400',
-    borderAccent: 'border-violet-500',
-  },
-};
-
-type ChallengeType = keyof typeof CHALLENGE_CONFIG;
+import { getChallengeColors, isValidChallengeType } from '@/lib/challenge/config';
 
 // Star Rating Component
 function StarRating({
@@ -136,7 +107,7 @@ export default function ChallengeFeedbackPage() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const challengeType = params.type as ChallengeType;
+  const challengeType = params.type as string;
 
   // UTM tracking
   const utmSource = searchParams.get('utm_source');
@@ -159,7 +130,7 @@ export default function ChallengeFeedbackPage() {
   const [displayName, setDisplayName] = useState('');
 
   const supabase = createClient();
-  const config = CHALLENGE_CONFIG[challengeType] || CHALLENGE_CONFIG.leadership;
+  const colors = getChallengeColors(challengeType);
 
   // Check authentication
   useEffect(() => {
@@ -226,14 +197,17 @@ export default function ChallengeFeedbackPage() {
   // Loading
   if (isAuthenticated === null) {
     return (
-      <div className={`min-h-screen bg-gradient-to-b ${config.gradient} flex items-center justify-center`}>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+      >
         <Loader2 className="w-8 h-8 animate-spin text-white" />
       </div>
     );
   }
 
   // Invalid challenge
-  if (!CHALLENGE_CONFIG[challengeType]) {
+  if (!isValidChallengeType(challengeType)) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
         <div className="text-center">
@@ -249,9 +223,15 @@ export default function ChallengeFeedbackPage() {
   // Success state
   if (isSubmitted) {
     return (
-      <div className={`min-h-screen bg-gradient-to-b ${config.gradient} flex items-center justify-center p-4`}>
+      <div
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+      >
         <div className="max-w-md w-full text-center">
-          <div className={`w-20 h-20 ${config.bgAccent} rounded-full flex items-center justify-center mx-auto mb-6`}>
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ backgroundColor: colors.accentColor }}
+          >
             <Check className="w-10 h-10 text-white" />
           </div>
 
@@ -267,7 +247,8 @@ export default function ChallengeFeedbackPage() {
           <div className="space-y-4">
             <Link
               href="/dashboard"
-              className={`block w-full py-3 ${config.bgAccent} hover:opacity-90 text-white font-bold rounded-lg transition`}
+              className="block w-full py-3 hover:opacity-90 text-white font-bold rounded-lg transition"
+              style={{ backgroundColor: colors.accentColor }}
             >
               Vai alla Dashboard
             </Link>
@@ -285,7 +266,10 @@ export default function ChallengeFeedbackPage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b ${config.gradient}`}>
+    <div
+      className="min-h-screen"
+      style={{ background: `linear-gradient(to bottom, ${colors.gradientFrom}, ${colors.gradientTo})` }}
+    >
       {/* Header */}
       <header className="py-6 px-4 border-b border-white/10">
         <div className="max-w-2xl mx-auto">
@@ -298,7 +282,15 @@ export default function ChallengeFeedbackPage() {
       <main className="max-w-2xl mx-auto px-4 py-12">
         {/* Hero */}
         <div className="text-center mb-10">
-          <div className={`inline-flex items-center gap-2 px-4 py-2 bg-${config.accent}-500/20 border border-${config.accent}-500/30 ${config.textAccent} rounded-full text-sm font-medium mb-6`}>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6"
+            style={{
+              backgroundColor: `${colors.accentColor}33`,
+              borderWidth: 1,
+              borderColor: `${colors.accentColor}4D`,
+              color: colors.badgeColor,
+            }}
+          >
             <Heart className="w-4 h-4" />
             Il tuo feedback conta
           </div>
@@ -360,7 +352,7 @@ export default function ChallengeFeedbackPage() {
           {/* Testimonial Section */}
           <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
             <div className="flex items-center gap-2 mb-4">
-              <MessageSquare className={`w-5 h-5 ${config.textAccent}`} />
+              <MessageSquare className="w-5 h-5" style={{ color: colors.badgeColor }} />
               <h3 className="text-white font-semibold">Vuoi condividere la tua esperienza?</h3>
             </div>
 
@@ -417,7 +409,8 @@ export default function ChallengeFeedbackPage() {
           <button
             type="submit"
             disabled={isSubmitting || overallRating === 0}
-            className={`w-full py-4 ${config.bgAccent} hover:opacity-90 text-white font-bold rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+            className="w-full py-4 hover:opacity-90 text-white font-bold rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: colors.accentColor }}
           >
             {isSubmitting ? (
               <>

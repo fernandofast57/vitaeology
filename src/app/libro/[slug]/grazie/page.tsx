@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getLibroBySlug } from '@/data/libri';
+import ConversionTracker from '@/components/tracking/ConversionTracker';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -29,6 +30,16 @@ export default async function GraziePage({ params, searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center p-4">
+      {/* Tracking conversione acquisto */}
+      <ConversionTracker
+        event={isBump ? 'Subscribe' : 'Purchase'}
+        data={{
+          content_name: libro.titolo,
+          content_category: isBump ? 'subscription_leader' : 'libro',
+          value: isBump ? 149 : libro.prezzo,
+          currency: 'EUR',
+        }}
+      />
       <div className="max-w-lg w-full text-center">
         {/* Icona successo */}
         <div

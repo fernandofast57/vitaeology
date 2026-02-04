@@ -3,25 +3,12 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Libro } from '@/data/libri';
+import { isValidRedirectUrl } from '@/lib/security';
 
 interface AcquistaButtonProps {
   libro: Libro;
   size?: 'normal' | 'large';
   variant?: 'primary' | 'gold';
-}
-
-// SECURITY: Valida che l'URL sia sicuro (solo Stripe o path relativi)
-function isValidRedirectUrl(url: string): boolean {
-  if (!url) return false;
-  // Accetta path relativi che iniziano con /
-  if (url.startsWith('/') && !url.startsWith('//')) return true;
-  // Accetta solo URL Stripe
-  try {
-    const parsed = new URL(url);
-    return parsed.hostname.endsWith('stripe.com');
-  } catch {
-    return false;
-  }
 }
 
 export default function AcquistaButton({

@@ -1,4 +1,4 @@
-import { UserContext, ActivePathway } from './types';
+import { UserContext, ActivePathway, ChallengeContext, MiniProfileContext } from './types';
 import { getExerciseListForPrompt } from './exercise-suggestions';
 import { getZoneForLevel, AWARENESS_ZONES } from '@/lib/awareness/types';
 
@@ -258,6 +258,91 @@ Ma sempre: USA i concetti senza nominarli esplicitamente (regola del Mistero).
 `;
 
   return context;
+}
+
+// Labels dimensioni per prompt AI Coach
+const DIMENSION_LABELS_AI: Record<string, string> = {
+  visione: 'Visione', azione: 'Azione', relazioni: 'Relazioni', adattamento: 'Adattamento',
+  pattern: 'Pattern', segnali: 'Segnali', risorse: 'Risorse',
+  rileva: 'Rileva', accogli: 'Accogli', distingui: 'Distingui', amplifica: 'Amplifica', resta: 'Resta',
+};
+
+/**
+ * P4.1: Genera contesto challenge per il system prompt.
+ */
+function getChallengeContextBlock(challenge: ChallengeContext): string {
+  let block = `\n\n---
+CONTESTO CHALLENGE
+---\n`;
+
+  if (challenge.status === 'completed') {
+    block += `L'utente ha completato la Challenge "${challenge.challengeName}" (tutti i 7 giorni).`;
+  } else if (challenge.currentDay > 0) {
+    block += `L'utente è al Giorno ${challenge.currentDay} della Challenge "${challenge.challengeName}" (${challenge.currentDay}/7 completati).`;
+  } else {
+    block += `L'utente si è iscritto alla Challenge "${challenge.challengeName}" ma non ha ancora iniziato.`;
+  }
+
+  return block;
+}
+
+/**
+ * P4.2: Genera contesto Mini-Profilo per il system prompt.
+ */
+function getMiniProfileContextBlock(profile: MiniProfileContext): string {
+  const strongLabel = DIMENSION_LABELS_AI[profile.strongestDimension] || profile.strongestDimension;
+
+  let block = `\n\n---
+RISULTATI MINI-PROFILO (dalle risposte Discovery)
+---
+
+Dimensione più forte: ${strongLabel} (${profile.strongestPercentage}%)
+
+Punteggi per dimensione:\n`;
+
+  for (const [dim, data] of Object.entries(profile.dimensionScores)) {
+    const label = DIMENSION_LABELS_AI[dim] || dim;
+    block += `- ${label}: ${data.percentage}%\n`;
+  }
+
+  block += `
+USA QUESTI DATI PER:
+- Valorizzare la dimensione più forte come punto di partenza
+- Se l'utente chiede "come sto?", riferisciti ai risultati delle sue risposte
+- Cerca dove GIÀ usa la dimensione forte e aiutalo ad espanderla
+- NON trattare le dimensioni con % più basse come deficit — sono capacità meno frequentemente usate`;
+
+  return block;
+}
+
+/**
+ * P4.3: Genera suggerimenti per il prossimo step nel funnel.
+ */
+function getFunnelStepBlock(challenge?: ChallengeContext): string {
+  if (!challenge) return '';
+
+  let block = `\n\n---
+SUGGERIMENTI PROSSIMO PASSO (usa SOLO dalla Dashboard, MAI ai punti STOP)
+---\n`;
+
+  if (challenge.status === 'completed' && !challenge.hasAssessment) {
+    block += `L'utente ha completato la Challenge ma NON ha fatto l'Assessment.
+SUGGERISCI (quando naturale nella conversazione, senza forzare):
+- "Dalle risposte che hai dato durante la Challenge, emergono capacità interessanti. L'Assessment ti mostra il quadro completo."
+- Non insistere. Se l'utente cambia argomento, seguilo.`;
+  } else if (challenge.hasAssessment && !challenge.hasSubscription) {
+    block += `L'utente ha fatto l'Assessment ma NON ha un abbonamento.
+SUGGERISCI (quando pertinente):
+- "Hai un profilo ricco. Gli esercizi del percorso ti aiutano a espandere ciò che hai."
+- Non insistere. Rispetta la sua scelta.`;
+  } else if (challenge.hasSubscription) {
+    block += `L'utente ha un abbonamento attivo. Ha accesso agli esercizi.
+SUGGERISCI esercizi specifici dal pool del suo percorso quando pertinente alla conversazione.`;
+  } else {
+    block += `L'utente è nella Challenge. Focus sul contenuto del giorno corrente. NON suggerire nulla al di fuori della Challenge.`;
+  }
+
+  return block;
 }
 
 export function buildSystemPrompt(context?: UserContext, userPath?: string, awarenessLevel?: number): string {
@@ -559,6 +644,21 @@ Poi aspetti. Non cambi argomento. Non torni al coaching.`;
       prompt += `\nNon parlare di "debolezze" o "mancanze". Cerca dove GIÀ usa queste capacità (anche in piccolo) e aiutalo ad espanderle.`;
 
       prompt += `\n\nQuando ti chiede un programma di miglioramento, proponi esercizi pratici basati su queste aree, sempre partendo da dove già fa bene.`;
+    }
+
+    // P4.1: Contesto challenge
+    if (context.challengeContext) {
+      prompt += getChallengeContextBlock(context.challengeContext);
+    }
+
+    // P4.2: Mini-Profilo
+    if (context.miniProfileContext) {
+      prompt += getMiniProfileContextBlock(context.miniProfileContext);
+    }
+
+    // P4.3: Suggerimenti prossimo step funnel
+    if (context.challengeContext) {
+      prompt += getFunnelStepBlock(context.challengeContext);
     }
   }
 

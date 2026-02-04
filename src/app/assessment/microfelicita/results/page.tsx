@@ -71,13 +71,10 @@ function MicrofelicitaResultsContent() {
             }),
           });
 
-          if (snapshotRes.ok) {
-            const snapshotData = await snapshotRes.json();
-            console.log('Radar snapshot saved:', snapshotData.data?.id);
-          }
-        } catch (snapshotErr) {
+          // Snapshot saved silently
+          if (snapshotRes.ok) await snapshotRes.json();
+        } catch {
           // Errore silenzioso - non blocca il flusso utente
-          console.warn('Radar snapshot save failed:', snapshotErr);
         }
       } catch (err) {
         setError('Impossibile caricare i risultati');

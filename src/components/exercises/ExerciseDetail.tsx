@@ -172,18 +172,8 @@ export default function ExerciseDetail({ exercise, progress, userId }: ExerciseD
       if (result.data?.radarUpdate) {
         setRadarUpdateEligibility(result.data.radarUpdate);
 
-        // Log per tracking (utile per analytics future)
-        if (result.data.radarUpdate.eligible) {
-          console.log('[Radar Update] Utente eleggibile per aggiornamento radar:', {
-            reason: result.data.radarUpdate.reason,
-            daysSinceLastSnapshot: result.data.radarUpdate.daysSinceLastSnapshot,
-            exercisesSinceSnapshot: result.data.radarUpdate.exercisesSinceSnapshot,
-          });
-
-          // PROMPT UTENTE (commentato per ora)
-          // Quando attivato, mostrerà un dialog chiedendo se vuole aggiornare il profilo
-          // setShowRadarPrompt(true);
-        }
+        // TODO: Quando attivato, mostrerà un dialog chiedendo se vuole aggiornare il profilo
+        // if (result.data.radarUpdate.eligible) setShowRadarPrompt(true);
       }
 
       // Gestisci milestone guadagnate

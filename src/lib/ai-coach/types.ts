@@ -11,6 +11,23 @@ export interface ActivePathway {
   hasAssessment: boolean;
 }
 
+// Contesto challenge per AI Coach
+export interface ChallengeContext {
+  challengeType: string;       // 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita'
+  challengeName: string;       // Nome leggibile
+  currentDay: number;          // 0-7
+  status: string;              // 'active' | 'completed'
+  hasAssessment: boolean;      // Ha fatto l'assessment corrispondente?
+  hasSubscription: boolean;    // Ha un abbonamento Leader/Mentor?
+}
+
+// Dati Mini-Profilo per AI Coach
+export interface MiniProfileContext {
+  dimensionScores: Record<string, { percentage: number }>;
+  strongestDimension: string;
+  strongestPercentage: number;
+}
+
 export interface UserContext {
   userId: string;
   userName?: string;
@@ -29,6 +46,10 @@ export interface UserContext {
   currentWeek: number;
   // Multi-pathway support
   activePathways?: ActivePathway[];
+  // Challenge context (P4.1)
+  challengeContext?: ChallengeContext;
+  // Mini-Profilo (P4.2)
+  miniProfileContext?: MiniProfileContext;
 }
 
 export interface ChatRequest {

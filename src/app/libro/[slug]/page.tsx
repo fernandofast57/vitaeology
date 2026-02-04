@@ -2,10 +2,16 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { CheckCircle, BookOpen, User, HelpCircle } from 'lucide-react';
 import { getLibroBySlug, getAllLibriSlugs, Libro } from '@/data/libri';
 import AcquistaButton from './AcquistaButton';
-import BumpOfferWrapper from './BumpOfferWrapper';
+
+// Dynamic import per evitare problemi SSR con Supabase browser client
+const ChallengeDiscountBanner = dynamic(
+  () => import('./ChallengeDiscountBanner'),
+  { ssr: false }
+);
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -75,6 +81,11 @@ export default async function LibroPage({ params }: PageProps) {
         </nav>
       </header>
 
+      {/* Banner sconto per chi ha completato la Challenge */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+        <ChallengeDiscountBanner libroSlug={libro.slug} libroTitolo={libro.titolo} />
+      </div>
+
       {/* HERO - 60% Blu Petrolio */}
       <HeroSection libro={libro} />
 
@@ -118,8 +129,6 @@ export default async function LibroPage({ params }: PageProps) {
         </div>
       </footer>
 
-      {/* Bump Offer Modal - Exit Intent */}
-      <BumpOfferWrapper libro={libro} />
     </div>
   );
 }

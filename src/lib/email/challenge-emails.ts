@@ -67,6 +67,29 @@ const CHALLENGE_URL_PATH: Record<ChallengeType, string> = {
   'microfelicita': 'microfelicita',
 };
 
+// Mappa challenge DB type → discovery type (per query discovery_responses)
+const CHALLENGE_TO_DISCOVERY: Record<ChallengeType, string> = {
+  'leadership-autentica': 'leadership',
+  'oltre-ostacoli': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+// Labels italiani per le dimensioni (usati nelle email personalizzate)
+const DIMENSION_LABELS: Record<string, string> = {
+  visione: 'Visione', azione: 'Azione', relazioni: 'Relazioni', adattamento: 'Adattamento',
+  pattern: 'Pattern', segnali: 'Segnali', risorse: 'Risorse',
+  rileva: 'Rileva', accogli: 'Accogli', distingui: 'Distingui', amplifica: 'Amplifica', resta: 'Resta',
+};
+
+// Dati Mini-Profilo opzionali per email personalizzate
+export interface MiniProfileEmailData {
+  strongestDimension: string;
+  strongestPercentage: number;
+  totalResponses: number;
+  dimensionsAbove70: number;
+  dimensionScores: Record<string, { score: number; maxScore: number; percentage: number }>;
+}
+
 // ============================================================
 // TITOLI DEI 7 GIORNI PER CHALLENGE
 // ============================================================
@@ -241,6 +264,16 @@ function baseEmailTemplate(
   `;
 }
 
+function miniProfileBox(color: string, innerHtml: string): string {
+  return `
+    <div style="background: ${color}10; padding: 20px; border-radius: 8px; border-left: 4px solid ${color}; margin: 20px 0;">
+      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0;">
+        ${innerHtml}
+      </p>
+    </div>
+  `;
+}
+
 function ctaButton(text: string, url: string, color: string): string {
   return `
     <table width="100%" cellpadding="0" cellspacing="0">
@@ -281,7 +314,8 @@ export async function sendChallengeEmail(
   type: EmailType,
   challengeType: ChallengeType,
   dayNumber?: number,
-  userName?: string
+  userName?: string,
+  miniProfileData?: MiniProfileEmailData
 ): Promise<EmailResult> {
   const config = CHALLENGE_CONFIG[challengeType];
   if (!config) {
@@ -509,12 +543,19 @@ export async function sendChallengeEmail(
     }
 
     // --------------------------------------------------------
-    // POST CHALLENGE 1 - 24h dopo (offerta libro)
+    // POST CHALLENGE 1 - 24h dopo (offerta libro + Mini-Profilo)
     // --------------------------------------------------------
     case 'post_challenge_1': {
       subject = `📖 Un regalo per te - ${config.bookTitle}`;
 
-      const bookUrl = `${appUrl}${config.landingPath}`;
+      const bookUrl1 = `${appUrl}${config.landingPath}`;
+
+      const profileSection1 = miniProfileData ? miniProfileBox(config.color,
+        `<strong>Le tue risposte hanno rivelato qualcosa:</strong><br>
+        La tua capacità di <strong>${DIMENSION_LABELS[miniProfileData.strongestDimension] || miniProfileData.strongestDimension}</strong>
+        è particolarmente attiva (${miniProfileData.strongestPercentage}%).
+        Il libro approfondisce come usarla in modo ancora più intenzionale.`
+      ) : '';
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -525,6 +566,8 @@ export async function sendChallengeEmail(
           Come ti senti dopo aver completato la Challenge?
           Spero che i 7 giorni ti abbiano dato nuovi strumenti e prospettive.
         </p>
+
+        ${profileSection1}
 
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
           Se vuoi continuare il percorso e andare ancora più in profondità,
@@ -544,7 +587,7 @@ export async function sendChallengeEmail(
           </p>
         </div>
 
-        ${ctaButton('📖 SCOPRI IL LIBRO', bookUrl, config.color)}
+        ${ctaButton('📖 SCOPRI IL LIBRO', bookUrl1, config.color)}
 
         <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0; text-align: center;">
           Include: PDF scaricabile + accesso permanente all'Assessment
@@ -563,12 +606,29 @@ export async function sendChallengeEmail(
     }
 
     // --------------------------------------------------------
-    // POST CHALLENGE 2 - 72h dopo (urgenza)
+    // POST CHALLENGE 2 - 72h dopo (urgenza + Mini-Profilo)
     // --------------------------------------------------------
     case 'post_challenge_2': {
       subject = `⏰ Non perdere lo slancio - ${config.bookTitle}`;
 
-      const bookUrl = `${appUrl}${config.landingPath}`;
+      const bookUrl2 = `${appUrl}${config.landingPath}`;
+
+      const profileSection2 = miniProfileData ? (() => {
+        const above70 = miniProfileData.dimensionsAbove70;
+        const strongLabel = DIMENSION_LABELS[miniProfileData.strongestDimension] || miniProfileData.strongestDimension;
+
+        if (above70 > 0) {
+          return miniProfileBox(config.color,
+            `Hai <strong>${above70} ${above70 === 1 ? 'dimensione' : 'dimensioni'}</strong> sopra il 70%.
+            La più forte è <strong>${strongLabel}</strong>.
+            Il libro ti mostra come usarla in situazioni diverse — e dove hai ancora margine di crescita.`
+          );
+        }
+        return miniProfileBox(config.color,
+          `Le tue risposte mostrano che hai capacità in tutte le dimensioni — in particolare in <strong>${strongLabel}</strong>.
+          Il libro ti aiuta a rendere più intenzionale ciò che già fai.`
+        );
+      })() : '';
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -579,6 +639,8 @@ export async function sendChallengeEmail(
           Sono passati alcuni giorni dalla Challenge.
           Come stai applicando ciò che hai imparato?
         </p>
+
+        ${profileSection2}
 
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
           So che è facile tornare alle vecchie abitudini.
@@ -593,7 +655,7 @@ export async function sendChallengeEmail(
           </p>
         </div>
 
-        ${ctaButton('📖 CONTINUA IL PERCORSO', bookUrl, config.color)}
+        ${ctaButton('📖 CONTINUA IL PERCORSO', bookUrl2, config.color)}
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
@@ -608,12 +670,18 @@ export async function sendChallengeEmail(
     }
 
     // --------------------------------------------------------
-    // POST CHALLENGE 3 - 7 giorni dopo (ultima chance)
+    // POST CHALLENGE 3 - 7 giorni dopo (ultima chance + Mini-Profilo)
     // --------------------------------------------------------
     case 'post_challenge_3': {
       subject = `💫 Ultima opportunità - ${config.bookTitle} a €${config.bookPrice}`;
 
-      const bookUrl = `${appUrl}${config.landingPath}`;
+      const bookUrl3 = `${appUrl}${config.landingPath}`;
+
+      const profileSection3 = miniProfileData ? miniProfileBox(config.color,
+        `Le tue <strong>${miniProfileData.totalResponses} risposte</strong> durante la Challenge hanno rivelato
+        un profilo unico. Il libro ti mostra il percorso completo per usare
+        ciò che hai — in modo più intenzionale.`
+      ) : '';
 
       const content = `
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -624,6 +692,8 @@ export async function sendChallengeEmail(
           È passata una settimana dalla Challenge ${config.name}.
           Volevo farti un ultimo check-in.
         </p>
+
+        ${profileSection3}
 
         <p style="color: #333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
           Se hai trovato valore nei 7 giorni insieme, sappi che il libro
@@ -643,7 +713,7 @@ export async function sendChallengeEmail(
           </p>
         </div>
 
-        ${ctaButton('📖 OTTIENI IL LIBRO ORA', bookUrl, '#dc2626')}
+        ${ctaButton('📖 OTTIENI IL LIBRO ORA', bookUrl3, '#dc2626')}
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
@@ -685,137 +755,95 @@ export async function sendChallengeEmail(
       return { success: false, error: error.message };
     }
 
-    // Log email inviata
     await logEmail(to, type === 'day_content' ? 'challenge_day' : type, challengeType, dayNumber, subject);
-
-    console.log(`📧 Email inviata: ${type} (${challengeType}) a ${to}`);
     return { success: true };
   } catch (err) {
-    console.error('Errore sendChallengeEmail:', err);
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
   }
 }
 
 // ============================================================
-// BATCH SEND HELPERS
+// MINI-PROFILO HELPER (per email personalizzate)
 // ============================================================
 
 /**
- * Invia email giornaliera a tutti gli utenti che hanno completato il giorno precedente
+ * Calcola Mini-Profilo per un utente (server-side, service role).
+ * Cerca l'utente per email e recupera le risposte discovery.
+ * Ritorna null se non ci sono dati.
  */
-export async function sendDailyEmails(): Promise<{ sent: number; errors: number }> {
-  const supabase = getSupabase();
-  let sent = 0;
-  let errors = 0;
+export async function fetchMiniProfileForEmail(
+  email: string,
+  challengeType: ChallengeType
+): Promise<MiniProfileEmailData | null> {
+  try {
+    // Import dinamico per evitare dipendenze circolari
+    const { calculateDiscoveryProfile } = await import('@/lib/challenge/discovery-data');
 
-  // Trova utenti che devono ricevere email del giorno successivo
-  // (hanno completato il giorno N ieri, devono ricevere giorno N+1)
-  const { data: subscribers } = await supabase
-    .from('challenge_subscribers')
-    .select('*')
-    .eq('status', 'active')
-    .lt('current_day', 7)
-    .is('completed_at', null);
+    const supabase = getSupabase();
+    const discoveryType = CHALLENGE_TO_DISCOVERY[challengeType];
 
-  if (!subscribers || subscribers.length === 0) {
-    return { sent: 0, errors: 0 };
-  }
+    // Trova user_id dall'email via profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', email)
+      .limit(1)
+      .maybeSingle();
 
-  for (const sub of subscribers) {
-    const nextDay = sub.current_day + 1;
-    const result = await sendChallengeEmail(
-      sub.email,
-      'day_content',
-      sub.challenge_type as ChallengeType,
-      nextDay,
-      sub.name
+    if (!profile?.id) return null;
+
+    // Recupera risposte discovery
+    const { data: responses } = await supabase
+      .from('challenge_discovery_responses')
+      .select('day_number, question_number, response')
+      .eq('user_id', profile.id)
+      .eq('challenge_type', discoveryType)
+      .order('day_number')
+      .order('question_number');
+
+    if (!responses || responses.length === 0) return null;
+
+    // Formatta risposte per calculateDiscoveryProfile
+    const formattedResponses: Record<number, Record<number, 'A' | 'B' | 'C'>> = {};
+    for (const r of responses) {
+      if (!formattedResponses[r.day_number]) {
+        formattedResponses[r.day_number] = {};
+      }
+      formattedResponses[r.day_number][r.question_number - 1] = r.response as 'A' | 'B' | 'C';
+    }
+
+    const profileResult = calculateDiscoveryProfile(
+      discoveryType as 'leadership' | 'ostacoli' | 'microfelicita',
+      formattedResponses
     );
 
-    if (result.success) {
-      sent++;
-    } else {
-      errors++;
-      console.error(`Errore email a ${sub.email}:`, result.error);
-    }
-  }
+    // Trova dimensione più forte
+    let strongestDimension = '';
+    let strongestPercentage = 0;
+    let dimensionsAbove70 = 0;
 
-  return { sent, errors };
+    for (const [dim, data] of Object.entries(profileResult.dimensionScores)) {
+      if (data.percentage > strongestPercentage) {
+        strongestDimension = dim;
+        strongestPercentage = data.percentage;
+      }
+      if (data.percentage >= 70) {
+        dimensionsAbove70++;
+      }
+    }
+
+    if (!strongestDimension) return null;
+
+    return {
+      strongestDimension,
+      strongestPercentage,
+      totalResponses: responses.length,
+      dimensionsAbove70,
+      dimensionScores: profileResult.dimensionScores,
+    };
+  } catch (err) {
+    console.error('Errore fetchMiniProfileForEmail:', err);
+    return null;
+  }
 }
 
-/**
- * Invia reminder a utenti inattivi (48h)
- */
-export async function sendInactivityReminders(): Promise<{ sent: number; errors: number }> {
-  const supabase = getSupabase();
-  let sent = 0;
-  let errors = 0;
-
-  const { data: inactive } = await supabase.rpc('get_inactive_subscribers', { p_hours_inactive: 48 });
-
-  if (!inactive || inactive.length === 0) {
-    return { sent: 0, errors: 0 };
-  }
-
-  for (const sub of inactive) {
-    const result = await sendChallengeEmail(
-      sub.email,
-      'reminder_48h',
-      sub.challenge_type as ChallengeType,
-      sub.current_day
-    );
-
-    if (result.success) {
-      // Aggiorna last_reminder_sent_at
-      await supabase
-        .from('challenge_subscribers')
-        .update({ last_reminder_sent_at: new Date().toISOString() })
-        .eq('id', sub.id);
-      sent++;
-    } else {
-      errors++;
-    }
-  }
-
-  return { sent, errors };
-}
-
-/**
- * Invia email post-challenge
- */
-export async function sendPostChallengeEmails(): Promise<{ sent: number; errors: number }> {
-  const supabase = getSupabase();
-  let sent = 0;
-  let errors = 0;
-
-  const { data: pending } = await supabase.rpc('get_post_challenge_pending');
-
-  if (!pending || pending.length === 0) {
-    return { sent: 0, errors: 0 };
-  }
-
-  for (const sub of pending) {
-    if (sub.next_email === 0) continue;
-
-    const emailType = `post_challenge_${sub.next_email}` as EmailType;
-
-    const result = await sendChallengeEmail(
-      sub.email,
-      emailType,
-      sub.challenge_type as ChallengeType
-    );
-
-    if (result.success) {
-      // Aggiorna flag email inviata
-      const updateField = `post_email_${sub.next_email}_sent`;
-      await supabase
-        .from('challenge_subscribers')
-        .update({ [updateField]: new Date().toISOString() })
-        .eq('id', sub.id);
-      sent++;
-    } else {
-      errors++;
-    }
-  }
-
-  return { sent, errors };
-}

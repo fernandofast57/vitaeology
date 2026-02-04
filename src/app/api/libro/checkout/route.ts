@@ -22,7 +22,7 @@ function getSupabase() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { libroSlug, priceId } = await request.json();
+    const { libroSlug, priceId, otoDiscount, source } = await request.json();
 
     // Valida libro
     const libro = getLibroBySlug(libroSlug);
@@ -32,6 +32,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Calcola prezzo: OTO sconto €2 se proveniente da challenge thank you page
+    const OTO_DISCOUNT = 2.00;
+    const finalPrice = (otoDiscount && source === 'challenge_oto')
+      ? Math.max(libro.prezzo - OTO_DISCOUNT, 0)
+      : libro.prezzo;
 
     // Verifica priceId
     if (!priceId || priceId.startsWith('price_')) {
@@ -77,12 +83,17 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Prepara metadata con tracking affiliato
+    // Prepara metadata con tracking affiliato e OTO
     const sessionMetadata: Record<string, string> = {
       libro_slug: libro.slug,
       libro_titolo: libro.titolo,
       tipo: 'libro_pdf',
     };
+
+    if (otoDiscount && source === 'challenge_oto') {
+      sessionMetadata.oto_discount = 'true';
+      sessionMetadata.oto_source = 'challenge_thank_you';
+    }
 
     if (affiliateId) {
       sessionMetadata.affiliate_id = affiliateId;
@@ -105,7 +116,7 @@ export async function POST(request: NextRequest) {
                 libro_slug: libro.slug,
               },
             },
-            unit_amount: Math.round(libro.prezzo * 100), // Stripe usa centesimi
+            unit_amount: Math.round(finalPrice * 100), // Stripe usa centesimi
           },
           quantity: 1,
         },

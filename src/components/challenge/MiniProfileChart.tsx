@@ -20,6 +20,8 @@ interface MiniProfileData {
 
 interface MiniProfileChartProps {
   profile: MiniProfileData;
+  showGap?: boolean;
+  assessmentDimensions?: number;
 }
 
 // Labels italiani per le dimensioni
@@ -77,7 +79,7 @@ function getMainMessage(strongestDimension: string, challengeType: string): stri
   return `Le tue risposte mostrano che la capacità di ${label} è particolarmente attiva in te. Questo è un punto di forza naturale che puoi usare in modo ancora più intenzionale con ${challengeName}.`;
 }
 
-export default function MiniProfileChart({ profile }: MiniProfileChartProps) {
+export default function MiniProfileChart({ profile, showGap = false, assessmentDimensions }: MiniProfileChartProps) {
   const color = CHALLENGE_COLORS[profile.challengeType];
 
   // Trova la dimensione più forte per il messaggio principale
@@ -175,12 +177,49 @@ export default function MiniProfileChart({ profile }: MiniProfileChartProps) {
         </div>
       </div>
 
-      {/* Footer motivazionale */}
-      <div className="text-center pt-2">
-        <p className="text-sm text-gray-600">
-          Queste capacità sono già tue — con il percorso completo puoi usarle in modo più intenzionale.
-        </p>
-      </div>
+      {/* Sezione GAP (quando showGap=true) */}
+      {showGap && assessmentDimensions && (
+        <div className="pt-4 border-t border-gray-200">
+          <p className="text-sm font-medium text-gray-700 mb-3 text-center">
+            E questo è solo l&apos;inizio
+          </p>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex-1">
+              <div className="flex items-center gap-1">
+                <div
+                  className="h-2 rounded-full"
+                  style={{
+                    width: `${(Object.keys(profile.dimensionScores).length / assessmentDimensions) * 100}%`,
+                    backgroundColor: color,
+                  }}
+                />
+                <div
+                  className="h-2 rounded-full bg-gray-200"
+                  style={{
+                    width: `${((assessmentDimensions - Object.keys(profile.dimensionScores).length) / assessmentDimensions) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>{Object.keys(profile.dimensionScores).length} esplorate</span>
+            <span>{assessmentDimensions} nell&apos;Assessment</span>
+          </div>
+          <p className="text-sm text-gray-600 mt-3 text-center">
+            Hai anche capacità che non hai ancora riconosciuto. L&apos;Assessment ti aiuta a vederle.
+          </p>
+        </div>
+      )}
+
+      {/* Footer motivazionale (solo senza gap) */}
+      {!showGap && (
+        <div className="text-center pt-2">
+          <p className="text-sm text-gray-600">
+            Queste capacità sono già tue — con il percorso completo puoi usarle in modo più intenzionale.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

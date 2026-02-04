@@ -11,7 +11,7 @@
  */
 
 import { useState, Suspense, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useBehavioralTracking } from '@/hooks/useBehavioralTracking';
 import {
@@ -118,11 +118,11 @@ function SignupForm({
 
 function MicrofelicitaLandingContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -139,6 +139,7 @@ function MicrofelicitaLandingContent() {
   const utmSource = searchParams.get('utm_source') || '';
   const utmMedium = searchParams.get('utm_medium') || '';
   const utmCampaign = searchParams.get('utm_campaign') || '';
+  const utmContent = searchParams.get('utm_content') || '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,12 +164,12 @@ function MicrofelicitaLandingContent() {
           utmSource,
           utmMedium,
           utmCampaign,
+          utmContent,
           turnstileToken
         })
       });
 
       if (response.ok) {
-        setSuccess(true);
         behaviorActions.trackConversion();
         if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
           (window as unknown as { gtag: (cmd: string, event: string, params: object) => void }).gtag('event', 'challenge_signup', {
@@ -176,6 +177,14 @@ function MicrofelicitaLandingContent() {
             variant: 'epiphany'
           });
         }
+        const utmParams = new URLSearchParams();
+        if (utmSource) utmParams.set('utm_source', utmSource);
+        if (utmMedium) utmParams.set('utm_medium', utmMedium);
+        if (utmCampaign) utmParams.set('utm_campaign', utmCampaign);
+        if (utmContent) utmParams.set('utm_content', utmContent);
+        const qs = utmParams.toString();
+        router.push(`/challenge/microfelicita/grazie${qs ? `?${qs}` : ''}`);
+        return;
       } else {
         const data = await response.json();
         setError(data.error || 'Si è verificato un errore. Riprova.');
@@ -207,6 +216,7 @@ function MicrofelicitaLandingContent() {
         utmSource,
         utmMedium,
         utmCampaign,
+        utmContent,
         turnstileToken
       })
     });
@@ -216,7 +226,6 @@ function MicrofelicitaLandingContent() {
       throw new Error(data.error || 'Errore iscrizione');
     }
 
-    setSuccess(true);
     behaviorActions.trackExitIntentConverted();
 
     if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
@@ -226,6 +235,14 @@ function MicrofelicitaLandingContent() {
         source: 'exit_intent'
       });
     }
+
+    const exitUtmParams = new URLSearchParams();
+    if (utmSource) exitUtmParams.set('utm_source', utmSource);
+    if (utmMedium) exitUtmParams.set('utm_medium', utmMedium);
+    if (utmCampaign) exitUtmParams.set('utm_campaign', utmCampaign);
+    if (utmContent) exitUtmParams.set('utm_content', utmContent);
+    const exitQs = exitUtmParams.toString();
+    router.push(`/challenge/microfelicita/grazie${exitQs ? `?${exitQs}` : ''}`);
   };
 
   // FAQ data (da OCEANO_BLU_VITAEOLOGY)
@@ -248,38 +265,10 @@ function MicrofelicitaLandingContent() {
     }
   ];
 
-  // Success state
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-violet-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="max-w-lg text-center">
-          <div className="w-20 h-20 bg-violet-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Benvenuto/a!</h2>
-          <p className="text-slate-300 mb-6">
-            Controlla la tua email. Il <strong className="text-violet-400">Giorno 1 — Il Primo Inventario</strong> sta arrivando.
-          </p>
-          <p className="text-violet-400 text-sm mb-6">
-            Preparati a scoprire quanto benessere ti attraversa ogni giorno.
-          </p>
-          <Link
-            href="/assessment/microfelicita"
-            className="inline-block bg-violet-500 hover:bg-violet-600 text-white font-bold py-3 px-8 rounded-lg transition"
-          >
-            Scopri il Tuo Profilo Benessere
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-900 to-slate-900">
       {/* Return Visitor Banner */}
-      {behavior.isReturnVisitor && !bannerDismissed && !success && (
+      {behavior.isReturnVisitor && !bannerDismissed && (
         <ReturnVisitorBanner
           isVisible={true}
           onDismiss={() => setBannerDismissed(true)}
@@ -832,7 +821,7 @@ function MicrofelicitaLandingContent() {
       </footer>
 
       {/* Exit Intent Popup */}
-      {behavior.isExitIntent && !exitPopupDismissed && !success && (
+      {behavior.isExitIntent && !exitPopupDismissed && (
         <ExitIntentPopup
           isVisible={true}
           onDismiss={() => {

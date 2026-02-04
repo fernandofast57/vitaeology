@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Check, ArrowRight, Sparkles, MessageCircle, BookOpen, BarChart3, Users } from 'lucide-react';
+import ConversionTracker from '@/components/tracking/ConversionTracker';
 
 // Configurazione piani
 const PLAN_CONFIG = {
@@ -103,6 +104,17 @@ function SuccessContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Meta Pixel + GA4 Subscribe event */}
+      <ConversionTracker
+        event="Subscribe"
+        data={{
+          content_name: `Piano ${config.name}`,
+          content_category: 'subscription',
+          value: Number(config.price),
+          currency: 'EUR',
+        }}
+      />
+
       {/* Confetti Animation */}
       {showConfetti && (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">

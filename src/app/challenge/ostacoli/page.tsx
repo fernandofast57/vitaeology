@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, Suspense, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useBehavioralTracking } from '@/hooks/useBehavioralTracking';
 import {
@@ -19,11 +19,11 @@ import Turnstile from '@/components/Turnstile';
 
 function OstacoliLandingContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
@@ -43,6 +43,7 @@ function OstacoliLandingContent() {
   const utmSource = searchParams.get('utm_source') || '';
   const utmMedium = searchParams.get('utm_medium') || '';
   const utmCampaign = searchParams.get('utm_campaign') || '';
+  const utmContent = searchParams.get('utm_content') || '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,12 +68,12 @@ function OstacoliLandingContent() {
           utmSource,
           utmMedium,
           utmCampaign,
+          utmContent,
           turnstileToken
         })
       });
 
       if (response.ok) {
-        setSuccess(true);
         behaviorActions.trackConversion();
         if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
           (window as unknown as { gtag: (cmd: string, event: string, params: object) => void }).gtag('event', 'challenge_signup', {
@@ -80,6 +81,14 @@ function OstacoliLandingContent() {
             variant: 'epiphany'
           });
         }
+        const utmParams = new URLSearchParams();
+        if (utmSource) utmParams.set('utm_source', utmSource);
+        if (utmMedium) utmParams.set('utm_medium', utmMedium);
+        if (utmCampaign) utmParams.set('utm_campaign', utmCampaign);
+        if (utmContent) utmParams.set('utm_content', utmContent);
+        const qs = utmParams.toString();
+        router.push(`/challenge/ostacoli/grazie${qs ? `?${qs}` : ''}`);
+        return;
       } else {
         const data = await response.json();
         setError(data.error || 'Si è verificato un errore. Riprova.');
@@ -111,6 +120,7 @@ function OstacoliLandingContent() {
         utmSource,
         utmMedium,
         utmCampaign,
+        utmContent,
         turnstileToken
       })
     });
@@ -120,7 +130,6 @@ function OstacoliLandingContent() {
       throw new Error(data.error || 'Errore iscrizione');
     }
 
-    setSuccess(true);
     behaviorActions.trackExitIntentConverted();
 
     if (typeof window !== 'undefined' && (window as unknown as { gtag?: (cmd: string, event: string, params: object) => void }).gtag) {
@@ -130,6 +139,14 @@ function OstacoliLandingContent() {
         source: 'exit_intent'
       });
     }
+
+    const exitUtmParams = new URLSearchParams();
+    if (utmSource) exitUtmParams.set('utm_source', utmSource);
+    if (utmMedium) exitUtmParams.set('utm_medium', utmMedium);
+    if (utmCampaign) exitUtmParams.set('utm_campaign', utmCampaign);
+    if (utmContent) exitUtmParams.set('utm_content', utmContent);
+    const exitQs = exitUtmParams.toString();
+    router.push(`/challenge/ostacoli/grazie${exitQs ? `?${exitQs}` : ''}`);
   };
 
   // Form component riutilizzabile
@@ -171,7 +188,7 @@ function OstacoliLandingContent() {
       >
         {loading ? 'Iscrizione in corso...' : 'Inizia la Challenge Gratuita'}
       </button>
-      {behavior.engagementScore > 60 && !success && (
+      {behavior.engagementScore > 60 && (
         <div className="flex justify-center">
           <EngagementBadge
             isVisible={true}
@@ -203,38 +220,10 @@ function OstacoliLandingContent() {
     }
   ];
 
-  // Success State
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="max-w-lg text-center">
-          <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Ci siamo.</h2>
-          <p className="text-slate-300 mb-6">
-            Controlla la tua email. Il Giorno 1 sta arrivando.
-          </p>
-          <p className="text-emerald-400 text-sm mb-6">
-            Ti racconterò della tessera ristoranti del 1993 — e di cosa ho imparato dai miei errori.
-          </p>
-          <Link
-            href="/test"
-            className="inline-block mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-lg transition"
-          >
-            Nel frattempo, scopri il tuo profilo
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-900 via-slate-900 to-slate-800">
       {/* Return Visitor Banner */}
-      {behavior.isReturnVisitor && !bannerDismissed && !success && (
+      {behavior.isReturnVisitor && !bannerDismissed && (
         <ReturnVisitorBanner
           isVisible={true}
           onDismiss={() => setBannerDismissed(true)}
@@ -620,7 +609,7 @@ function OstacoliLandingContent() {
       </footer>
 
       {/* Exit Intent Popup */}
-      {behavior.isExitIntent && !exitPopupDismissed && !success && (
+      {behavior.isExitIntent && !exitPopupDismissed && (
         <ExitIntentPopup
           isVisible={true}
           onDismiss={() => {

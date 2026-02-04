@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 2.9
-**Ultimo aggiornamento:** 26 Gennaio 2026
+**Versione:** 3.0
+**Ultimo aggiornamento:** 1 Febbraio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -116,6 +116,73 @@ P4 (Correzione)  → Disponibile ON-DEMAND, non imposto
 **Errore tipico:** Trattare P4 (AI Coach) come P2 (output da consumare), proponendolo ai punti STOP dove l'utente deve ricevere il suo output, non una correzione.
 
 **Soluzione:** AI Coach (P4) vive sulla Dashboard, disponibile quando l'utente SCEGLIE di correggere/migliorare il suo percorso.
+
+---
+
+### 0.1 Filosofia Vitaeology: Conoscenza → Esperienza → Consapevolezza
+
+> **"Tre passi in libertà"** — I tre percorsi di Vitaeology
+
+#### Il Principio Fondamentale
+
+**La conoscenza non è fine a sé stessa.**
+
+In Vitaeology, la trasformazione segue tre passaggi:
+
+| Passaggio | Significato | In Vitaeology |
+|-----------|-------------|---------------|
+| **CONOSCENZA** | Sapere teorico, informazione | Challenge 7 giorni, contenuti, libri |
+| **ESPERIENZA** | Sapere applicato, pratica | Esercizi, assessment, riflessioni guidate |
+| **CONSAPEVOLEZZA** | Sapere integrato, saggezza | Vivere con equilibrio e profondità |
+
+#### La Trasformazione
+
+```
+CONOSCENZA → ESPERIENZA → CONSAPEVOLEZZA
+
+La conoscenza si fa esperienza.
+L'esperienza si fa consapevolezza.
+```
+
+#### Applicazione Pratica
+
+Ogni contenuto Vitaeology deve:
+1. **Fornire conoscenza** — ma non fermarsi lì
+2. **Tradurla in esperienza** — esercizi pratici, applicazione quotidiana
+3. **Generare consapevolezza** — integrazione nella vita, equilibrio, profondità
+
+#### Struttura Funnel
+
+```
+HOMEPAGE
+   │
+   ├── "Scegli il percorso che senti più vicino"
+   │
+   ▼
+┌─────────────────┬─────────────────┬─────────────────┐
+│ Landing         │ Landing         │ Landing         │
+│ LEADERSHIP      │ OSTACOLI        │ MICROFELICITÀ   │
+│ (Guidare)       │ (Risolvere)     │ (Notare)        │
+└────────┬────────┴────────┬────────┴────────┬────────┘
+         │                 │                 │
+         ▼                 ▼                 ▼
+    Challenge 7 giorni (CONOSCENZA + ESPERIENZA)
+         │                 │                 │
+         ▼                 ▼                 ▼
+    Assessment + Esercizi (CONSAPEVOLEZZA)
+```
+
+#### Regola per i Contenuti
+
+```
+❌ MAI solo teoria senza applicazione pratica
+❌ MAI esercizi senza spiegazione del "perché"
+❌ MAI conoscenza fine a sé stessa
+
+✅ SEMPRE collegare sapere → fare → essere consapevoli
+✅ SEMPRE integrare nella vita quotidiana
+✅ SEMPRE puntare a equilibrio e profondità
+```
 
 ---
 

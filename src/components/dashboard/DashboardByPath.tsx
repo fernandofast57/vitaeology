@@ -219,7 +219,7 @@ export default function DashboardByPath({ pathType }: DashboardByPathProps) {
           }
         } catch (recError) {
           // Silently fail - raccomandazioni non critiche
-          console.log('Raccomandazioni non disponibili:', recError);
+          void recError;
         }
 
         // Fetch exercise stats for this path

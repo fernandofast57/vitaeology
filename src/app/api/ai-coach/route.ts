@@ -19,6 +19,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { alertAICoachError } from '@/lib/error-alerts';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 import { getCurrentAwarenessLevel, onAIConversation } from '@/lib/awareness';
+import { calculateDiscoveryProfile } from '@/lib/challenge/discovery-data';
+import type { ChallengeContext, MiniProfileContext } from '@/lib/ai-coach/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +36,112 @@ function getAnthropicClient() {
   return new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
   });
+}
+
+// === HELPER: Fetch challenge context e mini-profilo per AI Coach ===
+
+interface ChallengeAndMiniProfile {
+  challengeContext?: ChallengeContext;
+  miniProfileContext?: MiniProfileContext;
+}
+
+const CHALLENGE_NAMES: Record<string, string> = {
+  'leadership-autentica': 'Leadership Autentica',
+  'oltre-ostacoli': 'Oltre gli Ostacoli',
+  'microfelicita': 'Microfelicità',
+};
+
+const CHALLENGE_TO_DISCOVERY: Record<string, string> = {
+  'leadership-autentica': 'leadership',
+  'oltre-ostacoli': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+async function fetchChallengeContext(
+  supabase: ReturnType<typeof getSupabaseClient>,
+  userId: string,
+  email: string,
+  userTier: SubscriptionTier,
+): Promise<ChallengeAndMiniProfile> {
+  try {
+    const { data: subscriber } = await supabase
+      .from('challenge_subscribers')
+      .select('challenge, current_day, status')
+      .eq('email', email)
+      .order('subscribed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!subscriber) return {};
+
+    const discoveryType = CHALLENGE_TO_DISCOVERY[subscriber.challenge] || 'leadership';
+
+    const challengeContext: ChallengeContext = {
+      challengeType: subscriber.challenge,
+      challengeName: CHALLENGE_NAMES[subscriber.challenge] || subscriber.challenge,
+      currentDay: subscriber.current_day || 0,
+      status: subscriber.status,
+      hasAssessment: false,
+      hasSubscription: userTier === 'leader' || userTier === 'mentor',
+    };
+
+    // Check assessment
+    const { data: assessment } = await supabase
+      .from('user_assessments_v2')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('assessment_type', discoveryType)
+      .eq('is_completed', true)
+      .limit(1)
+      .maybeSingle();
+
+    challengeContext.hasAssessment = !!assessment;
+
+    // Mini-Profilo from discovery responses
+    const { data: discoveryResponses } = await supabase
+      .from('challenge_discovery_responses')
+      .select('day_number, question_number, response')
+      .eq('user_id', userId)
+      .eq('challenge_type', discoveryType)
+      .order('day_number')
+      .order('question_number');
+
+    let miniProfileContext: MiniProfileContext | undefined;
+
+    if (discoveryResponses && discoveryResponses.length > 0) {
+      const formatted: Record<number, Record<number, 'A' | 'B' | 'C'>> = {};
+      for (const r of discoveryResponses) {
+        if (!formatted[r.day_number]) formatted[r.day_number] = {};
+        formatted[r.day_number][r.question_number - 1] = r.response as 'A' | 'B' | 'C';
+      }
+
+      const profile = calculateDiscoveryProfile(
+        discoveryType as 'leadership' | 'ostacoli' | 'microfelicita',
+        formatted
+      );
+
+      let strongest = { key: '', pct: 0 };
+      for (const [dim, data] of Object.entries(profile.dimensionScores)) {
+        if (data.percentage > strongest.pct) {
+          strongest = { key: dim, pct: data.percentage };
+        }
+      }
+
+      if (strongest.key) {
+        miniProfileContext = {
+          dimensionScores: Object.fromEntries(
+            Object.entries(profile.dimensionScores).map(([k, v]) => [k, { percentage: v.percentage }])
+          ),
+          strongestDimension: strongest.key,
+          strongestPercentage: strongest.pct,
+        };
+      }
+    }
+
+    return { challengeContext, miniProfileContext };
+  } catch {
+    return {};
+  }
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse<ChatResponse>> {
@@ -56,24 +164,30 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       );
     }
 
-    // === VERIFICA LIMITI AI COACH PER TIER ===
-    let dailyLimit = 5; // Default per explorer o utenti non autenticati
+    // === SINGLE PROFILES QUERY (tier + path + email) ===
+    let dailyLimit = 5;
     let userTier: SubscriptionTier = 'explorer';
+    let userEmail: string | null = null;
+    let profileCurrentPath: PathType | null = null;
 
     if (userContext?.userId) {
-      // Recupera profilo utente per tier
       const { data: profile } = await supabase
         .from('profiles')
-        .select('subscription_tier')
+        .select('subscription_tier, current_path, email')
         .eq('id', userContext.userId)
         .single();
 
-      if (profile?.subscription_tier) {
-        userTier = profile.subscription_tier as SubscriptionTier;
-        const tierConfig = SUBSCRIPTION_TIERS[userTier];
-        if (tierConfig) {
-          const limit = tierConfig.features.ai_coach_messages_per_day;
-          dailyLimit = limit === 'unlimited' ? 999999 : limit;
+      if (profile) {
+        userEmail = profile.email || null;
+        profileCurrentPath = (profile.current_path as PathType) || null;
+
+        if (profile.subscription_tier) {
+          userTier = profile.subscription_tier as SubscriptionTier;
+          const tierConfig = SUBSCRIPTION_TIERS[userTier];
+          if (tierConfig) {
+            const limit = tierConfig.features.ai_coach_messages_per_day;
+            dailyLimit = limit === 'unlimited' ? 999999 : limit;
+          }
         }
       }
 
@@ -102,17 +216,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       }
     }
 
-    // Recupera current_path dell'utente dal profilo o usa quello dalla request
-    let currentPath: PathType | null = requestPath || null;
-    if (!currentPath && userContext?.userId) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('current_path')
-        .eq('id', userContext.userId)
-        .single();
-
-      currentPath = (profile?.current_path as PathType) || 'leadership';
-    }
+    // currentPath: usa request, fallback profilo, fallback default
+    const currentPath: PathType = (requestPath as PathType) || profileCurrentPath || 'leadership';
 
     // Prendi l'ultimo messaggio utente per il RAG
     const lastUserMessage = messages
@@ -164,6 +269,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       if (awarenessData) {
         awarenessLevel = awarenessData.level;
       }
+    }
+
+    // === P4.1-P4.3: FETCH CHALLENGE CONTEXT E MINI-PROFILO ===
+    if (userContext?.userId && userEmail) {
+      const ctx = await fetchChallengeContext(supabase, userContext.userId, userEmail, userTier);
+      if (ctx.challengeContext) userContext.challengeContext = ctx.challengeContext;
+      if (ctx.miniProfileContext) userContext.miniProfileContext = ctx.miniProfileContext;
     }
 
     // Carica correzioni attive dal sistema di ottimizzazione

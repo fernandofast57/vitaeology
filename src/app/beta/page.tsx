@@ -125,6 +125,9 @@ function BetaPageContent() {
   const utmCampaign = searchParams.get('utm_campaign');
   const utmContent = searchParams.get('utm_content');
 
+  // ?challenge= param dagli ads (auto-seleziona challenge)
+  const challengeParam = searchParams.get('challenge');
+
   // Auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -149,6 +152,14 @@ function BetaPageContent() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+
+  // Auto-seleziona challenge da ?challenge= param (dagli ads)
+  useEffect(() => {
+    if (challengeParam && CHALLENGES.some(c => c.id === challengeParam)) {
+      setSelectedChallenge(challengeParam);
+      setShowForm(true);
+    }
+  }, [challengeParam]);
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -204,11 +215,11 @@ function BetaPageContent() {
           challenge: challenge.dbValue,
           variant: 'beta', // Identifica come beta tester
           turnstileToken,
-          // UTM tracking
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          utm_content: utmContent,
+          // UTM tracking (camelCase per match con API subscribe)
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          utmContent,
         }),
       });
 
@@ -218,8 +229,8 @@ function BetaPageContent() {
         throw new Error(data.error || 'Errore durante l\'iscrizione');
       }
 
-      // Redirect alla challenge Day 1
-      router.push(`/challenge/${selectedChallenge}/day/1`);
+      // Redirect alla Thank You page con OTO
+      router.push(`/challenge/${selectedChallenge}/grazie`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore durante l\'iscrizione');
     } finally {
