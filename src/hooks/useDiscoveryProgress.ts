@@ -118,6 +118,7 @@ export function useDiscoveryProgress(
 
 /**
  * Hook per ottenere il progresso completo di una challenge (tutti i 7 giorni)
+ * Usa challenge_subscribers.current_day come fonte unica di verità
  */
 export function useFullChallengeProgress(
   challengeType: ChallengeType
@@ -130,35 +131,74 @@ export function useFullChallengeProgress(
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const supabase = createClient();
+
   const fetchProgress = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
-    try {
-      const response = await fetch('/api/challenge/check-unlock', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ challengeType })
-      });
+    const CHALLENGE_TYPE_MAP: Record<string, string> = {
+      'leadership': 'leadership-autentica',
+      'ostacoli': 'oltre-ostacoli',
+      'microfelicita': 'microfelicita'
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch progress');
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user || !user.email) {
+        setError('Utente non autenticato');
+        setIsLoading(false);
+        return;
       }
 
-      const data = await response.json();
+      const dbChallengeType = CHALLENGE_TYPE_MAP[challengeType] || challengeType;
 
-      setDayProgress(data.dayProgress);
-      setCurrentUnlockedDay(data.currentUnlockedDay);
-      setTotalResponses(data.totalResponses);
-      setCompletionPercentage(data.completionPercentage);
-      setIsComplete(data.isComplete);
+      // Fonte unica di verità: challenge_subscribers.current_day
+      const { data: subscriber, error: subscriberError } = await supabase
+        .from('challenge_subscribers')
+        .select('id, current_day, status')
+        .eq('email', user.email.toLowerCase())
+        .eq('challenge', dbChallengeType)
+        .single();
+
+      if (subscriberError || !subscriber) {
+        // Non iscritto: tutti i giorni non completati, day 1 sbloccato
+        const progress: Record<number, DayProgress> = {};
+        for (let d = 1; d <= 7; d++) {
+          progress[d] = { completed: false, responses: 0 };
+        }
+        setDayProgress(progress);
+        setCurrentUnlockedDay(1);
+        setTotalResponses(0);
+        setCompletionPercentage(0);
+        setIsComplete(false);
+        setIsLoading(false);
+        return;
+      }
+
+      const currentDay = subscriber.current_day || 0;
+      const progress: Record<number, DayProgress> = {};
+
+      for (let d = 1; d <= 7; d++) {
+        progress[d] = {
+          completed: d <= currentDay,
+          responses: d <= currentDay ? 3 : 0
+        };
+      }
+
+      setDayProgress(progress);
+      setCurrentUnlockedDay(Math.min(currentDay + 1, 7));
+      setTotalResponses(currentDay * 3);
+      setCompletionPercentage(Math.round((currentDay / 7) * 100));
+      setIsComplete(currentDay >= 7 || subscriber.status === 'completed');
     } catch (err) {
       console.error('Error fetching challenge progress:', err);
       setError('Errore nel caricamento del progresso');
     } finally {
       setIsLoading(false);
     }
-  }, [challengeType]);
+  }, [challengeType, supabase]);
 
   useEffect(() => {
     fetchProgress();

@@ -1,10 +1,11 @@
 /**
  * Cron Job: Email Automatiche Challenge
  *
- * Esegue 4 processi:
- * 0. Day Content - Invia contenuto giornaliero ai nuovi iscritti
+ * Esegue 5 processi:
+ * 0. Day Content (Welcome → Day 1) - Invia Day 1 ai nuovi iscritti
+ * 0.5. Daily Content (Day 2-7) - Invia email giorno successivo dopo completamento
  * 1. Reminder 48h - Per utenti inattivi
- * 2. Force Unlock 72h - Auto-sblocco giorno successivo
+ * 2. Force Reminder 72h - Incoraggiamento a riprendere (senza auto-advance)
  * 3. Sequenza post-challenge (24h, 72h, 7 giorni)
  *
  * Vercel Cron: GET /api/cron/challenge-emails (8:00 UTC)
@@ -184,6 +185,104 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
     }
 
     // ========================================
+    // 0.5 DAILY CONTENT DAY 2-7 - Utenti che hanno completato un giorno
+    // Logica: current_day >= 1 significa che l'utente ha completato almeno Day 1
+    // Invia email per current_day + 1 (il prossimo giorno sbloccato)
+    // Usa challenge_email_events per evitare doppi invii
+    // ========================================
+    console.log('📧 [Cron] Inizio invio Daily Content Day 2-7...');
+
+    const { data: activeDailyUsers, error: dailyError } = await supabase
+      .from('challenge_subscribers')
+      .select('*')
+      .eq('status', 'active')
+      .gte('current_day', 1)
+      .lt('current_day', 7);
+
+    debug.dailyContentQuery = {
+      found: activeDailyUsers?.length || 0,
+      error: dailyError?.message || null,
+      subscribers: activeDailyUsers?.map(s => ({
+        id: s.id,
+        email: s.email,
+        challenge: s.challenge,
+        current_day: s.current_day,
+        last_email_type: s.last_email_type
+      })) || []
+    };
+
+    if (dailyError) {
+      console.error('[Cron] Errore query dailyUsers:', dailyError.message);
+    } else if (activeDailyUsers && activeDailyUsers.length > 0) {
+      console.log(`📧 [Cron] Trovati ${activeDailyUsers.length} utenti attivi per Daily Content Day 2-7`);
+
+      for (const user of activeDailyUsers) {
+        try {
+          const nextDay = user.current_day + 1;
+
+          // Verifica se email per nextDay è già stata inviata
+          const { data: existingEmail } = await supabase
+            .from('challenge_email_events')
+            .select('id')
+            .eq('subscriber_id', user.id)
+            .eq('challenge', user.challenge)
+            .eq('day_number', nextDay)
+            .eq('event_type', 'sent')
+            .limit(1);
+
+          if (existingEmail && existingEmail.length > 0) {
+            continue; // Email già inviata per questo giorno
+          }
+
+          console.log(`📧 [Cron] Invio Day ${nextDay} a ${user.email} (current_day: ${user.current_day})`);
+
+          const result = await sendChallengeEmail(
+            user.email,
+            'day_content',
+            user.challenge as ChallengeType,
+            nextDay,
+            user.nome || undefined
+          );
+
+          if (result.success) {
+            console.log(`✅ [Cron] Email Day ${nextDay} INVIATA a ${user.email}`);
+
+            await supabase
+              .from('challenge_subscribers')
+              .update({
+                last_email_sent_at: new Date().toISOString(),
+                last_email_type: 'day_content'
+              })
+              .eq('id', user.id);
+
+            // Log evento
+            try {
+              await supabase.from('challenge_email_events').insert({
+                subscriber_id: user.id,
+                challenge: user.challenge,
+                day_number: nextDay,
+                event_type: 'sent',
+                created_at: new Date().toISOString()
+              });
+            } catch {
+              // Ignora errori di logging
+            }
+
+            results.day_content_sent++;
+          } else {
+            console.error(`❌ [Cron] Daily Content Day ${nextDay} FALLITO per ${user.email}:`, result.error);
+            results.day_content_errors++;
+          }
+        } catch (err) {
+          console.error(`❌ [Cron] Daily Content EXCEPTION per ${user.email}:`, err);
+          results.day_content_errors++;
+        }
+      }
+    } else {
+      console.log('📧 [Cron] Nessun utente trovato per Daily Content Day 2-7');
+    }
+
+    // ========================================
     // 1. REMINDER 48H - Utenti inattivi dopo day_content
     // ========================================
     console.log('📧 [Cron] Inizio processo reminder 48h...');
@@ -242,9 +341,12 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
     }
 
     // ========================================
-    // 2. FORCE UNLOCK 72H - Dopo reminder
+    // 2. FORCE REMINDER 72H - Incoraggiamento dopo reminder
+    // ⚠️ NON modifica current_day (rispetta user agency)
+    // Dopo force_reminder, il sistema non invia altre email
+    // fino a quando l'utente non completa il giorno corrente
     // ========================================
-    console.log('🔓 [Cron] Inizio processo force unlock 72h...');
+    console.log('🔓 [Cron] Inizio processo force reminder 72h...');
 
     const seventyTwoHoursAgo = new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString();
 
@@ -259,13 +361,13 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
     if (stuckError) {
       console.error('[Cron] Errore query stuckUsers:', stuckError.message);
     } else if (stuckUsers && stuckUsers.length > 0) {
-      console.log(`🔓 [Cron] Trovati ${stuckUsers.length} utenti bloccati per force unlock`);
+      console.log(`🔓 [Cron] Trovati ${stuckUsers.length} utenti bloccati per force reminder`);
 
       for (const user of stuckUsers) {
         try {
           const nextDay = Math.min((user.current_day || 0) + 1, 7);
 
-          // Invia email notifica sblocco
+          // Invia email di incoraggiamento a riprendere
           const result = await sendChallengeEmail(
             user.email,
             'day_unlock',
@@ -275,32 +377,25 @@ async function runCronJob(): Promise<{ success: boolean; results: CronResults; d
           );
 
           if (result.success) {
-            // Aggiorna current_day e prepara per il prossimo ciclo
-            const updateData: Record<string, unknown> = {
-              current_day: nextDay,
-              last_email_sent_at: new Date().toISOString(),
-              last_email_type: 'day_content' // Torna al ciclo normale
-            };
-
-            // Se giorno 7, marca come completato
-            if (nextDay >= 7) {
-              updateData.status = 'completed';
-              updateData.completed_at = new Date().toISOString();
-            }
-
+            // NON modificare current_day - rispetta user agency
+            // Setta force_reminder per fermare il ciclo di email
+            // L'utente deve completare il giorno per ricevere la prossima email
             await supabase
               .from('challenge_subscribers')
-              .update(updateData)
+              .update({
+                last_email_sent_at: new Date().toISOString(),
+                last_email_type: 'force_reminder'
+              })
               .eq('id', user.id);
 
             results.force_unlocks++;
-            console.log(`✅ Force unlock Day ${nextDay} per ${user.email}`);
+            console.log(`✅ Force reminder (Day ${nextDay}) per ${user.email} - NO auto-advance`);
           } else {
-            console.error(`Force unlock error for ${user.email}:`, result.error);
+            console.error(`Force reminder error for ${user.email}:`, result.error);
             results.force_unlock_errors++;
           }
         } catch (err) {
-          console.error(`Force unlock exception for ${user.email}:`, err);
+          console.error(`Force reminder exception for ${user.email}:`, err);
           results.force_unlock_errors++;
         }
       }
