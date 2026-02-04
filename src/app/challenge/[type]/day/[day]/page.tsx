@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import DiscoveryConfirmation from '@/components/challenge/DiscoveryConfirmation';
 import { getDiscoveryData, type ChallengeType, type DayNumber } from '@/lib/challenge/discovery-data';
-import { getDayContent, type DayContent } from '@/lib/challenge/day-content';
+import { getDayContent } from '@/lib/challenge/day-content';
 import { useDiscoveryProgress } from '@/hooks/useDiscoveryProgress';
 import { VideoPlaceholder } from '@/components/challenge/VideoPlaceholder';
 import { CHALLENGE_VIDEOS } from '@/config/videos';
@@ -15,6 +15,7 @@ import { CHALLENGE_VIDEOS } from '@/config/videos';
 const CHALLENGE_COLORS = {
   leadership: {
     primary: 'amber',
+    hex: '#F4B942',
     gradient: 'from-amber-900 to-slate-900',
     accent: 'amber-500',
     accentHover: 'amber-600',
@@ -24,6 +25,7 @@ const CHALLENGE_COLORS = {
   },
   ostacoli: {
     primary: 'emerald',
+    hex: '#10B981',
     gradient: 'from-emerald-900 to-slate-900',
     accent: 'emerald-500',
     accentHover: 'emerald-600',
@@ -33,6 +35,7 @@ const CHALLENGE_COLORS = {
   },
   microfelicita: {
     primary: 'violet',
+    hex: '#8B5CF6',
     gradient: 'from-violet-900 to-slate-900',
     accent: 'violet-500',
     accentHover: 'violet-600',
@@ -56,15 +59,9 @@ export default function ChallengeDayPage() {
   const dayNumber = parseInt(params.day as string) as DayNumber;
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [showDiscovery, setShowDiscovery] = useState(false);
 
-  // Form completamento giorno
-  const [responses, setResponses] = useState<string[]>(['', '', '']);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Stato completamento giorno
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string>('');
-  const [showEmailInput, setShowEmailInput] = useState(false);
 
   const supabase = createClient();
   const { isUnlocked, isCompleted, isLoading } = useDiscoveryProgress(challengeType, dayNumber);
@@ -93,83 +90,29 @@ export default function ChallengeDayPage() {
     checkAuth();
   }, [supabase, router, challengeType, dayNumber]);
 
-  // Load email from localStorage
-  useEffect(() => {
-    const storedEmail = localStorage.getItem('challenge_email');
-    if (storedEmail) {
-      setUserEmail(storedEmail);
-    } else {
-      setShowEmailInput(true);
-    }
-  }, []);
-
-  // Handle completion
-  const handleDiscoveryComplete = () => {
-    if (dayNumber < 7) {
-      router.push(`/challenge/${challengeType}/day/${dayNumber + 1}`);
-    } else {
-      router.push(`/challenge/${challengeType}/complete`);
-    }
-  };
-
-  // Handle form submission to complete day
-  const handleCompleteDaySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const email = userEmail.trim();
-    if (!email) {
-      setSubmitError('Inserisci la tua email');
-      return;
-    }
-
-    // Salva email in localStorage per future visite
-    localStorage.setItem('challenge_email', email);
-
-    setIsSubmitting(true);
-    setSubmitError(null);
-
+  // Gestione completamento: discovery risposte salvate dal componente, poi chiama complete-day API
+  const handleDiscoveryComplete = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const email = user?.email || localStorage.getItem('challenge_email') || '';
+
       const response = await fetch('/api/challenge/complete-day', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          challengeType,
-          dayNumber,
-          responses: responses.filter(r => r.trim() !== '')
-        })
+        body: JSON.stringify({ email, challengeType, dayNumber })
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          // Giorno già completato - non è un errore grave
-          setSubmitSuccess(true);
-        } else {
-          throw new Error(data.error || 'Errore nel completamento');
-        }
-      } else {
-        setSubmitSuccess(true);
+      if (!response.ok && response.status !== 409) {
+        console.error('Error completing day:', await response.text());
       }
+
+      setSubmitSuccess(true);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Errore sconosciuto');
-    } finally {
-      setIsSubmitting(false);
+      console.error('Error completing day:', error);
+      // Le risposte discovery sono già salvate dal componente, segniamo comunque come successo
+      setSubmitSuccess(true);
     }
   };
-
-  // Update response at index
-  const updateResponse = (index: number, value: string) => {
-    setResponses(prev => {
-      const updated = [...prev];
-      updated[index] = value;
-      return updated;
-    });
-  };
-
-  // Check if all responses are filled
-  const hasAllResponses = responses.every(r => r.trim().length > 0);
 
   // Loading state
   if (isAuthenticated === null || isLoading) {
@@ -377,111 +320,18 @@ export default function ChallengeDayPage() {
             </div>
           )}
 
-          {/* Form Completamento Giorno */}
-          {!isCompleted && !submitSuccess && (
-            <section className="bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-700/50">
-              <h2 className="text-xl md:text-2xl font-semibold text-white mb-2">
-                Completa il Giorno {dayNumber}
-              </h2>
-              <p className="text-slate-400 mb-6">
-                Rispondi a queste domande per consolidare quello che hai imparato oggi.
-              </p>
-
-              <form onSubmit={handleCompleteDaySubmit} className="space-y-6">
-                {/* Email input se necessario */}
-                {showEmailInput && (
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">
-                      La tua email (usata per iscriverti alla sfida)
-                    </label>
-                    <input
-                      type="email"
-                      value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
-                      placeholder="tu@email.com"
-                      className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-                      required
-                    />
-                  </div>
-                )}
-
-                {/* Domande di riflessione */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    1. Cosa ti ha colpito di più oggi?
-                  </label>
-                  <textarea
-                    value={responses[0]}
-                    onChange={(e) => updateResponse(0, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    2. Come puoi applicare questo nella tua vita?
-                  </label>
-                  <textarea
-                    value={responses[1]}
-                    onChange={(e) => updateResponse(1, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    3. Qual è una cosa concreta che farai domani?
-                  </label>
-                  <textarea
-                    value={responses[2]}
-                    onChange={(e) => updateResponse(2, e.target.value)}
-                    placeholder="Scrivi la tua riflessione..."
-                    rows={3}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
-                  />
-                </div>
-
-                {/* Error message */}
-                {submitError && (
-                  <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-red-300">
-                    {submitError}
-                  </div>
-                )}
-
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !hasAllResponses || (showEmailInput && !userEmail.trim())}
-                  className={`w-full py-4 px-6 rounded-xl font-bold text-white transition ${
-                    isSubmitting || !hasAllResponses || (showEmailInput && !userEmail.trim())
-                      ? 'bg-slate-600 cursor-not-allowed'
-                      : `bg-${colors.accent} hover:bg-${colors.accentHover} shadow-lg hover:shadow-xl`
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Invio in corso...
-                    </span>
-                  ) : (
-                    `Completa il Giorno ${dayNumber} →`
-                  )}
-                </button>
-
-                {!hasAllResponses && (
-                  <p className="text-center text-slate-500 text-sm">
-                    Rispondi a tutte le domande per completare il giorno
-                  </p>
-                )}
-              </form>
-            </section>
+          {/* Discovery Questions A/B/C */}
+          {!isCompleted && !submitSuccess && discoveryData && (
+            <DiscoveryConfirmation
+              challengeType={challengeType}
+              dayNumber={dayNumber}
+              title={discoveryData.title}
+              intro={discoveryData.intro}
+              questions={discoveryData.questions}
+              ctaText={discoveryData.ctaText}
+              accentColor={colors.hex}
+              onComplete={handleDiscoveryComplete}
+            />
           )}
 
           {/* Success Message */}
@@ -509,7 +359,7 @@ export default function ChallengeDayPage() {
                 </Link>
               ) : (
                 <Link
-                  href="/test"
+                  href={`/challenge/${challengeType}/complete`}
                   className={`inline-block bg-${colors.accent} hover:bg-${colors.accentHover} text-white font-bold py-3 px-8 rounded-lg transition`}
                 >
                   Scopri il tuo Profilo →

@@ -20,6 +20,7 @@ interface DiscoveryConfirmationProps {
   intro: string;
   questions: DiscoveryQuestion[];
   ctaText: string;
+  accentColor?: string;
   onComplete: () => void;
 }
 
@@ -30,6 +31,7 @@ export default function DiscoveryConfirmation({
   intro,
   questions,
   ctaText,
+  accentColor = '#F4B942',
   onComplete
 }: DiscoveryConfirmationProps) {
   const [responses, setResponses] = useState<Record<number, 'A' | 'B' | 'C'>>({});
@@ -118,22 +120,23 @@ export default function DiscoveryConfirmation({
                   <button
                     key={option.value}
                     onClick={() => handleSelect(qIndex + 1, option.value)}
-                    className={`
-                      w-full text-left p-4 rounded-xl border-2 transition-all
-                      ${isSelected
-                        ? 'border-[#F4B942] bg-[#F4B942]/10'
-                        : 'border-gray-200 hover:border-[#F4B942]/50 bg-white'
-                      }
-                    `}
+                    className="w-full text-left p-4 rounded-xl border-2 transition-all"
+                    style={{
+                      borderColor: isSelected ? accentColor : '#e5e7eb',
+                      backgroundColor: isSelected ? `${accentColor}1a` : 'white',
+                    }}
+                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.borderColor = `${accentColor}80`; }}
+                    onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.borderColor = '#e5e7eb'; }}
                   >
                     <div className="flex items-start gap-3">
-                      <span className={`
-                        flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center
-                        ${isSelected
-                          ? 'border-[#F4B942] bg-[#F4B942] text-white'
-                          : 'border-gray-300'
-                        }
-                      `}>
+                      <span
+                        className="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center"
+                        style={{
+                          borderColor: isSelected ? accentColor : '#d1d5db',
+                          backgroundColor: isSelected ? accentColor : 'transparent',
+                          color: isSelected ? 'white' : 'inherit',
+                        }}
+                      >
                         {isSelected && (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -164,10 +167,11 @@ export default function DiscoveryConfirmation({
         className={`
           mt-8 w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all
           ${allAnswered && !isSubmitting
-            ? 'bg-[#F4B942] text-[#0A2540] hover:bg-[#F4B942]/90 cursor-pointer shadow-lg hover:shadow-xl'
+            ? 'text-[#0A2540] cursor-pointer shadow-lg hover:shadow-xl'
             : 'bg-gray-200 text-gray-500 cursor-not-allowed'
           }
         `}
+        style={allAnswered && !isSubmitting ? { backgroundColor: accentColor } : undefined}
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
@@ -187,10 +191,8 @@ export default function DiscoveryConfirmation({
         {[1, 2, 3].map((num) => (
           <div
             key={num}
-            className={`
-              w-2 h-2 rounded-full transition-all
-              ${responses[num] ? 'bg-[#F4B942]' : 'bg-gray-300'}
-            `}
+            className="w-2 h-2 rounded-full transition-all"
+            style={{ backgroundColor: responses[num] ? accentColor : '#d1d5db' }}
           />
         ))}
       </div>
