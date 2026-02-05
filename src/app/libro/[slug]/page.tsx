@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { CheckCircle, BookOpen, User, HelpCircle } from 'lucide-react';
+import { CheckCircle, BookOpen, User, HelpCircle, ExternalLink } from 'lucide-react';
 import { getLibroBySlug, getAllLibriSlugs, Libro } from '@/data/libri';
 import AcquistaButton from './AcquistaButton';
 
@@ -157,6 +157,21 @@ function HeroSection({ libro }: { libro: Libro }) {
                 PDF scaricabile immediatamente
               </span>
             </div>
+
+            {/* CTA Amazon - libro fisico */}
+            {libro.amazonUrl && (
+              <div className="mt-4 flex items-center gap-3 justify-center lg:justify-start">
+                <a
+                  href={libro.amazonUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-medium transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Preferisci il libro fisico? Acquista su Amazon
+                </a>
+              </div>
+            )}
 
             {/* Trust indicators */}
             <div className="mt-8 flex flex-wrap gap-6 justify-center lg:justify-start text-white/60 text-sm">
@@ -382,6 +397,21 @@ function CTASection({ libro }: { libro: Libro }) {
 
         {/* CTA */}
         <AcquistaButton libro={libro} size="large" variant="gold" />
+
+        {/* CTA Amazon - libro fisico */}
+        {libro.amazonUrl && (
+          <div className="mt-4">
+            <a
+              href={libro.amazonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Preferisci il libro fisico? Acquista su Amazon
+            </a>
+          </div>
+        )}
 
         {/* Garanzia */}
         <p className="mt-8 text-white/60 text-sm max-w-md mx-auto">

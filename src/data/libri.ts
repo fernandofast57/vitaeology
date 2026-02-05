@@ -19,6 +19,8 @@ export interface Libro {
   };
   garanzia: string;
   copertinaUrl: string;
+  // URL Amazon per acquisto libro fisico (vuoto = non ancora disponibile)
+  amazonUrl?: string;
 }
 
 export const LIBRI: Record<string, Libro> = {
@@ -68,6 +70,7 @@ export const LIBRI: Record<string, Libro> = {
     },
     garanzia: 'Garanzia Soddisfatti o Rimborsati 30 giorni. Se il libro non ti è utile, ti restituisco l\'intero importo senza domande.',
     copertinaUrl: '/images/libri/leadership-cover.png',
+    amazonUrl: '', // Aggiungere URL Amazon quando disponibile
   },
 
   risolutore: {
@@ -118,6 +121,7 @@ export const LIBRI: Record<string, Libro> = {
     },
     garanzia: 'Garanzia Soddisfatti o Rimborsati 30 giorni. Se il metodo non funziona per te, rimborso completo.',
     copertinaUrl: '/images/libri/risolutore-cover.png',
+    amazonUrl: '', // Aggiungere URL Amazon quando disponibile
   },
 
   microfelicita: {
@@ -168,6 +172,7 @@ export const LIBRI: Record<string, Libro> = {
     },
     garanzia: 'Garanzia Soddisfatti o Rimborsati 30 giorni. Se non ti senti più sereno dopo 4 settimane, ti rimborso.',
     copertinaUrl: '/images/libri/microfelicita-cover.png',
+    amazonUrl: '', // Aggiungere URL Amazon quando disponibile
   },
 };
 
