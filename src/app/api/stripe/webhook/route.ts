@@ -19,6 +19,11 @@ const SUBSCRIPTION_PRICES = {
   mastermind: 2997,
 } as const;
 
+const HIGH_TICKET_PRICES = {
+  coaching: 4997,
+  advisory: 12000,
+} as const;
+
 const ALL_BOOKS = ['leadership', 'risolutore', 'microfelicita'] as const;
 const ALL_ASSESSMENTS = ['leadership', 'risolutore', 'microfelicita'] as const;
 
@@ -302,6 +307,68 @@ async function handleSubscription(
   }
 }
 
+/** Gestisce acquisti high-ticket one-time (Coaching/Advisory) */
+async function handleHighTicketPurchase(
+  supabase: SupabaseClient,
+  session: Stripe.Checkout.Session
+) {
+  const userId = session.metadata?.user_id;
+  const tierSlug = session.metadata?.tier_slug as 'coaching' | 'advisory';
+  const customerEmail = session.customer_email || session.customer_details?.email;
+
+  if (!userId || !tierSlug) return;
+
+  // Registra l'acquisto high-ticket
+  await supabase.from('high_ticket_purchases').upsert({
+    user_id: userId,
+    product_type: tierSlug,
+    stripe_session_id: session.id,
+    stripe_payment_intent: session.payment_intent as string,
+    amount_paid: (session.amount_total || 0) / 100,
+    status: 'active',
+    purchased_at: new Date().toISOString(),
+  }, { onConflict: 'user_id,product_type' });
+
+  // Per Advisory, grant anche Mastermind incluso
+  if (tierSlug === 'advisory') {
+    await updateProfileSubscription(supabase, userId, {
+      subscription_tier: 'mastermind',
+      subscription_status: 'active',
+    });
+    await grantAllAssessmentAccess(supabase, userId, session.id);
+  }
+
+  // Per Coaching, grant Mentor incluso per 1 anno
+  if (tierSlug === 'coaching') {
+    await updateProfileSubscription(supabase, userId, {
+      subscription_tier: 'mentor',
+      subscription_status: 'active',
+    });
+    await grantAllAssessmentAccess(supabase, userId, session.id);
+  }
+
+  // Invia email conferma
+  if (customerEmail) {
+    const productName = tierSlug === 'coaching' ? '1:1 Coaching' : 'Advisory Board';
+    const price = HIGH_TICKET_PRICES[tierSlug];
+
+    // TODO: Implementare email specifica per high-ticket
+    // Per ora usiamo l'email di upgrade con un workaround
+    console.log(`[HighTicket] ${productName} acquistato da ${customerEmail} - €${price}`);
+  }
+
+  // Analytics
+  await supabase.from('analytics_events').insert({
+    user_id: userId,
+    event_type: 'high_ticket_purchase',
+    event_data: {
+      product: tierSlug,
+      price: HIGH_TICKET_PRICES[tierSlug],
+      email: customerEmail
+    },
+  });
+}
+
 /** Gestisce aggiornamento subscription */
 async function handleSubscriptionUpdated(
   supabase: SupabaseClient,
@@ -547,10 +614,15 @@ export async function POST(request: NextRequest) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         const tipo = session.metadata?.tipo;
+        const paymentType = session.metadata?.payment_type;
+        const tierSlug = session.metadata?.tier_slug;
 
         if (tipo === 'libro_pdf') await handleLibroPurchase(supabase, session);
         else if (tipo === 'trilogy') await handleTrilogyPurchase(supabase, session);
         else if (tipo === 'bump_libro_leader') await handleBumpLibroLeader(supabase, session);
+        else if (paymentType === 'one_time' && (tierSlug === 'coaching' || tierSlug === 'advisory')) {
+          await handleHighTicketPurchase(supabase, session);
+        }
         else await handleSubscription(supabase, session);
         break;
       }

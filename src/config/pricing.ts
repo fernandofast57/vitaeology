@@ -12,7 +12,7 @@
 // TYPES
 // ============================================================
 
-export type PricingTierSlug = 'explorer' | 'leader' | 'mentor' | 'mastermind';
+export type PricingTierSlug = 'explorer' | 'leader' | 'mentor' | 'mastermind' | 'coaching' | 'advisory';
 
 // Fase 2 - Altri tiers futuri
 // export type PricingTierSlugFase2 = 'coaching_starter' | 'coaching_intensive' | 'partner_elite';
@@ -87,6 +87,28 @@ const MASTERMIND_FEATURES = [
   'Canale privato Mastermind',
   'Networking con imprenditori elite',
   'Accesso anticipato a nuove funzionalità',
+];
+
+const COACHING_FEATURES = [
+  '6 mesi di coaching individuale',
+  '12 sessioni 1:1 con Fernando (2/mese)',
+  'Assessment approfondito personalizzato',
+  'Piano azione strategico su misura',
+  'Supporto WhatsApp diretto',
+  'Revisione obiettivi mensile',
+  'Accesso Mentor incluso per 1 anno',
+  'Registrazione sessioni inclusa',
+];
+
+const ADVISORY_FEATURES = [
+  'Accesso annuale Advisory Board',
+  '4 sessioni strategiche/anno con Fernando',
+  'Analisi business approfondita',
+  'Network esclusivo imprenditori selezionati',
+  'Accesso a deal flow e opportunità',
+  'Mentorship su decisioni strategiche',
+  'Invito eventi privati Vitaeology',
+  'Mastermind incluso per sempre',
 ];
 
 // ============================================================
@@ -182,7 +204,7 @@ export const PRICING_TIERS: Record<PricingTierSlug, PricingTier> = {
     originalPrice: 3497,
     interval: 'year',
     intervalLabel: '/anno',
-    stripePriceId: process.env.STRIPE_PRICE_MASTERMIND_ANNUAL || null,
+    stripePriceId: process.env.STRIPE_PRICE_MASTERMIND_ANNUAL || 'price_1SxSIoCNkmTQHkcqX9mmMfqS',
     stripeProductName: 'Vitaeology Mastermind',
     valueLadderLevel: 6,
     features: MASTERMIND_FEATURES,
@@ -190,6 +212,42 @@ export const PRICING_TIERS: Record<PricingTierSlug, PricingTier> = {
     badge: 'Elite',
     ctaText: 'Richiedi Accesso',
     ctaVariant: 'secondary',
+  },
+
+  coaching: {
+    slug: 'coaching',
+    name: '1:1 Coaching',
+    description: '6 mesi di coaching individuale con Fernando',
+    price: 4997,
+    originalPrice: 5997,
+    interval: 'once',
+    intervalLabel: '',
+    stripePriceId: process.env.STRIPE_PRICE_COACHING_1TO1 || 'price_1SxSL3CNkmTQHkcq4klFVRFI',
+    stripeProductName: 'Vitaeology 1:1 Coaching',
+    valueLadderLevel: 7,
+    features: COACHING_FEATURES,
+    highlighted: false,
+    badge: 'Premium',
+    ctaText: 'Prenota Chiamata',
+    ctaVariant: 'primary',
+  },
+
+  advisory: {
+    slug: 'advisory',
+    name: 'Advisory Board',
+    description: 'Accesso annuale al board strategico',
+    price: 12000,
+    originalPrice: 15000,
+    interval: 'once',
+    intervalLabel: '',
+    stripePriceId: process.env.STRIPE_PRICE_ADVISORY || 'price_1SxSMXCNkmTQHkcqoojRv7mO',
+    stripeProductName: 'Vitaeology Advisory Board',
+    valueLadderLevel: 8,
+    features: ADVISORY_FEATURES,
+    highlighted: false,
+    badge: 'Invitation Only',
+    ctaText: 'Richiedi Invito',
+    ctaVariant: 'outline',
   },
 };
 
@@ -325,12 +383,12 @@ export function getUpgradeOptions(currentTier: PricingTierSlug): PricingTier[] {
 /**
  * Required environment variables for Stripe integration:
  *
+ * Subscriptions:
  * STRIPE_PRICE_LEADER_ANNUAL=price_xxxxxxxxxxxxx
  * STRIPE_PRICE_MENTOR_ANNUAL=price_xxxxxxxxxxxxx
+ * STRIPE_PRICE_MASTERMIND_ANNUAL=price_1SxSIoCNkmTQHkcqX9mmMfqS
  *
- * Fase 2:
- * STRIPE_PRICE_MASTERMIND_ANNUAL=price_xxxxxxxxxxxxx
- * STRIPE_PRICE_COACHING_STARTER=price_xxxxxxxxxxxxx
- * STRIPE_PRICE_COACHING_INTENSIVE=price_xxxxxxxxxxxxx
- * STRIPE_PRICE_PARTNER_ELITE=price_xxxxxxxxxxxxx
+ * One-time (High Ticket):
+ * STRIPE_PRICE_COACHING_1TO1=price_1SxSL3CNkmTQHkcq4klFVRFI
+ * STRIPE_PRICE_ADVISORY=price_1SxSMXCNkmTQHkcqoojRv7mO
  */

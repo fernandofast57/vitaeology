@@ -90,6 +90,10 @@ export async function POST(request: NextRequest) {
     const isFoundingTester = profile?.is_founding_tester === true;
     const foundingTesterCouponId = process.env.STRIPE_FOUNDING_TESTER_COUPON_ID;
 
+    // Determine if this is a one-time payment or subscription
+    const isOneTime = tier.interval === 'once';
+    const checkoutMode = isOneTime ? 'payment' : 'subscription';
+
     // Build checkout session options
     const checkoutOptions: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
@@ -100,23 +104,29 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/subscription/success?plan=${tierSlug}${isFoundingTester ? '&founding=true' : ''}`,
+      mode: checkoutMode,
+      success_url: isOneTime
+        ? `${process.env.NEXT_PUBLIC_APP_URL}/acquisto/success?product=${tierSlug}`
+        : `${process.env.NEXT_PUBLIC_APP_URL}/subscription/success?plan=${tierSlug}${isFoundingTester ? '&founding=true' : ''}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
       metadata: {
         user_id: userId,
         tier_slug: tierSlug,
         is_founding_tester: isFoundingTester ? 'true' : 'false',
+        payment_type: isOneTime ? 'one_time' : 'subscription',
       },
-      // Add subscription metadata
-      subscription_data: {
+    };
+
+    // Add subscription metadata only for subscriptions
+    if (!isOneTime) {
+      checkoutOptions.subscription_data = {
         metadata: {
           tier_slug: tierSlug,
           tier_name: tier.name,
           is_founding_tester: isFoundingTester ? 'true' : 'false',
         },
-      },
-    };
+      };
+    }
 
     // Auto-apply founding tester discount OR allow promo codes
     if (isFoundingTester && foundingTesterCouponId) {

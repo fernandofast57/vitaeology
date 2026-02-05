@@ -15,10 +15,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // TIPI
 // ============================================================
 
+type PlanNameType = 'leader' | 'mentor' | 'mastermind' | 'coaching' | 'advisory';
+
 export interface UpgradeEmailParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor' | 'mastermind';
+  planName: PlanNameType;
   planPrice: number;
   renewalDate: string;
   invoiceUrl?: string;
@@ -27,7 +29,7 @@ export interface UpgradeEmailParams {
 export interface RenewalReminderParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor' | 'mastermind';
+  planName: PlanNameType;
   planPrice: number;
   renewalDate: string;
   daysUntilRenewal: number;
@@ -37,7 +39,7 @@ export interface RenewalReminderParams {
 export interface CancellationEmailParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor' | 'mastermind';
+  planName: PlanNameType;
   accessEndDate: string;
   reason?: string;
 }
@@ -88,6 +90,34 @@ const PLAN_CONFIG = {
       'Canale privato Mastermind',
       'Networking con imprenditori elite',
       'Accesso anticipato a nuove funzionalità',
+    ],
+  },
+  coaching: {
+    displayName: '1:1 Coaching',
+    color: '#3B82F6',
+    features: [
+      '6 mesi di coaching individuale',
+      '12 sessioni 1:1 con Fernando (2/mese)',
+      'Assessment approfondito personalizzato',
+      'Piano azione strategico su misura',
+      'Supporto WhatsApp diretto',
+      'Revisione obiettivi mensile',
+      'Accesso Mentor incluso per 1 anno',
+      'Registrazione sessioni inclusa',
+    ],
+  },
+  advisory: {
+    displayName: 'Advisory Board',
+    color: '#F59E0B',
+    features: [
+      'Accesso annuale Advisory Board',
+      '4 sessioni strategiche/anno con Fernando',
+      'Analisi business approfondita',
+      'Network esclusivo imprenditori selezionati',
+      'Accesso a deal flow e opportunità',
+      'Mentorship su decisioni strategiche',
+      'Invito eventi privati Vitaeology',
+      'Mastermind incluso per sempre',
     ],
   },
 };
