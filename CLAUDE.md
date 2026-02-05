@@ -1345,6 +1345,25 @@ File contenuti:
 - src/lib/affiliate/training-content.ts (6 fasi, 12 esercizi, 24 checkpoint)
 ```
 
+#### ✅ COMPLETATO: Protezione PDF Libri (Febbraio 2026)
+```
+Sistema di protezione PDF con signed URL + watermark personalizzato.
+
+File implementati:
+- src/lib/libro/download-token.ts    → JWT firmato (24h scadenza)
+- src/lib/libro/watermark-pdf.ts     → Watermark nome+email su ogni pagina
+- src/app/api/libro/download/route.ts → Endpoint download protetto
+
+Funzionalità:
+- Token JWT con scadenza 24h per link email
+- Watermark "Copia personale di [Nome] - [Email]" diagonale semi-trasparente
+- Rate limit 20 download per libro per utente
+- Tracking download_count e last_download_at in user_books
+- Due modalità: token (da email) e auth (da dashboard)
+
+Piano originale archiviato: .claude/plans/archive/pdf-protection-completed.md
+```
+
 #### FUTURE: Beta Intelligence System (Post-lancio ADS)
 ```
 QUANDO ATTIVARE: Dopo aver acquisito 20-30 beta tester attivi che usano l'AI Coach.
