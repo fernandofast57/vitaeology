@@ -1334,6 +1334,25 @@ Pagine frontend da creare (API già esistenti):
 4. /affiliate/payouts    → Storico pagamenti e richieste payout
 
 Riferimento: docs/GUIDA_COMPLETA_VITAEOLOGY_ADS_AFFILIATI_v5.txt
+Piano dettagliato: .claude/plans/affiliate-pages-completion.md
+```
+
+#### FUTURE: Beta Intelligence System (Post-lancio ADS)
+```
+QUANDO ATTIVARE: Dopo aver acquisito 20-30 beta tester attivi che usano l'AI Coach.
+
+COSA FA:
+- Classifica automaticamente ogni conversazione AI Coach per topic/bisogno/sentiment
+- Identifica gap nel RAG (dove i libri non rispondono)
+- Dashboard admin per visualizzare pattern e priorità
+- Sistema per espandere il RAG con nuovi contenuti basati su dati reali
+
+FILE DI RIFERIMENTO: docs/FUTURE_BETA_INTELLIGENCE_SYSTEM.md
+
+PREREQUISITI:
+1. ADS attive
+2. Beta tester acquisiti e attivi
+3. Almeno 50-100 conversazioni AI Coach registrate
 ```
 
 ---
