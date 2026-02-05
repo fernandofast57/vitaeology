@@ -1,7 +1,7 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 3.1
+**Versione:** 3.2
 **Ultimo aggiornamento:** 5 Febbraio 2026
 **Owner:** Fernando Marongiu
 
@@ -239,6 +239,52 @@ AVERE/NON AVERE riconoscono che il soggetto **può scegliere**. "Hai questa capa
 - L'utente è **AGENTE attivo**, non paziente passivo
 - Mai prescrizioni dirette ("devi fare X")
 - Sempre domande e facilitazione
+
+### 2.1 Regole Copy Autodeterminazione (OBBLIGATORIE per tutto il copy)
+
+> **Riferimento completo:** `docs/REGOLA_COPY_AUTODETERMINAZIONE.md`, `docs/STILE_VITAEOLOGY.md`
+
+#### Regola "Per Caso" (MAI USARE)
+
+| ❌ Proibito | ✅ Alternativa | Motivo |
+|-------------|----------------|--------|
+| "per caso" | "reagendo senza direzione" | Nega autodeterminazione, implica assenza di volontà |
+| "per scelta" | "con autodeterminazione" | "Scelta" non include sempre consapevolezza |
+| "casualmente" | "senza consapevolezza" | Invalida l'agire dell'utente |
+
+#### Entry Point -7: La Rovina (Copy Landing Pages)
+
+L'utente arriva alle landing pages in stato di "rovina" (frustrazione, senso di fallimento). Il copy deve:
+
+```
+1. VALIDARE la rovina ("So cosa stai provando...")
+2. MAI diagnosticare ("Ti manca...", "Non hai...")
+3. RICONOSCERE le capacità esistenti
+4. APRIRE possibilità senza prescrivere
+```
+
+#### Linguaggio Copy: Diagnostico vs Validante
+
+| ❌ Diagnostico (vietato) | ✅ Validante (corretto) |
+|--------------------------|-------------------------|
+| "Ti manca un pezzo del puzzle" | "C'è un pezzo del puzzle che potresti non aver ancora riconosciuto" |
+| "Non possiedi questo talento" | "Potresti non aver ancora scoperto questo talento in te" |
+| "Devi sviluppare X" | "Puoi scegliere di espandere X" |
+| "Senza questa skill fallirai" | "Con questa skill hai più opzioni" |
+| "Il problema è che tu..." | "Una dinamica che potresti riconoscere è..." |
+
+#### Checklist Copy (USARE SEMPRE)
+
+Prima di scrivere qualsiasi copy (landing, email, UI):
+
+```
+□ Ho evitato "per caso" e derivati?
+□ Ho validato lo stato dell'utente (non diagnosticato)?
+□ Ho usato linguaggio AVERE (non ESSERE/FARE)?
+□ Ho riconosciuto capacità esistenti?
+□ Ho lasciato libertà di scelta (non prescrizioni)?
+□ Ho evitato valutazioni positive ("Bravo!", "Complimenti!")?
+```
 
 ### 3. AI Coach = FERNANDO (mai Marco)
 ```

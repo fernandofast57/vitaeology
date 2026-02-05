@@ -36,7 +36,7 @@ export default async function GrazieTrilogiaPage({ searchParams }: PageProps) {
         </div>
 
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Complimenti per il tuo acquisto!
+          Il tuo percorso inizia qui
         </h1>
 
         <p className="text-gray-600 mb-6">

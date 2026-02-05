@@ -33,10 +33,10 @@ export const LIBRI: Record<string, Libro> = {
     coloreAccent: '#0F4C81',
     assessmentSlug: 'leadership',
     painPoints: [
-      'Senti il peso della responsabilità ma non l\'autorevolezza che meriti?',
-      'I tuoi collaboratori eseguono, ma non si coinvolgono davvero?',
-      'Hai letto decine di manuali ma nulla sembra funzionare nel contesto italiano?',
-      'Ti chiedi se la leadership sia un talento innato che non possiedi?',
+      'Senti il peso della responsabilità ma non ancora l\'autorevolezza che vorresti?',
+      'I tuoi collaboratori eseguono, ma senti che potrebbero coinvolgersi di più?',
+      'Hai letto decine di manuali ma cerchi qualcosa che funzioni nel contesto italiano?',
+      'Ti chiedi se la leadership sia qualcosa che puoi sviluppare o se l\'hai già?',
     ],
     benefici: [
       '24 caratteristiche concrete da riconoscere e sviluppare',
@@ -133,9 +133,9 @@ export const LIBRI: Record<string, Libro> = {
     coloreAccent: '#2D9B6D',
     assessmentSlug: 'microfelicita',
     painPoints: [
-      'Ti senti costantemente connesso ma profondamente solo?',
-      'La tecnologia prometteva libertà ma ti ha reso schiavo delle notifiche?',
-      'Cerchi la felicità nei grandi eventi mentre ignori i piccoli momenti?',
+      'Ti senti costantemente connesso ma a volte profondamente solo?',
+      'La tecnologia prometteva libertà ma le notifiche chiedono sempre più attenzione?',
+      'Cerchi la felicità nei grandi eventi ma senti che c\'è altro nei piccoli momenti?',
       'Ti addormenti con lo smartphone e ti svegli già stanco?',
     ],
     benefici: [
@@ -209,10 +209,10 @@ export const TRILOGIA: Trilogia = {
   stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_TRILOGIA || 'price_1SxS4WCNkmTQHkcqrhB4qy4Y',
   libriInclusi: ['leadership', 'risolutore', 'microfelicita'],
   painPoints: [
-    'Senti che ti manca un pezzo del puzzle per guidare con sicurezza?',
+    'Senti che c\'è un pezzo del puzzle che potresti non aver ancora trovato?',
     'I problemi si accumulano mentre cerchi il benessere?',
-    'Salti da un libro all\'altro senza un percorso integrato?',
-    'Vuoi una visione completa, non frammenti isolati?',
+    'Salti da un libro all\'altro cercando un percorso più integrato?',
+    'Vorresti una visione completa, non frammenti isolati?',
   ],
   benefici: [
     'Tutti e 3 i libri della Trilogia Rivoluzione Aurea',
