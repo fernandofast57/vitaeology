@@ -1,7 +1,7 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 3.2
+**Versione:** 3.3
 **Ultimo aggiornamento:** 5 Febbraio 2026
 **Owner:** Fernando Marongiu
 
@@ -285,6 +285,68 @@ Prima di scrivere qualsiasi copy (landing, email, UI):
 □ Ho lasciato libertà di scelta (non prescrizioni)?
 □ Ho evitato valutazioni positive ("Bravo!", "Complimenti!")?
 ```
+
+### 2.2 Scala di Consapevolezza Vitaeology (55 livelli)
+
+> **Implementazione codice:** `src/lib/awareness/types.ts`
+
+La scala va da **-34 (Inesistenza)** a **+21 (Sorgente)**. **Non esiste livello 0.**
+
+#### SOTTO NECESSITÀ DI CAMBIARE (-34 → -7)
+
+| Livello | Nome | Livello | Nome |
+|---------|------|---------|------|
+| -34 | Inesistenza | -20 | Dualità |
+| -33 | Disconnessione | -19 | Distacco |
+| -32 | Non causatività | -18 | Oblio |
+| -31 | Criminalità | -17 | Catatonia |
+| -30 | Dissociazione | -16 | Shock |
+| -29 | Dispersione | -15 | Isteria |
+| -28 | Erosione | -14 | Illusione Ingannevole |
+| -27 | Fissità | -13 | Irrealtà |
+| -26 | Glee | -12 | Disastro |
+| -25 | Esaltazione | -11 | Introversione |
+| -24 | Masochismo | -10 | Intontimento |
+| -23 | Sadismo | -9 | Sofferenza |
+| -22 | Allucinazione | -8 | Disperazione |
+| -21 | Segretezza | **-7** | **ROVINA** ← Entry Point |
+
+#### TRANSIZIONE: Challenge 7 Giorni (-6 → -1)
+
+| Livello | Nome | Giorno Challenge |
+|---------|------|------------------|
+| -6 | Effetto | Giorno 1-2 |
+| -5 | Paura di Peggiorare | Giorno 3-4 |
+| -4 | Necessità di Cambiare | Giorno 5-6 |
+| -3 | Richiesta | — |
+| -2 | Speranza | — |
+| **-1** | **Aiuto** | **Giorno 7** ← Target |
+
+#### PERCORSO VITAEOLOGY (1 → 21)
+
+| Livello | Nome | Livello | Nome |
+|---------|------|---------|------|
+| 1 | Riconoscimento | 12 | Produzione |
+| 2 | Comunicazione | 13 | Risultato |
+| 3 | Percezione | 14 | Correzione |
+| 4 | Orientamento | 15 | Capacità |
+| 5 | Comprensioni | 16 | Scopi |
+| 6 | Illuminazione | 17 | Clearing |
+| 7 | Energia | 18 | Realizzazione |
+| 8 | Aggiustamento | 19 | Condizioni |
+| 9 | Corpo | 20 | Esistenza |
+| 10 | Predizione | **21** | **Sorgente** ← Libertà Totale |
+| 11 | Attività | | |
+
+#### Zone e Fasi Vitaeology
+
+| Zona | Livelli | Fase Vitaeology |
+|------|---------|-----------------|
+| Sotto Necessità | -34 → -7 | Entry Point (ADS/Challenge) |
+| Transizione | -6 → -1 | Challenge 7 Giorni |
+| Riconoscimento | 1 → 6 | Assessment + Primi Esercizi |
+| Trasformazione | 7 → 14 | Esercizi Avanzati |
+| Padronanza | 15 → 21 | Mentor/Mastermind |
 
 ### 3. AI Coach = FERNANDO (mai Marco)
 ```
