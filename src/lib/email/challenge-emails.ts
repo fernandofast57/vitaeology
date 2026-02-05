@@ -533,7 +533,7 @@ export async function sendChallengeEmail(
         <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
 
         <p style="color: #333; font-size: 16px; margin: 0;">
-          Complimenti ancora!<br>
+          A presto,<br>
           <strong>Fernando</strong>
         </p>
       `;

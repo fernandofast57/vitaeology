@@ -882,7 +882,7 @@ export function getConversionEmail(
   const challengeName = config?.name || 'Sfida';
 
   return {
-    subject: `Complimenti ${nome}! Scopri il tuo profilo completo`,
+    subject: `${nome}, il tuo percorso continua — scopri il profilo completo`,
     html: `
 <!DOCTYPE html>
 <html>
@@ -894,8 +894,8 @@ export function getConversionEmail(
 
   <div style="text-align: center; margin-bottom: 30px;">
     <div style="font-size: 48px; margin-bottom: 10px;">🏆</div>
-    <h1 style="color: ${color}; margin: 0; font-size: 28px;">Complimenti, ${nome}!</h1>
-    <p style="color: #666; font-size: 16px;">Hai completato la ${challengeName}</p>
+    <h1 style="color: ${color}; margin: 0; font-size: 28px;">Hai completato i 7 giorni, ${nome}</h1>
+    <p style="color: #666; font-size: 16px;">La ${challengeName} è completa</p>
   </div>
 
   <p>Ciao ${nome},</p>
@@ -974,7 +974,7 @@ export function getRecoveryEmail(
 
   <p>Ciao ${nome},</p>
 
-  <p>Qualche giorno fa hai completato la <strong>${challengeName}</strong>. Complimenti ancora!</p>
+  <p>Qualche giorno fa hai completato la <strong>${challengeName}</strong>.</p>
 
   <p>Volevo ricordarti che c'è un passo successivo che potrebbe interessarti: l'<strong>Assessment Vitaeology</strong>.</p>
 

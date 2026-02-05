@@ -347,8 +347,8 @@ export default function ChallengeDayPage() {
               </h3>
               <p className="text-slate-300 mb-6">
                 {dayNumber < 7
-                  ? `Ottimo lavoro! Domani riceverai il Giorno ${dayNumber + 1} nella tua email.`
-                  : 'Complimenti! Hai completato la Sfida dei 7 Giorni. Controlla la tua email per scoprire il prossimo passo.'}
+                  ? `Domani riceverai il Giorno ${dayNumber + 1} nella tua email.`
+                  : 'Hai completato la Sfida dei 7 Giorni. Controlla la tua email per scoprire il prossimo passo.'}
               </p>
               {dayNumber < 7 ? (
                 <Link
