@@ -58,6 +58,37 @@ export const LIBRO_TO_CHALLENGE_DB: Record<string, string> = {
 
 export const VALID_CHALLENGE_TYPES = ['leadership', 'ostacoli', 'microfelicita'] as const;
 
+/**
+ * Challenge URL/frontend slug → Database value
+ * Gestisce sia slug frontend che valori DB già corretti
+ */
+export const CHALLENGE_TYPE_MAP: Record<string, string> = {
+  'leadership': 'leadership-autentica',
+  'leadership-autentica': 'leadership-autentica',
+  'ostacoli': 'oltre-ostacoli',
+  'oltre-ostacoli': 'oltre-ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+/** Database value → Display name */
+export const CHALLENGE_DB_TO_NAME: Record<string, string> = {
+  'leadership-autentica': 'Leadership Autentica',
+  'oltre-ostacoli': 'Oltre gli Ostacoli',
+  'microfelicita': 'Microfelicità',
+};
+
+/** Database value → Discovery type */
+export const CHALLENGE_DB_TO_DISCOVERY: Record<string, string> = {
+  'leadership-autentica': 'leadership',
+  'oltre-ostacoli': 'ostacoli',
+  'microfelicita': 'microfelicita',
+};
+
+/** Normalize any challenge type input to DB value */
+export function normalizeChallengeType(type: string): string | null {
+  return CHALLENGE_TYPE_MAP[type] || null;
+}
+
 export function isValidChallengeType(type: string): boolean {
   return (VALID_CHALLENGE_TYPES as readonly string[]).includes(type);
 }

@@ -1,9 +1,10 @@
 // API per completamento giorno challenge
 // Gestisce: salvataggio risposte, invio email successiva, tracking completamento
 
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
+import { CHALLENGE_TYPE_MAP } from '@/lib/challenge/config';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
 import { sendAffiliateInviteEmail, sendBetaPremiumActivatedEmail } from '@/lib/email/beta-tester-emails';
 import { onChallengeDayCompleted } from '@/lib/awareness';
@@ -11,22 +12,6 @@ import { alertAPIError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-// Mappa challenge type dal frontend al database
-const CHALLENGE_TYPE_MAP: Record<string, string> = {
-  'leadership': 'leadership-autentica',
-  'leadership-autentica': 'leadership-autentica',
-  'ostacoli': 'oltre-ostacoli',
-  'oltre-ostacoli': 'oltre-ostacoli',
-  'microfelicita': 'microfelicita'
-};
 
 interface CompleteRequestBody {
   email: string;

@@ -3,8 +3,8 @@
  * Ciclo Veloce: Identifica pattern dopo ogni conversazione
  */
 
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { getSupabaseClient } from '@/lib/supabase/service';
+import { getOpenAIClient } from '@/lib/ai-clients';
 import {
   AICoachPattern,
   PatternType,
@@ -13,19 +13,6 @@ import {
   PatternIdentificationResult,
   FastCycleResult,
 } from '@/types/ai-coach-learning';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-function getOpenAIClient() {
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-}
 
 // Soglia per auto-correzione pattern
 const AUTO_CORRECT_THRESHOLD = 5;

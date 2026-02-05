@@ -2,7 +2,7 @@
  * Milestone Service - Logica per verificare e assegnare milestone
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import {
   PathType,
   MilestoneCheckResult,
@@ -14,17 +14,6 @@ import {
   OSTACOLI_MILESTONES,
   MICROFELICITA_MILESTONES,
 } from './types';
-
-// ============================================================================
-// SUPABASE CLIENT
-// ============================================================================
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // ============================================================================
 // CORE FUNCTIONS

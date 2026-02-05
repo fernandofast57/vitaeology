@@ -9,17 +9,10 @@
  * - consultant_comm (40): consulente comunicazione
  */
 
-import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { NextResponse } from 'next/server';
 import { PermissionName, RoleName, AuthorizationContext } from '@/lib/types/roles';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // ============================================================
 // VERIFICA RUOLO BASE

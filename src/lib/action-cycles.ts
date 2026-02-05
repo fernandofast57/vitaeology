@@ -10,7 +10,7 @@
  * Lo STOP di un ciclo è sempre un conseguimento che apre il prossimo START
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 
 // ============================================================
 // TYPES
@@ -91,17 +91,6 @@ export interface NextCycleProposal {
   exerciseTitle: string;
   reasoning: string;
   expectedBenefit: string;
-}
-
-// ============================================================
-// SUPABASE CLIENT
-// ============================================================
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 }
 
 // ============================================================

@@ -5,8 +5,8 @@
  * e li salva in Supabase per analytics.
  */
 
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { getSupabaseClient } from '@/lib/supabase/service';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -125,13 +125,6 @@ function validateEvent(event: unknown): BehavioralEventPayload | null {
 // ============================================================================
 // SUPABASE CLIENT
 // ============================================================================
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // ============================================================================
 // API HANDLER

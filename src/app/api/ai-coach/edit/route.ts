@@ -1,7 +1,8 @@
 // API per modificare un messaggio utente e rigenerare risposta AI
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
+import { getAnthropicClient } from '@/lib/ai-clients';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
 import { getUserMemory, generateMemoryContext } from '@/lib/ai-coach/user-memory';
@@ -20,19 +21,6 @@ interface EditResponse {
   success: boolean;
   newAiResponse?: string;
   error?: string;
-}
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-function getAnthropicClient() {
-  return new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
 }
 
 // Limite tempo per modifica: 5 minuti

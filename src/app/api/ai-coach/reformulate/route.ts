@@ -1,7 +1,8 @@
 // API per riformulare una risposta dell'AI Coach
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
+import { getAnthropicClient } from '@/lib/ai-clients';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,19 +16,6 @@ interface ReformulateResponse {
   newResponse?: string;
   reformulationCount?: number;
   error?: string;
-}
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-function getAnthropicClient() {
-  return new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
 }
 
 const REFORMULATION_PROMPT = `Riformula la seguente risposta mantenendo:

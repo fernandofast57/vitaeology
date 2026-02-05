@@ -7,7 +7,7 @@
  * raccomandare il prossimo passo nel percorso di crescita.
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 
 // ============================================================
 // TYPES
@@ -74,17 +74,6 @@ const BENEFIT_TEMPLATES: Record<string, string> = {
   ostacoli: 'Dopo questo esercizio potrai affrontare gli ostacoli con più {characteristic}, trasformando le sfide in opportunità.',
   microfelicita: 'Dopo questo esercizio potrai coltivare momenti di {characteristic} nella tua vita quotidiana.',
 };
-
-// ============================================================
-// SUPABASE CLIENT
-// ============================================================
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // ============================================================
 // MAIN FUNCTIONS

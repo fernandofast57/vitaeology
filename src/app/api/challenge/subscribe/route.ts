@@ -1,20 +1,13 @@
 // API per gestire iscrizioni alle Challenge con tracking A/B
 
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { alertAPIError } from '@/lib/error-alerts';
 import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
 import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 
 export const dynamic = 'force-dynamic';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 function getResendClient() {
   return new Resend(process.env.RESEND_API_KEY);

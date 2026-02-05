@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { CreateSignalInput, SignalType } from '@/types/ai-coach-learning';
 
 export const dynamic = 'force-dynamic';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 const VALID_SIGNAL_TYPES: SignalType[] = [
   'reformulated_question',

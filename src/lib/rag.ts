@@ -1,20 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
-
-// Lazy initialization per evitare errori durante il build
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-function getOpenAIClient() {
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    organization: process.env.OPENAI_ORG_ID,
-  });
-}
+import { getSupabaseClient } from '@/lib/supabase/service';
+import { getOpenAIClient } from '@/lib/ai-clients';
 
 // Mapping percorso → book_title
 const PATH_TO_BOOK: Record<string, string> = {

@@ -3,15 +3,8 @@
  * Calcola metriche giornaliere per i 12 Fattori
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { AICoachMetricsDaily } from '@/types/ai-coach-learning';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 /**
  * Calcola metriche per una data specifica

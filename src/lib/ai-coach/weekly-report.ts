@@ -3,7 +3,7 @@
  * Ciclo Lento: Genera report settimanale per Fernando
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import {
   AICoachWeeklyReport,
   WeeklyReportContent,
@@ -14,13 +14,6 @@ import {
   AICoachMetricsDaily,
 } from '@/types/ai-coach-learning';
 import { getMetricsRange } from './daily-metrics';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 /**
  * Calcola date inizio/fine settimana

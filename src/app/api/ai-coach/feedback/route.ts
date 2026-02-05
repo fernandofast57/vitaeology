@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
 import { CreateFeedbackInput } from '@/types/ai-coach-learning';
 import { createPatternDetectionService } from '@/lib/services/pattern-detection';
 
 export const dynamic = 'force-dynamic';
-
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 export async function POST(request: NextRequest) {
   try {

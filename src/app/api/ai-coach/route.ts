@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase/service';
+import { getAnthropicClient } from '@/lib/ai-clients';
 import { ChatRequest, ChatResponse, Message } from '@/lib/ai-coach/types';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
 import { getRAGContextWithMetadata, PathType } from '@/lib/rag';
@@ -20,23 +21,10 @@ import { alertAICoachError } from '@/lib/error-alerts';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 import { getCurrentAwarenessLevel, onAIConversation } from '@/lib/awareness';
 import { calculateDiscoveryProfile } from '@/lib/challenge/discovery-data';
+import { CHALLENGE_DB_TO_NAME, CHALLENGE_DB_TO_DISCOVERY } from '@/lib/challenge/config';
 import type { ChallengeContext, MiniProfileContext } from '@/lib/ai-coach/types';
 
 export const dynamic = 'force-dynamic';
-
-// Lazy initialization per evitare errori durante il build
-function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-function getAnthropicClient() {
-  return new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
-}
 
 // === HELPER: Fetch challenge context e mini-profilo per AI Coach ===
 
@@ -44,18 +32,6 @@ interface ChallengeAndMiniProfile {
   challengeContext?: ChallengeContext;
   miniProfileContext?: MiniProfileContext;
 }
-
-const CHALLENGE_NAMES: Record<string, string> = {
-  'leadership-autentica': 'Leadership Autentica',
-  'oltre-ostacoli': 'Oltre gli Ostacoli',
-  'microfelicita': 'Microfelicità',
-};
-
-const CHALLENGE_TO_DISCOVERY: Record<string, string> = {
-  'leadership-autentica': 'leadership',
-  'oltre-ostacoli': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
 
 async function fetchChallengeContext(
   supabase: ReturnType<typeof getSupabaseClient>,
@@ -74,11 +50,11 @@ async function fetchChallengeContext(
 
     if (!subscriber) return {};
 
-    const discoveryType = CHALLENGE_TO_DISCOVERY[subscriber.challenge] || 'leadership';
+    const discoveryType = CHALLENGE_DB_TO_DISCOVERY[subscriber.challenge] || 'leadership';
 
     const challengeContext: ChallengeContext = {
       challengeType: subscriber.challenge,
-      challengeName: CHALLENGE_NAMES[subscriber.challenge] || subscriber.challenge,
+      challengeName: CHALLENGE_DB_TO_NAME[subscriber.challenge] || subscriber.challenge,
       currentDay: subscriber.current_day || 0,
       status: subscriber.status,
       hasAssessment: false,
