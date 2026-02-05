@@ -476,7 +476,7 @@ export default function AffiliateDashboardPage() {
                   <h3 className="font-semibold text-petrol-600">Storico commissioni</h3>
                   {stats.stats.saldo_disponibile_euro >= 50 && (
                     <button
-                      onClick={() => router.push('/affiliate/payout')}
+                      onClick={() => router.push('/affiliate/payouts')}
                       className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"
                     >
                       Richiedi Pagamento
