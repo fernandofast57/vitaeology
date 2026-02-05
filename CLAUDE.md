@@ -1274,18 +1274,27 @@ Challenge (€0) → Leader (€149) → Mentor (€490) → Certificazione
 | Livello | Status | Note |
 |---------|--------|------|
 | L1-L4 | ✅ **PRODUZIONE** | Funzionanti e testati |
-| L5 | ⚠️ **PARZIALE** | Webhook esiste, manca checkout |
+| L5 | ✅ **COMPLETATO** | Bundle trilogia €24.90 one-time |
 | L6-L8 | 🔸 **FASE 2** | Stub in `pricing.ts`, non attivi |
 
-#### TODO L5 - Trilogia (€590/anno)
-```
-Requisiti per completare:
-1. Creare prodotto Stripe "Trilogia Bundle" → ottenere price_id
-2. Aggiungere STRIPE_PRICE_TRILOGY in .env + .env.example
-3. Creare /api/libro/trilogy/checkout/route.ts (copia da libro/checkout, tipo: 'trilogy')
-4. Aggiungere card/CTA in /subscription page
-5. Testare flusso: checkout → webhook handleTrilogyPurchase() → email sendTrilogyEmail()
-```
+#### ✅ COMPLETATO: L5 - Trilogia Bundle (Febbraio 2026)
+
+**Implementazione:**
+- `/libro/trilogia` - Landing page bundle 3 libri
+- `/libro/trilogia/grazie` - Thank you page post-acquisto
+- `/api/libro/checkout` - Aggiornato per gestire `isTrilogia: true`
+- `sendTrilogyEmail()` - Email con 3 link download protetti
+- `handleTrilogyPurchase()` - Webhook handler per accesso 3 libri + 3 assessment
+
+**Prezzo:** €24.90 (risparmio €4.80 su €29.70 singoli)
+
+**File principali:**
+- `src/data/libri.ts` → TRILOGIA constant
+- `src/app/libro/trilogia/page.tsx`
+- `src/app/libro/trilogia/AcquistaTrilogiaButton.tsx`
+- `src/app/libro/trilogia/grazie/page.tsx`
+
+**Nota:** Richiede `NEXT_PUBLIC_STRIPE_PRICE_TRILOGIA` in .env per produzione
 
 #### TODO L6 - Mastermind (€2.997/anno)
 ```

@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { getLibroBySlug } from '@/data/libri';
+import { getLibroBySlug, getTrilogia } from '@/data/libri';
 import { alertPaymentError } from '@/lib/error-alerts';
 
 export const dynamic = 'force-dynamic';
@@ -22,8 +22,18 @@ function getSupabase() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { libroSlug, priceId, otoDiscount, source } = await request.json();
+    const { libroSlug, priceId, otoDiscount, source, isTrilogia } = await request.json();
 
+    // =========================================================================
+    // TRILOGIA BUNDLE CHECKOUT
+    // =========================================================================
+    if (isTrilogia || libroSlug === 'trilogia') {
+      return handleTrilogiaCheckout(request);
+    }
+
+    // =========================================================================
+    // SINGLE BOOK CHECKOUT
+    // =========================================================================
     // Valida libro
     const libro = getLibroBySlug(libroSlug);
     if (!libro) {
@@ -149,4 +159,101 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// ============================================================================
+// TRILOGIA BUNDLE CHECKOUT HANDLER
+// ============================================================================
+async function handleTrilogiaCheckout(request: NextRequest) {
+  const trilogia = getTrilogia();
+  const stripe = getStripe();
+  const supabase = getSupabase();
+
+  // =========================================================================
+  // AFFILIATE TRACKING - Leggi cookie e trova affiliato
+  // =========================================================================
+  let affiliateId: string | null = null;
+  let clickId: string | null = null;
+
+  const refCode = request.cookies.get(AFFILIATE_COOKIE_NAME)?.value;
+
+  if (refCode) {
+    // Cerca affiliato per ref_code
+    const { data: affiliate } = await supabase
+      .from('affiliates')
+      .select('id')
+      .eq('ref_code', refCode)
+      .eq('stato', 'attivo')
+      .single();
+
+    if (affiliate) {
+      affiliateId = affiliate.id;
+
+      // Cerca click più recente per questo affiliato (non ancora convertito)
+      const { data: click } = await supabase
+        .from('affiliate_clicks')
+        .select('id')
+        .eq('affiliate_id', affiliateId)
+        .in('stato_conversione', ['click', 'signup', 'challenge_started', 'challenge_complete'])
+        .order('clicked_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (click) {
+        clickId = click.id;
+      }
+    }
+  }
+
+  // Prepara metadata
+  const sessionMetadata: Record<string, string> = {
+    tipo: 'trilogy',
+    libri: 'leadership,risolutore,microfelicita',
+  };
+
+  if (affiliateId) {
+    sessionMetadata.affiliate_id = affiliateId;
+  }
+  if (clickId) {
+    sessionMetadata.affiliate_click_id = clickId;
+  }
+
+  // Crea sessione checkout per trilogia bundle
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: trilogia.titolo,
+            description: `${trilogia.sottotitolo} - Include: Leadership Autentica, Oltre gli Ostacoli, Microfelicità Digitale`,
+            metadata: {
+              type: 'trilogy',
+              libri: 'leadership,risolutore,microfelicita',
+            },
+          },
+          unit_amount: Math.round(trilogia.prezzo * 100), // Stripe usa centesimi
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/libro/trilogia/grazie?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/libro/trilogia?canceled=true`,
+    metadata: sessionMetadata,
+    // Raccogli email per invio PDF
+    customer_creation: 'always',
+    // Permetti codici promo
+    allow_promotion_codes: true,
+    // Configura email automatica
+    payment_intent_data: {
+      metadata: sessionMetadata,
+    },
+  });
+
+  return NextResponse.json({
+    sessionId: session.id,
+    url: session.url
+  });
 }

@@ -176,10 +176,80 @@ export const LIBRI: Record<string, Libro> = {
   },
 };
 
+// ============================================================================
+// TRILOGIA - Bundle completo dei 3 libri
+// ============================================================================
+
+export interface Trilogia {
+  slug: 'trilogia';
+  titolo: string;
+  sottotitolo: string;
+  prezzo: number;
+  prezzoSingoli: number;  // Prezzo se comprati singolarmente
+  risparmio: number;
+  stripePriceId: string;
+  libriInclusi: string[];  // slugs dei 3 libri
+  painPoints: string[];
+  benefici: string[];
+  autore: {
+    nome: string;
+    bio: string;
+    credenziali: string[];
+  };
+  garanzia: string;
+}
+
+export const TRILOGIA: Trilogia = {
+  slug: 'trilogia',
+  titolo: 'La Trilogia Rivoluzione Aurea',
+  sottotitolo: 'Il percorso completo per guidare, risolvere e vivere con equilibrio',
+  prezzo: 24.90,
+  prezzoSingoli: 29.70,  // 3 × €9.90
+  risparmio: 4.80,
+  stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_TRILOGIA || 'price_trilogia',
+  libriInclusi: ['leadership', 'risolutore', 'microfelicita'],
+  painPoints: [
+    'Senti che ti manca un pezzo del puzzle per guidare con sicurezza?',
+    'I problemi si accumulano mentre cerchi il benessere?',
+    'Salti da un libro all\'altro senza un percorso integrato?',
+    'Vuoi una visione completa, non frammenti isolati?',
+  ],
+  benefici: [
+    'Tutti e 3 i libri della Trilogia Rivoluzione Aurea',
+    'Un percorso integrato: Leadership → Problem Solving → Benessere',
+    'Accesso ai 3 Assessment completi',
+    'Risparmio di €4,80 rispetto all\'acquisto singolo',
+    '50 anni di esperienza concentrati in un unico percorso',
+    'Framework pratici: 24 Caratteristiche + CAMBIA + R.A.D.A.R.',
+  ],
+  autore: {
+    nome: 'Fernando Marongiu',
+    bio: 'Dopo 50 anni come imprenditore, Fernando ha sintetizzato il suo percorso in tre libri interconnessi. La Trilogia Rivoluzione Aurea è il suo lascito: un metodo completo per chi vuole guidare con autenticità, affrontare gli ostacoli con lucidità e vivere con equilibrio.',
+    credenziali: [
+      '50+ anni di esperienza imprenditoriale',
+      'Autore di 3 metodi proprietari',
+      'Mentore di centinaia di imprenditori',
+    ],
+  },
+  garanzia: 'Garanzia Soddisfatti o Rimborsati 30 giorni. Se la Trilogia non trasforma il tuo approccio, rimborso completo senza domande.',
+};
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
 export function getLibroBySlug(slug: string): Libro | undefined {
   return LIBRI[slug];
 }
 
+export function getTrilogia(): Trilogia {
+  return TRILOGIA;
+}
+
 export function getAllLibriSlugs(): string[] {
   return Object.keys(LIBRI);
+}
+
+export function getLibriTrilogia(): Libro[] {
+  return TRILOGIA.libriInclusi.map(slug => LIBRI[slug]).filter(Boolean);
 }
