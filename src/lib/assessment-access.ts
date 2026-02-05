@@ -7,58 +7,65 @@
  * - Subscription attiva (subscription)
  * - Grant manuale admin (admin_grant)
  * - Trial temporaneo (trial)
+ *
+ * NOTA: Per mappature tra slug, usa src/lib/path-mappings.ts
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
+import {
+  CHALLENGE_DB_TO_DATABASE,
+  DATABASE_TO_CHALLENGE_DB,
+  DATABASE_DISPLAY_NAMES,
+  DATABASE_COLORS,
+  type DatabaseSlug,
+  type ChallengeDbValue,
+} from '@/lib/path-mappings';
 
-export type AssessmentType = 'leadership' | 'risolutore' | 'microfelicita';
+// AssessmentType = DatabaseSlug (stesso concetto)
+export type AssessmentType = DatabaseSlug;
 export type AccessSource = 'book_purchase' | 'challenge_complete' | 'subscription' | 'admin_grant' | 'trial';
 
-// Mapping libro slug → assessment type
+// Mapping libro slug → assessment type (libro slug = database slug)
 export const LIBRO_TO_ASSESSMENT: Record<string, AssessmentType> = {
   'leadership': 'leadership',
   'risolutore': 'risolutore',
   'microfelicita': 'microfelicita',
 };
 
-// Mapping challenge → assessment type
-export const CHALLENGE_TO_ASSESSMENT: Record<string, AssessmentType> = {
-  'leadership-autentica': 'leadership',
-  'oltre-ostacoli': 'risolutore',
-  'microfelicita': 'microfelicita',
-};
+// Mapping challenge DB value → assessment type (re-export from path-mappings)
+export const CHALLENGE_TO_ASSESSMENT: Record<string, AssessmentType> = CHALLENGE_DB_TO_DATABASE as Record<string, AssessmentType>;
 
 // Mapping assessment type → info display
 export const ASSESSMENT_INFO: Record<AssessmentType, {
   name: string;
   libro: string;
   libroSlug: string;
-  challenge: string;
+  challenge: ChallengeDbValue;
   color: string;
   url: string;
 }> = {
   'leadership': {
-    name: 'Leadership Autentica',
+    name: DATABASE_DISPLAY_NAMES.leadership,
     libro: 'Leadership Autentica',
     libroSlug: 'leadership',
-    challenge: 'leadership-autentica',
-    color: '#D4AF37',
+    challenge: DATABASE_TO_CHALLENGE_DB.leadership,
+    color: DATABASE_COLORS.leadership,
     url: '/assessment/leadership',
   },
   'risolutore': {
-    name: 'Oltre gli Ostacoli',
+    name: DATABASE_DISPLAY_NAMES.risolutore,
     libro: 'Oltre gli Ostacoli',
     libroSlug: 'risolutore',
-    challenge: 'oltre-ostacoli',
-    color: '#10B981',
+    challenge: DATABASE_TO_CHALLENGE_DB.risolutore,
+    color: DATABASE_COLORS.risolutore,
     url: '/assessment/risolutore',
   },
   'microfelicita': {
-    name: 'Microfelicità',
+    name: DATABASE_DISPLAY_NAMES.microfelicita,
     libro: 'Microfelicità Digitale',
     libroSlug: 'microfelicita',
-    challenge: 'microfelicita',
-    color: '#8B5CF6',
+    challenge: DATABASE_TO_CHALLENGE_DB.microfelicita,
+    color: DATABASE_COLORS.microfelicita,
     url: '/assessment/microfelicita',
   },
 };

@@ -1,15 +1,9 @@
 import { UserContext, ActivePathway, ChallengeContext, MiniProfileContext } from './types';
 import { getExerciseListForPrompt } from './exercise-suggestions';
 import { getZoneForLevel, AWARENESS_ZONES } from '@/lib/awareness/types';
+import { getDatabaseDisplayName, type FrontendSlug } from '@/lib/path-mappings';
 
-export type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
-
-// Nomi dei percorsi per il prompt
-const PATHWAY_DISPLAY_NAMES: Record<string, string> = {
-  'leadership': 'Leadership Autentica',
-  'risolutore': 'Oltre gli Ostacoli',
-  'microfelicita': 'Microfelicità Digitale',
-};
+export type PathType = FrontendSlug;
 
 /**
  * Genera istruzioni specifiche per Fernando basate sul livello di consapevolezza.
@@ -231,7 +225,7 @@ Questo utente sta seguendo ${pathways.length} percorsi contemporaneamente:
 `;
 
   pathways.forEach((pathway, index) => {
-    const displayName = PATHWAY_DISPLAY_NAMES[pathway.slug] || pathway.name;
+    const displayName = getDatabaseDisplayName(pathway.slug) || pathway.name;
     const mappedSlug = slugToPathType[pathway.slug] || pathway.slug;
     const isCurrent = mappedSlug === currentPath;
 

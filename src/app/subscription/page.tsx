@@ -8,6 +8,17 @@ import DashboardHeader from '@/components/layout/DashboardHeader';
 import { CreditCard, Check, Crown, Zap, Star, Loader2, ExternalLink, Target, Heart, Compass } from 'lucide-react';
 import { PRICING_TIERS, getAllTiers, type PricingTierSlug } from '@/config/pricing';
 import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
+import { DATABASE_TO_FRONTEND } from '@/lib/path-mappings';
+
+// Icone per percorso (keyed by database slug)
+const PATHWAY_ICONS: Record<string, React.ElementType> = {
+  'leadership': Crown,
+  'risolutore': Target,
+  'microfelicita': Heart,
+};
+
+// Mappa pathway/database slug → dashboard/frontend path (from path-mappings)
+const PATHWAY_TO_DASHBOARD = DATABASE_TO_FRONTEND;
 
 function SubscriptionContent() {
   const searchParams = useSearchParams();
@@ -25,20 +36,6 @@ function SubscriptionContent() {
   const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([]);
 
   const supabase = createClient();
-
-  // Icone per percorso
-  const PATHWAY_ICONS: Record<string, React.ElementType> = {
-    'leadership': Crown,
-    'risolutore': Target,
-    'microfelicita': Heart,
-  };
-
-  // Mappa pathway slug → dashboard path
-  const PATHWAY_TO_DASHBOARD: Record<string, string> = {
-    'leadership': 'leadership',
-    'risolutore': 'ostacoli',
-    'microfelicita': 'microfelicita',
-  };
 
   // Get tiers from config
   const tiers = getAllTiers();

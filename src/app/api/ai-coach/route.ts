@@ -21,7 +21,7 @@ import { alertAICoachError } from '@/lib/error-alerts';
 import { SUBSCRIPTION_TIERS, SubscriptionTier } from '@/lib/types/roles';
 import { getCurrentAwarenessLevel, onAIConversation } from '@/lib/awareness';
 import { calculateDiscoveryProfile } from '@/lib/challenge/discovery-data';
-import { CHALLENGE_DB_TO_NAME, CHALLENGE_DB_TO_DISCOVERY } from '@/lib/challenge/config';
+import { getChallengeDiscoveryType, getChallengeDisplayName } from '@/lib/challenge/config';
 import type { ChallengeContext, MiniProfileContext } from '@/lib/ai-coach/types';
 
 export const dynamic = 'force-dynamic';
@@ -50,11 +50,11 @@ async function fetchChallengeContext(
 
     if (!subscriber) return {};
 
-    const discoveryType = CHALLENGE_DB_TO_DISCOVERY[subscriber.challenge] || 'leadership';
+    const discoveryType = getChallengeDiscoveryType(subscriber.challenge) || 'leadership';
 
     const challengeContext: ChallengeContext = {
       challengeType: subscriber.challenge,
-      challengeName: CHALLENGE_DB_TO_NAME[subscriber.challenge] || subscriber.challenge,
+      challengeName: getChallengeDisplayName(subscriber.challenge),
       currentDay: subscriber.current_day || 0,
       status: subscriber.status,
       hasAssessment: false,

@@ -7,15 +7,12 @@ import { getUserPathways, type UserPathwayWithDetails } from '@/lib/pathways';
 import PathwaysOverview from '@/components/dashboard/PathwaysOverview';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
+import { DATABASE_TO_FRONTEND, type FrontendSlug } from '@/lib/path-mappings';
 
-type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+type PathType = FrontendSlug;
 
-// Mappa pathway slug → dashboard path
-const PATHWAY_TO_DASHBOARD: Record<string, PathType> = {
-  'leadership': 'leadership',
-  'risolutore': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+// Mappa pathway/database slug → dashboard/frontend path (from path-mappings)
+const PATHWAY_TO_DASHBOARD: Record<string, PathType> = DATABASE_TO_FRONTEND;
 
 function DashboardContent() {
   const router = useRouter();

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { isValidRedirectUrl } from '@/lib/security';
-import { LIBRO_TO_CHALLENGE_DB } from '@/lib/challenge/config';
+import { getLibroChallengeDbValue } from '@/lib/challenge/config';
 
 const OTO_PRICE = 7.90;
 
@@ -28,7 +28,7 @@ export default function ChallengeDiscountBanner({ libroSlug, libroTitolo }: Chal
           return;
         }
 
-        const challengeDbValue = LIBRO_TO_CHALLENGE_DB[libroSlug];
+        const challengeDbValue = getLibroChallengeDbValue(libroSlug);
         if (!challengeDbValue) {
           setLoading(false);
           return;

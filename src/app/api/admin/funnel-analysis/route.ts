@@ -3,6 +3,12 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import {
+  FRONTEND_TO_CHALLENGE_DB,
+  FRONTEND_TO_DATABASE,
+  ALL_FRONTEND_SLUGS,
+  type FrontendSlug,
+} from '@/lib/path-mappings';
 
 interface FunnelData {
   challenge_type: string;
@@ -31,17 +37,11 @@ export async function GET() {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 403 });
   }
 
-  // Mapping: display name → db slug
-  const challengeMap: Record<string, string> = {
-    'leadership': 'leadership-autentica',
-    'ostacoli': 'oltre-ostacoli',
-    'microfelicita': 'microfelicita'
-  };
-  const challengeTypes = ['leadership', 'ostacoli', 'microfelicita'];
+  // Usa path-mappings per le conversioni
   const funnelData: FunnelData[] = [];
 
-  for (const challengeType of challengeTypes) {
-    const dbSlug = challengeMap[challengeType];
+  for (const challengeType of ALL_FRONTEND_SLUGS) {
+    const dbSlug = FRONTEND_TO_CHALLENGE_DB[challengeType];
 
     // 1. Totale iscritti
     const { count: totalSubscribers } = await supabase
@@ -61,17 +61,13 @@ export async function GET() {
       dayCompletions.push(count || 0);
     }
 
-    // 3. Assessment completati (mapping challenge → assessment type)
-    const assessmentTypeMap: Record<string, string> = {
-      'leadership': 'leadership',
-      'ostacoli': 'risolutore',
-      'microfelicita': 'microfelicita'
-    };
+    // 3. Assessment completati (usa FRONTEND_TO_DATABASE da path-mappings)
+    const assessmentType = FRONTEND_TO_DATABASE[challengeType];
 
     const { count: assessmentCount } = await supabase
       .from('user_assessments_v2')
       .select('*', { count: 'exact', head: true })
-      .eq('assessment_type', assessmentTypeMap[challengeType])
+      .eq('assessment_type', assessmentType)
       .eq('status', 'completed');
 
     // 4. Distribuzione feedback

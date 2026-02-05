@@ -1,7 +1,21 @@
 /**
  * Configurazione centralizzata per le 3 challenge.
  * Colori in hex per evitare classi Tailwind dinamiche (non rilevate al build time).
+ *
+ * NOTA: Per mappature tra slug (frontend, DB, challenge), usa src/lib/path-mappings.ts
  */
+
+import {
+  FRONTEND_TO_DATABASE,
+  DATABASE_TO_CHALLENGE_DB,
+  FRONTEND_TO_CHALLENGE_DB,
+  CHALLENGE_DB_DISPLAY_NAMES,
+  CHALLENGE_DB_TO_FRONTEND,
+  toChallengeDbValue,
+  isValidFrontendSlug,
+  ALL_FRONTEND_SLUGS,
+  type FrontendSlug,
+} from '@/lib/path-mappings';
 
 export interface ChallengeColorConfig {
   name: string;
@@ -35,64 +49,83 @@ export const CHALLENGE_COLORS: Record<string, ChallengeColorConfig> = {
   },
 };
 
-/** Challenge URL slug → assessment URL slug */
-export const CHALLENGE_TO_ASSESSMENT: Record<string, string> = {
-  leadership: 'leadership',
-  ostacoli: 'risolutore',
-  microfelicita: 'microfelicita',
-};
+/** Challenge URL slug → assessment URL slug (re-export from path-mappings) */
+export const CHALLENGE_TO_ASSESSMENT = FRONTEND_TO_DATABASE;
 
-/** Challenge URL slug → libro URL slug */
-export const CHALLENGE_TO_LIBRO: Record<string, string> = {
-  leadership: 'leadership',
-  ostacoli: 'risolutore',
-  microfelicita: 'microfelicita',
-};
+/** Challenge URL slug → libro URL slug (re-export from path-mappings) */
+export const CHALLENGE_TO_LIBRO = FRONTEND_TO_DATABASE;
 
-/** Libro URL slug → challenge DB value */
-export const LIBRO_TO_CHALLENGE_DB: Record<string, string> = {
-  leadership: 'leadership-autentica',
-  risolutore: 'oltre-ostacoli',
-  microfelicita: 'microfelicita',
-};
+/** Libro URL slug → challenge DB value (re-export from path-mappings) */
+export const LIBRO_TO_CHALLENGE_DB = DATABASE_TO_CHALLENGE_DB;
 
-export const VALID_CHALLENGE_TYPES = ['leadership', 'ostacoli', 'microfelicita'] as const;
+export const VALID_CHALLENGE_TYPES = ALL_FRONTEND_SLUGS;
 
 /**
  * Challenge URL/frontend slug → Database value
  * Gestisce sia slug frontend che valori DB già corretti
  */
 export const CHALLENGE_TYPE_MAP: Record<string, string> = {
-  'leadership': 'leadership-autentica',
+  ...FRONTEND_TO_CHALLENGE_DB,
+  // Valori DB passano attraverso invariati
   'leadership-autentica': 'leadership-autentica',
-  'ostacoli': 'oltre-ostacoli',
   'oltre-ostacoli': 'oltre-ostacoli',
-  'microfelicita': 'microfelicita',
 };
 
-/** Database value → Display name */
-export const CHALLENGE_DB_TO_NAME: Record<string, string> = {
-  'leadership-autentica': 'Leadership Autentica',
-  'oltre-ostacoli': 'Oltre gli Ostacoli',
-  'microfelicita': 'Microfelicità',
-};
+/** Database value → Display name (re-export from path-mappings) */
+export const CHALLENGE_DB_TO_NAME = CHALLENGE_DB_DISPLAY_NAMES;
 
-/** Database value → Discovery type */
-export const CHALLENGE_DB_TO_DISCOVERY: Record<string, string> = {
-  'leadership-autentica': 'leadership',
-  'oltre-ostacoli': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+/** Database value → Discovery type (= frontend slug) */
+export const CHALLENGE_DB_TO_DISCOVERY = CHALLENGE_DB_TO_FRONTEND;
+
+/**
+ * Safe lookup for challenge DB → discovery type (for runtime use with unknown strings)
+ * Returns null if not found
+ */
+export function getChallengeDiscoveryType(challengeDbValue: string): FrontendSlug | null {
+  return (CHALLENGE_DB_TO_DISCOVERY as Record<string, FrontendSlug>)[challengeDbValue] ?? null;
+}
+
+/**
+ * Safe lookup for challenge DB → display name (for runtime use with unknown strings)
+ * Returns the input if not found
+ */
+export function getChallengeDisplayName(challengeDbValue: string): string {
+  return (CHALLENGE_DB_TO_NAME as Record<string, string>)[challengeDbValue] ?? challengeDbValue;
+}
 
 /** Normalize any challenge type input to DB value */
 export function normalizeChallengeType(type: string): string | null {
-  return CHALLENGE_TYPE_MAP[type] || null;
+  return toChallengeDbValue(type);
 }
 
 export function isValidChallengeType(type: string): boolean {
-  return (VALID_CHALLENGE_TYPES as readonly string[]).includes(type);
+  return isValidFrontendSlug(type);
 }
 
 export function getChallengeColors(type: string): ChallengeColorConfig {
-  return CHALLENGE_COLORS[type] || CHALLENGE_COLORS.leadership;
+  return CHALLENGE_COLORS[type as FrontendSlug] || CHALLENGE_COLORS.leadership;
+}
+
+/**
+ * Safe lookup for challenge type → libro slug (for runtime use with unknown strings)
+ * Returns 'leadership' as fallback
+ */
+export function getChallengeLibroSlug(challengeType: string): string {
+  return (CHALLENGE_TO_LIBRO as Record<string, string>)[challengeType] ?? 'leadership';
+}
+
+/**
+ * Safe lookup for challenge type → assessment slug (for runtime use with unknown strings)
+ * Returns 'leadership' as fallback
+ */
+export function getChallengeAssessmentSlug(challengeType: string): string {
+  return (CHALLENGE_TO_ASSESSMENT as Record<string, string>)[challengeType] ?? 'leadership';
+}
+
+/**
+ * Safe lookup for libro slug → challenge DB value (for runtime use with unknown strings)
+ * Returns null if not found
+ */
+export function getLibroChallengeDbValue(libroSlug: string): string | null {
+  return (LIBRO_TO_CHALLENGE_DB as Record<string, string>)[libroSlug] ?? null;
 }

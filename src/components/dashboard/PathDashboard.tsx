@@ -16,12 +16,19 @@ import ExercisesCard from '@/components/dashboard/ExercisesCard';
 import RecommendedExercises from '@/components/dashboard/RecommendedExercises';
 import ChatWidget from '@/components/ai-coach/ChatWidget';
 import { AchievementsList, CelebrationModal, type Achievement } from '@/components/dashboard/AchievementCard';
+import {
+  DATABASE_TO_FRONTEND,
+  FRONTEND_TO_DATABASE,
+  FRONTEND_DISPLAY_NAMES,
+  FRONTEND_COLORS,
+  type FrontendSlug,
+} from '@/lib/path-mappings';
 
-// Configurazione per ogni percorso
+// Configurazione per ogni percorso (usa path-mappings per colori/nomi)
 export const PATH_CONFIG = {
   leadership: {
-    name: 'Leadership Autentica',
-    color: '#D4AF37',
+    name: FRONTEND_DISPLAY_NAMES.leadership,
+    color: FRONTEND_COLORS.leadership,
     colorClass: 'amber',
     bgGradient: 'from-amber-50 to-amber-100/50',
     accentBg: 'bg-amber-500',
@@ -29,11 +36,11 @@ export const PATH_CONFIG = {
     accentBorder: 'border-amber-500',
     heroTitle: 'Il tuo percorso di Leadership',
     assessmentType: 'leadership',
-    bookSlug: 'leadership',
+    bookSlug: FRONTEND_TO_DATABASE.leadership,
   },
   ostacoli: {
-    name: 'Oltre gli Ostacoli',
-    color: '#228B22',
+    name: FRONTEND_DISPLAY_NAMES.ostacoli,
+    color: FRONTEND_COLORS.ostacoli,
     colorClass: 'emerald',
     bgGradient: 'from-emerald-50 to-emerald-100/50',
     accentBg: 'bg-emerald-500',
@@ -41,11 +48,11 @@ export const PATH_CONFIG = {
     accentBorder: 'border-emerald-500',
     heroTitle: 'Il tuo percorso Risolutore',
     assessmentType: 'ostacoli',
-    bookSlug: 'risolutore',
+    bookSlug: FRONTEND_TO_DATABASE.ostacoli,
   },
   microfelicita: {
-    name: 'Microfelicita Digitale',
-    color: '#8B5CF6',
+    name: FRONTEND_DISPLAY_NAMES.microfelicita,
+    color: FRONTEND_COLORS.microfelicita,
     colorClass: 'violet',
     bgGradient: 'from-violet-50 to-violet-100/50',
     accentBg: 'bg-violet-500',
@@ -53,30 +60,22 @@ export const PATH_CONFIG = {
     accentBorder: 'border-violet-500',
     heroTitle: 'Il tuo percorso di Benessere',
     assessmentType: 'microfelicita',
-    bookSlug: 'microfelicita',
+    bookSlug: FRONTEND_TO_DATABASE.microfelicita,
   },
 } as const;
 
-export type PathType = keyof typeof PATH_CONFIG;
+export type PathType = FrontendSlug;
 
 interface PathDashboardProps {
   pathType: PathType;
   autoOpenChat?: boolean;
 }
 
-// Mappa pathway slug → dashboard path
-const PATHWAY_TO_DASHBOARD: Record<string, string> = {
-  'leadership': 'leadership',
-  'risolutore': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+// Mappa pathway/database slug → dashboard/frontend path (re-export from path-mappings)
+const PATHWAY_TO_DASHBOARD = DATABASE_TO_FRONTEND;
 
-// Mappa dashboard path → pathway slug
-const DASHBOARD_TO_PATHWAY: Record<string, string> = {
-  'leadership': 'leadership',
-  'ostacoli': 'risolutore',
-  'microfelicita': 'microfelicita',
-};
+// Mappa dashboard/frontend path → pathway/database slug (re-export from path-mappings)
+const DASHBOARD_TO_PATHWAY = FRONTEND_TO_DATABASE;
 
 export default function PathDashboard({ pathType, autoOpenChat = false }: PathDashboardProps) {
   const config = PATH_CONFIG[pathType];

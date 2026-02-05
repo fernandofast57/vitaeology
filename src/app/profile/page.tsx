@@ -8,15 +8,12 @@ import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import { User, Mail, Shield, Save, Compass, Crown, Target, Heart, ChevronRight } from 'lucide-react';
 import Breadcrumb from '@/components/ui/Breadcrumb';
+import { DATABASE_TO_FRONTEND } from '@/lib/path-mappings';
 
-// Mappa pathway slug → dashboard path
-const PATHWAY_TO_DASHBOARD: Record<string, string> = {
-  'leadership': 'leadership',
-  'risolutore': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+// Mappa pathway/database slug → dashboard/frontend path (from path-mappings)
+const PATHWAY_TO_DASHBOARD = DATABASE_TO_FRONTEND;
 
-// Icone per percorso
+// Icone per percorso (keyed by database slug)
 const PATHWAY_ICONS: Record<string, React.ElementType> = {
   'leadership': Crown,
   'risolutore': Target,

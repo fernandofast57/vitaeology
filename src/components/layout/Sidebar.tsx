@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
+import { DATABASE_TO_FRONTEND } from '@/lib/path-mappings';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -36,21 +37,17 @@ interface SidebarProps {
   userName?: string;
 }
 
-// Mappa pathway slug → dashboard path
-const PATHWAY_TO_DASHBOARD: Record<string, string> = {
-  'leadership': 'leadership',
-  'risolutore': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+// Mappa pathway/database slug → dashboard/frontend path (from path-mappings)
+const PATHWAY_TO_DASHBOARD = DATABASE_TO_FRONTEND;
 
-// Mappa pathway slug → assessment path
+// Mappa pathway slug → assessment path (assessment usa database slug)
 const PATHWAY_TO_ASSESSMENT: Record<string, string> = {
   'leadership': '/assessment/leadership',
   'risolutore': '/assessment/risolutore',
   'microfelicita': '/assessment/microfelicita',
 };
 
-// Icone per percorso
+// Icone per percorso (keyed by database slug)
 const PATHWAY_ICONS: Record<string, any> = {
   'leadership': Crown,
   'risolutore': Target,

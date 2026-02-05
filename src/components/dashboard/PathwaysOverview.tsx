@@ -5,18 +5,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
+import { DATABASE_TO_FRONTEND } from '@/lib/path-mappings';
 
 interface PathwaysOverviewProps {
   pathways: UserPathwayWithDetails[];
   userName: string;
 }
 
-// Mappa pathway slug → dashboard path
-const PATHWAY_TO_DASHBOARD: Record<string, string> = {
-  'leadership': 'leadership',
-  'risolutore': 'ostacoli',
-  'microfelicita': 'microfelicita',
-};
+// Mappa pathway/database slug → dashboard/frontend path (from path-mappings)
+const PATHWAY_TO_DASHBOARD = DATABASE_TO_FRONTEND;
 
 // Configurazione icone per percorso
 const PATHWAY_ICONS: Record<string, JSX.Element> = {

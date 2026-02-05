@@ -3,15 +3,23 @@
  *
  * Gestisce le challenge 7 giorni degli utenti
  * Riferimento: ARCHITETTURA_DASHBOARD_VITAEOLOGY_DEFINITIVA.md
+ *
+ * NOTA: Per mappature tra slug, usa src/lib/path-mappings.ts
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
+import {
+  CHALLENGE_DB_DISPLAY_NAMES,
+  CHALLENGE_DB_TO_DATABASE,
+  type ChallengeDbValue,
+} from '@/lib/path-mappings';
 
 // ============================================================
 // TYPES
 // ============================================================
 
-export type ChallengeType = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
+// ChallengeType = ChallengeDbValue (valore in DB)
+export type ChallengeType = ChallengeDbValue;
 export type ChallengeStatus = 'active' | 'completed' | 'unsubscribed';
 
 export interface UserChallenge {
@@ -42,14 +50,10 @@ export interface ChallengeStats {
 }
 
 // ============================================================
-// CONSTANTS
+// CONSTANTS (re-exported from path-mappings with local additions)
 // ============================================================
 
-export const CHALLENGE_NAMES: Record<ChallengeType, string> = {
-  'leadership-autentica': 'Leadership Autentica',
-  'oltre-ostacoli': 'Oltre gli Ostacoli',
-  'microfelicita': 'Microfelicità Digitale',
-};
+export const CHALLENGE_NAMES: Record<ChallengeType, string> = CHALLENGE_DB_DISPLAY_NAMES;
 
 export const CHALLENGE_COLORS: Record<ChallengeType, string> = {
   'leadership-autentica': '#D4AF37',  // Oro
@@ -63,12 +67,8 @@ export const CHALLENGE_ICONS: Record<ChallengeType, string> = {
   'microfelicita': 'heart',
 };
 
-// Mapping challenge → pathway slug per conversione
-export const CHALLENGE_TO_PATHWAY: Record<ChallengeType, string> = {
-  'leadership-autentica': 'leadership',
-  'oltre-ostacoli': 'risolutore',
-  'microfelicita': 'microfelicita',
-};
+// Mapping challenge DB → pathway/database slug (re-export from path-mappings)
+export const CHALLENGE_TO_PATHWAY: Record<ChallengeType, string> = CHALLENGE_DB_TO_DATABASE;
 
 // ============================================================
 // FUNCTIONS

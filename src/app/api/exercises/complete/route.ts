@@ -130,7 +130,9 @@ async function getUserFromRequest(request: NextRequest): Promise<string | null> 
   return null;
 }
 
-type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+import { DATABASE_TO_FRONTEND, type FrontendSlug } from '@/lib/path-mappings';
+
+type PathType = FrontendSlug;
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -187,13 +189,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Mappa book_slug a pathType
-    const pathTypeMap: Record<string, PathType> = {
-      'leadership': 'leadership',
-      'risolutore': 'ostacoli',
-      'microfelicita': 'microfelicita',
-    };
-    const pathType = pathTypeMap[exercise.book_slug] || 'leadership';
+    // Mappa book_slug (database) a pathType (frontend) usando path-mappings
+    const pathType: PathType = DATABASE_TO_FRONTEND[exercise.book_slug as keyof typeof DATABASE_TO_FRONTEND] || 'leadership';
 
     // 1. Aggiorna progresso esercizio nel sistema esistente
     const { data: existingProgress } = await supabase

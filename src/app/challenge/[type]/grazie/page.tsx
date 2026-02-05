@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { getChallengeColors, CHALLENGE_TO_LIBRO } from '@/lib/challenge/config';
+import { getChallengeColors, getChallengeLibroSlug } from '@/lib/challenge/config';
 
 // Dati specifici per la pagina grazie (OTO)
 const GRAZIE_DATA: Record<string, {
@@ -41,7 +41,7 @@ function GrazieContent() {
 
   const colors = getChallengeColors(challengeType);
   const grazie = GRAZIE_DATA[challengeType] || GRAZIE_DATA.leadership;
-  const libroSlug = CHALLENGE_TO_LIBRO[challengeType] || 'leadership';
+  const libroSlug = getChallengeLibroSlug(challengeType);
   const isOtoActive = timeLeft > 0 && !otoDismissed;
   const currentPrice = isOtoActive ? OTO_PRICE : FULL_PRICE;
 

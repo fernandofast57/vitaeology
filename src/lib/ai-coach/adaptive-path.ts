@@ -5,15 +5,22 @@
  * basandosi sui risultati dell'assessment, risposte discovery e
  * progressi dell'utente. L'AI Fernando usa questo modulo per
  * raccomandare il prossimo passo nel percorso di crescita.
+ *
+ * NOTA: Per mappature tra slug, usa src/lib/path-mappings.ts
  */
 
 import { getSupabaseClient } from '@/lib/supabase/service';
+import {
+  FRONTEND_TO_DATABASE,
+  type FrontendSlug,
+} from '@/lib/path-mappings';
 
 // ============================================================
 // TYPES
 // ============================================================
 
-export type PathType = 'leadership' | 'ostacoli' | 'microfelicita';
+// PathType = FrontendSlug per questo modulo
+export type PathType = FrontendSlug;
 
 export interface UserContext {
   assessmentScores: Record<string, number>;
@@ -45,14 +52,10 @@ export interface Exercise {
   book_slug: string;
 }
 
-// Mappa pathType -> book_slug
-const PATH_TO_BOOK: Record<PathType, string> = {
-  leadership: 'leadership',
-  ostacoli: 'risolutore',
-  microfelicita: 'microfelicita',
-};
+// Mappa pathType (frontend) -> book_slug (database)
+const PATH_TO_BOOK: Record<PathType, string> = FRONTEND_TO_DATABASE;
 
-// Mappa pathType -> tabella assessment
+// Mappa pathType -> tabella assessment results
 const PATH_TO_ASSESSMENT_TABLE: Record<PathType, string> = {
   leadership: 'user_assessments',
   ostacoli: 'risolutore_results',
