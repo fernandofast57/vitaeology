@@ -206,7 +206,7 @@ export const TRILOGIA: Trilogia = {
   prezzo: 24.90,
   prezzoSingoli: 29.70,  // 3 × €9.90
   risparmio: 4.80,
-  stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_TRILOGIA || 'price_trilogia',
+  stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_TRILOGIA || 'price_1SxS4WCNkmTQHkcqrhB4qy4Y',
   libriInclusi: ['leadership', 'risolutore', 'microfelicita'],
   painPoints: [
     'Senti che ti manca un pezzo del puzzle per guidare con sicurezza?',
