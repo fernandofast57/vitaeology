@@ -1187,6 +1187,62 @@ Challenge (€0) → Leader (€149) → Mentor (€490) → Certificazione
 | **L7B** | Consulente Commerciale | €1.497 una tantum | Vende, commissioni 25-45% a vita |
 | **L8** | Partner Elite | €9.997/anno | Mini-franchising, esclusività territoriale |
 
+### Stato Implementazione e TODO
+
+| Livello | Status | Note |
+|---------|--------|------|
+| L1-L4 | ✅ **PRODUZIONE** | Funzionanti e testati |
+| L5 | ⚠️ **PARZIALE** | Webhook esiste, manca checkout |
+| L6-L8 | 🔸 **FASE 2** | Stub in `pricing.ts`, non attivi |
+
+#### TODO L5 - Trilogia (€590/anno)
+```
+Requisiti per completare:
+1. Creare prodotto Stripe "Trilogia Bundle" → ottenere price_id
+2. Aggiungere STRIPE_PRICE_TRILOGY in .env + .env.example
+3. Creare /api/libro/trilogy/checkout/route.ts (copia da libro/checkout, tipo: 'trilogy')
+4. Aggiungere card/CTA in /subscription page
+5. Testare flusso: checkout → webhook handleTrilogyPurchase() → email sendTrilogyEmail()
+```
+
+#### TODO L6 - Mastermind (€2.997/anno)
+```
+Requisiti per completare:
+1. Creare prodotto Stripe subscription "Mastermind" → price_id
+2. Aggiungere STRIPE_PRICE_MASTERMIND_ANNUAL in .env
+3. Decommentare sezione FASE 2 in src/config/pricing.ts
+4. Aggiungere tier in PRICING_TIERS config
+5. Creare email template sendMastermindWelcomeEmail()
+6. Aggiungere in /subscription page
+7. Aggiornare SubscriptionTier in src/types/database.ts
+```
+
+#### TODO L7 - Consulente (Tecnico €2.997 / Commerciale €1.497)
+```
+Requisiti per completare:
+1. Definire se one-time o subscription
+2. Creare prodotti Stripe (2 varianti)
+3. Creare flow di certificazione/onboarding dedicato
+4. Landing page dedicata /diventa-consulente
+5. Dashboard consulente con tracking commissioni (per Commerciale)
+6. Contratto/termini specifici
+```
+
+#### TODO L8 - Partner Elite (€9.997/anno)
+```
+Requisiti per completare:
+1. Creare prodotto Stripe subscription "Partner Elite"
+2. Aggiungere STRIPE_PRICE_PARTNER_ELITE in .env
+3. Decommentare sezione in src/config/pricing.ts
+4. Sistema esclusività territoriale (geofencing o manuale)
+5. Dashboard partner con metriche territorio
+6. Contratto franchising
+7. Onboarding call obbligatoria prima dell'attivazione
+```
+
+> **Nota:** I webhook handler per L5+ esistono già in `src/app/api/stripe/webhook/route.ts`.
+> Il codice Fase 2 è commentato in `src/config/pricing.ts` (linee 177-237).
+
 ---
 
 ## KPI TARGET
