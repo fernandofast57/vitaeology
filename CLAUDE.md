@@ -1325,16 +1325,24 @@ Requisiti per completare:
 > **Nota:** I webhook handler per L5+ esistono già in `src/app/api/stripe/webhook/route.ts`.
 > Il codice Fase 2 è commentato in `src/config/pricing.ts` (linee 177-237).
 
-#### TODO Affiliati - Pagine Mancanti
+#### ✅ COMPLETATO: Sezione Affiliati (Febbraio 2026)
 ```
-Pagine frontend da creare (API già esistenti):
-1. /affiliate/resources  → Materiali promozionali (swipe copy, banner, video)
-2. /affiliate/training   → Percorso 6 fasi per diventare super affiliate
-3. /affiliate/leaderboard → Classifica top affiliati del mese
-4. /affiliate/payouts    → Storico pagamenti e richieste payout
+Tutte le pagine affiliate sono state implementate:
 
-Riferimento: docs/GUIDA_COMPLETA_VITAEOLOGY_ADS_AFFILIATI_v5.txt
-Piano dettagliato: .claude/plans/affiliate-pages-completion.md
+| Pagina                   | Stato | Descrizione                              |
+|--------------------------|-------|------------------------------------------|
+| /affiliate               | ✅    | Landing + form registrazione             |
+| /affiliate/dashboard     | ✅    | Statistiche, link, commissioni           |
+| /affiliate/links         | ✅    | Gestione link tracciati                  |
+| /affiliate/termini       | ✅    | Condizioni programma                     |
+| /affiliate/payouts       | ✅    | Storico pagamenti e richieste payout     |
+| /affiliate/leaderboard   | ✅    | Classifica top 20, filtro mese/sempre    |
+| /affiliate/resources     | ✅    | Swipe copy, email, banner, link gen      |
+| /affiliate/training      | ✅    | 6 fasi Super Affiliate con checklist     |
+
+File contenuti:
+- src/lib/affiliate/resources-data.ts (9 swipe, 4 email, 8 UTM)
+- src/lib/affiliate/training-content.ts (6 fasi, 12 esercizi, 24 checkpoint)
 ```
 
 #### FUTURE: Beta Intelligence System (Post-lancio ADS)
