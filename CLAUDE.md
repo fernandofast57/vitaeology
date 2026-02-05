@@ -1325,6 +1325,17 @@ Requisiti per completare:
 > **Nota:** I webhook handler per L5+ esistono già in `src/app/api/stripe/webhook/route.ts`.
 > Il codice Fase 2 è commentato in `src/config/pricing.ts` (linee 177-237).
 
+#### TODO Affiliati - Pagine Mancanti
+```
+Pagine frontend da creare (API già esistenti):
+1. /affiliate/resources  → Materiali promozionali (swipe copy, banner, video)
+2. /affiliate/training   → Percorso 6 fasi per diventare super affiliate
+3. /affiliate/leaderboard → Classifica top affiliati del mese
+4. /affiliate/payouts    → Storico pagamenti e richieste payout
+
+Riferimento: docs/GUIDA_COMPLETA_VITAEOLOGY_ADS_AFFILIATI_v5.txt
+```
+
 ---
 
 ## KPI TARGET

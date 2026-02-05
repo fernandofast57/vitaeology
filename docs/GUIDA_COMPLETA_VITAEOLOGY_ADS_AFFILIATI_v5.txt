@@ -1,0 +1,625 @@
+GUIDA COMPLETA
+Progetto ADS e Programma Affiliati
+VITAEOLOGY
+Piattaforma di Sviluppo Leadership per Imprenditori e Manager
+Documento di Riferimento Versione 5.0
+Gennaio 2026
+Questo documento e auto-esplicativo e funge da guida per:
+1) Campagne ADS Meta | 2) Programma Affiliati | 3) Integrazione App
+
+INDICE
+PARTE A: FONDAMENTI E COMPRENSIONE
+1. Glossario dei Termini
+1.1 Termini di Marketing Digitale
+1.2 Termini di Affiliate Marketing
+1.3 Termini del Framework 4P/12F
+2. Principi di Comprensione (ARC)
+2.1 Il Triangolo ARC
+2.2 Le Tre Barriere alla Comprensione
+2.3 Il Principio Validante di Vitaeology
+PARTE B: STRATEGIA CAMPAGNE ADS
+3. Panoramica della Campagna
+3.1 Obiettivo Generale | 3.2 Struttura del Test | 3.3 Le Tre Challenge | 3.4 Matrice 9 Ads
+4. Metriche e KPI Target
+4.1 Soglie di Performance | 4.2 Calcolo Break-Even | 4.3 Soglie di Allarme
+5. Framework Hook-Story-Offer
+6. I Tre Tipi di Traffico
+PARTE C: PROGRAMMA AFFILIATI VITAEOLOGY
+7. Fondamenti del Programma Affiliati
+7.1 Cos'e un Programma Affiliati | 7.2 Perche Crearlo | 7.3 Bridge Funnel
+8. Categorie di Affiliati
+8.1 Le Quattro Categorie | 8.2 Calcolo Commissioni | 8.3 High-Ticket
+9. Le 6 Fasi per Diventare Super Affiliate
+10. Regole Etiche per gli Affiliati
+PARTE D: INTEGRAZIONE NELL'APP VITAEOLOGY
+11. Struttura Sezione Affiliati nell'App
+11.1 Nuove Pagine Frontend | 11.2 Nuovi API Endpoints | 11.3 Nuovi Componenti UI
+12. Flusso Utente Affiliato
+12.1 Percorso Registrazione | 12.2 Percorso Conversione | 12.3 Flusso Tecnico
+PARTE E: FRAMEWORK 4 PRODOTTI / 12 FATTORI
+13. Applicazione del Framework 4P/12F
+13.1 Il Framework Spiegato | 13.2 Applicazione ADS | 13.3 Applicazione Affiliati | 13.4 Checklist
+14. Documenti di Riferimento
+
+PARTE A: FONDAMENTI E COMPRENSIONE
+1. GLOSSARIO DEI TERMINI
+Prima di procedere, e essenziale comprendere il significato di ogni termine usato in questo documento. Questa sezione elimina la prima barriera alla comprensione: la conoscenza delle parole.
+1.1 Termini di Marketing Digitale
+Termine
+Significato in parole semplici
+ADS
+Abbreviazione di Advertisements. Sono gli annunci pubblicitari che appaiono su Facebook, Instagram e altri siti. Pensa a un volantino digitale che mostri solo alle persone giuste.
+CPC
+Cost Per Click. Quanto paghi ogni volta che qualcuno clicca sul tuo annuncio. Come pagare solo quando qualcuno entra nel tuo negozio, non quando passa davanti.
+CPL
+Cost Per Lead. Quanto paghi per ogni persona che si iscrive. Un lead e come un biglietto da visita lasciato da un potenziale cliente interessato.
+CTR
+Click-Through Rate. La percentuale di persone che cliccano dopo aver visto l'annuncio. Se 100 vedono e 2 cliccano, il CTR e 2%. Come misurare quanti entrano nel negozio rispetto a chi guarda la vetrina.
+CR
+Conversion Rate. La percentuale di chi compie l'azione desiderata (es. iscrizione). Se 100 visitano la pagina e 15 si iscrivono, CR = 15%.
+ROI
+Return On Investment. Quanto guadagni per ogni euro investito. Se spendi 100 euro e ne guadagni 200, il ROI e 100%.
+LTV
+Lifetime Value. Quanto vale un cliente nel tempo. Se paga 197 euro/anno per 2 anni, LTV = 394 euro.
+Funnel
+Imbuto di vendita. Il percorso che una persona compie da sconosciuto a cliente. Come un imbuto, molti entrano sopra, pochi escono sotto come clienti.
+Lead Magnet
+Calamita per contatti. Qualcosa di gratuito e di valore che offri in cambio dell'email. Le Challenge Vitaeology sono lead magnet.
+Landing Page
+Pagina di atterraggio. La pagina dove arriva chi clicca sull'annuncio. Progettata per un solo obiettivo: far compiere un'azione specifica.
+Bridge Funnel
+Funnel ponte. Una pagina intermedia che ti presenta PRIMA di mostrare l'offerta. Come presentarsi a una festa prima di chiedere un favore.
+Pixel
+Codice di tracciamento. Un piccolo codice invisibile che registra cosa fanno i visitatori sul tuo sito. Come una telecamera che conta chi entra e cosa fa.
+Retargeting
+Ri-mostrare annunci a chi ha gia visitato il tuo sito. Come ricordare gentilmente a qualcuno che ha guardato un prodotto in vetrina.
+1.2 Termini di Affiliate Marketing
+Termine
+Significato in parole semplici
+Affiliato
+Una persona o azienda che promuove i tuoi prodotti in cambio di una commissione sulle vendite generate. Come un venditore esterno pagato solo a risultato.
+Commissione
+La percentuale o cifra fissa che paghi all'affiliato per ogni vendita. Es: 40% di 197 euro = 78.80 euro per l'affiliato.
+Ricorrente
+Commissione che si ripete ogni mese/anno finche il cliente resta abbonato. L'affiliato guadagna continuamente.
+Cookie
+File che ricorda chi ha portato il visitatore. Se clicchi il link di Mario e compri dopo 30 giorni, Mario prende la commissione (se il cookie dura 30 giorni).
+Swipe Copy
+Testi pre-scritti che l'affiliato puo copiare e adattare per le sue promozioni. Facilita il lavoro dell'affiliato.
+JV Partner
+Joint Venture Partner. Un affiliato di alto livello con cui fai partnership strategiche, non solo commissioni.
+Dream 100
+Lista dei 100 influencer/partner ideali che potrebbero portarti i clienti migliori. Strategia di Russell Brunson.
+1.3 Termini del Framework 4P/12F
+Termine
+Significato con esempio concreto
+Istituzione (P1)
+Cio che produce. Per le ADS: l'account Meta, la campagna configurata, il pixel installato. Come la macchina da scrivere prima di battere i fogli.
+Prodotto (P2)
+Cio che viene generato. Per le ADS: click, lead, iscrizioni, vendite. Come i fogli battuti dalla macchina da scrivere.
+Riparazione (P3)
+Manutenzione di cio che produce. Per le ADS: monitoraggio, regole automatiche, correzione errori. Come pulire e oliare la macchina.
+Correzione (P4)
+Miglioramento del prodotto. Per le ADS: A/B testing, ottimizzazione copy, iterazione creatives. Come correggere i refusi sui fogli.
+Quantita
+Quanto produci. Es: 100 click, 30 lead, 5 vendite.
+Qualita
+Quanto bene produci. Es: lead qualificati vs lead non interessati, CTR alto vs basso.
+Viabilita
+Quanto a lungo puo durare. Es: campagna sostenibile nel tempo, budget scalabile, affiliati fedeli.
+
+2. PRINCIPI DI COMPRENSIONE (ARC)
+Questo documento segue i tre principi fondamentali che permettono a chiunque di comprendere qualsiasi argomento:
+2.1 Il Triangolo ARC
+Componente
+Definizione
+Applicazione nel documento
+Affinita
+Vicinanza emotiva all'argomento
+Usiamo esempi familiari, linguaggio diretto, tono italiano autentico
+Realta
+Accordo su cosa e vero
+Dati verificabili, metriche concrete, risultati misurabili
+Comunicazione
+Flusso di idee tra chi parla e chi ascolta
+Struttura graduale, feedback previsti, domande anticipate
+2.2 Le Tre Barriere alla Comprensione
+Barriera 1: PAROLE - Ogni termine non comune e spiegato nel Glossario (Sezione 1). Se incontri una parola che non capisci, torna al glossario.
+Barriera 2: MASSA - Ogni concetto astratto e accompagnato da un esempio concreto. Paragoniamo le ADS a un negozio fisico, gli affiliati a venditori esterni.
+Barriera 3: GRADUALITA - Il documento procede dal semplice al complesso. Prima i fondamenti, poi la strategia, infine l'implementazione tecnica.
+2.3 Il Principio Validante di Vitaeology
+L'utente HA GIA le capacita. Non deve acquisirle, deve RICONOSCERLE.
+Questo principio guida TUTTO il linguaggio usato nelle ADS e nella comunicazione con gli affiliati:
+    • SI: Riconoscere, Attivare, Scoprire, Riscoprire, Il leader che gia sei
+    • NO: Mancanza, Deficit, Problema, Devi imparare, Ti manca
+
+PARTE B: STRATEGIA CAMPAGNE ADS
+3. PANORAMICA DELLA CAMPAGNA
+3.1 Obiettivo Generale
+Identificare quale messaggio funziona meglio per attirare imprenditori e manager italiani verso le Challenge gratuite di Vitaeology.
+3.2 Struttura del Test
+Elemento
+Dettaglio
+Prodotto offerto
+Challenge gratuite di 7 giorni (Lead Magnet)
+Pubblico target
+Imprenditori e Manager italiani, eta 35-55 anni
+Budget test
+Euro 30-50 al giorno per 7-10 giorni (totale Euro 210-500)
+Struttura campagna
+1 campagna, 3 gruppi di annunci, 9 annunci totali
+Obiettivo test
+100 click per ogni landing page per avere dati significativi
+3.3 Le Tre Challenge (Landing Page)
+Vitaeology offre tre percorsi gratuiti di 7 giorni, ognuno focalizzato su un tema specifico:
+Leadership Autentica
+Oltre gli Ostacoli
+Microfelicita
+Sviluppare il proprio stile di leadership personale, passando dal fare il leader all'ESSERE un leader.
+Trasformare i problemi in opportunita di crescita usando il Metodo dei 3 Filtri.
+Riconoscere e amplificare i momenti di benessere quotidiano con il Metodo RADAR.
+Interessi targeting: CEO, MBA, Leadership, Business coaching, Gestione aziendale
+Interessi targeting: Problem solving, Resilienza, Psicologia, Gestione stress
+Interessi targeting: Mindfulness, Benessere, Work-life balance, Meditazione
+3.4 Matrice dei 9 Annunci
+Ogni Challenge ha 3 varianti di messaggio per testare quale approccio funziona meglio:
+ID
+Challenge
+Tipo
+Hook (frase che cattura l'attenzione)
+L1
+Leadership
+Emotivo
+Fare il leader non basta piu. In 7 giorni scopri come ESSERE il leader che il tuo team cerca.
+L2
+Leadership
+Pratico
+7 giorni, 10 minuti al giorno. Un percorso pratico per riconoscere il tuo stile di leadership.
+L3
+Leadership
+Domanda
+Quante decisioni hai preso oggi imitando qualcun altro? E se il TUO stile fosse la risposta?
+O1
+Ostacoli
+Emotivo
+Ogni ostacolo che hai superato ti ha insegnato qualcosa. In 7 giorni impara a vedere il dono.
+O2
+Ostacoli
+Pratico
+3 Filtri, 5 Minuti, 1 Problema risolto. Il metodo pratico per trasformare ostacoli in opportunita.
+O3
+Ostacoli
+Domanda
+Quando arriva un problema, qual e il tuo primo pensiero? La risposta rivela tutto.
+M1
+Microfelicita
+Emotivo
+Stamattina hai bevuto un caffe. Eri davvero presente in quel momento? La felicita e li.
+M2
+Microfelicita
+Pratico
+5 canali sensoriali, 2 minuti al giorno. Il Metodo RADAR per catturare la felicita quotidiana.
+M3
+Microfelicita
+Domanda
+Quanti momenti di felicita hai avuto oggi? Prima di rispondere zero, leggi questo.
+Legenda tipi: Emotivo = connessione | Pratico = metodo | Domanda = riflessione
+
+4. METRICHE E KPI TARGET
+4.1 Soglie di Performance
+Metrica
+Cosa misura
+Target Test
+Target Scala
+CPC
+Costo per ogni click sull'annuncio
+< Euro 0.80
+< Euro 0.50
+CPL
+Costo per ogni iscrizione alla challenge
+< Euro 8
+< Euro 5
+CTR
+Percentuale di chi clicca dopo aver visto
+> 1%
+> 1.5%
+CR
+Percentuale di chi si iscrive dopo il click
+> 10%
+> 15%
+4.2 Calcolo del Break-Even
+Il break-even e il punto in cui i ricavi coprono i costi. Ecco come calcolarlo per Vitaeology:
+Dato
+Valore
+Prezzo abbonamento annuale
+Euro 197
+Tasso conversione lead-cliente stimato
+5% (5 su 100 lead diventano clienti)
+Ricavo medio per lead
+Euro 197 x 5% = Euro 9.85
+CPL Break-Even
+Euro 9.85 (se CPL < 9.85, sei in profitto)
+Target CPL operativo
+Euro 5 (margine di sicurezza del 50%)
+4.3 Soglie di Allarme
+Quando una di queste condizioni si verifica, e necessario intervenire immediatamente:
+Condizione di Allarme
+Azione da Compiere
+CPL > Euro 15 per 48 ore
+Mettere in pausa la campagna e analizzare
+CTR < 0.3%
+Mettere in pausa l'annuncio, rivedere immagine e testo
+Frequenza > 4
+Espandere il pubblico o cambiare creativita
+Zero conversioni per 72 ore
+Verificare che il tracking funzioni correttamente
+
+5. FRAMEWORK HOOK-STORY-OFFER
+Regola d'oro: Se un annuncio o un funnel non funziona, il problema e SEMPRE in uno di questi tre elementi.
+5.1 I Tre Elementi
+Elemento
+Funzione
+Esempio Vitaeology
+HOOK
+Cattura l'attenzione nei primi 3 secondi. Ferma lo scroll. E la frase iniziale che fa dire: aspetta, questo mi interessa.
+Fare il leader non basta piu.
+STORY
+Crea connessione emotiva e aumenta il valore percepito. Racconta una trasformazione in cui il lettore si riconosce.
+La storia del manager che ha scoperto il suo stile autentico.
+OFFER
+L'invito all'azione irresistibile. Deve essere chiaro cosa ottiene e cosa deve fare.
+Challenge gratuita di 7 giorni. Inizia ora.
+5.2 Diagnosi dei Problemi
+Sintomo
+Problema probabile
+Soluzione
+CTR basso (< 1%)
+Hook debole
+Testare nuovi hook piu incisivi
+Click ma nessuna iscrizione
+Story non convincente
+Rafforzare la narrazione nella landing
+Iscrizioni ma nessun acquisto
+Offer non chiara o debole
+Migliorare la proposta di valore
+
+6. I TRE TIPI DI TRAFFICO
+6.1 Classificazione del Traffico
+Tipo
+Chi sono queste persone
+Come comunicare con loro
+HOT (Caldo)
+La TUA lista email, i tuoi follower fedeli. Ti conoscono e si fidano di te.
+Offerta diretta. Puoi proporre subito perche ti conoscono gia.
+WARM (Tiepido)
+Follower dei tuoi Dream 100. Conoscono il problema ma non te.
+Pre-frame + offerta. Prima presentati, poi proponi.
+COLD (Freddo)
+Non ti conoscono affatto. Sono solo consapevoli del loro disagio.
+Bridge lungo. Educali, crea fiducia, poi proponi.
+6.2 Dove Si Colloca il Test Vitaeology
+Il test 100 click su Meta Ads intercetta traffico WARM: persone interessate a leadership/benessere ma che non conoscono ancora Vitaeology. Le landing Challenge fungono da bridge: presentano Vitaeology prima di chiedere l'iscrizione.
+6.3 L'Obiettivo Primario: Traffic You Own
+L'obiettivo di ogni campagna e convertire il traffico che NON possiedi (Meta, Google) in traffico che POSSIEDI (lista email).
+    • Valore lista email: Minimo Euro 1 al mese per iscritto. Con buona relazione: Euro 5-10.
+    • Formula: 10.000 iscritti x Euro 1/mese x 12 mesi = Euro 120.000/anno di potenziale
+    • Obiettivo test: 300 click totali = circa 30-45 nuovi lead in lista
+
+PARTE C: PROGRAMMA AFFILIATI VITAEOLOGY
+7. FONDAMENTI DEL PROGRAMMA AFFILIATI
+7.1 Cos'e un Programma Affiliati
+Un programma affiliati e un sistema in cui altre persone (affiliati) promuovono i tuoi prodotti in cambio di una commissione sulle vendite che generano.
+Paragone concreto: Immagina di avere un negozio fisico. Gli affiliati sono come venditori esterni che portano clienti al tuo negozio. Tu li paghi solo quando il cliente compra, non per il loro tempo.
+7.2 Perche Creare un Programma Affiliati
+    • Leva: Invece di fare tutto tu, hai decine o centinaia di persone che promuovono per te.
+    • Rischio zero: Paghi solo a risultato. Niente vendita, niente commissione.
+    • Espansione: Raggiungi pubblici che da solo non raggiungeresti mai.
+    • Credibilita: Quando un influencer raccomanda Vitaeology, la sua audience si fida.
+7.3 La Regola Fondamentale: Il Bridge Funnel
+MAI mandare traffico diretto al link affiliato. SEMPRE usare un Bridge Funnel che presenta l'affiliato PRIMA del prodotto.
+Perche e importante: Se mandi traffico diretto, Facebook puo bannare l'account. Inoltre, non costruisci relazione con il potenziale cliente. Il bridge funnel permette all'affiliato di presentarsi, costruire fiducia, e poi dirigere all'offerta.
+Struttura del Bridge Funnel:
+    1. Step 1: Pagina di opt-in con lead magnet di valore (es. guida gratuita)
+    2. Step 2: Pagina di ringraziamento con video che presenta l'affiliato
+    3. Step 3: SOLO DOPO: redirect all'offerta Vitaeology
+Nota importante: Le landing delle Challenge Vitaeology SONO gia bridge funnel perfetti! L'affiliato puo semplicemente dirigere alla landing della challenge.
+
+8. CATEGORIE DI AFFILIATI
+8.1 Le Quattro Categorie
+Gli affiliati Vitaeology si dividono in quattro categorie in base al loro livello di coinvolgimento e risultati:
+Categoria
+Requisiti
+Commissione
+Benefici Extra
+BASE
+Iscrizione gratuita
+30% ricorrente
+Accesso Affiliate Center, swipe copy
+PRO
+10+ clienti attivi
+35% ricorrente
++ materiali avanzati, webinar mensile
+PARTNER
+50+ clienti attivi
+40% ricorrente
++ co-branding, supporto dedicato
+SUPER
+100+ clienti attivi
+40% + bonus Euro 500/mese
++ accesso anticipato, strategia 1:1
+8.2 Calcolo delle Commissioni
+Esempio concreto per un affiliato PRO con 20 clienti attivi:
+Voce
+Calcolo
+Clienti attivi
+20
+Abbonamento annuale
+Euro 197 ciascuno
+Commissione PRO (35%)
+Euro 197 x 35% = Euro 68.95 per cliente
+Guadagno annuale affiliato
+Euro 68.95 x 20 = Euro 1.379 all'anno
+Guadagno mensile medio
+Euro 114.92 al mese
+8.3 Commissioni sui Prodotti High-Ticket
+Oltre all'abbonamento base, gli affiliati guadagnano su prodotti di livello superiore:
+Prodotto
+Prezzo
+Commissione
+Guadagno
+Abbonamento Annuale
+Euro 197
+30-40%
+Euro 59-79
+Coaching Individuale (6 mesi)
+Euro 1.500
+25%
+Euro 375
+Mastermind Annuale
+Euro 5.000
+20%
+Euro 1.000
+Corporate Training
+Euro 10.000+
+15%
+Euro 1.500+
+
+9. LE 6 FASI PER DIVENTARE SUPER AFFILIATE
+Questo percorso, adattato dal framework di Jim Edwards, guida l'affiliato dal primo passo fino a risultati significativi:
+#
+Fase
+Cosa fare concretamente
+1
+Comprendere il PERCHE
+Prima di promuovere, l'affiliato deve capire e condividere la mission di Vitaeology: aiutare imprenditori a riconoscere le capacita che hanno gia. Non si promuove solo per i soldi, ma perche si crede nel prodotto.
+2
+Scegliere la propria nicchia
+Identificare UN pubblico specifico a cui parlare: coach, consulenti, HR manager, startupper. Non cercare di parlare a tutti. Chi e il TUO pubblico ideale?
+3
+Creare il Value Trade
+Offrire qualcosa di valore in cambio dell'attenzione. Puo essere: una guida gratuita, un video tutorial, un webinar. Le Challenge Vitaeology sono gia un perfetto value trade.
+4
+Aggiungere valore costante
+Pubblicare contenuti utili regolarmente: post sui social, articoli, video. Non vendere sempre, ma educare e aiutare. La vendita viene come conseguenza.
+5
+Diventare esperto percepito
+Posizionarsi come riferimento nel proprio settore. Usare il Principio Validante: mostrare che si capiscono le sfide del pubblico senza giudicare.
+6
+Promuovere con costanza
+Integrare la promozione di Vitaeology nel proprio content marketing. Non un post e basta, ma una presenza costante. Calendario editoriale + promozioni pianificate.
+
+10. REGOLE ETICHE PER GLI AFFILIATI
+Queste regole proteggono sia Vitaeology che gli affiliati da problemi legali e reputazionali:
+#
+Regola
+Spiegazione pratica
+1
+Testimonial con disclaimer
+Ogni testimonianza deve avere la scritta: I risultati variano in base all'impegno personale. Non promettere risultati garantiti.
+2
+Pubblicita onesta
+Se dici GRATIS, specifica cosa e gratis e cosa no. Es: Challenge gratuita, abbonamento a pagamento.
+3
+Income claims verificabili
+Non dire quanto si puo guadagnare senza prove. Dire: Io ho guadagnato X con documentazione.
+4
+NO traffico diretto
+Mai mandare ADS direttamente al link affiliato. Sempre passare per un bridge funnel.
+5
+NO termini trademark
+Non usare nomi di brand competitor nelle ADS. Non fingere di essere Vitaeology.
+Violazione delle regole: Prima violazione = avviso. Seconda = sospensione 30 giorni. Terza = rimozione permanente dal programma.
+
+PARTE D: INTEGRAZIONE NELL'APP VITAEOLOGY
+11. STRUTTURA SEZIONE AFFILIATI NELL'APP
+L'app Vitaeology verra estesa con una nuova sezione dedicata agli affiliati. Ecco la struttura proposta:
+11.1 Nuove Pagine Frontend
+Route
+Auth
+Descrizione
+/affiliate
+Pubblica
+Landing page programma affiliati con form iscrizione
+/affiliate/dashboard
+Affiliato
+Dashboard principale: statistiche, commissioni, link
+/affiliate/resources
+Affiliato
+Materiali promozionali: swipe copy, banner, video
+/affiliate/training
+Affiliato
+Percorso formativo 6 fasi per diventare super affiliate
+/affiliate/leaderboard
+Affiliato
+Classifica top affiliati del mese
+/affiliate/payouts
+Affiliato
+Storico pagamenti e prossimo payout
+/admin/affiliates
+Admin
+Gestione affiliati, approvazioni, commissioni
+11.2 Nuovi API Endpoints
+Endpoint
+Metodi
+Descrizione
+/api/affiliate/register
+POST
+Registrazione nuovo affiliato
+/api/affiliate/stats
+GET
+Statistiche personali affiliato
+/api/affiliate/links
+GET, POST
+Generazione e gestione link tracciati
+/api/affiliate/commissions
+GET
+Storico commissioni
+/api/affiliate/payouts
+GET, POST
+Richieste payout e storico
+/api/affiliate/resources
+GET
+Lista materiali promozionali
+/api/affiliate/track
+POST
+Tracciamento click e conversioni
+/api/admin/affiliates
+GET, PATCH
+Gestione admin affiliati
+11.3 Nuovi Componenti UI
+Componente
+Funzione
+AffiliateStats
+Widget con statistiche: click, conversioni, commissioni, trend
+CommissionTable
+Tabella storico commissioni con filtri per data e stato
+LinkGenerator
+Form per generare link tracciati con UTM personalizzati
+ResourceCard
+Card per materiale promozionale con preview e download
+TrainingProgress
+Barra progresso percorso 6 fasi con badge sbloccati
+Leaderboard
+Classifica affiliati con avatar, posizione, guadagni
+PayoutRequest
+Form richiesta pagamento con soglia minima e metodo
+
+12. FLUSSO UTENTE AFFILIATO
+12.1 Percorso di Registrazione
+Come un nuovo affiliato si registra e inizia a guadagnare:
+    4. Visita /affiliate: Scopre il programma, i benefici, le commissioni
+    5. Compila il form: Nome, email, sito web, come intende promuovere
+    6. Verifica email: Riceve link di conferma
+    7. Approvazione: Automatica per categoria BASE, manuale per upgrade
+    8. Accesso dashboard: Vede i suoi link, statistiche a zero, materiali
+    9. Inizia il training: Percorso 6 fasi per massimizzare i risultati
+12.2 Percorso di Conversione
+Come un click dell'affiliato diventa una commissione:
+    10. Click sul link: Il visitatore clicca il link tracciato dell'affiliato
+    11. Cookie salvato: Durata 90 giorni, attribuisce le conversioni
+    12. Landing Challenge: Il visitatore arriva sulla landing della challenge
+    13. Iscrizione: Il visitatore si iscrive alla challenge gratuita
+    14. Completamento: Il lead completa la challenge di 7 giorni
+    15. Acquisto: Il lead acquista l'abbonamento Vitaeology
+    16. Commissione: La commissione viene accreditata all'affiliato
+    17. Payout: Al raggiungimento della soglia, l'affiliato richiede il pagamento
+12.3 Flusso Tecnico Dettagliato
+Schema del percorso tecnico:
+/affiliate/dashboard ? Genera link ? vitaeology.com/challenge/leadership?ref=AFF123
+    ? Visitatore clicca ? Cookie ref=AFF123 salvato (90 giorni)
+    ? POST /api/challenge/subscribe ? referral_id salvato nel DB
+    ? Stripe Webhook ? POST /api/affiliate/track ? Commissione creata
+    ? Dashboard affiliato ? Nuova commissione visibile ? Payout disponibile
+
+PARTE E: FRAMEWORK 4 PRODOTTI / 12 FATTORI
+13. APPLICAZIONE DEL FRAMEWORK 4P/12F
+13.1 Il Framework Spiegato
+Il framework 4 Prodotti / 12 Fattori e un sistema per analizzare e ottimizzare qualsiasi attivita produttiva. Si basa su quattro tipi di prodotto, ognuno governato da tre fattori.
+Paragone: Immagina una macchina da scrivere. (1) Devi prima ISTITUIRLA (comprarla, metterla sulla scrivania). (2) Poi PRODUCE fogli battuti. (3) Ogni tanto va RIPARATA (oliata, pulita). (4) I fogli prodotti vanno CORRETTI (cancellare errori). Stesso principio per le ADS e per il programma affiliati.
+13.2 Applicazione alle Campagne ADS
+Prodotto
+Cosa comprende
+I 3 Fattori
+P1: ISTITUZIONE
+Account Meta, campagna creata, pixel installato, targeting configurato
+Qt: 1 account | Ql: Ben configurato | Vi: Stabile nel tempo
+P2: PRODOTTO
+Click generati, lead acquisiti, iscrizioni, vendite
+Qt: 100 click | Ql: Lead qualificati | Vi: Costo sostenibile
+P3: RIPARAZIONE
+Monitoraggio 2x/giorno, regole automatiche, fixing errori
+Qt: Check frequenti | Ql: Interventi efficaci | Vi: Processo rodato
+P4: CORREZIONE
+A/B test, iterazione copy, ottimizzazione creativita
+Qt: Test multipli | Ql: Miglioramenti misurabili | Vi: Apprendimento continuo
+13.3 Applicazione al Programma Affiliati
+Prodotto
+Cosa comprende
+I 3 Fattori
+P1: ISTITUZIONE
+Sistema affiliazione, pagine app, tracking, materiali
+Qt: Sistema completo | Ql: Funzionale | Vi: Scalabile
+P2: PRODOTTO
+Affiliati attivi, clienti referral, commissioni generate
+Qt: N affiliati | Ql: Affiliati che vendono | Vi: Retention alta
+P3: RIPARAZIONE
+Supporto affiliati, risoluzione problemi, update materiali
+Qt: Ticket risolti | Ql: Veloce ed efficace | Vi: Processo standardizzato
+P4: CORREZIONE
+Feedback affiliati, miglioramento commissioni, nuovi materiali
+Qt: Iterazioni | Ql: Basate su dati | Vi: Miglioramento continuo
+13.4 Checklist 12 Fattori
+Prima di lanciare qualsiasi attivita, verifica tutti i 12 fattori:
+
+Quantita
+Qualita
+Viabilita
+P1: Istituzione
+Quante istanze?
+Quanto ben fatte?
+Quanto dureranno?
+P2: Prodotto
+Quanto produci?
+Quanto e valido?
+E sostenibile?
+P3: Riparazione
+Quanto spesso?
+Quanto efficace?
+Processo rodato?
+P4: Correzione
+Quante iterazioni?
+Miglioramenti reali?
+Apprendimento?
+
+14. DOCUMENTI DI RIFERIMENTO
+Questo documento integra e sintetizza le seguenti fonti:
+14.1 Documenti Interni Vitaeology
+File
+Contenuto
+STRATEGIA_ADS_4P12F.md
+Framework completo, struttura campagna, timeline
+GUIDA_OPERATIVA_META.md
+Istruzioni passo-passo per setup Meta Ads Manager
+COPY_9_ADS_APPROVATI.md
+Testi completi dei 9 annunci con parametri UTM
+TARGETING_PERSONAS.md
+Definizione personas, pubblici, interessi targeting
+METRICHE_TARGET.md
+KPI, benchmark, template report giornaliero/settimanale
+BRAND_VITAEOLOGY.md
+Identita visiva, tono di voce, linguaggio approvato
+APP_STRUCTURE.md
+Struttura attuale dell'app con pagine, API, componenti
+14.2 Fonti Esterne Integrate
+Fonte
+Concetti chiave estratti
+Traffic Secrets (R. Brunson)
+Dream 100, Hook-Story-Offer, 3 tipi traffico, Follow-up Funnels, Break-even Funnel
+Noob Guide (Moz/Unbounce)
+Piano 6 mesi, 50 task, 8 discipline, calendario editoriale, landing pages
+Affiliate Bootcamp
+Bridge Funnel, 6 fasi super affiliate, struttura commissioni, regole etiche
+FINE DOCUMENTO
+Guida Completa Progetto ADS e Programma Affiliati Vitaeology
+Versione 5.0 - Gennaio 2026
+Framework: 4P/12F | Traffic Secrets | Noob Guide | Affiliate Bootcamp
