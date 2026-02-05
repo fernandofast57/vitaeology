@@ -1,16 +1,34 @@
 /**
- * PATH MAPPINGS - Fonte Unica di Verità
+ * ============================================================================
+ * PATH MAPPINGS - FONTE UNICA DI VERITÀ
+ * ============================================================================
+ *
+ * ⚠️  ATTENZIONE: NON CREARE MAI MAPPATURE LOCALI IN ALTRI FILE!
+ * ⚠️  IMPORTARE SEMPRE DA QUESTO FILE PER QUALSIASI CONVERSIONE SLUG/PATH.
  *
  * Questo file centralizza TUTTE le mappature tra i diversi nomi usati
- * per il percorso "Oltre gli Ostacoli" (e gli altri percorsi).
+ * per i 3 percorsi Vitaeology.
  *
- * CONTESTO:
- * - Frontend URLs (challenge, dashboard): 'ostacoli'
- * - Database (assessment_type, libro slug): 'risolutore'
- * - Database (challenge_subscribers): 'oltre-ostacoli'
- * - RAG (legacy): 'problemi'
+ * CONTESTO - Il percorso "Oltre gli Ostacoli" usa nomi diversi:
+ * ┌─────────────────────┬──────────────────┬─────────────────────────────────┐
+ * │ Contesto            │ Slug             │ Dove si usa                     │
+ * ├─────────────────────┼──────────────────┼─────────────────────────────────┤
+ * │ Frontend URLs       │ 'ostacoli'       │ /challenge/ostacoli, dashboard  │
+ * │ Database            │ 'risolutore'     │ assessment_type, libro slug     │
+ * │ Challenge DB        │ 'oltre-ostacoli' │ challenge_subscribers.challenge │
+ * │ RAG (legacy)        │ 'problemi'       │ book_chunks.current_path        │
+ * └─────────────────────┴──────────────────┴─────────────────────────────────┘
  *
- * REGOLA: Importare SEMPRE da questo file, MAI creare mappature locali.
+ * COME USARE:
+ * ```typescript
+ * // ✅ CORRETTO - Importa da qui
+ * import { FRONTEND_TO_DATABASE, toFrontendSlug } from '@/lib/path-mappings';
+ *
+ * // ❌ SBAGLIATO - Mai fare così!
+ * const localMap = { ostacoli: 'risolutore' };
+ * ```
+ *
+ * Documentazione completa: CLAUDE.md sezione "PATH/SLUG NAMING CONVENTIONS"
  */
 
 // ============================================================

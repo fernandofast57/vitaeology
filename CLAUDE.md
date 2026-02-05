@@ -854,6 +854,88 @@ Da Dashboard/Grazie (auth mode):
 
 ---
 
+## PATH/SLUG NAMING CONVENTIONS (OBBLIGATORIO)
+
+> **⚠️ REGOLA CRITICA:** Tutte le conversioni tra slug/path DEVONO usare `src/lib/path-mappings.ts`.
+> MAI creare mappature locali. MAI usare stringhe hardcoded per i percorsi.
+
+### I 3 Percorsi e i Loro Slug
+
+| Percorso | Frontend/URL | Database | Challenge DB | Legacy (RAG) |
+|----------|--------------|----------|--------------|--------------|
+| Leadership Autentica | `leadership` | `leadership` | `leadership-autentica` | `leadership` |
+| Oltre gli Ostacoli | `ostacoli` | `risolutore` | `oltre-ostacoli` | `problemi` |
+| Microfelicità | `microfelicita` | `microfelicita` | `microfelicita` | `benessere` |
+
+### File Centralizzato: `src/lib/path-mappings.ts`
+
+Questo file è la **FONTE UNICA DI VERITÀ** per tutte le conversioni tra slug. Contiene:
+
+```typescript
+// TIPI
+type FrontendSlug = 'leadership' | 'ostacoli' | 'microfelicita';
+type DatabaseSlug = 'leadership' | 'risolutore' | 'microfelicita';
+type ChallengeDbValue = 'leadership-autentica' | 'oltre-ostacoli' | 'microfelicita';
+type LegacyPathType = 'leadership' | 'problemi' | 'benessere';
+
+// MAPPE DI CONVERSIONE
+FRONTEND_TO_DATABASE      // ostacoli → risolutore
+DATABASE_TO_FRONTEND      // risolutore → ostacoli
+FRONTEND_TO_CHALLENGE_DB  // ostacoli → oltre-ostacoli
+CHALLENGE_DB_TO_FRONTEND  // oltre-ostacoli → ostacoli
+// ... e altre
+
+// SAFE ACCESSORS (per stringhe runtime)
+getDatabaseDisplayName(slug)
+toDatabaseSlug(anySlug)
+toFrontendSlug(anySlug)
+// ... e altre
+```
+
+### Regole di Utilizzo
+
+```
+✅ CORRETTO:
+import { FRONTEND_TO_DATABASE, toFrontendSlug } from '@/lib/path-mappings';
+const dbSlug = FRONTEND_TO_DATABASE[frontendSlug];
+const safeSlug = toFrontendSlug(unknownString);
+
+❌ SBAGLIATO:
+const map = { ostacoli: 'risolutore' };  // MAI mappature locali!
+if (slug === 'risolutore') { ... }        // MAI stringhe hardcoded!
+```
+
+### Quando Usare Cosa
+
+| Contesto | Slug da Usare | Esempio |
+|----------|---------------|---------|
+| URL routing (`/challenge/X`, `/dashboard/X`) | `FrontendSlug` | `/challenge/ostacoli` |
+| Query DB (`assessment_type`, `book_slug`) | `DatabaseSlug` | `assessment_type = 'risolutore'` |
+| Tabella `challenge_subscribers.challenge` | `ChallengeDbValue` | `challenge = 'oltre-ostacoli'` |
+| RAG `current_path` | `LegacyPathType` | `current_path = 'problemi'` |
+
+### Safe Accessors per TypeScript Strict
+
+Quando accedi a una mappa con una stringa runtime (es. da URL params o DB), usa le funzioni safe:
+
+```typescript
+// ❌ Causa errore TypeScript: "string can't index Record<FrontendSlug, ...>"
+const result = FRONTEND_TO_DATABASE[params.slug];
+
+// ✅ Usa safe accessor
+import { getDatabaseSlug } from '@/lib/path-mappings';
+const result = getDatabaseSlug(params.slug);
+```
+
+### Checklist Prima di Ogni Modifica
+
+- [ ] Sto usando `path-mappings.ts` per le conversioni?
+- [ ] NON sto creando nuove costanti di mapping locali?
+- [ ] Uso i tipi corretti (`FrontendSlug`, `DatabaseSlug`, ecc.)?
+- [ ] Per stringhe runtime uso i safe accessors?
+
+---
+
 ## REGOLE TECNICHE PER FLUSSO CHALLENGE (CONTRATTO)
 
 > **Principio guida:** L'utente è AGENTE ATTIVO. La progressione dipende dalle SUE azioni, non dal tempo.
