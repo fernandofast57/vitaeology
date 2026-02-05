@@ -568,7 +568,7 @@ Prima di pubblicare un esercizio, verifica:
 
 ## STRUTTURA PROGETTO COMPLETA
 
-### Pagine (36+)
+### Pagine (65+)
 
 ```
 src/app/
@@ -612,7 +612,7 @@ src/app/
 │       ├── AcquistaButton.tsx   # Bottone checkout
 │       └── grazie/page.tsx      # Thank you post-acquisto
 │
-├── admin/                       # ADMIN PANEL (10 pagine)
+├── admin/                       # ADMIN PANEL (18 pagine)
 │   ├── layout.tsx
 │   ├── users/page.tsx
 │   ├── analytics/page.tsx
@@ -636,7 +636,7 @@ src/app/
 └── privacy/page.tsx
 ```
 
-### API Endpoints (39+)
+### API Endpoints (95+)
 
 ```
 src/app/api/
@@ -685,7 +685,7 @@ src/app/api/
     └── ai-coach/dashboard/route.ts
 ```
 
-### Componenti (25+)
+### Componenti (50+)
 
 ```
 src/components/
@@ -728,7 +728,7 @@ src/components/
     └── DiscoveryConfirmation.tsx # Quiz A/B/C
 ```
 
-### Librerie (src/lib/)
+### Librerie (60+)
 
 ```
 src/lib/
@@ -1168,6 +1168,61 @@ Ogni utente vede solo i propri dati.
 ```
 Challenge (€0) → Leader (€149) → Mentor (€490) → Certificazione
 ```
+
+---
+
+## VALUE LADDER COMPLETA (8 Livelli)
+
+> Modello Russell Brunson applicato a Vitaeology
+
+| Livello | Nome | Prezzo | Include |
+|---------|------|--------|---------|
+| **L1** | Lead Magnet | €0 | Challenge gratuita 7 giorni + sequenza email |
+| **L2** | Libro | €24,90 fisico / €9,90 ebook | Libro + QR code → accesso Explorer gratuito |
+| **L3** | Core (Leader) | €149/anno | 1 percorso completo, 52 esercizi, AI Coach illimitato |
+| **L4** | Premium (Mentor) | €490/anno | 3 percorsi + 2 sessioni 1:1 con Fernando |
+| **L5** | Coaching 1:1 | €997-1.997 | 3-6 sessioni individuali (60 min) |
+| **L6** | Mastermind | €2.997/anno | Gruppo max 24, 2 live/mese, ritiro annuale |
+| **L7A** | Consulente Tecnico | €2.997 una tantum | Certifica altri, facilita workshop |
+| **L7B** | Consulente Commerciale | €1.497 una tantum | Vende, commissioni 25-45% a vita |
+| **L8** | Partner Elite | €9.997/anno | Mini-franchising, esclusività territoriale |
+
+---
+
+## KPI TARGET
+
+| Passaggio | Target |
+|-----------|--------|
+| Ads → Landing (CTR) | >1.5% |
+| Landing → Lead (Conversione) | >25% |
+| Lead → Libro (Acquisto) | >5% |
+| Free → Core (Upgrade) | 20-25% |
+| Core → Premium | 15% |
+| Core → Referral attivo | 10% |
+| Churn annuale | <30% |
+| LTV/CAC | >5x |
+
+---
+
+## LANDING PAGE - STRUTTURA STANDARD
+
+### Above the fold (critico per conversione)
+- Video Hero (autoplay muted)
+- Headline = Hook del Video Hero = Hook ADS (**message match**)
+- Subheadline = Beneficio principale
+- Form (SOLO email + nome opzionale)
+- CTA Button: Oro (#F4B942) su Blu (#0A2540)
+
+### Below the fold
+- Cosa ricevi (3-5 bullet)
+- Chi è Fernando (credibilità: "50 anni di esperienza imprenditoriale")
+- FAQ (3-4 obiezioni comuni)
+- CTA secondaria (ripetizione)
+
+### Headlines Approvate
+- **Leadership:** "Il leader che cerchi è già dentro di te"
+- **Ostacoli:** "I tuoi ostacoli nascondono la tua prossima svolta"
+- **Microfelicità:** "La felicità che cerchi è già nella tua giornata"
 
 ### Paradigma Esercizi (IMPORTANTE)
 ```
