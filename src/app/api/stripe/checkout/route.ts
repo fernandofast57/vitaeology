@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     // Validate tier exists
     if (!PRICING_TIERS[tierSlug as PricingTierSlug]) {
       return NextResponse.json(
-        { error: `Invalid tier: ${tierSlug}. Valid tiers: explorer, leader, mentor` },
+        { error: `Invalid tier: ${tierSlug}. Valid tiers: ${Object.keys(PRICING_TIERS).join(', ')}` },
         { status: 400 }
       );
     }

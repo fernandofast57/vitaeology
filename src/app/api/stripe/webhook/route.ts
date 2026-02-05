@@ -16,6 +16,7 @@ export const dynamic = 'force-dynamic';
 const SUBSCRIPTION_PRICES = {
   leader: 149,
   mentor: 490,
+  mastermind: 2997,
 } as const;
 
 const ALL_BOOKS = ['leadership', 'risolutore', 'microfelicita'] as const;
@@ -24,6 +25,7 @@ const ALL_ASSESSMENTS = ['leadership', 'risolutore', 'microfelicita'] as const;
 const AFFILIATE_PRODUCT_MAP: Record<string, string> = {
   [process.env.STRIPE_PRICE_LEADER_ANNUAL || 'price_1SfitcHtGer2Hvotf8O7NlBs']: 'leader',
   [process.env.STRIPE_PRICE_MENTOR_ANNUAL || 'price_1Sfiw6HtGer2HvotaaY1IV2I']: 'mentor',
+  [process.env.STRIPE_PRICE_MASTERMIND_ANNUAL || 'price_mastermind']: 'mastermind',
 };
 
 // ============================================================================
@@ -260,7 +262,7 @@ async function handleBumpLibroLeader(
   }
 }
 
-/** Gestisce subscription standard (Leader/Mentor) */
+/** Gestisce subscription standard (Leader/Mentor/Mastermind) */
 async function handleSubscription(
   supabase: SupabaseClient,
   session: Stripe.Checkout.Session
@@ -276,7 +278,7 @@ async function handleSubscription(
     stripe_subscription_id: session.subscription as string,
   });
 
-  if (tierSlug === 'leader' || tierSlug === 'mentor') {
+  if (tierSlug === 'leader' || tierSlug === 'mentor' || tierSlug === 'mastermind') {
     await grantAllAssessmentAccess(supabase, userId, session.subscription as string);
 
     // Invia email conferma
@@ -288,7 +290,7 @@ async function handleSubscription(
       await sendUpgradeConfirmationEmail({
         email: customerEmail,
         firstName: session.customer_details?.name?.split(' ')[0],
-        planName: tierSlug as 'leader' | 'mentor',
+        planName: tierSlug as 'leader' | 'mentor' | 'mastermind',
         planPrice: SUBSCRIPTION_PRICES[tierSlug as keyof typeof SUBSCRIPTION_PRICES],
         renewalDate: formatDateIT(renewalDate),
         invoiceUrl: session.invoice ? `https://dashboard.stripe.com/invoices/${session.invoice}` : undefined,
@@ -354,7 +356,7 @@ async function handleSubscriptionDeleted(
   });
 
   // Invia email cancellazione
-  if (profile.email && (previousTier === 'leader' || previousTier === 'mentor')) {
+  if (profile.email && (previousTier === 'leader' || previousTier === 'mentor' || previousTier === 'mastermind')) {
     const accessEndDate = subscription.current_period_end
       ? formatDateIT(new Date(subscription.current_period_end * 1000))
       : formatDateIT(new Date());
@@ -362,7 +364,7 @@ async function handleSubscriptionDeleted(
     await sendSubscriptionCancelledEmail({
       email: profile.email,
       firstName: profile.full_name?.split(' ')[0],
-      planName: previousTier as 'leader' | 'mentor',
+      planName: previousTier as 'leader' | 'mentor' | 'mastermind',
       accessEndDate,
       reason: subscription.cancellation_details?.reason || undefined,
     });

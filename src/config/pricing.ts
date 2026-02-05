@@ -12,10 +12,10 @@
 // TYPES
 // ============================================================
 
-export type PricingTierSlug = 'explorer' | 'leader' | 'mentor';
+export type PricingTierSlug = 'explorer' | 'leader' | 'mentor' | 'mastermind';
 
-// Fase 2 - Commentati per ora
-// export type PricingTierSlugFase2 = 'mastermind' | 'coaching_starter' | 'coaching_intensive' | 'partner_elite';
+// Fase 2 - Altri tiers futuri
+// export type PricingTierSlugFase2 = 'coaching_starter' | 'coaching_intensive' | 'partner_elite';
 
 export type BillingInterval = 'year' | 'month' | 'once';
 
@@ -78,18 +78,20 @@ const MENTOR_FEATURES = [
   'Supporto prioritario',
 ];
 
-// ============================================================
-// FASE 2 FEATURES (Commentate)
-// ============================================================
+const MASTERMIND_FEATURES = [
+  'Tutto di Mentor +',
+  'Gruppo esclusivo max 24 persone',
+  '2 sessioni live/mese con Fernando',
+  'Ritiro annuale incluso',
+  'Hot seat rotativo mensile',
+  'Canale privato Mastermind',
+  'Networking con imprenditori elite',
+  'Accesso anticipato a nuove funzionalità',
+];
 
-// const MASTERMIND_FEATURES = [
-//   'Tutto di Mentor +',
-//   'Gruppo max 24 persone',
-//   '2 live/mese con Fernando',
-//   'Ritiro annuale incluso',
-//   'Hot seat rotativo',
-//   'Canale privato Mastermind',
-// ];
+// ============================================================
+// FASE 2 FEATURES (Altri tiers futuri)
+// ============================================================
 
 // const COACHING_STARTER_FEATURES = [
 //   '3 sessioni 1:1 con Fernando',
@@ -169,6 +171,24 @@ export const PRICING_TIERS: Record<PricingTierSlug, PricingTier> = {
     highlighted: false,
     badge: 'Best Value',
     ctaText: 'Scegli Mentor',
+    ctaVariant: 'secondary',
+  },
+
+  mastermind: {
+    slug: 'mastermind',
+    name: 'Mastermind',
+    description: 'Gruppo esclusivo con Fernando',
+    price: 2997,
+    originalPrice: 3497,
+    interval: 'year',
+    intervalLabel: '/anno',
+    stripePriceId: process.env.STRIPE_PRICE_MASTERMIND_ANNUAL || null,
+    stripeProductName: 'Vitaeology Mastermind',
+    valueLadderLevel: 6,
+    features: MASTERMIND_FEATURES,
+    highlighted: false,
+    badge: 'Elite',
+    ctaText: 'Richiedi Accesso',
     ctaVariant: 'secondary',
   },
 };

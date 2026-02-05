@@ -18,7 +18,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export interface UpgradeEmailParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor';
+  planName: 'leader' | 'mentor' | 'mastermind';
   planPrice: number;
   renewalDate: string;
   invoiceUrl?: string;
@@ -27,7 +27,7 @@ export interface UpgradeEmailParams {
 export interface RenewalReminderParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor';
+  planName: 'leader' | 'mentor' | 'mastermind';
   planPrice: number;
   renewalDate: string;
   daysUntilRenewal: number;
@@ -37,7 +37,7 @@ export interface RenewalReminderParams {
 export interface CancellationEmailParams {
   email: string;
   firstName?: string;
-  planName: 'leader' | 'mentor';
+  planName: 'leader' | 'mentor' | 'mastermind';
   accessEndDate: string;
   reason?: string;
 }
@@ -74,6 +74,20 @@ const PLAN_CONFIG = {
       '2 sessioni 1:1 con Fernando',
       'Badge "Professionista Vitaeology"',
       'Accesso a tutti e 3 i percorsi',
+    ],
+  },
+  mastermind: {
+    displayName: 'Mastermind',
+    color: '#0EA5E9',
+    features: [
+      'Tutto di Mentor incluso',
+      'Gruppo esclusivo max 24 persone',
+      '2 sessioni live/mese con Fernando',
+      'Ritiro annuale incluso',
+      'Hot seat rotativo mensile',
+      'Canale privato Mastermind',
+      'Networking con imprenditori elite',
+      'Accesso anticipato a nuove funzionalità',
     ],
   },
 };

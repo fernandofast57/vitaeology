@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Sidebar from '@/components/layout/Sidebar';
 import DashboardHeader from '@/components/layout/DashboardHeader';
-import { CreditCard, Check, Crown, Zap, Star, Loader2, ExternalLink, Target, Heart, Compass } from 'lucide-react';
+import { CreditCard, Check, Crown, Zap, Star, Loader2, ExternalLink, Target, Heart, Compass, Users } from 'lucide-react';
 import { PRICING_TIERS, getAllTiers, type PricingTierSlug } from '@/config/pricing';
 import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
 import { DATABASE_TO_FRONTEND } from '@/lib/path-mappings';
@@ -85,6 +85,7 @@ function SubscriptionContent() {
             'leader': 'leader',
             'professional': 'leader', // Legacy mapping
             'mentor': 'mentor',
+            'mastermind': 'mastermind',
           };
           const mappedTier = tierMapping[profile.subscription_tier || 'explorer'] || 'explorer';
           setCurrentTier(mappedTier);
@@ -277,10 +278,51 @@ function SubscriptionContent() {
                       <p className="text-white/90">Accesso completo a tutti i percorsi e funzionalità</p>
                     </div>
                   </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleCheckout('mastermind')}
+                      disabled={!!checkoutLoading}
+                      className="bg-sky-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-sky-400 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {checkoutLoading === 'mastermind' ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : null}
+                      Upgrade a Mastermind
+                    </button>
+                    <button
+                      onClick={handlePortal}
+                      disabled={portalLoading}
+                      className="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    >
+                      {portalLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <ExternalLink className="w-4 h-4" />
+                      )}
+                      Gestisci
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Mastermind Plan Banner */}
+            {currentTier === 'mastermind' && subscriptionStatus === 'active' && (
+              <div className="bg-gradient-to-r from-sky-500 to-sky-600 rounded-xl p-5 text-white">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">Piano Mastermind attivo</h3>
+                      <p className="text-white/90">Fai parte del gruppo esclusivo con Fernando</p>
+                    </div>
+                  </div>
                   <button
                     onClick={handlePortal}
                     disabled={portalLoading}
-                    className="bg-white text-purple-600 px-5 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="bg-white text-sky-600 px-5 py-2 rounded-lg font-medium hover:bg-white/90 transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {portalLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
