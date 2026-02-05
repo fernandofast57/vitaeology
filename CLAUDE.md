@@ -1,8 +1,8 @@
 # CLAUDE.md - Istruzioni Complete per Claude Code
 ## Progetto: Vitaeology - Leadership Development Platform
 
-**Versione:** 3.0
-**Ultimo aggiornamento:** 1 Febbraio 2026
+**Versione:** 3.1
+**Ultimo aggiornamento:** 5 Febbraio 2026
 **Owner:** Fernando Marongiu
 
 ---
@@ -30,6 +30,7 @@ Vitaeology è una **piattaforma SaaS completa** per lo sviluppo della leadership
 - **STRIPE_SECRET_KEY** → Pagamenti
 - **RESEND_API_KEY** → Email challenge
 - **SUPABASE** → Database + Auth
+- **MICROSOFT_CLARITY** → Session recording (ID: v4dg8tygen)
 
 ---
 
@@ -567,7 +568,7 @@ Prima di pubblicare un esercizio, verifica:
 
 ## STRUTTURA PROGETTO COMPLETA
 
-### Pagine (35+)
+### Pagine (36+)
 
 ```
 src/app/
@@ -611,7 +612,7 @@ src/app/
 │       ├── AcquistaButton.tsx   # Bottone checkout
 │       └── grazie/page.tsx      # Thank you post-acquisto
 │
-├── admin/                       # ADMIN PANEL (9 pagine)
+├── admin/                       # ADMIN PANEL (10 pagine)
 │   ├── layout.tsx
 │   ├── users/page.tsx
 │   ├── analytics/page.tsx
@@ -621,8 +622,10 @@ src/app/
 │   ├── quality-audit/page.tsx
 │   ├── feedback-patterns/page.tsx
 │   ├── corrections/page.tsx
-│   └── ab-testing/page.tsx
+│   ├── ab-testing/page.tsx
+│   └── beta-testing/page.tsx    # Dashboard gestione beta tester
 │
+├── beta/page.tsx                # Landing beta tester
 ├── profile/page.tsx
 ├── progress/page.tsx
 ├── results/page.tsx
@@ -633,7 +636,7 @@ src/app/
 └── privacy/page.tsx
 ```
 
-### API Endpoints (38+)
+### API Endpoints (39+)
 
 ```
 src/app/api/
@@ -668,7 +671,8 @@ src/app/api/
 │   └── check-unlock/route.ts    # POST - Verifica sblocco
 │
 ├── libro/
-│   └── checkout/route.ts        # POST - Checkout libro singolo
+│   ├── checkout/route.ts        # POST - Checkout libro singolo
+│   └── download/route.ts        # GET - Download PDF protetto (token o auth)
 │
 ├── recommendations/route.ts     # GET - Esercizi raccomandati
 │
@@ -681,7 +685,7 @@ src/app/api/
     └── ai-coach/dashboard/route.ts
 ```
 
-### Componenti (24+)
+### Componenti (25+)
 
 ```
 src/components/
@@ -717,6 +721,9 @@ src/components/
 │   ├── ExerciseDetail.tsx       # Dettaglio
 │   └── LockedExerciseView.tsx   # Vista bloccata
 │
+├── libro/
+│   └── DownloadBookButton.tsx   # Download PDF con watermark
+│
 └── challenge/
     └── DiscoveryConfirmation.tsx # Quiz A/B/C
 ```
@@ -749,6 +756,10 @@ src/lib/
 ├── email/
 │   └── challenge-day-templates.ts # 21 template email + system emails
 │
+├── libro/
+│   ├── download-token.ts        # JWT generation/verification (jose)
+│   └── watermark-pdf.ts         # PDF watermarking (pdf-lib)
+│
 ├── rag.ts                       # RAG System (OpenAI embeddings)
 ├── assessment-scoring.ts        # Calcolo punteggi assessment
 │
@@ -769,6 +780,36 @@ src/lib/
 | Leadership Autentica | `leadership` | Oro #D4AF37 | €9.90 |
 | Oltre gli Ostacoli | `risolutore` | Verde #10B981 | €9.90 |
 | Microfelicità Digitale | `microfelicita` | Viola #8B5CF6 | €9.90 |
+
+### Protezione PDF (Signed URL + Watermark)
+
+I PDF dei libri sono protetti con:
+1. **Signed URL (JWT 24h)** — Link temporaneo che scade dopo 24 ore
+2. **Watermark personalizzato** — Nome + email acquirente su ogni pagina
+
+```
+FLUSSO DOWNLOAD:
+
+Da Email (token mode):
+  /api/libro/download?token=<JWT>
+  → Verifica JWT → Watermark → Stream PDF
+
+Da Dashboard/Grazie (auth mode):
+  /api/libro/download?book=<slug>
+  → Verifica auth + ownership → Watermark → Stream PDF
+```
+
+**File chiave:**
+- `src/lib/libro/download-token.ts` — Generazione/verifica JWT (libreria `jose`)
+- `src/lib/libro/watermark-pdf.ts` — Watermarking PDF (libreria `pdf-lib`)
+- `src/app/api/libro/download/route.ts` — Endpoint download protetto
+
+**Env vars (server-side only, MAI esporre al client):**
+- `PDF_URL_LEADERSHIP`
+- `PDF_URL_RISOLUTORE`
+- `PDF_URL_MICROFELICITA`
+
+**Rate limit:** Max 20 download per libro per utente.
 
 ---
 
@@ -1104,6 +1145,9 @@ Non devono "acquisirle" - devono RICONOSCERLE e ESPANDERLE.
 | `challenge_subscribers` | N | Iscritti challenge |
 | `challenge_discovery_responses` | N | Risposte quiz A/B/C |
 | `book_chunks` | N | Chunks RAG con embeddings |
+| `user_books` | N | Libri acquistati + download count |
+| `beta_testers` | N | Candidature beta tester |
+| `beta_feedback` | N | Feedback dai beta tester |
 
 ### RLS Attivo
 Ogni utente vede solo i propri dati.
@@ -1165,6 +1209,11 @@ CRON_SECRET=
 
 # App
 NEXT_PUBLIC_APP_URL=
+
+# PDF Libri (server-side only, MAI esporre al client)
+PDF_URL_LEADERSHIP=
+PDF_URL_RISOLUTORE=
+PDF_URL_MICROFELICITA=
 ```
 
 ---
@@ -1433,6 +1482,7 @@ Per documentazione completa, consulta `/docs`:
 | `docs/DATABASE_SCHEMA.md` | Schema DB completo |
 | `docs/ESERCIZI_STRUTTURA_COMPLETA.md` | Struttura 126 esercizi (12 Fond + 100 App + 14 Mentor) |
 | `docs/QUICK_REFERENCE.md` | Riferimento rapido |
+| `docs/PROGETTO_TESTING_UMANO_BEST_PRACTICE.md` | Best practice per beta testing |
 
 ---
 
@@ -1466,3 +1516,6 @@ Per documentazione completa, consulta `/docs`:
 | Stripe Payments | ✅ | `src/app/api/stripe/` |
 | User Memory AI | ✅ | `src/lib/ai-coach/user-memory.ts` |
 | Pattern Recognition | ✅ | `src/lib/ai-coach/pattern-recognition.ts` |
+| PDF Protection (Signed URL + Watermark) | ✅ | `src/lib/libro/` |
+| Beta Testing System | ✅ | `src/app/beta/`, `/admin/beta-testing` |
+| Microsoft Clarity (Session Recording) | ✅ | `src/app/layout.tsx` |
