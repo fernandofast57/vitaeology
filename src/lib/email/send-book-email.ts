@@ -1,10 +1,11 @@
 /**
  * Email di consegna libri dopo acquisto
  *
- * Invia email con link download PDF e CTA per assessment
+ * Invia email con link download protetto (signed URL 24h) e CTA per assessment
  */
 
 import { Resend } from 'resend';
+import { generateDownloadToken } from '@/lib/libro/download-token';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -60,14 +61,28 @@ export async function sendBookEmail(
     return false;
   }
 
-  const pdfUrl = process.env[book.pdfEnvKey];
-  if (!pdfUrl) {
+  const pdfConfigured = !!process.env[book.pdfEnvKey];
+  if (!pdfConfigured) {
     console.error(`PDF URL not configured: ${book.pdfEnvKey}`);
-    // Continua comunque, ma senza link diretto
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vitaeology.com';
   const greeting = customerName ? `Ciao ${customerName}` : 'Ciao';
+
+  // Genera signed URL per download protetto (24h)
+  let downloadUrl: string | null = null;
+  if (pdfConfigured) {
+    try {
+      const token = await generateDownloadToken({
+        email,
+        name: customerName || '',
+        bookSlug,
+      });
+      downloadUrl = `${appUrl}/api/libro/download?token=${token}`;
+    } catch (err) {
+      console.error('Errore generazione download token:', err);
+    }
+  }
 
   try {
     const { error } = await resend.emails.send({
@@ -111,23 +126,30 @@ export async function sendBookEmail(
                 Il tuo libro è pronto per essere scaricato.
               </p>
 
-              <!-- Bottone Download -->
-              ${pdfUrl ? `
+              <!-- Bottone Download (signed URL 24h) -->
+              ${downloadUrl ? `
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center" style="padding: 20px 0;">
-                    <a href="${pdfUrl}"
+                    <a href="${downloadUrl}"
                        style="display: inline-block; background-color: ${book.color}; color: #ffffff;
                               padding: 16px 40px; text-decoration: none; border-radius: 8px;
                               font-weight: bold; font-size: 16px;">
-                      📖 SCARICA IL TUO LIBRO
+                      SCARICA IL TUO LIBRO
                     </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <p style="color: #999; font-size: 12px; margin: 5px 0 0 0;">
+                      Questo link è valido per 24 ore. Dopo potrai scaricare il libro dal tuo account.
+                    </p>
                   </td>
                 </tr>
               </table>
               ` : `
               <p style="color: #666; font-size: 14px; background: #f0f0f0; padding: 15px; border-radius: 8px;">
-                ⏳ Il link per il download ti sarà inviato entro 24 ore.
+                Il link per il download ti sarà inviato entro 24 ore.
               </p>
               `}
 
@@ -222,11 +244,30 @@ export async function sendTrilogyEmail(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://vitaeology.com';
   const greeting = customerName ? `Ciao ${customerName}` : 'Ciao';
 
-  const books = [
-    { ...BOOK_CONFIG.leadership, slug: 'leadership', pdfUrl: process.env.PDF_URL_LEADERSHIP },
-    { ...BOOK_CONFIG.risolutore, slug: 'risolutore', pdfUrl: process.env.PDF_URL_RISOLUTORE },
-    { ...BOOK_CONFIG.microfelicita, slug: 'microfelicita', pdfUrl: process.env.PDF_URL_MICROFELICITA },
-  ];
+  // Genera signed URL per ogni libro (24h)
+  const bookSlugs = ['leadership', 'risolutore', 'microfelicita'] as const;
+  const books = await Promise.all(
+    bookSlugs.map(async (slug) => {
+      const config = BOOK_CONFIG[slug];
+      const pdfConfigured = !!process.env[config.pdfEnvKey];
+      let downloadUrl: string | null = null;
+
+      if (pdfConfigured) {
+        try {
+          const token = await generateDownloadToken({
+            email,
+            name: customerName || '',
+            bookSlug: slug,
+          });
+          downloadUrl = `${appUrl}/api/libro/download?token=${token}`;
+        } catch (err) {
+          console.error(`Errore token per ${slug}:`, err);
+        }
+      }
+
+      return { ...config, slug, downloadUrl };
+    })
+  );
 
   try {
     const { error } = await resend.emails.send({
@@ -282,14 +323,18 @@ export async function sendTrilogyEmail(
                       ${book.subtitle}
                     </p>
                     <p style="margin: 0;">
-                      ${book.pdfUrl ? `<a href="${book.pdfUrl}" style="color: ${book.color}; font-weight: bold;">Scarica PDF</a>` : '<span style="color: #999;">PDF in arrivo</span>'}
+                      ${book.downloadUrl ? `<a href="${book.downloadUrl}" style="color: ${book.color}; font-weight: bold;">Scarica PDF</a>` : '<span style="color: #999;">PDF in arrivo</span>'}
                       &nbsp;|&nbsp;
-                      <a href="${appUrl}${book.assessmentPath}" style="color: #0A2540;">Fai l'Assessment →</a>
+                      <a href="${appUrl}${book.assessmentPath}" style="color: #0A2540;">Fai l'Assessment</a>
                     </p>
                   </td>
                 </tr>
               </table>
               `).join('')}
+
+              <p style="color: #999; font-size: 12px; margin: 10px 0 0 0; text-align: center;">
+                I link di download sono validi per 24 ore. Dopo potrai scaricare i libri dal tuo account.
+              </p>
 
               <!-- Divider -->
               <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">

@@ -1,7 +1,7 @@
 # VITAEOLOGY - DOCUMENTAZIONE COMPLETA DEL PROGETTO
 
-**Versione:** 2.0
-**Data:** 20 Gennaio 2026
+**Versione:** 3.0
+**Data:** 5 Febbraio 2026
 **Owner:** Fernando Marongiu
 **Stack:** Next.js 14 + TypeScript + Supabase + Stripe + Claude AI + Resend
 
@@ -21,11 +21,12 @@
 10. [Sistema Challenge (Funnel 7 Giorni)](#10-sistema-challenge)
 11. [Sistema Email Resend](#11-sistema-email-resend)
 12. [Sistema Libri e Pagamenti](#12-sistema-libri-e-pagamenti)
-13. [Admin Panel](#13-admin-panel)
-14. [Design System](#14-design-system)
-15. [Variabili Ambiente](#15-variabili-ambiente)
-16. [Script e Utility](#16-script-e-utility)
-17. [Deployment](#17-deployment)
+13. [Sistema Protezione PDF](#13-sistema-protezione-pdf)
+14. [Admin Panel](#14-admin-panel)
+15. [Design System](#15-design-system)
+16. [Variabili Ambiente](#16-variabili-ambiente)
+17. [Script e Utility](#17-script-e-utility)
+18. [Deployment](#18-deployment)
 
 ---
 
@@ -247,7 +248,8 @@ vitaeology-Claude_Project/
 │   │       │   └── check-unlock/route.ts
 │   │       │
 │   │       ├── libro/
-│   │       │   └── checkout/route.ts
+│   │       │   ├── checkout/route.ts
+│   │       │   └── download/route.ts     # Download protetto con watermark
 │   │       │
 │   │       ├── recommendations/route.ts
 │   │       │
@@ -291,6 +293,9 @@ vitaeology-Claude_Project/
 │   │   ├── challenge/
 │   │   │   └── DiscoveryConfirmation.tsx
 │   │   │
+│   │   ├── libro/
+│   │   │   └── DownloadBookButton.tsx    # Bottone download protetto
+│   │   │
 │   │   └── ui/
 │   │       └── Breadcrumb.tsx
 │   │
@@ -327,7 +332,12 @@ vitaeology-Claude_Project/
 │   │   │   └── discovery-data.ts
 │   │   │
 │   │   ├── email/
-│   │   │   └── challenge-day-templates.ts
+│   │   │   ├── challenge-day-templates.ts
+│   │   │   └── send-book-email.ts        # Email consegna libri con signed URL
+│   │   │
+│   │   ├── libro/
+│   │   │   ├── download-token.ts         # JWT per download protetto (24h)
+│   │   │   └── watermark-pdf.ts          # Watermark PDF con nome/email
 │   │   │
 │   │   ├── auth/
 │   │   │   └── permissions.ts
@@ -364,6 +374,7 @@ vitaeology-Claude_Project/
 │   ├── 04_exercises_table.sql
 │   ├── 05_user_progress_table.sql
 │   ├── 06_rls_policies.sql
+│   ├── user_books_update_policy.sql  # RLS UPDATE per download count
 │   └── [40+ altri file SQL]
 │
 ├── sql_exercises/                    # SEED ESERCIZI
@@ -501,6 +512,12 @@ vitaeology-Claude_Project/
 |------------|------|-------------|
 | `DiscoveryConfirmation` | `challenge/DiscoveryConfirmation.tsx` | Quiz A/B/C discovery |
 
+### 5.7 Libro
+
+| Componente | File | Descrizione |
+|------------|------|-------------|
+| `DownloadBookButton` | `libro/DownloadBookButton.tsx` | Bottone download PDF protetto con verifica ownership |
+
 ---
 
 ## 6. API ENDPOINTS
@@ -549,6 +566,8 @@ vitaeology-Claude_Project/
 | Metodo | Endpoint | Descrizione |
 |--------|----------|-------------|
 | POST | `/api/libro/checkout` | Checkout libro singolo |
+| GET | `/api/libro/download?token=xxx` | Download PDF con signed URL (da email) |
+| GET | `/api/libro/download?book=slug` | Download PDF con auth session (da dashboard) |
 
 ### 6.6 Cron Jobs
 
@@ -1104,9 +1123,121 @@ const session = await stripe.checkout.sessions.create({
 
 ---
 
-## 13. ADMIN PANEL
+## 13. SISTEMA PROTEZIONE PDF
 
-### 13.1 Pagine Admin (9 totali)
+### 13.1 Architettura
+
+Il sistema protegge i PDF dei 3 libri con:
+1. **Signed URL (24h)** - Link temporaneo firmato con JWT, scade dopo 24 ore
+2. **Watermark personalizzato** - Nome + email dell'acquirente su ogni pagina
+
+```
+ACQUISTO STRIPE
+    │
+    ▼
+Webhook → sendBookEmail()
+    │
+    ▼
+Genera JWT (24h) → URL: /api/libro/download?token=xxx
+    │
+    ▼
+Email con link protetto (URL originale PDF MAI esposto)
+
+UTENTE CLICCA LINK EMAIL
+    │
+    ▼
+/api/libro/download?token=xxx
+    │
+    ▼
+Valida JWT → Fetch PDF server-side → Watermark → Stream al browser
+    │
+    ▼
+PDF con "Copia personale di [Nome] - [email]" su ogni pagina
+```
+
+### 13.2 Componenti
+
+| File | Funzione |
+|------|----------|
+| `src/lib/libro/download-token.ts` | Genera/verifica JWT con `jose` |
+| `src/lib/libro/watermark-pdf.ts` | Watermark PDF con `pdf-lib` |
+| `src/app/api/libro/download/route.ts` | Endpoint download (token + auth mode) |
+| `src/components/libro/DownloadBookButton.tsx` | Componente client per download |
+| `src/lib/email/send-book-email.ts` | Email con signed URL |
+
+### 13.3 Token JWT
+
+```typescript
+// Generazione token (24h default)
+const token = await generateDownloadToken({
+  email: 'user@example.com',
+  name: 'Mario Rossi',
+  bookSlug: 'leadership',
+  expiresInSeconds: 86400  // 24h
+});
+
+// Payload JWT
+{
+  sub: email,       // Subject = email acquirente
+  name: 'Mario',    // Nome per watermark
+  book: 'leadership',
+  iat: timestamp,
+  exp: timestamp + 24h
+}
+
+// Signing key: CRON_SECRET (env var esistente)
+```
+
+### 13.4 Watermark PDF
+
+```typescript
+// Watermark su ogni pagina
+// Posizione: centro pagina, rotazione 45°
+// Opacità: 0.12 (visibile ma non invasivo)
+// Font: Helvetica (built-in pdf-lib)
+
+// Riga 1: "Copia personale di [Nome]" (36pt)
+// Riga 2: "[email]" (22pt)
+// Colore: grigio rgb(0.6, 0.6, 0.6)
+```
+
+### 13.5 Modalità Download
+
+| Modalità | URL | Autenticazione | Uso |
+|----------|-----|----------------|-----|
+| **Token** | `?token=xxx` | JWT firmato | Link in email (24h) |
+| **Auth** | `?book=slug` | Cookie Supabase | Dashboard, pagina grazie |
+
+### 13.6 Rate Limiting
+
+- Max 20 download per libro per utente
+- Conteggio in `user_books.download_count`
+- Superato limite → errore 429 con suggerimento contatto supporto
+
+### 13.7 Sicurezza
+
+| Aspetto | Protezione |
+|---------|------------|
+| URL originale PDF | MAI esposto al client (solo server-side) |
+| Token scaduto | Redirect a login con messaggio amichevole |
+| Ownership | Verifica `user_books` per auth mode |
+| Tracciabilità | Watermark con dati acquirente |
+| Distribuzione illecita | PDF tracciabile a persona specifica |
+
+### 13.8 Dipendenze
+
+```json
+{
+  "pdf-lib": "^1.17.1",  // Manipolazione PDF pura JS
+  "jose": "^5.x"         // JWT signing/verification
+}
+```
+
+---
+
+## 14. ADMIN PANEL
+
+### 14.1 Pagine Admin (9 totali)
 
 | Pagina | Route | Funzione |
 |--------|-------|----------|
@@ -1120,7 +1251,7 @@ const session = await stripe.checkout.sessions.create({
 | Corrections | `/admin/corrections` | Auto-correzioni suggerite |
 | A/B Testing | `/admin/ab-testing` | Risultati test varianti |
 
-### 13.2 Protezione Admin
+### 14.2 Protezione Admin
 
 ```typescript
 // File: src/lib/admin/verify-admin.ts
@@ -1145,9 +1276,9 @@ async function verifyAdmin(request: NextRequest) {
 
 ---
 
-## 14. DESIGN SYSTEM
+## 15. DESIGN SYSTEM
 
-### 14.1 Palette Colori
+### 15.1 Palette Colori
 
 ```css
 /* Colori Primari */
@@ -1170,7 +1301,7 @@ async function verifyAdmin(request: NextRequest) {
 --charcoal-gray: #2C3E50;
 ```
 
-### 14.2 Typography
+### 15.2 Typography
 
 ```typescript
 // tailwind.config.ts
@@ -1182,7 +1313,7 @@ fontFamily: {
 }
 ```
 
-### 14.3 Componenti CSS
+### 15.3 Componenti CSS
 
 ```css
 /* src/app/globals.css */
@@ -1204,9 +1335,9 @@ fontFamily: {
 
 ---
 
-## 15. VARIABILI AMBIENTE
+## 16. VARIABILI AMBIENTE
 
-### 15.1 File .env.local (Template)
+### 16.1 File .env.local (Template)
 
 ```bash
 # Supabase
@@ -1235,19 +1366,24 @@ RESEND_AUDIENCE_ID=aud_xxx  # Opzionale
 # Cron Jobs
 CRON_SECRET=xxx
 
+# PDF Libri (URL storage, usati solo server-side)
+PDF_URL_LEADERSHIP=https://xxx.supabase.co/storage/v1/object/public/books/Leadership.pdf
+PDF_URL_RISOLUTORE=https://xxx.supabase.co/storage/v1/object/public/books/Risolutore.pdf
+PDF_URL_MICROFELICITA=https://xxx.supabase.co/storage/v1/object/public/books/Microfelicita.pdf
+
 # App
 NEXT_PUBLIC_APP_URL=https://vitaeology.com
 ```
 
-### 15.2 Variabili Vercel
+### 16.2 Variabili Vercel
 
 Tutte le variabili sopra devono essere configurate anche in Vercel Dashboard → Settings → Environment Variables.
 
 ---
 
-## 16. SCRIPT E UTILITY
+## 17. SCRIPT E UTILITY
 
-### 16.1 Script Principali
+### 17.1 Script Principali
 
 | Script | Comando | Descrizione |
 |--------|---------|-------------|
@@ -1258,7 +1394,7 @@ Tutte le variabili sopra devono essere configurate anche in Vercel Dashboard →
 | `check-users.js` | `node scripts/check-users.js` | Lista utenti |
 | `check-conversations.js` | `node scripts/check-conversations.js` | Lista conversazioni |
 
-### 16.2 Comandi NPM
+### 17.2 Comandi NPM
 
 ```bash
 npm run dev          # Avvia dev server
@@ -1270,9 +1406,9 @@ npm install          # Installa dipendenze
 
 ---
 
-## 17. DEPLOYMENT
+## 18. DEPLOYMENT
 
-### 17.1 Vercel Configuration
+### 18.1 Vercel Configuration
 
 ```json
 // vercel.json (se necessario)
@@ -1290,7 +1426,7 @@ npm install          # Installa dipendenze
 }
 ```
 
-### 17.2 Deploy Steps
+### 18.2 Deploy Steps
 
 ```bash
 1. git add .
@@ -1299,7 +1435,7 @@ npm install          # Installa dipendenze
 4. Vercel auto-deploys from main branch
 ```
 
-### 17.3 Post-Deploy Checklist
+### 18.3 Post-Deploy Checklist
 
 - [ ] Variabili ambiente configurate
 - [ ] Webhook Stripe configurato
@@ -1315,8 +1451,8 @@ npm install          # Installa dipendenze
 | Metrica | Valore |
 |---------|--------|
 | Pagine Next.js | 35+ |
-| API Routes | 38+ |
-| Componenti React | 24+ |
+| API Routes | 40+ |
+| Componenti React | 25+ |
 | Tabelle Database | 18+ |
 | File SQL | 50+ |
 | Script Utility | 45+ |
@@ -1332,6 +1468,18 @@ npm install          # Installa dipendenze
 
 ## APPENDICE B: CHANGELOG
 
+### v3.0 (5 Febbraio 2026)
+- **Sistema Protezione PDF** con signed URL (24h) + watermark personalizzato
+- Nuove dipendenze: `pdf-lib`, `jose`
+- Nuovo endpoint `/api/libro/download` (token + auth mode)
+- Componente `DownloadBookButton` per download da dashboard/grazie
+- Email libro con link protetto invece di URL diretto
+- Rate limiting download (max 20 per libro)
+
+### v2.0 (20 Gennaio 2026)
+- Aggiornamento documentazione completa
+- Allineamento con stato attuale del progetto
+
 ### v1.0 (26 Dicembre 2024)
 - Documentazione iniziale completa
 - Tutte le funzionalità core implementate
@@ -1342,5 +1490,5 @@ npm install          # Installa dipendenze
 ---
 
 **Documento creato da:** Claude Code
-**Ultima modifica:** 26 Dicembre 2024
+**Ultima modifica:** 5 Febbraio 2026
 **Prossima revisione:** Al prossimo major update

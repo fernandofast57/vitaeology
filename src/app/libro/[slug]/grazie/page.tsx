@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getLibroBySlug } from '@/data/libri';
 import ConversionTracker from '@/components/tracking/ConversionTracker';
+import DownloadBookButton from '@/components/libro/DownloadBookButton';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -140,6 +141,17 @@ export default async function GraziePage({ params, searchParams }: PageProps) {
               </>
             )}
           </div>
+        </div>
+
+        {/* Download diretto libro */}
+        <div className="mb-6">
+          <DownloadBookButton
+            bookSlug={slug}
+            color={libro.coloreAccent}
+          />
+          <p className="text-xs text-gray-400 mt-2">
+            Il PDF è anche in arrivo nella tua email.
+          </p>
         </div>
 
         {/* CTA */}
