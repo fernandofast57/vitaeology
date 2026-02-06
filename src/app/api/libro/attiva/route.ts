@@ -10,8 +10,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { grantAssessmentAccess, AssessmentType, LIBRO_TO_ASSESSMENT } from '@/lib/assessment-access';
 import { alertAPIError } from '@/lib/error-alerts';
+import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
+
+// Rate limit attivazione codici: 10 tentativi per 5 minuti (anti brute-force)
+const ATTIVA_RATE_LIMIT = {
+  maxRequests: 10,
+  windowSeconds: 300,
+  identifier: 'libro-attiva',
+};
 
 export async function POST(request: NextRequest) {
+  // Rate limiting anti brute-force
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, ATTIVA_RATE_LIMIT);
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn);
+  }
+
   try {
     const { code, email } = await request.json();
 
@@ -171,7 +186,7 @@ export async function POST(request: NextRequest) {
         message: 'Codice valido! Registrati per attivare l\'accesso.',
         code: normalizedCode,
         assessmentType,
-        redirectUrl: `/auth/signup?book_code=${normalizedCode}&email=${encodeURIComponent(email)}`,
+        redirectUrl: `/auth/signup?book_code=${normalizedCode}`,
       });
     }
 

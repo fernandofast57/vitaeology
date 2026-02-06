@@ -196,8 +196,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
       console.error('Errore registrazione segnale:', signalError);
     }
 
-    console.log('✅ Messaggio modificato:', conversationId);
-
     return NextResponse.json({
       success: true,
       newAiResponse,

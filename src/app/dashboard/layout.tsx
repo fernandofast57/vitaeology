@@ -1,10 +1,14 @@
-// Dashboard Layout
-// FeedbackWidget è ora nel root layout, non serve qui
+// Dashboard Layout con auto-logout per inattività
+import IdleTimeoutProvider from '@/components/IdleTimeoutProvider';
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <IdleTimeoutProvider>
+      {children}
+    </IdleTimeoutProvider>
+  );
 }

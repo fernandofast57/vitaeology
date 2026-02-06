@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       });
 
     if (insertError) {
-      console.error('Errore salvataggio OTP resend:', insertError);
+      console.error('Errore salvataggio OTP resend');
       return NextResponse.json(
         { error: 'Errore interno. Riprova.' },
         { status: 500 }
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (emailError) {
-      console.error('Errore invio email conferma:', emailError);
+      console.error('Errore invio email conferma');
       // Elimina il codice se l'email fallisce
       await supabase
         .from('auth_verification_codes')
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Errore resend-confirmation:', error);
+    console.error('Errore resend-confirmation');
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

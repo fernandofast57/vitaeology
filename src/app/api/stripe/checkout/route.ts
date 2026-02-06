@@ -3,8 +3,16 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { PRICING_TIERS, type PricingTierSlug } from '@/config/pricing';
+import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
+
+// Rate limit checkout: 5 sessioni per minuto (previene abuse)
+const CHECKOUT_RATE_LIMIT = {
+  maxRequests: 5,
+  windowSeconds: 60,
+  identifier: 'stripe-checkout',
+};
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -18,6 +26,13 @@ function getSupabase() {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limiting
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, CHECKOUT_RATE_LIMIT);
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn);
+  }
+
   try {
     // === AUTENTICAZIONE SERVER-SIDE (C13 fix) ===
     const authSupabase = await createServerClient();
@@ -147,7 +162,6 @@ export async function POST(request: NextRequest) {
     // Auto-apply founding tester discount OR allow promo codes
     if (isFoundingTester && foundingTesterCouponId) {
       checkoutOptions.discounts = [{ coupon: foundingTesterCouponId }];
-      console.log(`[Checkout] Applying founding tester discount for user ${userId}`);
     } else {
       // Allow manual promo codes for non-founding testers
       checkoutOptions.allow_promotion_codes = true;

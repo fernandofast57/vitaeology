@@ -104,16 +104,11 @@ export async function POST(request: NextRequest) {
         );
         patternsDetected = results.length;
 
-        if (results.length > 0) {
-          console.log(`[Feedback] Pattern rilevati: ${results.map(r => r.pattern_name).join(', ')}`);
-        }
       } catch (patternError) {
         console.error('Errore pattern detection:', patternError);
         // Non fallire la request
       }
     }
-
-    console.log('Feedback salvato:', feedback?.id, '| Patterns:', patternsDetected);
 
     return NextResponse.json({
       success: true,

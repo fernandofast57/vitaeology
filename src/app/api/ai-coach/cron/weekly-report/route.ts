@@ -24,14 +24,11 @@ export async function GET(request: NextRequest) {
     const report = await generateWeeklyReport();
 
     if (report) {
-      console.log('Report settimanale generato:', report.id);
-      console.log('Settimana:', report.week_start, '-', report.week_end);
-
       // Invia email a Fernando
       const emailResult = await sendWeeklyReportEmail(report);
 
       if (emailResult.success) {
-        console.log('Email inviata:', emailResult.messageId);
+        // Email report inviata
       } else {
         console.warn('Email non inviata:', emailResult.error);
       }

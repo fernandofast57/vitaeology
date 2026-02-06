@@ -13,6 +13,7 @@ import {
   P3_THRESHOLDS,
   P4_THRESHOLDS
 } from '@/lib/monitoring/thresholds';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,6 +25,12 @@ function getSupabase() {
 }
 
 export async function GET() {
+  // Verifica admin auth
+  const auth = await verifyAdminFromRequest();
+  if (!auth.isAdmin) {
+    return auth.response;
+  }
+
   const supabase = getSupabase();
 
   try {

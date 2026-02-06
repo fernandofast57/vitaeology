@@ -170,7 +170,6 @@ export async function POST(request: NextRequest) {
     // Auto-apply founding tester discount OR allow promo codes
     if (hasFoundingDiscount) {
       sessionConfig.discounts = [{ coupon: foundingTesterCouponId }];
-      console.log(`[Bump Checkout] Applying founding tester discount for user ${userId}`);
     } else {
       sessionConfig.allow_promotion_codes = true;
     }

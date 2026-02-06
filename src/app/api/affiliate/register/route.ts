@@ -331,7 +331,6 @@ export async function POST(request: NextRequest) {
         subject: 'Richiesta Partner Vitaeology ricevuta',
         html: generateAffiliateConfirmationEmail(body.nome.trim()),
       });
-      console.log(`📧 Email conferma affiliato inviata a: ${body.email.toLowerCase()}`);
     } catch (emailError) {
       // Non blocchiamo la registrazione se l'email fallisce
       console.error('Errore invio email conferma affiliato:', emailError);

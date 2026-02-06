@@ -160,9 +160,13 @@ async function handleLibroPurchase(
 
   const profile = await findProfileByEmail(supabase, customerEmail);
 
+  const paymentIntentId = typeof session.payment_intent === 'string'
+    ? session.payment_intent
+    : session.payment_intent?.id || session.id;
+
   if (profile) {
     // Utente esistente: grant immediato
-    await grantBookAccess(supabase, profile.id, libroSlug, session.id, session.payment_intent as string);
+    await grantBookAccess(supabase, profile.id, libroSlug, session.id, paymentIntentId);
 
     if (affiliateId && clickId) {
       await trackAffiliateBookPurchase(supabase, clickId, libroSlug);
@@ -171,7 +175,7 @@ async function handleLibroPurchase(
     // Utente NON esistente: salva pending
     await savePendingPurchase(
       supabase, customerEmail, 'libro', libroSlug,
-      session.id, session.payment_intent as string,
+      session.id, paymentIntentId,
       session.amount_total || undefined
     );
 
@@ -195,14 +199,18 @@ async function handleTrilogyPurchase(
 
   const profile = await findProfileByEmail(supabase, customerEmail);
 
+  const paymentIntentId = typeof session.payment_intent === 'string'
+    ? session.payment_intent
+    : session.payment_intent?.id || session.id;
+
   if (profile) {
     for (const bookSlug of ALL_BOOKS) {
-      await grantBookAccess(supabase, profile.id, bookSlug, session.id, session.payment_intent as string);
+      await grantBookAccess(supabase, profile.id, bookSlug, session.id, paymentIntentId);
     }
   } else {
     await savePendingPurchase(
       supabase, customerEmail, 'trilogy', 'trilogy',
-      session.id, session.payment_intent as string,
+      session.id, paymentIntentId,
       session.amount_total || undefined
     );
   }
@@ -221,12 +229,16 @@ async function handleBumpLibroLeader(
   const affiliateId = session.metadata?.affiliate_id;
   const clickId = session.metadata?.affiliate_click_id;
 
+  const subscriptionId = typeof session.subscription === 'string'
+    ? session.subscription
+    : session.subscription?.id || '';
+
   if (userId) {
     // 1. Attiva subscription Leader
     await updateProfileSubscription(supabase, userId, {
       subscription_status: 'active',
       subscription_tier: 'leader',
-      stripe_subscription_id: session.subscription as string,
+      stripe_subscription_id: subscriptionId,
     });
 
     // 2. Concedi libro gratuito
@@ -235,13 +247,13 @@ async function handleBumpLibroLeader(
     }
 
     // 3. Concedi accesso a tutti gli assessment
-    await grantAllAssessmentAccess(supabase, userId, session.subscription as string);
+    await grantAllAssessmentAccess(supabase, userId, subscriptionId);
 
     // 4. Affiliate tracking
     if (affiliateId && clickId) {
       await supabase.from('subscription_affiliate_tracking').upsert({
         user_id: userId,
-        stripe_subscription_id: session.subscription as string,
+        stripe_subscription_id: subscriptionId,
         affiliate_id: affiliateId,
         affiliate_click_id: clickId,
         is_active: true
@@ -277,14 +289,18 @@ async function handleSubscription(
 
   if (!userId) return;
 
+  const subId = typeof session.subscription === 'string'
+    ? session.subscription
+    : session.subscription?.id || '';
+
   await updateProfileSubscription(supabase, userId, {
     subscription_status: 'active',
     subscription_tier: tierSlug,
-    stripe_subscription_id: session.subscription as string,
+    stripe_subscription_id: subId,
   });
 
   if (tierSlug === 'leader' || tierSlug === 'mentor' || tierSlug === 'mastermind') {
-    await grantAllAssessmentAccess(supabase, userId, session.subscription as string);
+    await grantAllAssessmentAccess(supabase, userId, subId);
 
     // Invia email conferma
     const customerEmail = session.customer_email || session.customer_details?.email;
@@ -318,12 +334,16 @@ async function handleHighTicketPurchase(
 
   if (!userId || !tierSlug) return;
 
+  const piId = typeof session.payment_intent === 'string'
+    ? session.payment_intent
+    : session.payment_intent?.id || session.id;
+
   // Registra l'acquisto high-ticket
   await supabase.from('high_ticket_purchases').upsert({
     user_id: userId,
     product_type: tierSlug,
     stripe_session_id: session.id,
-    stripe_payment_intent: session.payment_intent as string,
+    stripe_payment_intent: piId,
     amount_paid: (session.amount_total || 0) / 100,
     status: 'active',
     purchased_at: new Date().toISOString(),
@@ -353,8 +373,6 @@ async function handleHighTicketPurchase(
     const price = HIGH_TICKET_PRICES[tierSlug];
 
     // TODO: Implementare email specifica per high-ticket
-    // Per ora usiamo l'email di upgrade con un workaround
-    console.log(`[HighTicket] ${productName} acquistato da ${customerEmail} - €${price}`);
   }
 
   // Analytics

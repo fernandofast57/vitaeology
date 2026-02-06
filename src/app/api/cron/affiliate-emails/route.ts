@@ -42,8 +42,6 @@ export async function GET(request: Request) {
     // ========================================
     // 1. NUOVI AFFILIATI SENZA T1
     // ========================================
-    console.log('📧 [Affiliate Cron] Processando nuovi affiliati...');
-
     const { data: newAffiliates } = await supabase
       .from('v_affiliates_need_t1')
       .select('*');
@@ -87,7 +85,7 @@ export async function GET(request: Request) {
           results.t1.sent++;
         } else {
           results.t1.errors++;
-          console.error(`Errore T1 per ${affiliate.email}:`, result.error);
+          console.error(`Errore T1 per affiliato ${affiliate.id}:`, result.error);
         }
       } catch (err) {
         results.t1.errors++;
@@ -98,8 +96,6 @@ export async function GET(request: Request) {
     // ========================================
     // 2. AFFILIATI IN SEQUENZA (D1-D7)
     // ========================================
-    console.log('📧 [Affiliate Cron] Processando sequenze...');
-
     const { data: inSequence } = await supabase
       .from('v_affiliates_sequence_ready')
       .select('*');
@@ -143,7 +139,7 @@ export async function GET(request: Request) {
           results.sequence.sent++;
         } else {
           results.sequence.errors++;
-          console.error(`Errore ${emailType} per ${fullData.email}:`, result.error);
+          console.error(`Errore ${emailType} per affiliato ${record.affiliate_id}:`, result.error);
         }
       } catch (err) {
         results.sequence.errors++;
@@ -154,8 +150,6 @@ export async function GET(request: Request) {
     // ========================================
     // 3. AFFILIATI INATTIVI (E1)
     // ========================================
-    console.log('📧 [Affiliate Cron] Processando inattivi...');
-
     const { data: inactive } = await supabase
       .from('v_affiliates_inactive')
       .select('*');

@@ -12,24 +12,24 @@ const R2_CDN_URL = 'https://pub-2417d7e6729544f893d3a858ccab7ea2.r2.dev';
 export const LANDING_VIDEOS = {
   homepage: {
     videoUrl: `${R2_CDN_URL}/homepage.mp4`,
-    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png',
+    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.webp',
   },
   // Video per /beta - TODO: aggiornare quando pronto
   beta: {
     videoUrl: `${R2_CDN_URL}/beta.mp4`,
-    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.png', // Usa homepage come placeholder
+    thumbnail: '/videos/thumbnails/01_homepage_thumbnail.webp', // Usa homepage come placeholder
   },
   leadership: {
     videoUrl: `${R2_CDN_URL}/leadership.mp4`,
-    thumbnail: '/videos/thumbnails/02_leadership_thumbnail.png',
+    thumbnail: '/videos/thumbnails/02_leadership_thumbnail.webp',
   },
   ostacoli: {
     videoUrl: `${R2_CDN_URL}/ostacoli.mp4`,
-    thumbnail: '/videos/thumbnails/03_ostacoli_thumbnail.png',
+    thumbnail: '/videos/thumbnails/03_ostacoli_thumbnail.webp',
   },
   microfelicita: {
     videoUrl: `${R2_CDN_URL}/microfelicita.mp4`,
-    thumbnail: '/videos/thumbnails/04_microfelicita_thumbnail.png',
+    thumbnail: '/videos/thumbnails/04_microfelicita_thumbnail.webp',
   },
 };
 

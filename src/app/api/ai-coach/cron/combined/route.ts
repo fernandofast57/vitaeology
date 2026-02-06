@@ -72,8 +72,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  console.log('Combined cron results:', results);
-
   return NextResponse.json({
     success: true,
     isSunday,

@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
+import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 import { getAnthropicClient } from '@/lib/ai-clients';
 import { ChatRequest, ChatResponse, Message } from '@/lib/ai-coach/types';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
@@ -121,8 +122,22 @@ async function fetchChallengeContext(
   }
 }
 
+// Rate limit AI Coach: 20 richieste per minuto (protegge costi Anthropic)
+const AI_COACH_RATE_LIMIT = {
+  maxRequests: 20,
+  windowSeconds: 60,
+  identifier: 'ai-coach',
+};
+
 export async function POST(request: NextRequest): Promise<NextResponse<ChatResponse>> {
   const startTime = Date.now();
+
+  // Rate limiting
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, AI_COACH_RATE_LIMIT);
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn) as NextResponse<ChatResponse>;
+  }
 
   try {
     // === AUTENTICAZIONE SERVER-SIDE (C1 fix) ===

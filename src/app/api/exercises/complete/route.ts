@@ -280,13 +280,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         exercise.book_slug
       );
 
-      // Log per tracking (utile per analytics future)
-      if (radarUpdateEligibility.eligible) {
-        console.log(`[Radar Update] Utente ${userId} eleggibile per aggiornamento ${pathType}:`, {
-          daysSinceLastSnapshot: radarUpdateEligibility.daysSinceLastSnapshot,
-          exercisesSinceSnapshot: radarUpdateEligibility.exercisesSinceSnapshot,
-        });
-      }
+      // Radar update eligibility verificata
     } catch (radarError) {
       // Errore non blocca il completamento
       console.warn('Errore verifica radar eligibility:', radarError);
@@ -301,13 +295,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         bookSlug: exercise.book_slug,
       });
 
-      // Log milestone guadagnate
-      const newMilestones = earnedMilestones.filter(m => m.success && !m.alreadyExists);
-      if (newMilestones.length > 0) {
-        console.log(`[Milestone] Utente ${userId} ha guadagnato ${newMilestones.length} milestone:`,
-          newMilestones.map(m => m.milestone?.milestoneType)
-        );
-      }
+      // Milestone verificate
     } catch (milestoneError) {
       // Errore non blocca il completamento
       console.warn('Errore verifica milestone:', milestoneError);

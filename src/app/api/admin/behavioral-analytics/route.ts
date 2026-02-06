@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,26 +63,13 @@ interface BehavioralMetrics {
 
 export async function GET() {
   try {
+    // Verifica admin con sistema ruoli standardizzato
+    const auth = await verifyAdminFromRequest();
+    if (!auth.isAdmin) {
+      return auth.response;
+    }
+
     const supabase = await createClient();
-
-    // Verify admin access
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 });
-    }
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin, role_id, roles (level)')
-      .eq('id', user.id)
-      .single();
-
-    const roleLevel = (profile?.roles as { level?: number })?.level ?? 0;
-    const isAdmin = profile?.is_admin === true || roleLevel >= 80;
-
-    if (!isAdmin) {
-      return NextResponse.json({ error: 'Accesso negato' }, { status: 403 });
-    }
 
     // Fetch all behavioral events
     const { data: events, error: eventsError } = await supabase

@@ -3,6 +3,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 import {
   FRONTEND_TO_CHALLENGE_DB,
   FRONTEND_TO_DATABASE,
@@ -19,23 +20,13 @@ interface FunnelData {
 }
 
 export async function GET() {
+  // Verifica admin con sistema ruoli standardizzato
+  const auth = await verifyAdminFromRequest();
+  if (!auth.isAdmin) {
+    return auth.response;
+  }
+
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: 'Non autenticato' }, { status: 401 });
-  }
-
-  // Verifica admin
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin, role_id')
-    .eq('id', user.id)
-    .single();
-
-  if (!profile?.is_admin && !profile?.role_id) {
-    return NextResponse.json({ error: 'Non autorizzato' }, { status: 403 });
-  }
 
   // Usa path-mappings per le conversioni
   const funnelData: FunnelData[] = [];

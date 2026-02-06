@@ -72,16 +72,14 @@ export async function GET(request: NextRequest) {
           .eq('id', user.id);
 
         if (updateError) {
-          console.error(`[Beta Premium Expiry] Errore downgrade ${user.email}:`, updateError);
+          console.error(`[Beta Premium Expiry] Errore downgrade utente:`, updateError);
           results.errors++;
           continue;
         }
 
         results.downgraded++;
-        console.log(`[Beta Premium Expiry] Downgraded: ${user.email}`);
-
       } catch (err) {
-        console.error(`[Beta Premium Expiry] Errore processing ${user.email}:`, err);
+        console.error('[Beta Premium Expiry] Errore processing utente:', err);
         results.errors++;
       }
     }

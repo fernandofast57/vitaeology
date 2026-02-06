@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getLevelName, getZoneForLevel, getZoneInfo, AWARENESS_ZONES, AWARENESS_SCALE } from '@/lib/awareness/types';
+import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,12 @@ function getSupabase() {
 
 export async function GET() {
   try {
+    // Verifica admin auth
+    const auth = await verifyAdminFromRequest();
+    if (!auth.isAdmin) {
+      return auth.response;
+    }
+
     const supabase = getSupabase();
 
     // 1. Distribuzione per livello

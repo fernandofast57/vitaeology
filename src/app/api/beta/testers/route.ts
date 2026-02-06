@@ -27,10 +27,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Accesso negato' }, { status: 403 });
     }
 
-    // Parametri di filtro
+    // Parametri di filtro (I2 fix: whitelist valori validi)
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
     const cohort = searchParams.get('cohort');
+
+    const validStatuses = ['pending', 'approved', 'rejected', 'active', 'completed'];
+    const validCohorts = ['alpha', 'beta_1', 'beta_2', 'beta_3'];
 
     // Query
     let query = supabase
@@ -38,11 +41,11 @@ export async function GET(request: Request) {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (status) {
+    if (status && validStatuses.includes(status)) {
       query = query.eq('status', status);
     }
 
-    if (cohort) {
+    if (cohort && validCohorts.includes(cohort)) {
       query = query.eq('cohort', cohort);
     }
 

@@ -3,12 +3,21 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+// Validazione UUID
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+
+    // Validazione UUID
+    if (!UUID_REGEX.test(id)) {
+      return NextResponse.json({ error: 'ID non valido' }, { status: 400 });
+    }
+
     const supabase = await createClient();
 
     // Verifica autenticazione
@@ -79,6 +88,12 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    // Validazione UUID
+    if (!UUID_REGEX.test(id)) {
+      return NextResponse.json({ error: 'ID non valido' }, { status: 400 });
+    }
+
     const supabase = await createClient();
 
     // Verifica autenticazione

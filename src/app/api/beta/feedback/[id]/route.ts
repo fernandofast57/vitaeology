@@ -9,6 +9,13 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
+
+    // I3 fix: Validazione formato UUID
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return NextResponse.json({ error: 'ID non valido' }, { status: 400 });
+    }
+
     const supabase = await createClient();
 
     // Verifica autenticazione

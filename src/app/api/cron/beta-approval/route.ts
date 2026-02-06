@@ -101,14 +101,13 @@ export async function GET(request: NextRequest) {
 
         if (emailResult.success) {
           results.emailsSent++;
-          console.log(`[Beta Approval] Approvato e email inviata: ${tester.email}`);
         } else {
-          console.error(`[Beta Approval] Errore email ${tester.email}:`, emailResult.error);
+          console.error(`[Beta Approval] Errore email tester ${tester.id}:`, emailResult.error);
           results.errors++;
         }
 
       } catch (err) {
-        console.error(`[Beta Approval] Errore processing ${tester.email}:`, err);
+        console.error(`[Beta Approval] Errore processing tester ${tester.id}:`, err);
         results.errors++;
       }
     }

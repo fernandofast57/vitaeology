@@ -301,7 +301,7 @@ export async function POST(request: NextRequest) {
               premiumUntil: premiumUntilFormatted,
             });
 
-            console.log('[Beta Premium] Attivato 6 mesi per:', email, 'fino al:', premiumUntilFormatted);
+            // Beta premium attivato
           }
 
           // =========================================================
@@ -330,7 +330,7 @@ export async function POST(request: NextRequest) {
                   .update({ affiliate_invite_sent_at: new Date().toISOString() })
                   .eq('id', betaTester.id);
 
-                console.log('[Affiliate Invite] Inviato a beta tester:', email);
+                // Invito affiliato inviato
               }
             }
           }

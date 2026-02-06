@@ -43,8 +43,7 @@ export async function GET(request: Request) {
           )
 
           if (result.processed > 0) {
-            console.log(`✅ Processed ${result.processed} pending purchases for ${user.email}`)
-            console.log(`   Grants: ${result.grants.join(', ')}`)
+            // Pending purchases processate con successo
           }
 
           if (result.errors.length > 0) {
@@ -100,7 +99,7 @@ export async function GET(request: Request) {
                       .update({ current_uses: bookCodeData.current_uses + 1 })
                       .eq('id', bookCodeData.id)
 
-                    console.log(`✅ Book code ${normalizedCode} activated for ${user.email}`)
+                    // Book code attivato con successo
                   }
                 }
               }
