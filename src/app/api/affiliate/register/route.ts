@@ -12,6 +12,7 @@ import { verifyTurnstileToken } from '@/lib/turnstile';
 import { validateName, isDefinitelySpam } from '@/lib/validation/name-validator';
 import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
+import { Resend } from 'resend';
 
 interface RegisterAffiliateInput {
   email: string;
@@ -24,12 +25,104 @@ interface RegisterAffiliateInput {
   turnstileToken?: string;
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://vitaeology.com';
+
 // Rate limit per affiliate registration
 const AFFILIATE_RATE_LIMIT = {
   maxRequests: 3,
   windowSeconds: 600, // 3 tentativi ogni 10 minuti
   identifier: 'affiliate-register',
 };
+
+// Template email conferma registrazione affiliato
+function generateAffiliateConfirmationEmail(nome: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f6f9fc;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f6f9fc; padding: 20px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #0A2540; padding: 20px 30px;">
+              <p style="color: #ffffff; margin: 0; font-size: 14px; font-weight: 600;">
+                VITAEOLOGY PARTNER
+              </p>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <p style="color: #0A2540; font-size: 20px; font-weight: 600; line-height: 28px; margin: 0 0 20px 0;">
+                Ciao ${nome},
+              </p>
+
+              <p style="color: #525f7f; font-size: 16px; line-height: 26px; margin: 0 0 16px 0;">
+                Grazie per aver richiesto di entrare nel programma Partner Vitaeology.
+              </p>
+
+              <p style="color: #525f7f; font-size: 16px; line-height: 26px; margin: 0 0 16px 0;">
+                Abbiamo ricevuto la tua richiesta e la stiamo esaminando.
+              </p>
+
+              <div style="background: #f8f9fa; padding: 16px 20px; border-radius: 8px; margin: 20px 0;">
+                <p style="color: #525f7f; font-size: 15px; line-height: 24px; margin: 0;">
+                  <strong>Cosa succede ora?</strong><br><br>
+                  Riceverai una email di conferma quando il tuo account sarà attivato,
+                  con tutte le informazioni per iniziare a condividere Vitaeology.
+                </p>
+              </div>
+
+              <p style="color: #525f7f; font-size: 16px; line-height: 26px; margin: 0 0 16px 0;">
+                Se hai domande nel frattempo, puoi rispondere direttamente a questa email.
+              </p>
+
+              <p style="color: #525f7f; font-size: 16px; line-height: 26px; margin: 30px 0 0 0;">
+                A presto,<br>
+                <strong>Fernando</strong>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 0 30px;">
+              <hr style="border: none; border-top: 1px solid #e6ebf1; margin: 0;">
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 30px; text-align: center;">
+              <p style="color: #8898aa; font-size: 12px; line-height: 16px; margin: 0;">
+                Vitaeology - Leadership Development Platform
+              </p>
+              <p style="color: #8898aa; font-size: 12px; line-height: 16px; margin: 10px 0 0 0;">
+                <a href="${APP_URL}" style="color: #0A2540; text-decoration: underline;">
+                  www.vitaeology.com
+                </a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+}
 
 export async function POST(request: NextRequest) {
   const clientIP = getClientIP(request);
@@ -228,6 +321,20 @@ export async function POST(request: NextRequest) {
         { error: 'Errore durante la registrazione. Riprova più tardi.' },
         { status: 500 }
       );
+    }
+
+    // 6b. Invia email di conferma registrazione via Resend
+    try {
+      await resend.emails.send({
+        from: 'Vitaeology <noreply@vitaeology.com>',
+        to: body.email.toLowerCase(),
+        subject: 'Richiesta Partner Vitaeology ricevuta',
+        html: generateAffiliateConfirmationEmail(body.nome.trim()),
+      });
+      console.log(`📧 Email conferma affiliato inviata a: ${body.email.toLowerCase()}`);
+    } catch (emailError) {
+      // Non blocchiamo la registrazione se l'email fallisce
+      console.error('Errore invio email conferma affiliato:', emailError);
     }
 
     // 7. Log successo

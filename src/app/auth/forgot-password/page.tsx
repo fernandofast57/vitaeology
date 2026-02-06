@@ -1,15 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2, Shield } from 'lucide-react'
+import { Mail, ArrowLeft, AlertCircle, Loader2, Shield } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
 
 export default function ForgotPasswordPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileExpired, setTurnstileExpired] = useState(false)
@@ -44,40 +45,16 @@ export default function ForgotPasswordPage() {
         return
       }
 
-      setSuccess(true)
+      // Salva email per la pagina di reset
+      sessionStorage.setItem('resetPasswordEmail', email.trim().toLowerCase())
+
+      // Redirect alla pagina reset-password con input OTP
+      router.push(`/auth/reset-password?email=${encodeURIComponent(email.trim().toLowerCase())}`)
     } catch {
       setError('Errore di connessione. Riprova.')
     } finally {
       setLoading(false)
     }
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-sm rounded-xl sm:px-10 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Email inviata!
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Se l&apos;email è registrata, riceverai un link per reimpostare la password.
-              Controlla la tua casella di posta (anche lo spam).
-            </p>
-            <Link
-              href="/auth/login"
-              className="inline-flex items-center gap-2 text-petrol-600 hover:text-petrol-700 font-medium"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Torna al login
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (

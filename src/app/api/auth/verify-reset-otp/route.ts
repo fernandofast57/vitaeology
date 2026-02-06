@@ -1,5 +1,5 @@
-// POST /api/auth/verify-otp - Verifica OTP e crea account Supabase
-// Step 2 del flusso: dopo che l'utente ha inserito il codice OTP
+// POST /api/auth/verify-reset-otp - Verifica OTP e aggiorna password
+// Step 2 del flusso reset password: dopo che l'utente ha inserito il codice OTP
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -16,7 +16,7 @@ const supabase = createClient(
 const VERIFY_RATE_LIMIT = {
   maxRequests: 10,
   windowSeconds: 300, // 10 tentativi ogni 5 minuti
-  identifier: 'verify-otp',
+  identifier: 'verify-reset-otp',
 };
 
 export async function POST(request: NextRequest) {
@@ -30,12 +30,19 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { email, code, password, fullName, bookCode } = body;
+    const { email, code, newPassword } = body;
 
     // 1. Validazione
-    if (!email || !code || !password || !fullName) {
+    if (!email || !code || !newPassword) {
       return NextResponse.json(
-        { error: 'Dati mancanti' },
+        { error: 'Email, codice e nuova password sono obbligatori' },
+        { status: 400 }
+      );
+    }
+
+    if (newPassword.length < 6) {
+      return NextResponse.json(
+        { error: 'La password deve essere di almeno 6 caratteri' },
         { status: 400 }
       );
     }
@@ -48,6 +55,7 @@ export async function POST(request: NextRequest) {
       .from('auth_verification_codes')
       .select('*')
       .eq('email', normalizedEmail)
+      .eq('type', 'reset_password')
       .is('verified_at', null)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -75,7 +83,8 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Verifica tentativi
-    if (verification.attempts >= verification.max_attempts) {
+    const maxAttempts = verification.max_attempts || 5;
+    if (verification.attempts >= maxAttempts) {
       // Elimina codice dopo troppi tentativi
       await supabase
         .from('auth_verification_codes')
@@ -96,7 +105,7 @@ export async function POST(request: NextRequest) {
         .update({ attempts: verification.attempts + 1 })
         .eq('id', verification.id);
 
-      const remainingAttempts = verification.max_attempts - verification.attempts - 1;
+      const remainingAttempts = maxAttempts - verification.attempts - 1;
 
       return NextResponse.json(
         {
@@ -107,73 +116,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 6. Codice corretto! Crea utente in Supabase
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email: normalizedEmail,
-      password: password,
-      email_confirm: true, // Già verificato via OTP
-      user_metadata: {
-        full_name: fullName,
-        book_code: bookCode || undefined,
-        verified_via: 'otp',
-      },
-    });
+    // 6. Codice corretto! Trova l'utente
+    const { data: existingUsers } = await supabase.auth.admin.listUsers();
+    const user = existingUsers?.users?.find(
+      u => u.email?.toLowerCase() === normalizedEmail
+    );
 
-    if (authError) {
-      console.error('Errore creazione utente:', authError);
-
-      if (authError.message.includes('already been registered')) {
-        return NextResponse.json(
-          { error: 'Questa email è già registrata.' },
-          { status: 409 }
-        );
-      }
-
+    if (!user) {
       return NextResponse.json(
-        { error: 'Errore durante la registrazione. Riprova.' },
+        { error: 'Utente non trovato.' },
+        { status: 404 }
+      );
+    }
+
+    // 7. Aggiorna password
+    const { error: updateError } = await supabase.auth.admin.updateUserById(
+      user.id,
+      { password: newPassword }
+    );
+
+    if (updateError) {
+      console.error('Errore aggiornamento password:', updateError);
+      return NextResponse.json(
+        { error: 'Errore durante l\'aggiornamento della password. Riprova.' },
         { status: 500 }
       );
     }
 
-    // 7. Marca codice come verificato
+    // 8. Marca codice come verificato
     await supabase
       .from('auth_verification_codes')
       .update({ verified_at: new Date().toISOString() })
       .eq('id', verification.id);
 
-    // 8. Crea profilo utente
-    if (authData.user) {
-      await supabase
-        .from('profiles')
-        .upsert({
-          id: authData.user.id,
-          full_name: fullName,
-          email: normalizedEmail,
-          updated_at: new Date().toISOString(),
-        });
-
-      // 8b. Collega eventuali challenge_subscribers esistenti con la stessa email
-      // Questo permette di collegare le challenge fatte prima della registrazione
-      try {
-        await supabase.rpc('link_user_challenges', {
-          p_user_id: authData.user.id,
-          p_email: normalizedEmail,
-        });
-      } catch (linkError) {
-        // Non blocchiamo la registrazione se il linking fallisce
-        console.warn('Warning: Could not link challenge_subscribers:', linkError);
-      }
-    }
-
     // 9. Successo!
     return NextResponse.json({
       success: true,
-      message: 'Account creato con successo!',
-      userId: authData.user?.id,
+      message: 'Password aggiornata con successo!',
     });
 
   } catch (error) {
-    console.error('Errore verify-otp:', error);
+    console.error('Errore verify-reset-otp:', error);
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

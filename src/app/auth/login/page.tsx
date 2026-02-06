@@ -71,7 +71,7 @@ function LoginForm() {
 
   const handleResendConfirmation = async () => {
     if (!email) {
-      setError('Inserisci la tua email per ricevere il link di conferma')
+      setError('Inserisci la tua email per ricevere il codice di conferma')
       return
     }
 
@@ -79,21 +79,30 @@ function LoginForm() {
     setError('')
 
     try {
-      const { error: resendError } = await supabase.auth.resend({
-        type: 'signup',
-        email: email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        }
+      const res = await fetch('/api/auth/resend-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
       })
 
-      if (resendError) {
-        setError('Errore durante l\'invio. Riprova tra qualche minuto.')
-      } else {
-        setResendSuccess(true)
-        setEmailNotConfirmed(false)
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Errore durante l\'invio. Riprova tra qualche minuto.')
+        return
       }
-    } catch (err) {
+
+      // Se già confermato, mostra messaggio
+      if (data.alreadyConfirmed) {
+        setError('')
+        setEmailNotConfirmed(false)
+        return
+      }
+
+      // Salva email e redirect a pagina conferma
+      sessionStorage.setItem('confirmEmail', email.trim().toLowerCase())
+      router.push(`/auth/confirm-email?email=${encodeURIComponent(email.trim().toLowerCase())}`)
+    } catch {
       setError('Si è verificato un errore. Riprova.')
     } finally {
       setResendLoading(false)
