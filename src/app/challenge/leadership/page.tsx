@@ -83,12 +83,13 @@ function LeadershipLandingContent() {
         }
         // Redirect alla Thank You page con OTO
         const utmParams = new URLSearchParams();
+        utmParams.set('fresh', 'true'); // Reset timer OTO per nuova iscrizione
         if (utmSource) utmParams.set('utm_source', utmSource);
         if (utmMedium) utmParams.set('utm_medium', utmMedium);
         if (utmCampaign) utmParams.set('utm_campaign', utmCampaign);
         if (utmContent) utmParams.set('utm_content', utmContent);
         const qs = utmParams.toString();
-        router.push(`/challenge/leadership/grazie${qs ? `?${qs}` : ''}`);
+        router.push(`/challenge/leadership/grazie?${qs}`);
         return;
       } else {
         const data = await response.json();
@@ -142,12 +143,13 @@ function LeadershipLandingContent() {
     }
 
     const exitUtmParams = new URLSearchParams();
+    exitUtmParams.set('fresh', 'true'); // Reset timer OTO per nuova iscrizione
     if (utmSource) exitUtmParams.set('utm_source', utmSource);
     if (utmMedium) exitUtmParams.set('utm_medium', utmMedium);
     if (utmCampaign) exitUtmParams.set('utm_campaign', utmCampaign);
     if (utmContent) exitUtmParams.set('utm_content', utmContent);
     const exitQs = exitUtmParams.toString();
-    router.push(`/challenge/leadership/grazie${exitQs ? `?${exitQs}` : ''}`);
+    router.push(`/challenge/leadership/grazie?${exitQs}`);
   };
 
   // Form component riutilizzabile

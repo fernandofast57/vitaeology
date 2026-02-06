@@ -229,8 +229,8 @@ function BetaPageContent() {
         throw new Error(data.error || 'Errore durante l\'iscrizione');
       }
 
-      // Redirect alla Thank You page con OTO
-      router.push(`/challenge/${selectedChallenge}/grazie`);
+      // Redirect alla Thank You page con OTO (fresh=true resetta il timer)
+      router.push(`/challenge/${selectedChallenge}/grazie?fresh=true`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore durante l\'iscrizione');
     } finally {
