@@ -4,12 +4,12 @@
 // Permette risorse da origini attendibili
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://www.clarity.ms;
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://www.clarity.ms https://challenges.cloudflare.com;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: blob: https://*.supabase.co https://q.stripe.com https://*.stripe.com;
   font-src 'self' https://fonts.gstatic.com;
   connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://api.resend.com https://www.clarity.ms https://vitaeology.com https://www.vitaeology.com;
-  frame-src 'self' https://js.stripe.com https://hooks.stripe.com;
+  frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
