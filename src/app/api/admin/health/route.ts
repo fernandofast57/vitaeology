@@ -1,8 +1,36 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 
-// Health check per tutti i servizi critici
+export const dynamic = 'force-dynamic';
+
+// Health check per tutti i servizi critici (C11 fix: richiede admin auth)
 export async function GET() {
+  // Verifica admin auth
+  try {
+    const authSupabase = await createServerClient();
+    const { data: { user }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Non autenticato' }, { status: 401 });
+    }
+
+    const adminSupabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    const { data: profile } = await adminSupabase
+      .from('profiles')
+      .select('role_id')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile?.role_id) {
+      return NextResponse.json({ error: 'Accesso negato' }, { status: 403 });
+    }
+  } catch {
+    return NextResponse.json({ error: 'Errore autenticazione' }, { status: 500 });
+  }
   const results: {
     service: string;
     status: 'ok' | 'error' | 'warning';

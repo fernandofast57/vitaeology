@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 import { PRICING_TIERS, type PricingTierSlug } from '@/config/pricing';
 
 export const dynamic = 'force-dynamic';
@@ -18,12 +19,27 @@ function getSupabase() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { tierSlug, userId, userEmail } = await request.json();
+    // === AUTENTICAZIONE SERVER-SIDE (C13 fix) ===
+    const authSupabase = await createServerClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    // Usa userId e email dall'auth server-side, non dal body
+    const userId = authUser.id;
+    const userEmail = authUser.email;
+
+    const { tierSlug } = await request.json();
 
     // Validate required fields
-    if (!tierSlug || !userId || !userEmail) {
+    if (!tierSlug) {
       return NextResponse.json(
-        { error: 'Missing required fields: tierSlug, userId, userEmail' },
+        { error: 'Missing required field: tierSlug' },
         { status: 400 }
       );
     }

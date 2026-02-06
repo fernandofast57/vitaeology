@@ -609,6 +609,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
+  // === IDEMPOTENCY CHECK (C12 fix): evita processamento duplicati ===
+  try {
+    const { data: existing } = await supabase
+      .from('stripe_processed_events')
+      .select('id')
+      .eq('event_id', event.id)
+      .maybeSingle();
+
+    if (existing) {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+
+    await supabase
+      .from('stripe_processed_events')
+      .insert({
+        event_id: event.id,
+        event_type: event.type,
+        processed_at: new Date().toISOString(),
+      });
+  } catch {
+    // Graceful degradation: se tabella non esiste, continua
+  }
+
   try {
     switch (event.type) {
       case 'checkout.session.completed': {

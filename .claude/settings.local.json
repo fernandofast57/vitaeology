@@ -69,7 +69,10 @@
       "Bash(supabase projects:*)",
       "Bash(npx vercel:*)",
       "Bash(python3:*)",
-      "WebFetch(domain:vitaeology.com)"
+      "WebFetch(domain:vitaeology.com)",
+      "Bash(npx supabase --version)",
+      "Bash(npx supabase db execute --help:*)",
+      "Bash(npx supabase:*)"
     ]
   }
 }

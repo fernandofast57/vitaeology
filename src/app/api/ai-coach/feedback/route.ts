@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { CreateFeedbackInput } from '@/types/ai-coach-learning';
 import { createPatternDetectionService } from '@/lib/services/pattern-detection';
@@ -7,24 +8,37 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const body: CreateFeedbackInput = await request.json();
-    const { conversation_id, user_id, is_helpful, rating, comment, issue_category } = body;
+    // === AUTENTICAZIONE SERVER-SIDE (C3 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
 
-    if (!conversation_id || !user_id) {
+    if (authError || !authUser) {
       return NextResponse.json(
-        { error: 'conversation_id e user_id sono richiesti' },
+        { error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authUser.id;
+
+    const body: CreateFeedbackInput = await request.json();
+    const { conversation_id, is_helpful, rating, comment, issue_category } = body;
+
+    if (!conversation_id) {
+      return NextResponse.json(
+        { error: 'conversation_id è richiesto' },
         { status: 400 }
       );
     }
 
     const supabase = getSupabaseClient();
 
-    // Verifica che la conversazione esista e appartenga all'utente
+    // Verifica che la conversazione esista e appartenga all'utente autenticato
     const { data: conversation, error: convError } = await supabase
       .from('ai_coach_conversations')
       .select('id, ai_response, user_message')
       .eq('id', conversation_id)
-      .eq('user_id', user_id)
+      .eq('user_id', authenticatedUserId)
       .single();
 
     if (convError || !conversation) {
@@ -58,7 +72,7 @@ export async function POST(request: NextRequest) {
       .upsert(
         {
           conversation_id,
-          user_id,
+          user_id: authenticatedUserId,
           is_helpful,
           rating: rating || null,
           comment: comment || null,

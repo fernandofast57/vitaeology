@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { CreateSignalInput, SignalType } from '@/types/ai-coach-learning';
 
@@ -17,11 +18,24 @@ const VALID_SIGNAL_TYPES: SignalType[] = [
 
 export async function POST(request: NextRequest) {
   try {
+    // === AUTENTICAZIONE SERVER-SIDE (C5 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authUser.id;
+
     const body: CreateSignalInput = await request.json();
-    const { conversation_id, user_id, session_id, signal_type, metadata } = body;
+    const { conversation_id, session_id, signal_type, metadata } = body;
 
     // Validazione
-    if (!conversation_id || !user_id || !session_id || !signal_type) {
+    if (!conversation_id || !session_id || !signal_type) {
       return NextResponse.json(
         { error: 'Campi obbligatori mancanti' },
         { status: 400 }
@@ -37,12 +51,12 @@ export async function POST(request: NextRequest) {
 
     const supabase = getSupabaseClient();
 
-    // Inserisci segnale
+    // Inserisci segnale con user_id autenticato dal server
     const { data, error } = await supabase
       .from('ai_coach_implicit_signals')
       .insert({
         conversation_id,
-        user_id,
+        user_id: authenticatedUserId,
         session_id,
         signal_type,
         metadata: metadata || {},
@@ -51,22 +65,18 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Errore inserimento segnale:', error);
       return NextResponse.json(
         { error: 'Errore salvataggio segnale' },
         { status: 500 }
       );
     }
 
-    console.log(`Segnale ${signal_type} registrato:`, data?.id);
-
     return NextResponse.json({
       success: true,
       signalId: data?.id,
     });
 
-  } catch (error) {
-    console.error('Errore signals API:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

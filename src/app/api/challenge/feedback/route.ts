@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Errore salvataggio feedback:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ error: 'Errore salvataggio feedback' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

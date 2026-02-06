@@ -25,9 +25,17 @@ export async function GET(
       );
     }
 
-    // Verifica che l'assessment esista e sia dell'utente
+    // Verifica che l'assessment esista e sia dell'utente autenticato (C6 fix)
     const assessment = await getCompletedAssessment(supabase, assessmentId);
     if (!assessment) {
+      return NextResponse.json(
+        { error: 'Assessment non trovato' },
+        { status: 404 }
+      );
+    }
+
+    // Ownership check esplicito (defense-in-depth oltre RLS)
+    if (assessment.user_id !== user.id) {
       return NextResponse.json(
         { error: 'Assessment non trovato' },
         { status: 404 }

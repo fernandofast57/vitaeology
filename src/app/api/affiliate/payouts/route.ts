@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Errore creazione payout:', error);
-      return NextResponse.json({ error: error.message || 'Errore creazione richiesta' }, { status: 400 });
+      return NextResponse.json({ error: 'Errore creazione richiesta payout' }, { status: 400 });
     }
 
     return NextResponse.json({

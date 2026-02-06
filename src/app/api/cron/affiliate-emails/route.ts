@@ -203,7 +203,6 @@ export async function GET(request: Request) {
     // ========================================
     // RIEPILOGO
     // ========================================
-    console.log('📧 [Affiliate Cron] Completato:', results);
 
     return NextResponse.json({
       success: true,
@@ -211,10 +210,9 @@ export async function GET(request: Request) {
       timestamp: new Date().toISOString(),
     });
 
-  } catch (error) {
-    console.error('Errore cron affiliate-emails:', error);
+  } catch {
     return NextResponse.json(
-      { error: 'Errore processamento', details: String(error) },
+      { error: 'Errore processamento' },
       { status: 500 }
     );
   }

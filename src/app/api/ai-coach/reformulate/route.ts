@@ -1,6 +1,7 @@
 // API per riformulare una risposta dell'AI Coach
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { getAnthropicClient } from '@/lib/ai-clients';
 
@@ -33,6 +34,19 @@ Risposta originale da riformulare:
 
 export async function POST(request: NextRequest): Promise<NextResponse<ReformulateResponse>> {
   try {
+    // === AUTENTICAZIONE SERVER-SIDE (C4 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { success: false, error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authUser.id;
+
     const body: ReformulateRequest = await request.json();
     const { conversationId, originalResponse } = body;
 
@@ -46,11 +60,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
     const supabase = getSupabaseClient();
     const anthropic = getAnthropicClient();
 
-    // 1. Verifica che la conversazione esista e controlla il conteggio
+    // 1. Verifica che la conversazione esista, appartenga all'utente e controlla il conteggio
     const { data: conversation, error: fetchError } = await supabase
       .from('ai_coach_conversations')
-      .select('id, ai_response, reformulation_count, original_response, api_cost_usd')
+      .select('id, user_id, ai_response, reformulation_count, original_response, api_cost_usd')
       .eq('id', conversationId)
+      .eq('user_id', authenticatedUserId)
       .single();
 
     if (fetchError || !conversation) {
@@ -131,14 +146,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
       );
     }
 
-    // 5. Registra segnale implicito per tracking
+    // 5. Registra segnale implicito per tracking (usa dati già recuperati)
     try {
+      // Recupera session_id dalla conversazione (già verificata appartenere all'utente)
+      const { data: convSession } = await supabase
+        .from('ai_coach_conversations')
+        .select('session_id')
+        .eq('id', conversationId)
+        .single();
+
       await supabase
         .from('ai_coach_implicit_signals')
         .insert({
           conversation_id: conversationId,
-          user_id: (await supabase.from('ai_coach_conversations').select('user_id').eq('id', conversationId).single()).data?.user_id,
-          session_id: (await supabase.from('ai_coach_conversations').select('session_id').eq('id', conversationId).single()).data?.session_id,
+          user_id: authenticatedUserId,
+          session_id: convSession?.session_id,
           signal_type: 'reformulated_question',
           metadata: {
             reformulation_number: currentCount + 1,
@@ -146,9 +168,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
             new_length: newResponse.length,
           },
         });
-    } catch (signalError) {
+    } catch {
       // Non bloccare per errore di segnale
-      console.error('Errore registrazione segnale:', signalError);
     }
 
     return NextResponse.json({
@@ -162,7 +183,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<Reformula
 
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
-        { success: false, error: `Errore API: ${error.message}` },
+        { success: false, error: 'Servizio temporaneamente non disponibile' },
         { status: error.status || 500 }
       );
     }

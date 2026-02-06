@@ -56,11 +56,8 @@ export default function SpamMonitoringPage() {
     setError(null);
 
     try {
-      const res = await fetch('/api/admin/spam-monitor', {
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || ''}`,
-        },
-      });
+      // C10 fix: usa cookie auth, non CRON_SECRET client-side
+      const res = await fetch('/api/admin/spam-monitor');
 
       if (!res.ok) {
         throw new Error('Errore nel caricamento delle statistiche');

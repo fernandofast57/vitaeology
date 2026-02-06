@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 import { Resend } from 'resend';
 
 export const dynamic = 'force-dynamic';
@@ -64,14 +65,38 @@ interface SpamStats {
 }
 
 export async function GET(request: NextRequest) {
-  // Verifica autorizzazione (cron o admin)
+  // Verifica autorizzazione: cron (Bearer CRON_SECRET) o admin (session cookie)
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
+  let isAuthorized = false;
 
-  // Se non è una chiamata cron, verifica auth admin
-  if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
-    // TODO: Aggiungere verifica ruolo admin
-    // Per ora accetta solo cron calls
+  // 1. Check cron auth
+  if (authHeader === `Bearer ${cronSecret}`) {
+    isAuthorized = true;
+  }
+
+  // 2. Check admin session auth (C10 fix: rimosso NEXT_PUBLIC_CRON_SECRET)
+  if (!isAuthorized) {
+    try {
+      const authSupabase = await createServerClient();
+      const { data: { user } } = await authSupabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role_id')
+          .eq('id', user.id)
+          .single();
+        // Admin check: role_id presente (admin ha un ruolo assegnato)
+        if (profile?.role_id) {
+          isAuthorized = true;
+        }
+      }
+    } catch {
+      // Auth fallita silenziosamente
+    }
+  }
+
+  if (!isAuthorized) {
     return NextResponse.json(
       { error: 'Non autorizzato' },
       { status: 401 }

@@ -5,48 +5,26 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createExerciseRecommendationService } from '@/lib/services/exercise-recommendation';
 
 export const dynamic = 'force-dynamic';
 
 function getServiceClient() {
-  return createClient(
+  return createServiceClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 }
 
-// Verifica autenticazione da cookie
-async function getUserFromRequest(request: NextRequest): Promise<string | null> {
-  // Estrai token da Authorization header o cookie
-  const authHeader = request.headers.get('Authorization');
+// Verifica autenticazione server-side (C9 fix: rimosso fallback insicuro a query params)
+async function getUserFromRequest(): Promise<string | null> {
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
 
-  if (authHeader?.startsWith('Bearer ')) {
-    const token = authHeader.substring(7);
-    const supabase = getServiceClient();
-
-    const { data: { user } } = await supabase.auth.getUser(token);
-    return user?.id || null;
-  }
-
-  // Fallback: cerca user_id nel body o query params
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('user_id');
-
-  if (userId) {
-    // Verifica che l'utente esista
-    const supabase = getServiceClient();
-    const { data } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', userId)
-      .single();
-
-    return data?.id || null;
-  }
-
-  return null;
+  if (error || !user) return null;
+  return user.id;
 }
 
 // ============================================================
@@ -54,7 +32,7 @@ async function getUserFromRequest(request: NextRequest): Promise<string | null> 
 // ============================================================
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const userId = await getUserFromRequest(request);
+    const userId = await getUserFromRequest();
 
     if (!userId) {
       return NextResponse.json(
@@ -84,7 +62,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 // ============================================================
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const userId = await getUserFromRequest(request);
+    const userId = await getUserFromRequest();
 
     if (!userId) {
       return NextResponse.json(

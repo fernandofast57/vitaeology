@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { getAnthropicClient } from '@/lib/ai-clients';
 import { ChatRequest, ChatResponse, Message } from '@/lib/ai-coach/types';
@@ -124,8 +125,26 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
   const startTime = Date.now();
 
   try {
+    // === AUTENTICAZIONE SERVER-SIDE (C1 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { message: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authUser.id;
+
     const body: ChatRequest = await request.json();
     const { messages, userContext, sessionId: clientSessionId, currentPath: requestPath } = body;
+
+    // Sovrascrivi userId dal client con quello autenticato dal server
+    if (userContext) {
+      userContext.userId = authenticatedUserId;
+    }
 
     const supabase = getSupabaseClient();
     const anthropic = getAnthropicClient();
@@ -146,11 +165,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     let userEmail: string | null = null;
     let profileCurrentPath: PathType | null = null;
 
-    if (userContext?.userId) {
+    if (authenticatedUserId) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('subscription_tier, current_path, email')
-        .eq('id', userContext.userId)
+        .eq('id', authenticatedUserId)
         .single();
 
       if (profile) {
@@ -171,7 +190,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       if (dailyLimit < 999999) {
         const { data: limitCheck, error: limitError } = await supabase
           .rpc('check_ai_coach_limit', {
-            p_user_id: userContext.userId,
+            p_user_id: authenticatedUserId,
             p_daily_limit: dailyLimit
           });
 
@@ -412,7 +431,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
 
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
-        { message: `Errore API Anthropic: ${error.message}` },
+        { message: 'Servizio temporaneamente non disponibile. Riprova tra qualche istante.' },
         { status: error.status || 500 }
       );
     }

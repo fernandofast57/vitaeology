@@ -11,7 +11,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
 import {
   updateUserAwarenessLevel,
   updateAwarenessByEmail,
@@ -24,64 +25,36 @@ import { getLevelName, getZoneForLevel, getZoneInfo } from '@/lib/awareness/type
 
 export const dynamic = 'force-dynamic';
 
-// Supabase client
+// Supabase service client (per operazioni che richiedono accesso completo)
 function getSupabase() {
-  return createClient(
+  return createServiceClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 }
 
 // =====================================================
-// GET - Ottieni livello attuale
+// GET - Ottieni livello attuale (C8 fix: richiede autenticazione)
 // =====================================================
 
 export async function GET(request: NextRequest) {
   try {
+    // === AUTENTICAZIONE SERVER-SIDE ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    // L'utente puo solo consultare il PROPRIO livello awareness
+    const targetUserId = authUser.id;
+
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const email = searchParams.get('email');
     const recalculate = searchParams.get('recalculate') === 'true';
-
-    if (!userId && !email) {
-      return NextResponse.json(
-        { error: 'userId or email required' },
-        { status: 400 }
-      );
-    }
-
-    const supabase = getSupabase();
-    let targetUserId = userId;
-
-    // Se abbiamo solo email, cerca l'userId
-    if (!targetUserId && email) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', email)
-        .single();
-
-      if (profile) {
-        targetUserId = profile.id;
-      } else {
-        // Utente non registrato
-        return NextResponse.json({
-          level: -5,
-          levelName: 'Paura di Peggiorare',
-          score: 0,
-          zone: 'sotto_necessita',
-          zoneName: 'Sotto Necessità',
-          isRegistered: false,
-        });
-      }
-    }
-
-    if (!targetUserId) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
 
     // Se richiesto ricalcolo
     if (recalculate) {
@@ -91,7 +64,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         ...result,
         isRegistered: true,
-        indicators, // Includi per debug
       });
     }
 
@@ -119,8 +91,7 @@ export async function GET(request: NextRequest) {
       calculatedAt: current.calculatedAt,
       isRegistered: true,
     });
-  } catch (error) {
-    console.error('[Awareness API] GET Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -140,15 +111,19 @@ interface PostBody {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: PostBody = await request.json();
-    const { userId, email, triggerEvent = 'manual_recalculate' } = body;
+    // === AUTENTICAZIONE SERVER-SIDE (C8 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
 
-    if (!userId && !email) {
+    if (authError || !authUser) {
       return NextResponse.json(
-        { error: 'userId or email required' },
-        { status: 400 }
+        { error: 'Non autenticato' },
+        { status: 401 }
       );
     }
+
+    const body: PostBody = await request.json();
+    const { triggerEvent = 'manual_recalculate' } = body;
 
     // Validate trigger event
     const validTriggers: TriggerEvent[] = [
@@ -171,13 +146,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let result;
-
-    if (userId) {
-      result = await updateUserAwarenessLevel(userId, triggerEvent);
-    } else if (email) {
-      result = await updateAwarenessByEmail(email, triggerEvent);
-    }
+    // Usa sempre l'userId autenticato dal server
+    const result = await updateUserAwarenessLevel(authUser.id, triggerEvent);
 
     if (!result) {
       return NextResponse.json(
@@ -206,8 +176,7 @@ export async function POST(request: NextRequest) {
       nextLevelHint: result.result.nextLevelHint,
       historyId: result.historyId,
     });
-  } catch (error) {
-    console.error('[Awareness API] POST Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

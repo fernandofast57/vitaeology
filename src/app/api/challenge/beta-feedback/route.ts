@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Errore salvataggio beta feedback:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ error: 'Errore interno del server' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

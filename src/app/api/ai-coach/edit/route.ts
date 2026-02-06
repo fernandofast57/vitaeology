@@ -1,6 +1,7 @@
 // API per modificare un messaggio utente e rigenerare risposta AI
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { getAnthropicClient } from '@/lib/ai-clients';
 import { buildSystemPrompt } from '@/lib/ai-coach/system-prompt';
@@ -30,8 +31,26 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
   const startTime = Date.now();
 
   try {
+    // === AUTENTICAZIONE SERVER-SIDE (C2 fix) ===
+    const authSupabase = await createClient();
+    const { data: { user: authUser }, error: authError } = await authSupabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return NextResponse.json(
+        { success: false, error: 'Non autenticato' },
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUserId = authUser.id;
+
     const body: EditRequest = await request.json();
     const { conversationId, newContent, userContext, previousMessages } = body;
+
+    // Sovrascrivi userId dal client con quello autenticato
+    if (userContext) {
+      userContext.userId = authenticatedUserId;
+    }
 
     if (!conversationId || !newContent?.trim()) {
       return NextResponse.json(
@@ -75,8 +94,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
       );
     }
 
-    // 4. Verifica che l'utente sia il proprietario
-    if (conversation.user_id !== userContext.userId) {
+    // 4. Verifica che l'utente sia il proprietario (usa ID autenticato, non client)
+    if (conversation.user_id !== authenticatedUserId) {
       return NextResponse.json(
         { success: false, error: 'Non autorizzato' },
         { status: 403 }
@@ -189,7 +208,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<EditRespo
 
     if (error instanceof Anthropic.APIError) {
       return NextResponse.json(
-        { success: false, error: `Errore API: ${error.message}` },
+        { success: false, error: 'Servizio temporaneamente non disponibile' },
         { status: error.status || 500 }
       );
     }
