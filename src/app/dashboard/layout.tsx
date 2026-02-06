@@ -1,3 +1,5 @@
+'use client';
+
 // Dashboard Layout con auto-logout per inattività
 import IdleTimeoutProvider from '@/components/IdleTimeoutProvider';
 
