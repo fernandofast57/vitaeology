@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES } from '@/lib/pathways';
@@ -16,6 +16,7 @@ import ExercisesCard from '@/components/dashboard/ExercisesCard';
 import RecommendedExercises from '@/components/dashboard/RecommendedExercises';
 import ChatWidget from '@/components/ai-coach/ChatWidget';
 import { AchievementsList, CelebrationModal, type Achievement } from '@/components/dashboard/AchievementCard';
+import FoundingTesterWelcome from '@/components/onboarding/FoundingTesterWelcome';
 import {
   DATABASE_TO_FRONTEND,
   FRONTEND_TO_DATABASE,
@@ -93,6 +94,10 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([]);
   const [isFoundingTester, setIsFoundingTester] = useState(false);
+  // Stati per onboarding Founding Tester
+  const [showOnboardingModal, setShowOnboardingModal] = useState(false);
+  const [premiumUntilFormatted, setPremiumUntilFormatted] = useState<string | undefined>(undefined);
+  const [activeChallengeUrl, setActiveChallengeUrl] = useState<string | undefined>(undefined);
 
   const supabase = createClient();
 
@@ -110,13 +115,55 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
         const pathways = await getUserPathways(supabase, user.id);
         setUserPathways(pathways);
 
-        // Fetch founding tester status and update current_path
+        // Fetch founding tester status, onboarding status, premium expiry
         const { data: profile } = await supabase
           .from('profiles')
-          .select('is_founding_tester')
+          .select('is_founding_tester, founding_tester_onboarding_shown, beta_premium_until')
           .eq('id', user.id)
           .single();
-        setIsFoundingTester(profile?.is_founding_tester || false);
+
+        const isFT = profile?.is_founding_tester || false;
+        setIsFoundingTester(isFT);
+
+        // Determina se mostrare il modal di onboarding
+        if (isFT && !profile?.founding_tester_onboarding_shown) {
+          // Formatta data scadenza premium
+          if (profile?.beta_premium_until) {
+            const premiumDate = new Date(profile.beta_premium_until);
+            const formatted = premiumDate.toLocaleDateString('it-IT', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
+            setPremiumUntilFormatted(formatted);
+          }
+
+          // Cerca challenge attiva dell'utente
+          const { data: activeChallenge } = await supabase
+            .from('challenge_subscribers')
+            .select('challenge, current_day, status')
+            .eq('email', user.email?.toLowerCase())
+            .eq('status', 'active')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+          if (activeChallenge) {
+            // Mappa challenge DB → frontend URL
+            const challengeUrlMap: Record<string, string> = {
+              'leadership-autentica': 'leadership',
+              'oltre-ostacoli': 'ostacoli',
+              'microfelicita': 'microfelicita',
+            };
+            const challengeSlug = challengeUrlMap[activeChallenge.challenge] || 'leadership';
+            const nextDay = (activeChallenge.current_day || 0) + 1;
+            if (nextDay <= 7) {
+              setActiveChallengeUrl(`/challenge/${challengeSlug}/day/${nextDay}`);
+            }
+          }
+
+          setShowOnboardingModal(true);
+        }
 
         // Aggiorna current_path nel profilo
         await supabase
@@ -243,6 +290,26 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
     };
     fetchData();
   }, [supabase, pathType, config.bookSlug]);
+
+  // Callback per completare onboarding Founding Tester (deve essere prima dell'early return)
+  const handleOnboardingComplete = useCallback(async () => {
+    try {
+      const response = await fetch('/api/user/onboarding-complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        console.error('Errore completamento onboarding');
+      }
+
+      // Nascondi il modal indipendentemente dal risultato
+      setShowOnboardingModal(false);
+    } catch (error) {
+      console.error('Errore completamento onboarding:', error);
+      setShowOnboardingModal(false);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -417,6 +484,16 @@ export default function PathDashboard({ pathType, autoOpenChat = false }: PathDa
           }}
           currentPath={pathType}
           autoOpen={autoOpenChat}
+        />
+      )}
+
+      {/* Modal Onboarding Founding Tester - mostrato UNA volta al primo accesso */}
+      {showOnboardingModal && (
+        <FoundingTesterWelcome
+          userName={userName}
+          premiumUntil={premiumUntilFormatted}
+          challengeUrl={activeChallengeUrl}
+          onComplete={handleOnboardingComplete}
         />
       )}
     </div>
