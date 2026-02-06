@@ -44,6 +44,9 @@ interface SignupFormProps {
   showEngagementBadge?: boolean;
   onTurnstileVerify: (token: string) => void;
   turnstileReady: boolean;
+  turnstileKey: number;
+  turnstileExpired: boolean;
+  onTurnstileExpire: () => void;
 }
 
 function SignupForm({
@@ -60,6 +63,9 @@ function SignupForm({
   showEngagementBadge = false,
   onTurnstileVerify,
   turnstileReady,
+  turnstileKey,
+  turnstileExpired,
+  onTurnstileExpire,
 }: SignupFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
@@ -86,11 +92,20 @@ function SignupForm({
         className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-violet-500"
       />
       {/* Turnstile - captcha invisibile */}
-      <Turnstile
-        onVerify={onTurnstileVerify}
-        theme="dark"
-        className="flex justify-center"
-      />
+      <div className="flex flex-col items-center gap-2">
+        <Turnstile
+          key={turnstileKey}
+          onVerify={onTurnstileVerify}
+          onExpire={onTurnstileExpire}
+          theme="dark"
+          className="flex justify-center"
+        />
+        {turnstileExpired && (
+          <p className="text-sm text-violet-400">
+            Verifica di sicurezza scaduta. Rinnovo in corso...
+          </p>
+        )}
+      </div>
       {error && <p className="text-red-400 text-sm">{error}</p>}
       <button
         type="submit"
@@ -126,9 +141,21 @@ function MicrofelicitaLandingContent() {
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileExpired, setTurnstileExpired] = useState(false);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleTurnstileVerify = useCallback((token: string) => {
     setTurnstileToken(token);
+    setTurnstileExpired(false);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+    setTurnstileExpired(true);
+    setTimeout(() => {
+      setTurnstileKey(prev => prev + 1);
+      setTurnstileExpired(false);
+    }, 1000);
   }, []);
 
   // Behavioral tracking con variante "epiphany"
@@ -336,6 +363,9 @@ function MicrofelicitaLandingContent() {
               showEngagementBadge={true}
               onTurnstileVerify={handleTurnstileVerify}
               turnstileReady={!!turnstileToken}
+              turnstileKey={turnstileKey}
+              turnstileExpired={turnstileExpired}
+              onTurnstileExpire={handleTurnstileExpire}
             />
           </div>
 
@@ -775,6 +805,9 @@ function MicrofelicitaLandingContent() {
             showEngagementBadge={true}
             onTurnstileVerify={handleTurnstileVerify}
             turnstileReady={!!turnstileToken}
+            turnstileKey={turnstileKey}
+            turnstileExpired={turnstileExpired}
+            onTurnstileExpire={handleTurnstileExpire}
           />
 
           <p className="text-slate-500 text-sm mt-4">

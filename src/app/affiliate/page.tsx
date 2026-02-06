@@ -9,6 +9,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Shield } from 'lucide-react';
+import Turnstile from '@/components/Turnstile';
 
 export default function AffiliatePage() {
   const [formData, setFormData] = useState({
@@ -20,17 +22,26 @@ export default function AffiliatePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileExpired, setTurnstileExpired] = useState(false);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
+    if (!turnstileToken) {
+      setError('Completa la verifica di sicurezza');
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch('/api/affiliate/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, turnstileToken }),
       });
 
       const data = await res.json();
@@ -469,7 +480,7 @@ export default function AffiliatePage() {
               />
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4">
               <label className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -487,9 +498,43 @@ export default function AffiliatePage() {
               </label>
             </div>
 
+            {/* Turnstile CAPTCHA */}
+            <div className="flex flex-col items-center gap-2 mb-6">
+              <Turnstile
+                key={turnstileKey}
+                onVerify={(token) => {
+                  setTurnstileToken(token);
+                  setTurnstileExpired(false);
+                }}
+                onError={() => setError('Verifica di sicurezza fallita. Ricarica la pagina.')}
+                onExpire={() => {
+                  setTurnstileToken(null);
+                  setTurnstileExpired(true);
+                  // Auto-refresh widget dopo 1 secondo
+                  setTimeout(() => {
+                    setTurnstileKey(prev => prev + 1);
+                    setTurnstileExpired(false);
+                  }, 1000);
+                }}
+                theme="light"
+                size="normal"
+              />
+              {turnstileExpired && (
+                <p className="text-sm text-amber-600">
+                  Verifica di sicurezza scaduta. Rinnovo in corso...
+                </p>
+              )}
+              {turnstileToken && !turnstileExpired && (
+                <div className="flex items-center gap-1 text-xs text-green-600">
+                  <Shield className="h-3 w-3" />
+                  Verificato
+                </div>
+              )}
+            </div>
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !turnstileToken}
               className="w-full py-3 bg-petrol-600 text-white font-semibold rounded-lg hover:bg-petrol-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Invio in corso...' : 'Richiedi accesso'}

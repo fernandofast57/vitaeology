@@ -118,6 +118,12 @@ export const RATE_LIMITS = {
     windowSeconds: 60,
     identifier: 'public-form',
   },
+  // Challenge subscribe: 10 richieste per minuto (evita falsi positivi su 3 landing)
+  challengeSubscribe: {
+    maxRequests: 10,
+    windowSeconds: 60,
+    identifier: 'challenge-subscribe',
+  },
   // API generiche: 30 richieste per minuto
   api: {
     maxRequests: 30,

@@ -165,9 +165,22 @@ function BetaPageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileExpired, setTurnstileExpired] = useState(false);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleTurnstileVerify = useCallback((token: string) => {
     setTurnstileToken(token);
+    setTurnstileExpired(false);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+    setTurnstileExpired(true);
+    // Auto-refresh widget dopo 1 secondo
+    setTimeout(() => {
+      setTurnstileKey(prev => prev + 1);
+      setTurnstileExpired(false);
+    }, 1000);
   }, []);
 
   // Seleziona challenge e mostra form
@@ -567,8 +580,18 @@ function BetaPageContent() {
               </div>
 
               {/* Turnstile */}
-              <div className="flex justify-center">
-                <Turnstile onVerify={handleTurnstileVerify} theme="light" />
+              <div className="flex flex-col items-center gap-2">
+                <Turnstile
+                  key={turnstileKey}
+                  onVerify={handleTurnstileVerify}
+                  onExpire={handleTurnstileExpire}
+                  theme="light"
+                />
+                {turnstileExpired && (
+                  <p className="text-sm text-amber-600">
+                    Verifica di sicurezza scaduta. Rinnovo in corso...
+                  </p>
+                )}
               </div>
 
               {/* Error */}

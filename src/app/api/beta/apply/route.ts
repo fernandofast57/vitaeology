@@ -6,6 +6,9 @@ import { createClient } from '@supabase/supabase-js';
 import { sendBetaWelcomeEmail, sendBetaWaitlistEmail } from '@/lib/email/beta-tester-emails';
 import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
 import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
+import { validateName, isDefinitelySpam, shouldFlagForReview } from '@/lib/validation/name-validator';
+import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
+import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,6 +21,14 @@ const MAX_BETA_TESTERS = 20;
 export async function POST(request: Request) {
   // Rate limiting: max 5 richieste per minuto per IP
   const clientIP = getClientIP(request);
+  const userAgent = request.headers.get('user-agent') || undefined;
+
+  // 0. Verifica IP blocklist
+  const ipBlockCheck = await isIPBlocked(clientIP);
+  if (ipBlockCheck.isBlocked) {
+    return blockedIPResponse();
+  }
+
   const rateLimit = checkRateLimit(clientIP, RATE_LIMITS.publicForm);
 
   if (!rateLimit.success) {
@@ -45,10 +56,24 @@ export async function POST(request: Request) {
     // Verifica Turnstile (anti-bot)
     const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP);
     if (!turnstileResult.success) {
+      await logSignupAttempt({
+        email: email || 'missing',
+        name: full_name,
+        ipAddress: clientIP,
+        userAgent,
+        turnstilePassed: false,
+        emailValid: true,
+        nameSuspicionScore: 0,
+        blocked: true,
+        blockReason: 'turnstile_failed',
+        success: false,
+        source: 'beta',
+        metadata: { job_title, company },
+      });
       return turnstileFailedResponse(turnstileResult.error);
     }
 
-    // Validazione
+    // Validazione campi obbligatori
     if (!email || !full_name || !job_title || !years_experience || !device || !motivation || !hours_available) {
       return NextResponse.json(
         { error: 'Compila tutti i campi obbligatori' },
@@ -59,11 +84,60 @@ export async function POST(request: Request) {
     // Validazione email completa (formato + spam + domini disposable)
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
+      await logSignupAttempt({
+        email,
+        name: full_name,
+        ipAddress: clientIP,
+        userAgent,
+        turnstilePassed: true,
+        emailValid: false,
+        nameSuspicionScore: 0,
+        blocked: true,
+        blockReason: `email_invalid: ${emailValidation.reason}`,
+        success: false,
+        source: 'beta',
+        metadata: { job_title, company },
+      });
       return NextResponse.json(
         { error: emailValidation.reason || 'Email non valida' },
         { status: 400 }
       );
     }
+
+    // Validazione nome (anti-spam)
+    const nameValidation = validateName(full_name);
+    const nameSuspicionScore = nameValidation.suspicionScore;
+
+    if (isDefinitelySpam(nameValidation)) {
+      await logSignupAttempt({
+        email,
+        name: full_name,
+        ipAddress: clientIP,
+        userAgent,
+        turnstilePassed: true,
+        emailValid: true,
+        nameSuspicionScore,
+        blocked: true,
+        blockReason: `spam_name: ${nameValidation.flags.join(', ')}`,
+        success: false,
+        source: 'beta',
+        metadata: { job_title, company },
+      });
+
+      // Auto-block IP se troppi tentativi spam
+      const autoBlockCheck = await shouldAutoBlockIP(clientIP);
+      if (autoBlockCheck.shouldBlock) {
+        await blockIP(clientIP, autoBlockCheck.reason || 'Too many spam attempts', 24);
+      }
+
+      return NextResponse.json(
+        { error: nameValidation.reason || 'Il nome inserito non è valido' },
+        { status: 400 }
+      );
+    }
+
+    // Flag per review se sospetto ma non definitivamente spam
+    const flagForReview = shouldFlagForReview(nameValidation);
 
     // Verifica se email già registrata
     const { data: existing } = await supabase
@@ -121,6 +195,27 @@ export async function POST(request: Request) {
       );
     }
 
+    // Log tentativo riuscito
+    await logSignupAttempt({
+      email: email.toLowerCase(),
+      name: full_name,
+      ipAddress: clientIP,
+      userAgent,
+      turnstilePassed: true,
+      emailValid: true,
+      nameSuspicionScore,
+      blocked: false,
+      success: true,
+      source: 'beta',
+      metadata: {
+        job_title,
+        company,
+        status,
+        flaggedForReview: flagForReview,
+        betaTesterId: data.id,
+      },
+    });
+
     // NON inviare email subito - il cron la invierà domani
     if (spotsAvailable) {
       // Sarà approvato domani
@@ -158,6 +253,25 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error('Errore API beta/apply:', error);
+
+    // Log errore
+    try {
+      await logSignupAttempt({
+        email: 'error',
+        ipAddress: clientIP,
+        userAgent,
+        turnstilePassed: true,
+        emailValid: true,
+        nameSuspicionScore: 0,
+        blocked: false,
+        blockReason: 'server_error',
+        success: false,
+        source: 'beta',
+      });
+    } catch {
+      // Ignora errori di logging
+    }
+
     return NextResponse.json(
       { error: 'Errore interno del server' },
       { status: 500 }

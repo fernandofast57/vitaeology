@@ -21,6 +21,8 @@ function SignupForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileExpired, setTurnstileExpired] = useState(false)
+  const [turnstileKey, setTurnstileKey] = useState(0)
 
   // Pre-compila email se presente nell'URL
   useEffect(() => {
@@ -213,13 +215,30 @@ function SignupForm() {
             {/* Turnstile CAPTCHA */}
             <div className="flex flex-col items-center gap-2">
               <Turnstile
-                onVerify={(token) => setTurnstileToken(token)}
+                key={turnstileKey}
+                onVerify={(token) => {
+                  setTurnstileToken(token)
+                  setTurnstileExpired(false)
+                }}
                 onError={() => setError('Verifica di sicurezza fallita. Ricarica la pagina.')}
-                onExpire={() => setTurnstileToken(null)}
+                onExpire={() => {
+                  setTurnstileToken(null)
+                  setTurnstileExpired(true)
+                  // Auto-refresh widget dopo 1 secondo
+                  setTimeout(() => {
+                    setTurnstileKey(prev => prev + 1)
+                    setTurnstileExpired(false)
+                  }, 1000)
+                }}
                 theme="light"
                 size="normal"
               />
-              {turnstileToken && (
+              {turnstileExpired && (
+                <p className="text-sm text-amber-600">
+                  Verifica di sicurezza scaduta. Rinnovo in corso...
+                </p>
+              )}
+              {turnstileToken && !turnstileExpired && (
                 <div className="flex items-center gap-1 text-xs text-green-600">
                   <Shield className="h-3 w-3" />
                   Verificato

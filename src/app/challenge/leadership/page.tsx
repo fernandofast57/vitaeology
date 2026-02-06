@@ -26,9 +26,22 @@ function LeadershipLandingContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileExpired, setTurnstileExpired] = useState(false);
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   const handleTurnstileVerify = useCallback((token: string) => {
     setTurnstileToken(token);
+    setTurnstileExpired(false);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken(null);
+    setTurnstileExpired(true);
+    // Auto-refresh widget dopo 1 secondo
+    setTimeout(() => {
+      setTurnstileKey(prev => prev + 1);
+      setTurnstileExpired(false);
+    }, 1000);
   }, []);
 
   // Behavioral tracking
@@ -178,11 +191,19 @@ function LeadershipLandingContent() {
         className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-colors"
       />
       {/* Turnstile - captcha invisibile */}
-      <Turnstile
-        onVerify={handleTurnstileVerify}
-        theme="dark"
-        className="flex justify-center"
-      />
+      <div className="flex flex-col items-center gap-2">
+        <Turnstile
+          key={turnstileKey}
+          onVerify={handleTurnstileVerify}
+          onExpire={handleTurnstileExpire}
+          theme="dark"
+        />
+        {turnstileExpired && (
+          <p className="text-sm text-amber-400">
+            Verifica di sicurezza scaduta. Rinnovo in corso...
+          </p>
+        )}
+      </div>
       {error && <p className="text-red-400 text-sm">{error}</p>}
       <button
         type="submit"

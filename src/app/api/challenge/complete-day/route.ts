@@ -3,12 +3,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
+import { createClient } from '@/lib/supabase/server';
 import { CHALLENGE_TO_ASSESSMENT, grantAssessmentAccess } from '@/lib/assessment-access';
 import { CHALLENGE_TYPE_MAP } from '@/lib/challenge/config';
 import { sendChallengeEmail } from '@/lib/email/challenge-emails';
 import { sendAffiliateInviteEmail, sendBetaPremiumActivatedEmail } from '@/lib/email/beta-tester-emails';
 import { onChallengeDayCompleted } from '@/lib/awareness';
 import { alertAPIError } from '@/lib/error-alerts';
+import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -21,6 +23,29 @@ interface CompleteRequestBody {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 30 richieste per minuto per IP (completamento giorno)
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, {
+    maxRequests: 30,
+    windowSeconds: 60,
+    identifier: 'challenge-complete-day',
+  });
+
+  if (!rateLimit.success) {
+    return rateLimitExceededResponse(rateLimit.resetIn);
+  }
+
+  // Verifica autenticazione utente
+  const supabaseAuth = await createClient();
+  const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+  if (authError || !user) {
+    return NextResponse.json(
+      { error: 'Non autorizzato' },
+      { status: 401 }
+    );
+  }
+
   try {
     const body: CompleteRequestBody = await request.json();
     const { email, challengeType, dayNumber } = body;
@@ -30,6 +55,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Email, challengeType e dayNumber sono obbligatori' },
         { status: 400 }
+      );
+    }
+
+    // Verifica che l'utente stia completando il proprio challenge (non quello di altri)
+    if (user.email?.toLowerCase() !== email.toLowerCase()) {
+      return NextResponse.json(
+        { error: 'Non autorizzato a completare questo challenge' },
+        { status: 403 }
       );
     }
 

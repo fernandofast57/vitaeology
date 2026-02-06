@@ -20,6 +20,7 @@ import {
   ThresholdResult
 } from '@/lib/monitoring/thresholds';
 import { sendErrorAlert } from '@/lib/error-alerts';
+import { cleanupExpiredBlocks } from '@/lib/validation/ip-blocklist';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -130,6 +131,109 @@ async function runHealthCheck(): Promise<{ results: HealthCheckResult[]; isAnoma
 }
 
 // =====================================================
+// SPAM CHECK
+// =====================================================
+
+interface SpamCheckResult {
+  lastHour: {
+    total: number;
+    blocked: number;
+    success: number;
+  };
+  last24h: {
+    total: number;
+    blocked: number;
+  };
+  suspiciousIPCount: number;
+  highSuspicionNameCount: number;
+  alerts: string[];
+  isAnomaly: boolean;
+}
+
+// Soglie per spam alerts
+const SPAM_THRESHOLDS = {
+  registrationsPerHour: 10,
+  sameIPAttemptsPerHour: 3,
+  highSuspicionNamesIn24h: 5,
+  blockedAttemptsPerHour: 3,
+};
+
+async function runSpamCheck(supabase: ReturnType<typeof getSupabase>): Promise<SpamCheckResult> {
+  const now = new Date();
+  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+  const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+  // Cleanup expired IP blocks
+  await cleanupExpiredBlocks();
+
+  // Stats ultima ora
+  const { data: lastHourData } = await supabase
+    .from('signup_attempts')
+    .select('*')
+    .gte('created_at', oneHourAgo.toISOString());
+
+  const lastHour = {
+    total: lastHourData?.length || 0,
+    blocked: lastHourData?.filter(d => d.blocked).length || 0,
+    success: lastHourData?.filter(d => d.success).length || 0,
+  };
+
+  // Stats ultime 24h
+  const { data: last24hData } = await supabase
+    .from('signup_attempts')
+    .select('*')
+    .gte('created_at', oneDayAgo.toISOString());
+
+  const last24h = {
+    total: last24hData?.length || 0,
+    blocked: last24hData?.filter(d => d.blocked).length || 0,
+  };
+
+  // IP sospetti (più di 3 tentativi in 1 ora)
+  const ipCounts = new Map<string, number>();
+  for (const attempt of lastHourData || []) {
+    const ip = attempt.ip_address;
+    if (ip) {
+      ipCounts.set(ip, (ipCounts.get(ip) || 0) + 1);
+    }
+  }
+  const suspiciousIPCount = Array.from(ipCounts.values()).filter(c => c > 3).length;
+
+  // Nomi con alto suspicion score nelle ultime 24h
+  const highSuspicionNameCount = (last24hData || [])
+    .filter(d => d.name_suspicion_score && d.name_suspicion_score >= 60)
+    .length;
+
+  // Valuta alerts
+  const alerts: string[] = [];
+
+  if (lastHour.total > SPAM_THRESHOLDS.registrationsPerHour) {
+    alerts.push(`⚠️ ${lastHour.total} registrazioni nell'ultima ora (soglia: ${SPAM_THRESHOLDS.registrationsPerHour})`);
+  }
+
+  if (suspiciousIPCount > 0) {
+    alerts.push(`⚠️ ${suspiciousIPCount} IP sospetti (>3 tentativi/ora)`);
+  }
+
+  if (highSuspicionNameCount > SPAM_THRESHOLDS.highSuspicionNamesIn24h) {
+    alerts.push(`⚠️ ${highSuspicionNameCount} nomi con score ≥60 nelle ultime 24h`);
+  }
+
+  if (lastHour.blocked > SPAM_THRESHOLDS.blockedAttemptsPerHour) {
+    alerts.push(`⚠️ ${lastHour.blocked} tentativi bloccati nell'ultima ora`);
+  }
+
+  return {
+    lastHour,
+    last24h,
+    suspiciousIPCount,
+    highSuspicionNameCount,
+    alerts,
+    isAnomaly: alerts.length > 0,
+  };
+}
+
+// =====================================================
 // VALUTA ALERT E INVIA SE NECESSARIO
 // =====================================================
 
@@ -237,6 +341,7 @@ async function runMonitoring(): Promise<NextResponse> {
     const results: Record<string, unknown> = {};
     let healthResults: HealthCheckResult[] = [];
     let overallIsAnomaly = false;
+    let spamCheckResult: SpamCheckResult | null = null;
 
     // Esegui Health Check (sempre prioritario)
     if (checksToRun.some(c => c.checkType === 'health')) {
@@ -255,6 +360,49 @@ async function runMonitoring(): Promise<NextResponse> {
         services: healthResults,
         isAnomaly: overallIsAnomaly
       };
+
+      // Run spam check alongside health check
+      try {
+        spamCheckResult = await runSpamCheck(supabase);
+        results.spam = spamCheckResult;
+
+        if (spamCheckResult.isAnomaly) {
+          overallIsAnomaly = true;
+
+          // Log spam alerts
+          for (const alert of spamCheckResult.alerts) {
+            await supabase.from('monitoring_alerts_log').insert({
+              alert_type: 'spam_anomaly',
+              severity: 'warning',
+              metric_name: 'spam_check',
+              threshold_value: null,
+              actual_value: null,
+              message: alert
+            });
+          }
+
+          // Send email alert for spam anomalies
+          await sendErrorAlert({
+            type: 'spam_monitoring',
+            severity: 'medium',
+            message: `[SPAM] ${spamCheckResult.alerts.length} anomalie rilevate - ` +
+              `Ultima ora: ${spamCheckResult.lastHour.total} tentativi, ${spamCheckResult.lastHour.blocked} bloccati - ` +
+              `IP sospetti: ${spamCheckResult.suspiciousIPCount} - Nomi sospetti: ${spamCheckResult.highSuspicionNameCount}`,
+            context: {
+              requestBody: {
+                lastHour: spamCheckResult.lastHour,
+                last24h: spamCheckResult.last24h,
+                suspiciousIPCount: spamCheckResult.suspiciousIPCount,
+                highSuspicionNameCount: spamCheckResult.highSuspicionNameCount,
+                alerts: spamCheckResult.alerts
+              }
+            }
+          });
+        }
+      } catch (spamError) {
+        console.error('[Monitoring] Errore spam check:', spamError);
+        results.spam = { error: 'Failed to run spam check' };
+      }
     } else {
       // Recupera ultimo health check per metriche
       const { data: lastMetrics } = await supabase
@@ -350,9 +498,17 @@ async function runMonitoring(): Promise<NextResponse> {
         p4: {
           patterns_detected: metrics.p4_quantity_patterns_detected,
           patterns_corrected: metrics.p4_quantity_patterns_corrected
-        }
+        },
+        spam: spamCheckResult ? {
+          lastHour: spamCheckResult.lastHour,
+          last24h: spamCheckResult.last24h,
+          suspiciousIPs: spamCheckResult.suspiciousIPCount,
+          highSuspicionNames: spamCheckResult.highSuspicionNameCount,
+          alertsCount: spamCheckResult.alerts.length
+        } : null
       },
-      alertsTriggered: alertsTriggered.length,
+      alertsTriggered: alertsTriggered.length + (spamCheckResult?.alerts.length || 0),
+      spamAlerts: spamCheckResult?.alerts || [],
       decisions,
       duration_ms: Date.now() - startTime
     });

@@ -7,6 +7,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabase/service';
+import { createClient } from '@/lib/supabase/server';
+import { checkRateLimit, getClientIP } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -131,6 +133,30 @@ function validateEvent(event: unknown): BehavioralEventPayload | null {
 // ============================================================================
 
 export async function POST(request: NextRequest) {
+  // Light rate limiting for analytics (100 requests per minute per IP)
+  const clientIP = getClientIP(request);
+  const rateLimit = checkRateLimit(clientIP, {
+    maxRequests: 100,
+    windowSeconds: 60,
+    identifier: 'analytics-behavioral',
+  });
+
+  if (!rateLimit.success) {
+    // Return success but don't process - analytics shouldn't block UX
+    return NextResponse.json({ success: true, count: 0, rateLimited: true });
+  }
+
+  // Verifica autenticazione utente
+  const supabaseAuth = await createClient();
+  const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+  if (authError || !user) {
+    return NextResponse.json(
+      { error: 'Non autorizzato' },
+      { status: 401 }
+    );
+  }
+
   try {
     // Parse body
     const body: BatchPayload = await request.json();

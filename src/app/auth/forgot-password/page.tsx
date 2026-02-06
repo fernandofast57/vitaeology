@@ -3,34 +3,53 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
-import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Mail, ArrowLeft, CheckCircle, AlertCircle, Loader2, Shield } from 'lucide-react'
+import Turnstile from '@/components/Turnstile'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileExpired, setTurnstileExpired] = useState(false)
+  const [turnstileKey, setTurnstileKey] = useState(0)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    const supabase = createClient()
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
-    })
-
-    if (error) {
-      setError('Errore durante l\'invio. Verifica l\'email e riprova.')
+    if (!turnstileToken) {
+      setError('Completa la verifica di sicurezza')
       setLoading(false)
       return
     }
 
-    setSuccess(true)
-    setLoading(false)
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          turnstileToken,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Errore durante l\'invio. Riprova.')
+        setLoading(false)
+        return
+      }
+
+      setSuccess(true)
+    } catch {
+      setError('Errore di connessione. Riprova.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (success) {
@@ -45,7 +64,7 @@ export default function ForgotPasswordPage() {
               Email inviata!
             </h2>
             <p className="text-gray-600 mb-6">
-              Ti abbiamo inviato un link per reimpostare la password a <strong>{email}</strong>.
+              Se l&apos;email è registrata, riceverai un link per reimpostare la password.
               Controlla la tua casella di posta (anche lo spam).
             </p>
             <Link
@@ -114,9 +133,43 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
+            {/* Turnstile CAPTCHA */}
+            <div className="flex flex-col items-center gap-2">
+              <Turnstile
+                key={turnstileKey}
+                onVerify={(token) => {
+                  setTurnstileToken(token)
+                  setTurnstileExpired(false)
+                }}
+                onError={() => setError('Verifica di sicurezza fallita. Ricarica la pagina.')}
+                onExpire={() => {
+                  setTurnstileToken(null)
+                  setTurnstileExpired(true)
+                  // Auto-refresh widget dopo 1 secondo
+                  setTimeout(() => {
+                    setTurnstileKey(prev => prev + 1)
+                    setTurnstileExpired(false)
+                  }, 1000)
+                }}
+                theme="light"
+                size="normal"
+              />
+              {turnstileExpired && (
+                <p className="text-sm text-amber-600">
+                  Verifica di sicurezza scaduta. Rinnovo in corso...
+                </p>
+              )}
+              {turnstileToken && !turnstileExpired && (
+                <div className="flex items-center gap-1 text-xs text-green-600">
+                  <Shield className="h-3 w-3" />
+                  Verificato
+                </div>
+              )}
+            </div>
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !turnstileToken}
               className="w-full py-3 px-4 bg-petrol-600 hover:bg-petrol-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
