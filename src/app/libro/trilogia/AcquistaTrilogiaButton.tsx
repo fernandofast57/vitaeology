@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ShoppingCart, Loader2 } from 'lucide-react';
 import { getTrilogia } from '@/data/libri';
+import { isValidRedirectUrl } from '@/lib/security';
 
 interface Props {
   size?: 'normal' | 'large';
@@ -28,10 +29,9 @@ export default function AcquistaTrilogiaButton({ size = 'normal', variant = 'pri
 
       const data = await response.json();
 
-      if (data.url) {
+      if (data.url && isValidRedirectUrl(data.url)) {
         window.location.href = data.url;
       } else {
-        console.error('Errore checkout:', data.error);
         setIsLoading(false);
       }
     } catch (error) {
