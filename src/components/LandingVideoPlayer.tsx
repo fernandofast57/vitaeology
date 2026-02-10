@@ -70,8 +70,9 @@ export function LandingVideoPlayer({
             className="w-full h-full object-contain"
             controls
             playsInline
+            preload="auto"
+            src={videoUrl}
           >
-            <source src={videoUrl} type="video/mp4" />
             Il tuo browser non supporta il video.
           </video>
         )}
