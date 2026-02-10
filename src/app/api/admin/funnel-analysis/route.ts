@@ -1,6 +1,8 @@
 // API Admin Funnel Analysis
 // Analisi conversione: iscrizione → giorni → assessment
 
+export const dynamic = 'force-dynamic';
+
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
