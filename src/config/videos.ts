@@ -8,27 +8,30 @@
 // Cloudflare R2 CDN base URL
 const R2_CDN_URL = 'https://pub-2417d7e6729544f893d3a858ccab7ea2.r2.dev';
 
+// Cache buster: incrementare quando si caricano nuovi video su R2
+const VIDEO_VERSION = 'v=2';
+
 // Video landing page (hostati su Cloudflare R2)
 export const LANDING_VIDEOS = {
   homepage: {
-    videoUrl: `${R2_CDN_URL}/homepage.mp4`,
+    videoUrl: `${R2_CDN_URL}/homepage.mp4?${VIDEO_VERSION}`,
     thumbnail: '/videos/thumbnails/01_homepage_thumbnail.webp',
   },
   // Video per /beta - TODO: aggiornare quando pronto
   beta: {
-    videoUrl: `${R2_CDN_URL}/beta.mp4`,
+    videoUrl: `${R2_CDN_URL}/beta.mp4?${VIDEO_VERSION}`,
     thumbnail: '/videos/thumbnails/01_homepage_thumbnail.webp', // Usa homepage come placeholder
   },
   leadership: {
-    videoUrl: `${R2_CDN_URL}/leadership.mp4`,
+    videoUrl: `${R2_CDN_URL}/leadership.mp4?${VIDEO_VERSION}`,
     thumbnail: '/videos/thumbnails/02_leadership_thumbnail.webp',
   },
   ostacoli: {
-    videoUrl: `${R2_CDN_URL}/ostacoli.mp4`,
+    videoUrl: `${R2_CDN_URL}/ostacoli.mp4?${VIDEO_VERSION}`,
     thumbnail: '/videos/thumbnails/03_ostacoli_thumbnail.webp',
   },
   microfelicita: {
-    videoUrl: `${R2_CDN_URL}/microfelicita.mp4`,
+    videoUrl: `${R2_CDN_URL}/microfelicita.mp4?${VIDEO_VERSION}`,
     thumbnail: '/videos/thumbnails/04_microfelicita_thumbnail.webp',
   },
 };
@@ -36,39 +39,39 @@ export const LANDING_VIDEOS = {
 // Video delle challenge (7 giorni ciascuna) - hostati su Cloudflare R2
 export const CHALLENGE_VIDEOS = {
   leadership: {
-    hero: `${R2_CDN_URL}/leadership.mp4`,
+    hero: `${R2_CDN_URL}/leadership.mp4?${VIDEO_VERSION}`,
     days: [
-      `${R2_CDN_URL}/leadership-day-1.mp4`,
-      `${R2_CDN_URL}/leadership-day-2.mp4`,
-      `${R2_CDN_URL}/leadership-day-3.mp4`,
-      `${R2_CDN_URL}/leadership-day-4.mp4`,
-      `${R2_CDN_URL}/leadership-day-5.mp4`,
-      `${R2_CDN_URL}/leadership-day-6.mp4`,
-      `${R2_CDN_URL}/leadership-day-7.mp4`,
+      `${R2_CDN_URL}/leadership-day-1.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-2.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-3.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-4.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-5.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-6.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/leadership-day-7.mp4?${VIDEO_VERSION}`,
     ],
   },
   ostacoli: {
-    hero: `${R2_CDN_URL}/ostacoli.mp4`,
+    hero: `${R2_CDN_URL}/ostacoli.mp4?${VIDEO_VERSION}`,
     days: [
-      `${R2_CDN_URL}/ostacoli-day-1.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-2.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-3.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-4.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-5.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-6.mp4`,
-      `${R2_CDN_URL}/ostacoli-day-7.mp4`,
+      `${R2_CDN_URL}/ostacoli-day-1.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-2.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-3.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-4.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-5.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-6.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/ostacoli-day-7.mp4?${VIDEO_VERSION}`,
     ],
   },
   microfelicita: {
-    hero: `${R2_CDN_URL}/microfelicita.mp4`,
+    hero: `${R2_CDN_URL}/microfelicita.mp4?${VIDEO_VERSION}`,
     days: [
-      `${R2_CDN_URL}/microfelicita-day-1.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-2.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-3.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-4.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-5.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-6.mp4`,
-      `${R2_CDN_URL}/microfelicita-day-7.mp4`,
+      `${R2_CDN_URL}/microfelicita-day-1.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-2.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-3.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-4.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-5.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-6.mp4?${VIDEO_VERSION}`,
+      `${R2_CDN_URL}/microfelicita-day-7.mp4?${VIDEO_VERSION}`,
     ],
   },
 };
