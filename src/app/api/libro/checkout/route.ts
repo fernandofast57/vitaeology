@@ -1,7 +1,7 @@
 // API per checkout libri (one-time payment) con tracking affiliato
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { getLibroBySlug, getTrilogia } from '@/data/libri';
 import { alertPaymentError } from '@/lib/error-alerts';
 
@@ -11,13 +11,6 @@ const AFFILIATE_COOKIE_NAME = 'vitae_ref';
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
-}
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 }
 
 export async function POST(request: NextRequest) {
@@ -55,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     const stripe = getStripe();
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
 
     // =========================================================================
     // AFFILIATE TRACKING - Leggi cookie e trova affiliato
@@ -167,7 +160,7 @@ export async function POST(request: NextRequest) {
 async function handleTrilogiaCheckout(request: NextRequest) {
   const trilogia = getTrilogia();
   const stripe = getStripe();
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   // =========================================================================
   // AFFILIATE TRACKING - Leggi cookie e trova affiliato

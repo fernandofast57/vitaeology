@@ -7,6 +7,7 @@ import {
   loadMicrofelicitaAnswers,
 } from '@/lib/supabase/microfelicita';
 import { checkAssessmentAccess } from '@/lib/assessment-access';
+import { markChallengeConvertedToAssessment } from '@/lib/challenges';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,24 @@ export async function POST() {
         started_at: new Date().toISOString(),
         completed_at: null,
       };
+
+      // Tracking conversione challenge→assessment (P2 Viability)
+      try {
+        const { data: completedChallenges } = await supabase
+          .from('challenge_subscribers')
+          .select('id')
+          .or(`user_id.eq.${user.id},email.eq.${user.email}`)
+          .eq('status', 'completed')
+          .eq('converted_to_assessment', false);
+
+        if (completedChallenges && completedChallenges.length > 0) {
+          for (const challenge of completedChallenges) {
+            await markChallengeConvertedToAssessment(supabase, challenge.id);
+          }
+        }
+      } catch (convError) {
+        console.error('Errore tracking conversione challenge→assessment:', convError);
+      }
     }
 
     return NextResponse.json({

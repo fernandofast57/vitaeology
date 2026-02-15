@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { determineChecksToRun, updateScheduleState, CheckType, initializeScheduler } from '@/lib/monitoring/scheduler';
 import { calculateAll12Factors, saveMetrics12F, HealthCheckResult } from '@/lib/monitoring/metrics-12f';
 import {
@@ -25,14 +25,6 @@ import { cleanupExpiredBlocks } from '@/lib/validation/ip-blocklist';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-// Supabase client con service role
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
 // =====================================================
 // HEALTH CHECK (P1)
 // =====================================================
@@ -43,7 +35,7 @@ async function runHealthCheck(): Promise<{ results: HealthCheckResult[]; isAnoma
   // Database
   const dbStart = Date.now();
   try {
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
     await supabase.from('profiles').select('id').limit(1);
     results.push({ service: 'Database', status: 'ok', latency: Date.now() - dbStart });
   } catch {
@@ -53,7 +45,7 @@ async function runHealthCheck(): Promise<{ results: HealthCheckResult[]; isAnoma
   // Auth
   const authStart = Date.now();
   try {
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
     await supabase.auth.admin.listUsers({ page: 1, perPage: 1 });
     results.push({ service: 'Auth', status: 'ok', latency: Date.now() - authStart });
   } catch {
@@ -158,7 +150,7 @@ const SPAM_THRESHOLDS = {
   blockedAttemptsPerHour: 3,
 };
 
-async function runSpamCheck(supabase: ReturnType<typeof getSupabase>): Promise<SpamCheckResult> {
+async function runSpamCheck(supabase: ReturnType<typeof getServiceClient>): Promise<SpamCheckResult> {
   const now = new Date();
   const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -238,7 +230,7 @@ async function runSpamCheck(supabase: ReturnType<typeof getSupabase>): Promise<S
 // =====================================================
 
 async function evaluateAndAlert(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   metrics: Record<string, number | null>,
   checkType: 'P1' | 'P2' | 'P4'
 ): Promise<ThresholdResult[]> {
@@ -310,7 +302,7 @@ export async function POST(request: NextRequest) {
 
 async function runMonitoring(): Promise<NextResponse> {
   const startTime = Date.now();
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   try {
     // Inizializza scheduler se necessario

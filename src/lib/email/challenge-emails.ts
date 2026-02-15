@@ -9,10 +9,8 @@
  * - Sequenza post-challenge
  */
 
-import { Resend } from 'resend';
-import { createClient } from '@supabase/supabase-js';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from '@/lib/email/client';
+import { getServiceClient } from '@/lib/supabase/service';
 
 // ============================================================
 // CONFIGURAZIONE CHALLENGE
@@ -168,13 +166,6 @@ export function getCompletionBullets(challengeType: ChallengeType): string[] {
   return COMPLETION_BULLETS[challengeType] || [];
 }
 
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
 async function logEmail(
   email: string,
   emailType: string,
@@ -183,7 +174,7 @@ async function logEmail(
   subject?: string
 ): Promise<void> {
   try {
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
     await supabase.rpc('log_email_sent', {
       p_email: email,
       p_email_type: emailType,
@@ -738,7 +729,7 @@ export async function sendChallengeEmail(
 
   // Invia email
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Fernando <fernando@vitaeology.com>',
       to,
       subject,
@@ -779,7 +770,7 @@ export async function fetchMiniProfileForEmail(
     // Import dinamico per evitare dipendenze circolari
     const { calculateDiscoveryProfile } = await import('@/lib/challenge/discovery-data');
 
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
     const discoveryType = CHALLENGE_TO_DISCOVERY[challengeType];
 
     // Trova user_id dall'email via profiles

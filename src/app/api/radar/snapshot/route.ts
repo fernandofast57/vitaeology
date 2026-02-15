@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,13 +17,6 @@ interface SnapshotRequestBody {
   assessment_type: AssessmentType;
   scores_json: Record<string, number> | Array<{ axis: string; score: number }>;
   triggered_by: TriggeredBy;
-}
-
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 }
 
 async function getUserFromRequest(request: NextRequest): Promise<string | null> {

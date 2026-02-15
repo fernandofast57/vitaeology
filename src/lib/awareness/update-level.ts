@@ -5,21 +5,10 @@
  * e il salvataggio dello storico per analytics
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { AwarenessIndicators, AwarenessResult, AwarenessHistoryEntry } from './types';
 import { calculateAwarenessLevel } from './calculate-level';
 import { collectIndicators, collectIndicatorsByEmail } from './indicators';
-
-// =====================================================
-// SUPABASE CLIENT
-// =====================================================
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // =====================================================
 // TRIGGER EVENTS (per tracking)
@@ -59,7 +48,7 @@ export async function updateUserAwarenessLevel(
   userId: string,
   triggerEvent: TriggerEvent
 ): Promise<UpdateResult> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   try {
     // 1. Raccogli indicatori attuali
@@ -171,7 +160,7 @@ export async function updateAwarenessByEmail(
   email: string,
   triggerEvent: TriggerEvent
 ): Promise<UpdateResult | null> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   // Cerca se esiste un profilo con questa email
   const { data: profile } = await supabase
@@ -227,7 +216,7 @@ export async function getCurrentAwarenessLevel(userId: string): Promise<{
   score: number;
   calculatedAt: Date | null;
 } | null> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   const { data } = await supabase
     .from('ai_coach_user_memory')
@@ -257,7 +246,7 @@ export async function getAwarenessHistory(
   userId: string,
   limit = 50
 ): Promise<AwarenessHistoryEntry[]> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   const { data } = await supabase
     .from('user_awareness_history')
@@ -294,7 +283,7 @@ export async function bulkRecalculateAwareness(): Promise<{
   changed: number;
   errors: number;
 }> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   // Ottieni tutti gli utenti con attività recente
   const thirtyDaysAgo = new Date();

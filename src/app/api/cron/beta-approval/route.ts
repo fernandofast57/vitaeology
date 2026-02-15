@@ -5,16 +5,11 @@
 // ============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { sendBetaWelcomeEmail } from '@/lib/email/beta-tester-emails';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -33,7 +28,7 @@ export async function GET(request: NextRequest) {
     const twelveHoursAgo = new Date();
     twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
 
-    const { data: pendingTesters, error: fetchError } = await supabase
+    const { data: pendingTesters, error: fetchError } = await getServiceClient()
       .from('beta_testers')
       .select('*')
       .eq('status', 'pending_approval')
@@ -68,7 +63,7 @@ export async function GET(request: NextRequest) {
     for (const tester of pendingTesters) {
       try {
         // Aggiorna status a 'approved'
-        const { error: updateError } = await supabase
+        const { error: updateError } = await getServiceClient()
           .from('beta_testers')
           .update({
             status: 'approved',
@@ -86,7 +81,7 @@ export async function GET(request: NextRequest) {
         results.approved++;
 
         // Imposta badge Founding Tester sul profilo (se esiste)
-        await supabase
+        await getServiceClient()
           .from('profiles')
           .update({ is_founding_tester: true })
           .eq('email', tester.email.toLowerCase());

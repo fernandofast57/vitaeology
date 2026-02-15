@@ -9,20 +9,12 @@
  * 3. Affiliati inattivi → invia E1 (14 giorni senza click)
  */
 
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { getServiceClient } from '@/lib/supabase/service';
 import {
   sendAffiliateEmail,
   type AffiliateEmailData,
 } from '@/lib/email/affiliate-emails';
-
-// Supabase con service role per accesso completo
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 export async function GET(request: Request) {
   // Verifica header cron (Vercel Cron o simile)
@@ -31,7 +23,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
   const results = {
     t1: { sent: 0, errors: 0 },
     sequence: { sent: 0, errors: 0 },

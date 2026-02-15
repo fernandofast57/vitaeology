@@ -5,9 +5,7 @@
  * Aiuta a identificare problemi prima che gli utenti li segnalino.
  */
 
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from '@/lib/email/client';
 
 // Email destinatario per gli alert (configura in .env)
 const ALERT_EMAIL = process.env.ERROR_ALERT_EMAIL || 'fernando@vitaeology.com';
@@ -175,7 +173,7 @@ export async function sendErrorAlert(alert: ErrorAlert): Promise<boolean> {
   `;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: ALERT_EMAIL,
       subject: `[${alert.severity.toUpperCase()}] Vitaeology: ${alert.type}`,

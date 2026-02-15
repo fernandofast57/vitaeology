@@ -343,20 +343,13 @@ function ResultsContent() {
           <p className="mb-4 text-amber-100">
             Esplora gli esercizi personalizzati basati sul tuo profilo
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/dashboard"
-              className="bg-white text-amber-600 px-6 py-3 rounded-lg font-medium hover:bg-amber-50 transition"
-            >
-              Vai alla Dashboard
-            </Link>
-            <Link
-              href="/exercises"
-              className="bg-amber-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-amber-800 transition"
-            >
-              Esplora Esercizi
-            </Link>
-          </div>
+          {/* CTA unica — Principio STOP→START */}
+          <Link
+            href="/exercises"
+            className="inline-block bg-white text-amber-600 px-8 py-3 rounded-lg font-medium hover:bg-amber-50 transition shadow-lg"
+          >
+            Esplora i Tuoi Esercizi
+          </Link>
         </div>
 
         {/* Footer */}

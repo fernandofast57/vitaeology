@@ -2,21 +2,15 @@
 // Genera OTP 6 cifre e invia via Resend (elimina dipendenza da Supabase SMTP)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 import { validateEmail, checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { isIPBlocked, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt } from '@/lib/validation/signup-logger';
+import { getServiceClient } from '@/lib/supabase/service';
+import { generateOTPEmailTemplate } from '@/lib/email/auth-emails';
 
 export const dynamic = 'force-dynamic';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Genera codice OTP 6 cifre
 function generateOTP(): string {
@@ -125,7 +119,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.toLowerCase().trim();
 
     // 4. Verifica se utente esiste in Supabase (per sicurezza, non riveliamo l'esistenza)
-    const { data: existingUsers } = await supabase.auth.admin.listUsers();
+    const { data: existingUsers } = await getServiceClient().auth.admin.listUsers();
     const userExists = existingUsers?.users?.some(
       u => u.email?.toLowerCase() === normalizedEmail
     );
@@ -156,7 +150,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 5. Invalida eventuali codici precedenti per questa email (tipo reset_password)
-    await supabase
+    await getServiceClient()
       .from('auth_verification_codes')
       .update({ verified_at: new Date().toISOString() })
       .eq('email', normalizedEmail)
@@ -167,7 +161,7 @@ export async function POST(request: NextRequest) {
     const otp = generateOTP();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minuti
 
-    const { error: insertError } = await supabase
+    const { error: insertError } = await getServiceClient()
       .from('auth_verification_codes')
       .insert({
         email: normalizedEmail,
@@ -187,17 +181,17 @@ export async function POST(request: NextRequest) {
     }
 
     // 7. Invia email con OTP via Resend
-    const { error: emailError } = await resend.emails.send({
+    const { error: emailError } = await getResend().emails.send({
       from: 'Vitaeology <noreply@vitaeology.com>',
       to: normalizedEmail,
       subject: `${otp} - Codice per reimpostare la password`,
-      html: generateResetPasswordEmail(otp),
+      html: generateOTPEmailTemplate(otp, 'password_reset'),
     });
 
     if (emailError) {
       console.error('Errore invio email reset password:', emailError);
       // Elimina il codice se l'email fallisce
-      await supabase
+      await getServiceClient()
         .from('auth_verification_codes')
         .delete()
         .eq('email', normalizedEmail)
@@ -240,47 +234,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Template email reset password OTP
-function generateResetPasswordEmail(otp: string): string {
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-
-  <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #0A2540; margin-bottom: 5px; font-size: 24px;">Reimposta la tua password</h1>
-  </div>
-
-  <p>Ciao,</p>
-
-  <p>Hai richiesto di reimpostare la password del tuo account Vitaeology. Usa il codice qui sotto per procedere:</p>
-
-  <div style="background: #f5f5f5; padding: 30px; text-align: center; margin: 30px 0; border-radius: 8px;">
-    <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #0A2540; font-family: monospace;">
-      ${otp}
-    </span>
-  </div>
-
-  <p style="color: #666; font-size: 14px;">
-    ⏱️ Questo codice scade tra <strong>15 minuti</strong>.
-  </p>
-
-  <p style="color: #666; font-size: 14px;">
-    Se non hai richiesto il reset della password, puoi ignorare questa email. La tua password resterà invariata.
-  </p>
-
-  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-
-  <p style="font-size: 12px; color: #999; text-align: center;">
-    Vitaeology - Leadership Development Platform<br>
-    <a href="https://www.vitaeology.com" style="color: #999;">www.vitaeology.com</a>
-  </p>
-
-</body>
-</html>
-  `;
-}

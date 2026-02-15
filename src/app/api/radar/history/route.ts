@@ -6,18 +6,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 
 export const dynamic = 'force-dynamic';
 
 type AssessmentType = 'leadership' | 'ostacoli' | 'microfelicita';
-
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 async function getUserFromRequest(request: NextRequest): Promise<string | null> {
   const authHeader = request.headers.get('Authorization');

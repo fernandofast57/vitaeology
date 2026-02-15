@@ -4,10 +4,8 @@
  * Invia email con link download protetto (signed URL 24h) e CTA per assessment
  */
 
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 import { generateDownloadToken } from '@/lib/libro/download-token';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Configurazione libri
 interface BookConfig {
@@ -85,7 +83,7 @@ export async function sendBookEmail(
   }
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Fernando Marongiu <fernando@vitaeology.com>',
       to: email,
       subject: `📖 Il tuo libro: ${book.title}`,
@@ -270,7 +268,7 @@ export async function sendTrilogyEmail(
   );
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Fernando Marongiu <fernando@vitaeology.com>',
       to: email,
       subject: '📚 La tua Trilogia Rivoluzione Aurea è pronta!',

@@ -9,7 +9,7 @@
  * - Interazioni AI Coach
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 
 // Tipi supportati
 type ServiceType = 'cron' | 'email' | 'api' | 'auth' | 'coach';
@@ -28,21 +28,11 @@ interface LogEntry {
 }
 
 /**
- * Ottiene il client Supabase con service role
- */
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
-/**
  * Registra un evento nel sistema di logging
  */
 export async function logSystem(entry: LogEntry): Promise<void> {
   try {
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
 
     const { error } = await supabase
       .from('system_logs')

@@ -5,26 +5,15 @@
  * per calcolare il livello di consapevolezza di un utente
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { AwarenessIndicators } from './types';
-
-// =====================================================
-// SUPABASE CLIENT
-// =====================================================
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // =====================================================
 // COLLECT ALL INDICATORS
 // =====================================================
 
 export async function collectIndicators(userId: string): Promise<AwarenessIndicators> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   // Esegui tutte le query in parallelo
   const [
@@ -81,7 +70,7 @@ interface ChallengeIndicators {
 }
 
 async function getChallengeIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<ChallengeIndicators> {
   // Prima otteniamo l'email dell'utente
@@ -133,7 +122,7 @@ interface AssessmentIndicators {
 }
 
 async function getAssessmentIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<AssessmentIndicators> {
   const { data: assessment } = await supabase
@@ -179,7 +168,7 @@ interface AICoachIndicators {
 }
 
 async function getAICoachIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<AICoachIndicators> {
   // Conta conversazioni totali
@@ -239,7 +228,7 @@ interface ExerciseIndicators {
 }
 
 async function getExerciseIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<ExerciseIndicators> {
   // Conta esercizi completati
@@ -292,7 +281,7 @@ interface EngagementIndicators {
 }
 
 async function getEngagementIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<EngagementIndicators> {
   // Conta giorni unici con attività negli ultimi 30 giorni
@@ -370,7 +359,7 @@ interface ProfileIndicators {
 }
 
 async function getProfileIndicators(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   userId: string
 ): Promise<ProfileIndicators> {
   const { data: profile } = await supabase
@@ -391,7 +380,7 @@ async function getProfileIndicators(
 // =====================================================
 
 export async function collectIndicatorsByEmail(email: string): Promise<AwarenessIndicators | null> {
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   // Prima cerca se c'è un utente con questa email
   const { data: profile } = await supabase

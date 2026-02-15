@@ -122,8 +122,9 @@ export async function calculateP2Metrics(
     .gte('completed_at', last24h);
 
   // P2 Quantità: Assessment completati (ultime 24h)
+  // NOTA: tabella attiva è user_assessments_v2 (non user_assessments legacy)
   const { count: assessmentsCount } = await supabase
-    .from('user_assessments')
+    .from('user_assessments_v2')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'completed')
     .gte('completed_at', last24h);

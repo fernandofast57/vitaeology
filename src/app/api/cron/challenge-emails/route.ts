@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { sendChallengeEmail, fetchMiniProfileForEmail } from '@/lib/email/challenge-emails';
 import { alertAPIError } from '@/lib/error-alerts';
 
@@ -45,13 +45,6 @@ interface Subscriber {
   [key: string]: unknown;
 }
 
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
 function hoursAgo(hours: number): string {
   return new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
 }
@@ -70,7 +63,7 @@ interface SendAndUpdateOptions {
 }
 
 async function sendAndUpdate(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   opts: SendAndUpdateOptions
 ): Promise<boolean> {
   const { user, emailType, dayNumber, updateFields, logDayEvent, withMiniProfile } = opts;
@@ -124,7 +117,7 @@ interface PostChallengeStep {
 }
 
 async function processPostChallengeStep(
-  supabase: ReturnType<typeof getSupabase>,
+  supabase: ReturnType<typeof getServiceClient>,
   step: PostChallengeStep,
   results: CronResults
 ): Promise<void> {
@@ -167,7 +160,7 @@ async function processPostChallengeStep(
 
 async function runCronJob(): Promise<{ success: boolean; results: CronResults; duration_ms: number; error?: string }> {
   const startTime = Date.now();
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
   const now = () => new Date().toISOString();
 
   const results: CronResults = {

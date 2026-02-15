@@ -3,17 +3,8 @@
  * Invia report settimanale via email a Fernando
  */
 
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 import { AICoachWeeklyReport } from '@/types/ai-coach-learning';
-
-function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.warn('RESEND_API_KEY non configurata');
-    return null;
-  }
-  return new Resend(apiKey);
-}
 
 // Email destinatario (Fernando)
 const REPORT_RECIPIENT = process.env.REPORT_EMAIL || 'fernando@vitaeology.com';
@@ -184,14 +175,7 @@ Dashboard: https://vitaeology.com/admin/ai-coach
 export async function sendWeeklyReportEmail(
   report: AICoachWeeklyReport
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
-  const resend = getResendClient();
-
-  if (!resend) {
-    return {
-      success: false,
-      error: 'RESEND_API_KEY non configurata',
-    };
-  }
+  const resend = getResend();
 
   try {
     const { data, error } = await resend.emails.send({
