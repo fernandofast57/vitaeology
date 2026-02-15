@@ -6,7 +6,7 @@
  * - CLIENTI: basata su subscription_tier
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import {
   Role,
@@ -18,17 +18,6 @@ import {
   RolePermissionCheck,
   FeatureAccessCheck,
 } from '@/lib/types/roles';
-
-// ============================================================
-// SUPABASE CLIENT (Service Role per operazioni server)
-// ============================================================
-
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // ============================================================
 // CARICAMENTO CONTESTO AUTORIZZAZIONE

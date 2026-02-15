@@ -4,15 +4,7 @@
  * Logga TUTTI i tentativi di registrazione per monitoring anti-spam.
  */
 
-import { createClient } from '@supabase/supabase-js';
-
-// Client con service role per bypassing RLS
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+import { getServiceClient } from '@/lib/supabase/service';
 
 export type SignupSource = 'signup' | 'challenge' | 'affiliate' | 'beta' | 'contact' | 'forgot_password';
 

@@ -5,7 +5,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import {
   evaluateThreshold,
   P1_THRESHOLDS,
@@ -17,13 +17,6 @@ import { verifyAdminFromRequest } from '@/lib/admin/verify-admin';
 
 export const dynamic = 'force-dynamic';
 
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
-
 export async function GET() {
   // Verifica admin auth
   const auth = await verifyAdminFromRequest();
@@ -31,7 +24,7 @@ export async function GET() {
     return auth.response;
   }
 
-  const supabase = getSupabase();
+  const supabase = getServiceClient();
 
   try {
     // Recupera ultime metriche

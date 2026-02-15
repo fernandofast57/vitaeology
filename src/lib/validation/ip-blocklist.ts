@@ -7,15 +7,7 @@
  * - Usa Supabase per persistenza
  */
 
-import { createClient } from '@supabase/supabase-js';
-
-// Client con service role per bypassing RLS
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
+import { getServiceClient } from '@/lib/supabase/service';
 
 export interface BlockCheckResult {
   isBlocked: boolean;

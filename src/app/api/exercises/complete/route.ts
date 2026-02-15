@@ -6,7 +6,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { completeExerciseWithCycle } from '@/lib/action-cycles';
 import { getNextExercise } from '@/lib/ai-coach/adaptive-path';
 import { checkAndAwardMilestones, MilestoneAwardResult } from '@/lib/milestones';
@@ -26,13 +27,6 @@ interface RadarUpdateEligibility {
   daysSinceLastSnapshot: number | null;
   exercisesSinceSnapshot: number;
   lastSnapshotDate: string | null;
-}
-
-function getServiceClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 }
 
 /**

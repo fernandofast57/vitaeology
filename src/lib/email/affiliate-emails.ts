@@ -10,10 +10,8 @@
  * Conformità: VITAEOLOGY_MEGA_PROMPT v4.3
  */
 
-import { Resend } from 'resend';
-import { createClient } from '@supabase/supabase-js';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from '@/lib/email/client';
+import { getServiceClient } from '@/lib/supabase/service';
 
 // ============================================================
 // TIPI
@@ -71,13 +69,6 @@ const COLORS = {
 // ============================================================
 // HELPER FUNCTIONS
 // ============================================================
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 function baseEmailTemplate(
   content: string,
@@ -1023,7 +1014,7 @@ export async function sendAffiliateEmail(
   }
 
   try {
-    const { data: resendData, error } = await resend.emails.send({
+    const { data: resendData, error } = await getResend().emails.send({
       from: 'Fernando <fernando@vitaeology.com>',
       to: data.email,
       subject: emailContent.subject,
@@ -1040,7 +1031,7 @@ export async function sendAffiliateEmail(
     }
 
     // Log email nel database
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
     await supabase.rpc('log_affiliate_email', {
       p_affiliate_id: metadata?.affiliateId as string,
       p_email_type: emailType,
@@ -1065,7 +1056,7 @@ export async function sendAffiliateNotification(
   extraData?: Partial<AffiliateEmailData>
 ): Promise<boolean> {
   try {
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
 
     // Recupera dati affiliato
     const { data: affiliate } = await supabase

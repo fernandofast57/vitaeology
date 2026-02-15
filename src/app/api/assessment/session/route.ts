@@ -7,6 +7,7 @@ import {
   loadAnswers,
 } from '@/lib/supabase/assessment';
 import { checkAssessmentAccess } from '@/lib/assessment-access';
+import { markChallengeConvertedToAssessment } from '@/lib/challenges';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,6 +56,26 @@ export async function GET() {
         started_at: new Date().toISOString(),
         completed_at: null,
       };
+
+      // Tracking conversione challenge→assessment (P2 Viability)
+      // Cerca challenge completate per questo utente e marcale come convertite
+      try {
+        const { data: completedChallenges } = await supabase
+          .from('challenge_subscribers')
+          .select('id')
+          .or(`user_id.eq.${user.id},email.eq.${user.email}`)
+          .eq('status', 'completed')
+          .eq('converted_to_assessment', false);
+
+        if (completedChallenges && completedChallenges.length > 0) {
+          for (const challenge of completedChallenges) {
+            await markChallengeConvertedToAssessment(supabase, challenge.id);
+          }
+        }
+      } catch (convError) {
+        // Non bloccare la sessione se il tracking fallisce
+        console.error('Errore tracking conversione challenge→assessment:', convError);
+      }
     }
 
     return NextResponse.json({

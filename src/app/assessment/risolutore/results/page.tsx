@@ -336,37 +336,19 @@ function RisolutoreResultsContent() {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* CTA unica — Principio STOP→START */}
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl shadow-lg p-6 text-center text-white">
           <h2 className="text-2xl font-bold mb-2">
-            Vuoi potenziare le tue capacità di Risolutore?
+            Hai già le capacità di un risolutore
           </h2>
           <p className="mb-6 opacity-90">
-            Scopri il libro &ldquo;Oltre gli Ostacoli&rdquo; e la Challenge di 7 giorni
+            Gli esercizi ti aiutano a riconoscere e espandere ciò che già possiedi
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => router.push('/libro/risolutore')}
-              className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-medium hover:bg-emerald-50 transition"
-            >
-              Scopri il Libro
-            </button>
-            <button
-              onClick={() => router.push('/challenge/ostacoli')}
-              className="bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-800 transition border border-emerald-500"
-            >
-              Challenge 7 Giorni
-            </button>
-          </div>
-        </div>
-
-        {/* Link Dashboard */}
-        <div className="text-center mt-8">
           <button
-            onClick={() => router.push('/dashboard')}
-            className="text-gray-600 hover:text-gray-800 underline"
+            onClick={() => router.push('/exercises')}
+            className="bg-white text-emerald-600 px-8 py-3 rounded-lg font-medium hover:bg-emerald-50 transition shadow-lg"
           >
-            ← Torna alla Dashboard
+            Esplora i Tuoi Esercizi
           </button>
         </div>
       </div>

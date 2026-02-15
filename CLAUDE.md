@@ -783,6 +783,7 @@ return dots > 3 && letters < 15;
 | `docs/PROGETTO_VITAEOLOGY_COMPLETO.md` | Documentazione tecnica master |
 | `docs/DATABASE_SCHEMA.md` | Schema DB completo |
 | `docs/ESERCIZI_STRUTTURA_COMPLETA.md` | Struttura 126 esercizi |
+| `docs/GLOSSARIO_NAMING_CODEBASE.md` | **Glossario naming funzioni** (OBBLIGATORIO consultare prima di creare/nominare funzioni) |
 
 ---
 
@@ -795,6 +796,11 @@ return dots > 3 && letters < 15;
 5. Tailwind per styling, no CSS separato
 6. Commenta in italiano
 7. **Linguaggio validante** in tutto il codice UI/UX
+8. **GLOSSARIO NAMING (OBBLIGATORIO):** Prima di creare o nominare una funzione, CONSULTARE `docs/GLOSSARIO_NAMING_CODEBASE.md`:
+   - Se la funzione **esiste nel glossario**: usare il nome canonico indicato. MAI inventare nomi alternativi.
+   - Se la funzione **non esiste nel glossario**: PRIMA di usarla, aggiungere la nuova funzione al glossario (nome, file, scopo) nella sezione appropriata, poi usarla nel codice.
+   - Questo previene la creazione di duplicati funzionali con nomi diversi (es. `getSupabase()` vs `getServiceClient()` vs `getSupabaseClient()`).
+   - **Regola aurea:** Una funzione, un nome, un file. Nessun duplicato locale.
 
 ---
 

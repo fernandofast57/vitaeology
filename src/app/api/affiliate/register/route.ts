@@ -12,7 +12,7 @@ import { verifyTurnstileToken } from '@/lib/turnstile';
 import { validateName, isDefinitelySpam } from '@/lib/validation/name-validator';
 import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 
 interface RegisterAffiliateInput {
   email: string;
@@ -24,8 +24,6 @@ interface RegisterAffiliateInput {
   accetta_termini: boolean;
   turnstileToken?: string;
 }
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://vitaeology.com';
 
@@ -325,7 +323,7 @@ export async function POST(request: NextRequest) {
 
     // 6b. Invia email di conferma registrazione via Resend
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Vitaeology <noreply@vitaeology.com>',
         to: body.email.toLowerCase(),
         subject: 'Richiesta Partner Vitaeology ricevuta',

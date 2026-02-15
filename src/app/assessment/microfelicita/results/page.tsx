@@ -244,23 +244,15 @@ function MicrofelicitaResultsContent() {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* CTA unica — Principio STOP→START */}
         <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl shadow-lg p-6 text-center text-white">
-          <h2 className="text-2xl font-bold mb-2">Vuoi approfondire la Microfelicità?</h2>
-          <p className="mb-6 opacity-90">Scopri il libro e la Challenge di 7 giorni</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={() => router.push('/libro/microfelicita')} className="bg-white text-violet-600 px-6 py-3 rounded-lg font-medium hover:bg-violet-50">
-              Scopri il Libro
-            </button>
-            <button onClick={() => router.push('/challenge/microfelicita')} className="bg-violet-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-violet-800 border border-violet-500">
-              Challenge 7 Giorni
-            </button>
-          </div>
-        </div>
-
-        <div className="text-center mt-8">
-          <button onClick={() => router.push('/dashboard')} className="text-gray-600 hover:text-gray-800 underline">
-            ← Torna alla Dashboard
+          <h2 className="text-2xl font-bold mb-2">Hai già le risorse per amplificare il tuo benessere</h2>
+          <p className="mb-6 opacity-90">Gli esercizi ti aiutano a riconoscere e espandere ciò che già possiedi</p>
+          <button
+            onClick={() => router.push('/exercises')}
+            className="bg-white text-violet-600 px-8 py-3 rounded-lg font-medium hover:bg-violet-50 shadow-lg"
+          >
+            Esplora i Tuoi Esercizi
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 // API per gestire iscrizioni alle Challenge con tracking A/B + Anti-Spam
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { getResend } from '@/lib/email/client';
 import { getSupabaseClient } from '@/lib/supabase/service';
 import { alertAPIError } from '@/lib/error-alerts';
 import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
@@ -11,10 +11,6 @@ import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blo
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
 
 export const dynamic = 'force-dynamic';
-
-function getResendClient() {
-  return new Resend(process.env.RESEND_API_KEY);
-}
 
 // Email templates per ogni challenge
 const CHALLENGE_CONFIG = {
@@ -154,7 +150,7 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = getSupabaseClient();
-    const resend = getResendClient();
+    const resend = getResend();
 
     // Controlla se già iscritto a questa challenge
     const { data: existing } = await supabase

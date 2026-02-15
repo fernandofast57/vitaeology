@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { createBrowserClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabase/client'
 import {
   RadarChart,
   PolarGrid,
@@ -13,9 +13,8 @@ import {
   ResponsiveContainer,
   Tooltip
 } from 'recharts'
-import ChatWidget from '@/components/ai-coach/ChatWidget'
 import Breadcrumb from '@/components/ui/Breadcrumb'
-import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, PATHWAY_NAMES, type PathwaySlug } from '@/lib/pathways'
+import { getUserPathways, type UserPathwayWithDetails, PATHWAY_COLORS, type PathwaySlug } from '@/lib/pathways'
 
 // Tipi
 interface Characteristic {
@@ -114,10 +113,7 @@ export default function ResultsPage() {
   const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([])
   const [otherAssessments, setOtherAssessments] = useState<{ slug: string; name: string; completedAt: string }[]>([])
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = createClient()
 
   useEffect(() => {
     async function loadResults() {
@@ -603,50 +599,17 @@ charScores.forEach(score => {
           </div>
         </div>
 
-        {/* Azioni */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base"
-          >
-            Vai alla Dashboard
-          </button>
+        {/* CTA unica — Principio STOP→START: una sola azione chiara */}
+        <div className="flex justify-center">
           <button
             onClick={() => router.push('/exercises')}
-            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-slate-700 font-semibold rounded-lg shadow hover:shadow-md transition-all text-sm sm:text-base"
+            className="px-8 sm:px-10 py-3 sm:py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base shadow-lg"
           >
-            Vai agli Esercizi
+            Esplora i Tuoi Esercizi
           </button>
         </div>
 
       </div>
-
-      {/* Fernando AI Coach */}
-      {userId && (
-        <ChatWidget
-          userContext={{
-            userId,
-            userName: userName || undefined,
-            assessmentResults: characteristicScores.length > 0
-              ? characteristicScores.map(c => ({
-                  characteristicSlug: c.name,
-                  score: c.percentage,
-                  pillar: c.pillar
-                }))
-              : undefined,
-            completedExercisesCount: 0,
-            currentWeek: 1,
-            // Multi-pathway context
-            activePathways: userPathways.length > 1 ? userPathways.map(p => ({
-              slug: p.pathway.slug,
-              name: PATHWAY_NAMES[p.pathway.slug as PathwaySlug] || p.pathway.name,
-              progressPercentage: p.progress_percentage || 0,
-              hasAssessment: !!p.last_assessment_at,
-            })) : undefined,
-          }}
-          currentPath="leadership"
-        />
-      )}
     </div>
   )
 }

@@ -7,9 +7,7 @@
  * - Cancellazione subscription
  */
 
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { getResend } from '@/lib/email/client';
 
 // ============================================================
 // TIPI
@@ -352,7 +350,7 @@ export async function sendUpgradeConfirmationEmail(
   );
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: 'Fernando <fernando@vitaeology.com>',
       replyTo: 'fernando@vitaeology.com',
       to: email,
@@ -454,7 +452,7 @@ export async function sendSubscriptionRenewalReminder(
   );
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: 'Fernando <fernando@vitaeology.com>',
       replyTo: 'fernando@vitaeology.com',
       to: email,
@@ -582,7 +580,7 @@ export async function sendSubscriptionCancelledEmail(
   );
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: 'Fernando <fernando@vitaeology.com>',
       replyTo: 'fernando@vitaeology.com',
       to: email,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
+import { getServiceClient } from '@/lib/supabase/service';
 import { PRICING_TIERS, type PricingTierSlug } from '@/config/pricing';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
@@ -16,13 +16,6 @@ const CHECKOUT_RATE_LIMIT = {
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
-}
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 }
 
 export async function POST(request: NextRequest) {
@@ -89,7 +82,7 @@ export async function POST(request: NextRequest) {
     }
 
     const stripe = getStripe();
-    const supabase = getSupabase();
+    const supabase = getServiceClient();
 
     // Check if user already has a Stripe customer ID and founding tester status
     const { data: profile } = await supabase

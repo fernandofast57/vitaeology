@@ -6,17 +6,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getServiceClient } from '@/lib/supabase/service';
 import { createExerciseRecommendationService } from '@/lib/services/exercise-recommendation';
 
 export const dynamic = 'force-dynamic';
-
-function getServiceClient() {
-  return createServiceClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 // Verifica autenticazione server-side (C9 fix: rimosso fallback insicuro a query params)
 async function getUserFromRequest(): Promise<string | null> {
