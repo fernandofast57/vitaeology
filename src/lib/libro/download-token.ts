@@ -20,9 +20,10 @@ interface GenerateTokenOptions extends DownloadTokenPayload {
 const DEFAULT_EXPIRY = 24 * 60 * 60; // 24 ore
 
 function getSigningKey(): Uint8Array {
-  const secret = process.env.CRON_SECRET;
+  // Usa chiave dedicata per firma PDF, con fallback a CRON_SECRET per retrocompatibilità
+  const secret = process.env.PDF_SIGNING_KEY || process.env.CRON_SECRET;
   if (!secret) {
-    throw new Error('CRON_SECRET non configurato');
+    throw new Error('PDF_SIGNING_KEY (o CRON_SECRET) non configurato');
   }
   return new TextEncoder().encode(secret);
 }

@@ -45,8 +45,8 @@ export const DAY_CONTENT: Record<ChallengeType, Record<DayNumber, DayContent>> =
       sections: [
         {
           icon: "📞",
-          title: "Febbraio 1985 - La Cabina Telefonica",
-          content: "Avevo 27 anni. Mi trovavo in una cabina telefonica a Milano, con l'ultimo gettone in mano.\n\nDovevo chiamare un cliente importante. Mi ero preparato un discorso pieno di passione.\n\nParlo per tre minuti. Gli racconto tutto — il progetto, il potenziale, il futuro che vedevo.\n\nSilenzio.\n\nPoi lui dice: «Senta, mi fa piacere il suo entusiasmo. Ma lei cosa sa fare CONCRETAMENTE?»\n\nIl gettone finisce. La linea cade.\n\nQuella domanda mi ha accompagnato per anni. Non perché non sapessi rispondere — ma perché mi aveva mostrato qualcosa che preferivo non vedere."
+          title: "Febbraio 1989 - La Cabina Telefonica",
+          content: "Avevo 32 anni. Mi trovavo in una cabina telefonica a Milano, con l'ultimo gettone in mano.\n\nDovevo chiamare un cliente importante. Mi ero preparato un discorso pieno di passione.\n\nParlo per tre minuti. Gli racconto tutto — il progetto, il potenziale, il futuro che vedevo.\n\nSilenzio.\n\nPoi lui dice: «Senta, mi fa piacere il suo entusiasmo. Ma lei cosa sa fare CONCRETAMENTE?»\n\nIl gettone finisce. La linea cade.\n\nQuella domanda mi ha accompagnato per anni. Non perché non sapessi rispondere — ma perché mi aveva mostrato qualcosa che preferivo non vedere."
         },
         {
           icon: "💡",

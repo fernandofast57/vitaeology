@@ -25,18 +25,13 @@ export async function verifyTurnstileToken(
 ): Promise<TurnstileResult> {
   const secretKey = process.env.TURNSTILE_SECRET_KEY;
 
-  // Se non configurato, bypass in development
+  // Se non configurato, errore (anche in dev per consistenza)
   if (!secretKey) {
     if (process.env.NODE_ENV === 'development') {
       console.warn('Turnstile: TURNSTILE_SECRET_KEY non configurato, bypass in dev');
       return { success: true };
     }
     return { success: false, error: 'Turnstile non configurato' };
-  }
-
-  // Token bypass per development
-  if (token === 'dev-bypass-token' && process.env.NODE_ENV === 'development') {
-    return { success: true };
   }
 
   // Token mancante

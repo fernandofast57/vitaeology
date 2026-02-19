@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { sendErrorAlert } from '@/lib/error-alerts';
 import { createClient } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API per segnalare errori
  *

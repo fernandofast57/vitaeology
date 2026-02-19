@@ -7,7 +7,14 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy init per evitare crash durante build (env vars non disponibili)
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 // Email destinatario per gli alert (configura in .env)
 const ALERT_EMAIL = process.env.ERROR_ALERT_EMAIL || 'fernando@vitaeology.com';
@@ -80,9 +87,25 @@ function formatContext(context?: ErrorContext): string {
   }
 
   if (context.requestBody) {
-    const bodyStr = typeof context.requestBody === 'string'
-      ? context.requestBody
-      : JSON.stringify(context.requestBody, null, 2);
+    // Sanitizza campi sensibili prima di includere nel log
+    const SENSITIVE_KEYS = ['password', 'token', 'api_key', 'apiKey', 'secret', 'authorization', 'credit_card', 'card_number', 'cvv', 'ssn'];
+    const sanitize = (obj: unknown): unknown => {
+      if (typeof obj === 'string') return obj;
+      if (typeof obj !== 'object' || obj === null) return obj;
+      const sanitized: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+        if (SENSITIVE_KEYS.some(sk => key.toLowerCase().includes(sk))) {
+          sanitized[key] = '[REDACTED]';
+        } else {
+          sanitized[key] = value;
+        }
+      }
+      return sanitized;
+    };
+    const sanitizedBody = sanitize(context.requestBody);
+    const bodyStr = typeof sanitizedBody === 'string'
+      ? sanitizedBody
+      : JSON.stringify(sanitizedBody, null, 2);
     parts.push(`<tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Request Body</strong></td><td style="padding: 8px; border: 1px solid #ddd;"><pre style="margin: 0; white-space: pre-wrap;">${bodyStr.slice(0, 500)}</pre></td></tr>`);
   }
 
@@ -175,7 +198,7 @@ export async function sendErrorAlert(alert: ErrorAlert): Promise<boolean> {
   `;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: ALERT_EMAIL,
       subject: `[${alert.severity.toUpperCase()}] Vitaeology: ${alert.type}`,
