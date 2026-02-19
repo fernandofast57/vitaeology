@@ -84,11 +84,11 @@ export function VideoPlaceholder({
           <video
             className="absolute inset-0 w-full h-full object-contain"
             controls
-            preload="metadata"
+            preload="auto"
             poster={posterUrl}
             playsInline
+            src={videoUrl}
           >
-            <source src={videoUrl} type="video/mp4" />
             Il tuo browser non supporta il tag video.
           </video>
         </div>

@@ -8,6 +8,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: blob: https://*.supabase.co https://q.stripe.com https://*.stripe.com;
   font-src 'self' https://fonts.gstatic.com;
+  media-src 'self' https://pub-2417d7e6729544f893d3a858ccab7ea2.r2.dev;
   connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://api.openai.com https://api.resend.com https://www.clarity.ms https://vitaeology.com https://www.vitaeology.com;
   frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com;
   media-src 'self' https://pub-2417d7e6729544f893d3a858ccab7ea2.r2.dev;
