@@ -6,14 +6,20 @@
 // ============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } }
-);
+let _supabaseAdmin: SupabaseClient | null = null;
+function getSupabaseAdmin() {
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      { auth: { persistSession: false } }
+    );
+  }
+  return _supabaseAdmin;
+}
 
 const COOKIE_DURATION_DAYS = 90;
 
@@ -40,7 +46,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Formato ref_code non valido' }, { status: 400 });
     }
 
-    const { data: affiliate, error: affiliateError } = await supabaseAdmin
+    const { data: affiliate, error: affiliateError } = await getSupabaseAdmin()
       .from('affiliates')
       .select('id, stato')
       .eq('ref_code', body.ref_code)
@@ -64,7 +70,7 @@ export async function POST(request: NextRequest) {
     const userAgent = body.user_agent || request.headers.get('user-agent') || '';
     const deviceInfo = parseUserAgent(userAgent);
 
-    const { data: click, error: clickError } = await supabaseAdmin
+    const { data: click, error: clickError } = await getSupabaseAdmin()
       .from('affiliate_clicks')
       .insert({
         affiliate_id: affiliate.id,

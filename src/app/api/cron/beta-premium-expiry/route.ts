@@ -5,15 +5,21 @@
 // ============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -30,7 +36,7 @@ export async function GET(request: NextRequest) {
     const now = new Date().toISOString();
 
     // Trova utenti con beta_premium_until scaduto e ancora tier leader
-    const { data: expiredUsers, error: fetchError } = await supabase
+    const { data: expiredUsers, error: fetchError } = await getSupabase()
       .from('profiles')
       .select('id, email, subscription_tier, beta_premium_until')
       .lt('beta_premium_until', now)
@@ -63,7 +69,7 @@ export async function GET(request: NextRequest) {
     // Downgrade ogni utente a explorer
     for (const user of expiredUsers) {
       try {
-        const { error: updateError } = await supabase
+        const { error: updateError } = await getSupabase()
           .from('profiles')
           .update({
             subscription_tier: 'explorer',

@@ -2,15 +2,21 @@
 // Step 2 del flusso: dopo che l'utente ha inserito il codice OTP
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 // Rate limit per verifica OTP (anti brute-force)
 const VERIFY_RATE_LIMIT = {
@@ -44,7 +50,7 @@ export async function POST(request: NextRequest) {
     const normalizedCode = code.trim();
 
     // 2. Trova il codice di verifica
-    const { data: verification, error: fetchError } = await supabase
+    const { data: verification, error: fetchError } = await getSupabase()
       .from('auth_verification_codes')
       .select('*')
       .eq('email', normalizedEmail)
@@ -63,7 +69,7 @@ export async function POST(request: NextRequest) {
     // 3. Verifica scadenza
     if (new Date(verification.expires_at) < new Date()) {
       // Elimina codice scaduto
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .delete()
         .eq('id', verification.id);
@@ -77,7 +83,7 @@ export async function POST(request: NextRequest) {
     // 4. Verifica tentativi
     if (verification.attempts >= verification.max_attempts) {
       // Elimina codice dopo troppi tentativi
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .delete()
         .eq('id', verification.id);
@@ -91,7 +97,7 @@ export async function POST(request: NextRequest) {
     // 5. Verifica codice
     if (verification.code !== normalizedCode) {
       // Incrementa tentativi
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .update({ attempts: verification.attempts + 1 })
         .eq('id', verification.id);
@@ -108,7 +114,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 6. Codice corretto! Crea utente in Supabase
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    const { data: authData, error: authError } = await getSupabase().auth.admin.createUser({
       email: normalizedEmail,
       password: password,
       email_confirm: true, // Già verificato via OTP
@@ -136,14 +142,14 @@ export async function POST(request: NextRequest) {
     }
 
     // 7. Marca codice come verificato
-    await supabase
+    await getSupabase()
       .from('auth_verification_codes')
       .update({ verified_at: new Date().toISOString() })
       .eq('id', verification.id);
 
     // 8. Crea profilo utente
     if (authData.user) {
-      await supabase
+      await getSupabase()
         .from('profiles')
         .upsert({
           id: authData.user.id,
@@ -155,7 +161,7 @@ export async function POST(request: NextRequest) {
       // 8b. Collega eventuali challenge_subscribers esistenti con la stessa email
       // Questo permette di collegare le challenge fatte prima della registrazione
       try {
-        await supabase.rpc('link_user_challenges', {
+        await getSupabase().rpc('link_user_challenges', {
           p_user_id: authData.user.id,
           p_email: normalizedEmail,
         });

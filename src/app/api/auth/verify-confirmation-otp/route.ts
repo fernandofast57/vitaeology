@@ -2,15 +2,21 @@
 // Per utenti che si sono registrati ma non hanno confermato l'email
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 // Rate limit per verifica OTP (anti brute-force)
 const VERIFY_RATE_LIMIT = {
@@ -44,7 +50,7 @@ export async function POST(request: NextRequest) {
     const normalizedCode = code.trim();
 
     // 2. Trova il codice di verifica
-    const { data: verification, error: fetchError } = await supabase
+    const { data: verification, error: fetchError } = await getSupabase()
       .from('auth_verification_codes')
       .select('*')
       .eq('email', normalizedEmail)
@@ -63,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // 3. Verifica scadenza
     if (new Date(verification.expires_at) < new Date()) {
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .delete()
         .eq('id', verification.id);
@@ -77,7 +83,7 @@ export async function POST(request: NextRequest) {
     // 4. Verifica tentativi
     const maxAttempts = verification.max_attempts || 5;
     if (verification.attempts >= maxAttempts) {
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .delete()
         .eq('id', verification.id);
@@ -90,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // 5. Verifica codice
     if (verification.code !== normalizedCode) {
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .update({ attempts: verification.attempts + 1 })
         .eq('id', verification.id);
@@ -107,7 +113,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 6. Trova l'utente
-    const { data: existingUsers } = await supabase.auth.admin.listUsers();
+    const { data: existingUsers } = await getSupabase().auth.admin.listUsers();
     const user = existingUsers?.users?.find(
       u => u.email?.toLowerCase() === normalizedEmail
     );
@@ -120,7 +126,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 7. Conferma l'email dell'utente
-    const { error: updateError } = await supabase.auth.admin.updateUserById(
+    const { error: updateError } = await getSupabase().auth.admin.updateUserById(
       user.id,
       { email_confirm: true }
     );
@@ -134,7 +140,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Marca codice come verificato
-    await supabase
+    await getSupabase()
       .from('auth_verification_codes')
       .update({ verified_at: new Date().toISOString() })
       .eq('id', verification.id);

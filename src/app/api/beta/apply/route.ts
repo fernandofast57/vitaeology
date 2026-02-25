@@ -2,7 +2,7 @@
 // Auto-approva se ci sono posti disponibili, altrimenti waitlist
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { sendBetaWelcomeEmail, sendBetaWaitlistEmail } from '@/lib/email/beta-tester-emails';
 import { checkRateLimit, getClientIP, RATE_LIMITS, rateLimitExceededResponse, validateEmail } from '@/lib/rate-limiter';
 import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
@@ -10,10 +10,16 @@ import { validateName, isDefinitelySpam, shouldFlagForReview } from '@/lib/valid
 import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
 // Configurazione posti disponibili
 const MAX_BETA_TESTERS = 20;
@@ -140,7 +146,7 @@ export async function POST(request: Request) {
     const flagForReview = shouldFlagForReview(nameValidation);
 
     // Verifica se email già registrata
-    const { data: existing } = await supabase
+    const { data: existing } = await getSupabase()
       .from('beta_testers')
       .select('id, status')
       .eq('email', email.toLowerCase())
@@ -154,7 +160,7 @@ export async function POST(request: Request) {
     }
 
     // Conta tester attualmente approvati/attivi
-    const { count: currentTesters } = await supabase
+    const { count: currentTesters } = await getSupabase()
       .from('beta_testers')
       .select('*', { count: 'exact', head: true })
       .in('status', ['approved', 'active', 'pending_approval']);
@@ -167,7 +173,7 @@ export async function POST(request: Request) {
     const status = spotsAvailable ? 'pending_approval' : 'pending';
 
     // Inserisci candidatura
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('beta_testers')
       .insert({
         email: email.toLowerCase(),
@@ -228,7 +234,7 @@ export async function POST(request: Request) {
       });
     } else {
       // Posti esauriti: invia email waitlist
-      const { count: waitlistPosition } = await supabase
+      const { count: waitlistPosition } = await getSupabase()
         .from('beta_testers')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'pending');
