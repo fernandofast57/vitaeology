@@ -25,7 +25,15 @@ interface RegisterAffiliateInput {
   turnstileToken?: string;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) throw new Error('RESEND_API_KEY non configurata');
+    _resend = new Resend(apiKey);
+  }
+  return _resend;
+}
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://vitaeology.com';
 
@@ -325,7 +333,7 @@ export async function POST(request: NextRequest) {
 
     // 6b. Invia email di conferma registrazione via Resend
     try {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Vitaeology <noreply@vitaeology.com>',
         to: body.email.toLowerCase(),
         subject: 'Richiesta Partner Vitaeology ricevuta',

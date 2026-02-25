@@ -2,18 +2,32 @@
 // Usato quando un utente tenta il login ma la sua email non è confermata
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) throw new Error('RESEND_API_KEY non configurata');
+    _resend = new Resend(apiKey);
+  }
+  return _resend;
+}
 
 // Genera codice OTP 6 cifre
 function generateOTP(): string {
@@ -51,7 +65,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.toLowerCase().trim();
 
     // 2. Verifica se utente esiste ma non è confermato
-    const { data: existingUsers } = await supabase.auth.admin.listUsers();
+    const { data: existingUsers } = await getSupabase().auth.admin.listUsers();
     const user = existingUsers?.users?.find(
       u => u.email?.toLowerCase() === normalizedEmail
     );
@@ -77,7 +91,7 @@ export async function POST(request: NextRequest) {
     const fullName = user.user_metadata?.full_name || 'Utente';
 
     // 4. Invalida eventuali codici precedenti per questa email
-    await supabase
+    await getSupabase()
       .from('auth_verification_codes')
       .delete()
       .eq('email', normalizedEmail)
@@ -87,7 +101,7 @@ export async function POST(request: NextRequest) {
     const otp = generateOTP();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minuti
 
-    const { error: insertError } = await supabase
+    const { error: insertError } = await getSupabase()
       .from('auth_verification_codes')
       .insert({
         email: normalizedEmail,
@@ -107,7 +121,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 6. Invia email con OTP via Resend
-    const { error: emailError } = await resend.emails.send({
+    const { error: emailError } = await getResend().emails.send({
       from: 'Vitaeology <noreply@vitaeology.com>',
       to: normalizedEmail,
       subject: `${otp} - Il tuo codice di verifica Vitaeology`,
@@ -117,7 +131,7 @@ export async function POST(request: NextRequest) {
     if (emailError) {
       console.error('Errore invio email conferma');
       // Elimina il codice se l'email fallisce
-      await supabase
+      await getSupabase()
         .from('auth_verification_codes')
         .delete()
         .eq('email', normalizedEmail)

@@ -7,7 +7,15 @@
 import { Resend } from 'resend';
 import { generateDownloadToken } from '@/lib/libro/download-token';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) throw new Error('RESEND_API_KEY non configurata');
+    _resend = new Resend(apiKey);
+  }
+  return _resend;
+}
 
 // Configurazione libri
 interface BookConfig {
@@ -85,7 +93,7 @@ export async function sendBookEmail(
   }
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Fernando Marongiu <fernando@vitaeology.com>',
       to: email,
       subject: `📖 Il tuo libro: ${book.title}`,
@@ -270,7 +278,7 @@ export async function sendTrilogyEmail(
   );
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Fernando Marongiu <fernando@vitaeology.com>',
       to: email,
       subject: '📚 La tua Trilogia Rivoluzione Aurea è pronta!',

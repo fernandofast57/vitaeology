@@ -6,18 +6,32 @@
 // ============================================================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { Resend } from 'resend';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let _supabase: SupabaseClient | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+  }
+  return _supabase;
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) throw new Error('RESEND_API_KEY non configurata');
+    _resend = new Resend(apiKey);
+  }
+  return _resend;
+}
 
 // Soglie per alert
 const ALERT_THRESHOLDS = {
@@ -81,7 +95,7 @@ export async function GET(request: NextRequest) {
       const authSupabase = await createServerClient();
       const { data: { user } } = await authSupabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase
+        const { data: profile } = await getSupabase()
           .from('profiles')
           .select('role_id')
           .eq('id', user.id)
@@ -135,7 +149,7 @@ async function getSpamStats(): Promise<Omit<SpamStats, 'alerts' | 'isAnomaly'>> 
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
   // Stats ultima ora
-  const { data: lastHourData } = await supabase
+  const { data: lastHourData } = await getSupabase()
     .from('signup_attempts')
     .select('*')
     .gte('created_at', oneHourAgo.toISOString());
@@ -148,7 +162,7 @@ async function getSpamStats(): Promise<Omit<SpamStats, 'alerts' | 'isAnomaly'>> 
   };
 
   // Stats ultime 24h
-  const { data: last24hData } = await supabase
+  const { data: last24hData } = await getSupabase()
     .from('signup_attempts')
     .select('*')
     .gte('created_at', oneDayAgo.toISOString());
@@ -298,7 +312,7 @@ async function sendAlertEmail(stats: SpamStats) {
   `;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: 'Vitaeology Alerts <alerts@vitaeology.com>',
       to: alertEmail,
       subject: `⚠️ Anomalia Anti-Spam - ${stats.alerts.length} alert`,
