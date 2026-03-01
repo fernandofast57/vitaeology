@@ -48,7 +48,7 @@ export async function upsertKPI(data: {
   const notion = getNotionClient();
   const existingId = await findKPIRecord(data.metrica, data.periodo);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const properties: Record<string, any> = {
     'Metrica': {
       title: [{ text: { content: data.metrica } }],

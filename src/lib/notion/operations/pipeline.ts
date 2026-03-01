@@ -104,7 +104,7 @@ export async function updateContactStage(
 
   const notion = getNotionClient();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const properties: Record<string, any> = {
     'Stato': {
       select: { name: stato },

@@ -25,7 +25,7 @@ export async function createTask(data: TaskData): Promise<string> {
 
   const priorityLabel = `${PRIORITY_EMOJI[data.priority]} ${data.priority}`;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const properties: Record<string, any> = {
     'Task': {
       title: [{ text: { content: data.title } }],
