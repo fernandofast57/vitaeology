@@ -7,6 +7,7 @@ import { sendBookEmail, sendTrilogyEmail } from '@/lib/email/send-book-email';
 import { sendUpgradeConfirmationEmail, sendSubscriptionCancelledEmail } from '@/lib/email/subscription-emails';
 import { alertPaymentError } from '@/lib/error-alerts';
 import { onSubscriptionChanged } from '@/lib/awareness';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 
@@ -185,6 +186,12 @@ async function handleLibroPurchase(
   }
 
   await sendBookEmail(customerEmail, libroSlug, customerName);
+
+  // Hook Notion: libro acquistato (fire-and-forget)
+  createAndDispatch('book_purchased', {
+    email: customerEmail.toLowerCase(),
+    bookSlug: libroSlug,
+  });
 }
 
 /** Gestisce acquisto trilogia (bundle 3 libri) */
@@ -216,6 +223,11 @@ async function handleTrilogyPurchase(
   }
 
   await sendTrilogyEmail(customerEmail, customerName);
+
+  // Hook Notion: trilogia acquistata (fire-and-forget)
+  createAndDispatch('trilogy_purchased', {
+    email: customerEmail.toLowerCase(),
+  });
 }
 
 /** Gestisce BUMP: Libro GRATIS + Leader subscription */
@@ -320,6 +332,15 @@ async function handleSubscription(
 
     // Aggiorna awareness (fire and forget)
     onSubscriptionChanged(userId).catch(() => {});
+
+    // Hook Notion: subscription attivata (fire-and-forget)
+    const customerEmailForNotion = session.customer_email || session.customer_details?.email;
+    if (customerEmailForNotion) {
+      createAndDispatch('subscription_started', {
+        email: customerEmailForNotion.toLowerCase(),
+        tier: tierSlug,
+      });
+    }
   }
 }
 
@@ -395,8 +416,8 @@ async function handleSubscriptionUpdated(
   const customerId = subscription.customer as string;
   const tierSlug = subscription.metadata?.tier_slug;
 
-  const profile = await findProfileByCustomerId<{ id: string; subscription_tier: string }>(
-    supabase, customerId, 'id, subscription_tier'
+  const profile = await findProfileByCustomerId<{ id: string; email: string; subscription_tier: string }>(
+    supabase, customerId, 'id, email, subscription_tier'
   );
   if (!profile) return;
 
@@ -414,6 +435,12 @@ async function handleSubscriptionUpdated(
 
   if (tierSlug && tierSlug !== profile.subscription_tier) {
     onSubscriptionChanged(profile.id).catch(() => {});
+
+    // Hook Notion: subscription upgrade (fire-and-forget)
+    createAndDispatch('subscription_upgraded', {
+      email: profile.email,
+      tier: tierSlug,
+    });
   }
 }
 
@@ -456,6 +483,14 @@ async function handleSubscriptionDeleted(
   }
 
   onSubscriptionChanged(profile.id).catch(() => {});
+
+  // Hook Notion: subscription cancellata (fire-and-forget)
+  if (profile.email) {
+    createAndDispatch('subscription_cancelled', {
+      email: profile.email,
+      tier: previousTier,
+    });
+  }
 }
 
 /** Gestisce pagamento fallito */
@@ -468,6 +503,14 @@ async function handlePaymentFailed(
 
   if (profile) {
     await updateProfileSubscription(supabase, profile.id, { subscription_status: 'past_due' });
+
+    // Hook Notion: pagamento fallito (fire-and-forget)
+    const failedEmail = invoice.customer_email;
+    if (failedEmail) {
+      createAndDispatch('payment_failed', {
+        email: failedEmail.toLowerCase(),
+      });
+    }
   }
 }
 

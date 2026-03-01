@@ -12,7 +12,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Tipi supportati
-type ServiceType = 'cron' | 'email' | 'api' | 'auth' | 'coach';
+type ServiceType = 'cron' | 'email' | 'api' | 'auth' | 'coach' | 'notion';
 type StatusType = 'success' | 'error' | 'warning';
 
 interface LogEntry {

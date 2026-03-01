@@ -23,6 +23,10 @@
     {
       "path": "/api/cron/beta-premium-expiry",
       "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/notion-sync",
+      "schedule": "*/5 * * * *"
     }
   ]
 }

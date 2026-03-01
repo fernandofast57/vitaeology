@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { createBrowserClient } from '@supabase/ssr'
+import { createClient } from '@/lib/supabase/client'
 import {
   RadarChart,
   PolarGrid,
@@ -114,10 +114,7 @@ export default function ResultsPage() {
   const [userPathways, setUserPathways] = useState<UserPathwayWithDetails[]>([])
   const [otherAssessments, setOtherAssessments] = useState<{ slug: string; name: string; completedAt: string }[]>([])
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = createClient()
 
   useEffect(() => {
     async function loadResults() {

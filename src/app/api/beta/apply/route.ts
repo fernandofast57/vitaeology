@@ -9,6 +9,7 @@ import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 import { validateName, isDefinitelySpam, shouldFlagForReview } from '@/lib/validation/name-validator';
 import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 let _supabase: SupabaseClient | null = null;
 function getSupabase() {
@@ -220,6 +221,13 @@ export async function POST(request: Request) {
         flaggedForReview: flagForReview,
         betaTesterId: data.id,
       },
+    });
+
+    // Hook Notion: candidatura beta (fire-and-forget)
+    createAndDispatch('beta_applied', {
+      email: email.toLowerCase(),
+      fullName: full_name,
+      motivation: motivation?.substring(0, 200) || '',
     });
 
     // NON inviare email subito - il cron la invierà domani

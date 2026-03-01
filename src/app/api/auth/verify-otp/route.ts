@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 
@@ -157,6 +158,12 @@ export async function POST(request: NextRequest) {
           email: normalizedEmail,
           updated_at: new Date().toISOString(),
         });
+
+      // Hook Notion: registrazione utente (fire-and-forget)
+      createAndDispatch('user_registered', {
+        email: normalizedEmail,
+        userId: authData.user.id,
+      });
 
       // 8b. Collega eventuali challenge_subscribers esistenti con la stessa email
       // Questo permette di collegare le challenge fatte prima della registrazione

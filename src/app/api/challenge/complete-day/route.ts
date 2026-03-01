@@ -11,6 +11,7 @@ import { sendAffiliateInviteEmail, sendBetaPremiumActivatedEmail } from '@/lib/e
 import { onChallengeDayCompleted } from '@/lib/awareness';
 import { alertAPIError } from '@/lib/error-alerts';
 import { checkRateLimit, getClientIP, rateLimitExceededResponse } from '@/lib/rate-limiter';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -191,6 +192,13 @@ export async function POST(request: NextRequest) {
         })
         .eq('id', subscriber.id);
 
+      // Hook Notion: giorno challenge completato (fire-and-forget)
+      createAndDispatch('challenge_day_completed', {
+        email: email.toLowerCase(),
+        challengeType: normalizedChallenge,
+        dayNumber,
+      });
+
     } else {
       // Giorno 7 completato - challenge finita!
       try {
@@ -235,6 +243,12 @@ export async function POST(request: NextRequest) {
 
       // Aggiorna awareness level (challenge completata)
       onChallengeDayCompleted(email, 7).catch(() => {});
+
+      // Hook Notion: challenge completata (fire-and-forget)
+      createAndDispatch('challenge_completed', {
+        email: email.toLowerCase(),
+        challengeType: normalizedChallenge,
+      });
 
       // Concedi accesso all'assessment corrispondente
       const { data: profile } = await supabase

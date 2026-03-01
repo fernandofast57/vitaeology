@@ -6,6 +6,7 @@ import {
   completeAssessment,
 } from '@/lib/supabase/assessment';
 import { onAssessmentCompleted } from '@/lib/awareness';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,12 @@ export async function POST() {
     onAssessmentCompleted(user.id).catch(err =>
       console.error('[Awareness] Assessment completion update error:', err)
     );
+
+    // Hook Notion: assessment completato (fire-and-forget)
+    createAndDispatch('assessment_completed', {
+      email: user.email || '',
+      assessmentType: session.assessment_type || 'unknown',
+    });
 
     return NextResponse.json({
       success: true,

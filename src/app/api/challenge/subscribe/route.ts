@@ -9,6 +9,7 @@ import { verifyTurnstileToken, turnstileFailedResponse } from '@/lib/turnstile';
 import { validateName, isDefinitelySpam, shouldFlagForReview } from '@/lib/validation/name-validator';
 import { isIPBlocked, blockIP, blockedIPResponse } from '@/lib/validation/ip-blocklist';
 import { logSignupAttempt, shouldAutoBlockIP } from '@/lib/validation/signup-logger';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 
@@ -294,6 +295,13 @@ export async function POST(request: NextRequest) {
         flaggedForReview: flagForReview,
         subscriberId: subscriber.id,
       },
+    });
+
+    // Hook Notion: nuovo lead challenge (fire-and-forget)
+    createAndDispatch('challenge_subscribed', {
+      email: email.toLowerCase(),
+      nome: nome || 'Lead',
+      challengeType: challenge,
     });
 
     return NextResponse.json({

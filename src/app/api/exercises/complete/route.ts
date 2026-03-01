@@ -11,6 +11,7 @@ import { completeExerciseWithCycle } from '@/lib/action-cycles';
 import { getNextExercise } from '@/lib/ai-coach/adaptive-path';
 import { checkAndAwardMilestones, MilestoneAwardResult } from '@/lib/milestones';
 import { onExerciseCompleted } from '@/lib/awareness';
+import { createAndDispatch } from '@/lib/notion/dispatcher';
 
 export const dynamic = 'force-dynamic';
 
@@ -305,6 +306,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     onExerciseCompleted(userId).catch(err =>
       console.error('[Awareness] Exercise completion update error:', err)
     );
+
+    // Hook Notion: esercizio completato (fire-and-forget)
+    createAndDispatch('exercise_completed', {
+      exerciseId,
+      userId,
+    });
 
     return NextResponse.json({
       success: true,
